@@ -2,25 +2,6 @@ appId: com.nylohq.nylo
 ---
 - launchApp
 - tapOn: "(?s)Open Example: A focused morning.*"
-- tapOn: "Add attachment"
-- tapOn: "Photo library"
-# Cancel exists on the loading screen and moves when Photos finishes loading.
-# Wait for the actual grid before taking evidence or making a single tap.
-- extendedWaitUntil:
-    visible:
-      id: "PXGGridLayout-Info"
-      index: 0
-    timeout: 60000
-- assertVisible: "Cancel"
-- waitForAnimationToEnd:
-    timeout: 10000
-- takeScreenshot: attachments-01-system-photo-picker
-- tapOn:
-    text: "Cancel"
-    waitToSettleTimeoutMs: 1000
-    retryTapIfNoChange: false
-- assertVisible:
-    id: "chat-message"
 # Disposable CI Photos is seeded with our green PNG after the stock photos.
 # The inspected failure PNG/AX identifies it as the first/newest grid item.
 - tapOn:
@@ -69,6 +50,26 @@ appId: com.nylohq.nylo
 - tapOn: "Remove Photo.jpg"
 - assertNotVisible: "Preview Photo.jpg"
 - assertNotVisible: "Remove Photo.jpg"
+- assertVisible:
+    id: "chat-message"
+# Keep cancellation coverage after import so it cannot hide renderer evidence.
+- tapOn: "Add attachment"
+- tapOn: "Photo library"
+# Cancel exists on the loading screen and moves when Photos finishes loading.
+# Wait for the actual grid before taking evidence or making a single tap.
+- extendedWaitUntil:
+    visible:
+      id: "PXGGridLayout-Info"
+      index: 0
+    timeout: 60000
+- assertVisible: "Cancel"
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: attachments-01-system-photo-picker
+- tapOn:
+    text: "Cancel"
+    waitToSettleTimeoutMs: 1000
+    retryTapIfNoChange: false
 - assertVisible:
     id: "chat-message"
 - tapOn: "Add attachment"
