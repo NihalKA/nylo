@@ -30,6 +30,11 @@ import { runAgent, safeError } from "./providers";
 import { streamingFetch } from "./transport";
 
 type AgentDraft = Omit<Agent, "id" | "createdAt" | "memories">;
+type SendOptions = {
+  maxOutputTokens: number;
+  tools: false;
+  onText?: () => void;
+};
 type Store = {
   data: AppData;
   ready: boolean;
@@ -50,6 +55,7 @@ type Store = {
     text: string,
     retry?: boolean,
     onAccepted?: () => void,
+    options?: SendOptions,
   ) => Promise<void>;
   stop: () => void;
   importBackup: (value: unknown) => Promise<void>;
@@ -310,6 +316,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     input: string,
     retry = false,
     onAccepted?: () => void,
+    options?: SendOptions,
   ) => {
     if (active.current)
       throw new Error(
@@ -457,10 +464,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         key,
         messages,
         instructions: systemPrompt(agent),
-        useTools: !!agent,
+        useTools: !!agent && options?.tools !== false,
+        maxOutputTokens: options?.maxOutputTokens,
         signal: controller.signal,
         fetcher: streamingFetch,
         onText: (text) => {
+          options?.onText?.();
           pending += text;
           if (Date.now() - lastFlush > 100) flush();
         },

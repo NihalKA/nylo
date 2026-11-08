@@ -21,3 +21,32 @@ appId: com.nylohq.nylo
     visible: "Latest example answer: history is intact."
     timeout: 30000
 - takeScreenshot: gallery-05-long-history
+- tapOn: "Go back"
+- tapOn: "Settings, tab, 3 of 3"
+- scrollUntilVisible:
+    element: "Live device check"
+    direction: DOWN
+- tapOn: "Live device check"
+- tapOn: "Prepare local test"
+- assertVisible: "Not run"
+- scrollUntilVisible:
+    element: "Approve & save test memory"
+    direction: DOWN
+    centerElement: true
+- tapOn: "Approve & save test memory"
+- assertVisible: "Saved in the test agent’s memory."
+- takeScreenshot: gallery-06-device-check-memory
+- stopApp
+- launchApp
+- tapOn: "Settings, tab, 3 of 3"
+- scrollUntilVisible:
+    element: "Live device check"
+    direction: DOWN
+- tapOn: "Live device check"
+- scrollUntilVisible:
+    element: "Check after reopening"
+    direction: DOWN
+    centerElement: true
+- tapOn: "Check after reopening"
+- assertVisible: "(?s)Passed: a new app session restored.*"
+- takeScreenshot: gallery-07-device-check-reopened

@@ -44,7 +44,14 @@ export function buildRequest(
   turns: WireTurn[],
   instructions: string,
   useTools: boolean,
+  maxOutputTokens = 4096,
 ) {
+  if (
+    !Number.isInteger(maxOutputTokens) ||
+    maxOutputTokens < 1 ||
+    maxOutputTokens > 4096
+  )
+    throw new Error("Choose an output limit between 1 and 4096 tokens.");
   const base = connection.baseUrl.replace(/\/+$/, "");
   if (connection.protocol === "openai") {
     const input = turns.flatMap((t) => {
@@ -71,7 +78,7 @@ export function buildRequest(
         instructions,
         input,
         store: false,
-        max_output_tokens: 4096,
+        max_output_tokens: maxOutputTokens,
         stream: true,
         ...(useTools
           ? {
@@ -113,7 +120,7 @@ export function buildRequest(
         model: connection.model,
         system: instructions,
         messages,
-        max_tokens: 4096,
+        max_tokens: maxOutputTokens,
         stream: true,
         ...(useTools
           ? {
@@ -152,7 +159,7 @@ export function buildRequest(
     body: {
       model: connection.model,
       messages,
-      max_tokens: 4096,
+      max_tokens: maxOutputTokens,
       stream: true,
       ...(useTools
         ? { tools: memoryTools.map((t) => ({ type: "function", function: t })) }
@@ -294,6 +301,7 @@ export function safeError(error: unknown, key: string) {
 }
 
 export async function runAgent(options: {
+  maxOutputTokens?: number;
   connection: Connection;
   key: string;
   instructions: string;
@@ -331,7 +339,13 @@ export async function runAgent(options: {
   // Bound the local tool loop so a malformed model cannot run indefinitely.
   for (let step = 0; step < 5; step++) {
     if (signal.aborted) throw new Error("Response stopped.");
-    const request = buildRequest(connection, turns, instructions, useTools);
+    const request = buildRequest(
+      connection,
+      turns,
+      instructions,
+      useTools,
+      options.maxOutputTokens,
+    );
     const response = await fetcher(request.url, {
       method: "POST",
       redirect: "error",

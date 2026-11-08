@@ -234,6 +234,34 @@ export function parseData(value: unknown, local = false): AppData {
   // Explicit projection prevents an imported key or unknown field from entering ordinary app storage.
   return recoverInterrupted({
     version: 1,
+    deviceCheck:
+      local &&
+      d.deviceCheck &&
+      [
+        d.deviceCheck.agentId,
+        d.deviceCheck.streamChatId,
+        d.deviceCheck.recallChatId,
+        d.deviceCheck.connectionId,
+        d.deviceCheck.sessionId,
+      ].every((v) => typeof v === "string" && /^[a-z0-9-]{1,80}$/.test(v)) &&
+      typeof d.deviceCheck.word === "string" &&
+      /^cedar-[a-z0-9-]{1,60}$/.test(d.deviceCheck.word) &&
+      Number.isFinite(d.deviceCheck.createdAt)
+        ? {
+            agentId: d.deviceCheck.agentId,
+            streamChatId: d.deviceCheck.streamChatId,
+            recallChatId: d.deviceCheck.recallChatId,
+            connectionId: d.deviceCheck.connectionId,
+            word: d.deviceCheck.word,
+            sessionId: d.deviceCheck.sessionId,
+            createdAt: d.deviceCheck.createdAt,
+            streamEvents:
+              Number.isSafeInteger(d.deviceCheck.streamEvents) &&
+              d.deviceCheck.streamEvents! >= 0
+                ? d.deviceCheck.streamEvents
+                : undefined,
+          }
+        : undefined,
     providerConsents:
       local && Array.isArray(d.providerConsents)
         ? d.providerConsents

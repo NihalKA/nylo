@@ -85,6 +85,12 @@ export default function Settings() {
           <Icon name="chevron-forward" color={theme.sub} size={16} />
         </Pressable>
         <Text style={s.eyebrow}>ON THIS DEVICE</Text>
+        <Button
+          title="Live device check"
+          secondary
+          icon="pulse-outline"
+          onPress={() => router.push("/device-check")}
+        />
         <View style={[s.card, { gap: 18 }]}>
           <View style={[s.row, { gap: 12 }]}>
             <Icon name="phone-portrait-outline" color={theme.green} />

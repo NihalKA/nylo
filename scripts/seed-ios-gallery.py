@@ -46,7 +46,7 @@ for index in range(100):
                 "Latest example answer: history is intact." if index == 99 else
                 f"Example answer {index + 1}: choose one clear task, finish it, then review what changed."),
     ])
-data = dict(version=1, connections=[], defaultConnectionId="", agents=[dict(
+data = dict(version=1, connections=[dict(id="gallery-provider", name="Offline QA provider", protocol="openai", provider="custom", baseUrl="https://example.invalid/v1", model="synthetic-no-network")], defaultConnectionId="gallery-provider", agents=[dict(
     id="gallery-writer", name="Writing partner", description="Clear words, in your voice.",
     instructions="Write with warmth and clarity.", connectionId="", color="#246B58", createdAt=stamp,
     memories=[dict(id="gallery-memory", text="Use friendly, direct language.", createdAt=stamp)],

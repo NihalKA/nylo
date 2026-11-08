@@ -221,6 +221,80 @@ test("requests use correct provider protocols; OpenAI storage is disabled", () =
   );
   assert.equal(compatible.url, "https://api.openai.com/v1/chat/completions");
 });
+test("live checks preserve the 128-token cap across all protocols and make one request", async () => {
+  for (const protocol of ["openai", "anthropic", "compatible"] as const) {
+    const request = buildRequest(
+      { ...connection, protocol },
+      [{ role: "user", text: "Test" }],
+      "Test",
+      false,
+      128,
+    );
+    assert.equal(
+      (request.body as any)[
+        protocol === "openai" ? "max_output_tokens" : "max_tokens"
+      ],
+      128,
+    );
+    assert.ok(!("tools" in request.body));
+  }
+  assert.throws(
+    () => buildRequest(connection, [], "", false, 0),
+    /output limit/,
+  );
+  assert.throws(
+    () => buildRequest(connection, [], "", false, 4097),
+    /output limit/,
+  );
+  let requests = 0;
+  await runAgent({
+    connection,
+    key: "synthetic",
+    maxOutputTokens: 128,
+    instructions: "Test",
+    messages: [message("user", "Test")],
+    useTools: false,
+    signal: new AbortController().signal,
+    fetcher: (async (_url: unknown, init: RequestInit) => {
+      requests++;
+      assert.equal(JSON.parse(init.body as string).max_output_tokens, 128);
+      return stream([
+        { type: "response.output_text.delta", delta: "OK" },
+        { type: "response.completed" },
+      ]);
+    }) as typeof fetch,
+    onText: () => {},
+    onAction: () => {},
+    executeTool: async () => {
+      throw new Error("No tools permitted");
+    },
+  });
+  assert.equal(requests, 1);
+});
+test("device-check restart evidence remains local and cannot be imported as a pass", () => {
+  const data = {
+    ...emptyData(),
+    deviceCheck: {
+      agentId: "agent",
+      streamChatId: "stream",
+      recallChatId: "recall",
+      connectionId: "provider",
+      word: "cedar-test",
+      sessionId: "old-session",
+      createdAt: 1,
+      streamEvents: 4,
+    },
+  };
+  assert.deepEqual(parseData(data, true).deviceCheck, data.deviceCheck);
+  assert.equal(parseData(data).deviceCheck, undefined);
+  assert.equal(
+    parseData(
+      { ...data, deviceCheck: { ...data.deviceCheck, word: "untrusted" } },
+      true,
+    ).deviceCheck,
+    undefined,
+  );
+});
 test("memory tool output is returned to the model and the final answer is streamed", async () => {
   let requests = 0;
   let executions = 0;

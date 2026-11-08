@@ -42,6 +42,16 @@ export type Conversation = {
 };
 export type AppData = {
   version: 1;
+  deviceCheck?: {
+    agentId: string;
+    streamChatId: string;
+    recallChatId: string;
+    connectionId: string;
+    word: string;
+    sessionId: string;
+    createdAt: number;
+    streamEvents?: number;
+  };
   retiredCredentialIds?: string[];
   providerConsents?: {
     credentialId: string;
