@@ -155,9 +155,14 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 09-restored-memory
+# Actual maximum-text AX placed this button at y26–187 behind the fixed Agent
+# header. Require the whole target below that header before the same single tap.
 - scrollUntilVisible:
-    element: "New conversation"
+    element:
+      text: "New conversation"
+      below: "Agent"
     direction: UP
+    centerElement: true
 - tapOn: "New conversation"
 - tapOn:
     id: "chat-message"
