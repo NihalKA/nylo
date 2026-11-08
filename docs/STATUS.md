@@ -15,7 +15,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 
 - iOS-oriented tab navigation, universal inbox, simpler Settings and progressive provider setup.
 - Provider discovery, explicit sharing consent, memory change approval, durable credential staging/retirement and failed-checkpoint completion protection.
-- Native iOS Release simulator build 337d99e passed and launched; first Chats screenshot reviewed. Current source has an original n+dot app mark. Automated UI flow exposed screenshot path and synthesized accessibility-label selector issues; fixes are being validated. No full UI smoke pass yet. Public privacy/support site is live at https://nihalka.github.io/nylo/; source checks pass.
+- Native iOS Release simulator builds through a8768b6 passed. Actual older screenshots cover Chats, Agents, Settings, provider setup and composer; a full UI smoke pass is still missing. Exact composer-label mismatch is fixed using a stable test ID. New profile jobs hit iOS 26.5 XCTest startup timeouts before exercising the app; the rerun uses the previously working 26.2 runtime, longer startup allowance and launch/driver diagnostics. Current-JS UI run 42481190022 and fresh signed candidate 42481219738 are in progress. Refreshed-JS provenance is explicit and never substitutes for final signed-build verification. Public privacy/support site is live at https://nihalka.github.io/nylo/; current source suite has 37 passing tests.
 
 ## External dependencies
 
