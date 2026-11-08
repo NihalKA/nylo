@@ -19,6 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router, useSegments } from "expo-router";
 import { Agent, Conversation } from "./types";
+import { plainTextPreview } from "./domain";
 
 export const theme = {
   bg: "#FFFFFF",
@@ -133,10 +134,12 @@ export function Header({
   title,
   right,
   dismissKeyboard,
+  onDismissKeyboard,
 }: {
   title: string;
   right?: React.ReactNode;
   dismissKeyboard?: boolean;
+  onDismissKeyboard?: () => void;
 }) {
   return (
     <View style={[s.between, { minHeight: 56, gap: 8 }]}>
@@ -158,13 +161,17 @@ export function Header({
         </Text>
       </View>
       <View style={s.row}>
-        {dismissKeyboard ? <KeyboardDismissButton /> : null}
+        {dismissKeyboard ? (
+          <KeyboardDismissButton onDismiss={onDismissKeyboard} />
+        ) : null}
         {right}
       </View>
     </View>
   );
 }
-export function KeyboardDismissButton() {
+export function KeyboardDismissButton({
+  onDismiss,
+}: { onDismiss?: () => void } = {}) {
   const [visible, setVisible] = useState(Keyboard.isVisible());
   useEffect(() => {
     const show = Keyboard.addListener("keyboardDidShow", () =>
@@ -182,7 +189,7 @@ export function KeyboardDismissButton() {
     <IconButton
       name="chevron-down"
       label="Dismiss keyboard"
-      onPress={Keyboard.dismiss}
+      onPress={onDismiss || Keyboard.dismiss}
     />
   ) : null;
 }
@@ -386,15 +393,21 @@ export function ConversationRow({
   onPress: () => void;
 }) {
   const last = conversation.messages.filter((m) => m.text).at(-1);
+  const preview = conversation.draft?.length
+    ? `Draft: ${plainTextPreview(conversation.draft)}`
+    : plainTextPreview(last?.text || "New conversation");
+  const date = new Date(conversation.updatedAt).toLocaleDateString(undefined, {
+    month: "short",
+    day: "numeric",
+  });
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={[
         `Open ${conversation.title}`,
         agent?.name,
-        conversation.draft?.trim()
-          ? `Draft: ${conversation.draft.trim().slice(0, 100)}`
-          : undefined,
+        preview.slice(0, 140),
+        date,
       ]
         .filter(Boolean)
         .join(". ")}
@@ -424,12 +437,7 @@ export function ConversationRow({
           >
             {conversation.title}
           </Text>
-          <Text style={{ fontSize: 12, color: theme.sub }}>
-            {new Date(conversation.updatedAt).toLocaleDateString(undefined, {
-              month: "short",
-              day: "numeric",
-            })}
-          </Text>
+          <Text style={{ fontSize: 12, color: theme.sub }}>{date}</Text>
         </View>
         {agent ? (
           <View style={[s.row, { gap: 6 }]}>
@@ -445,9 +453,7 @@ export function ConversationRow({
           </View>
         ) : null}
         <Text numberOfLines={2} style={s.sub}>
-          {conversation.draft?.trim()
-            ? `Draft: ${conversation.draft}`
-            : last?.text || "New conversation"}
+          {preview}
         </Text>
       </View>
     </Pressable>

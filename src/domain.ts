@@ -9,6 +9,20 @@ import {
 
 export const uid = () =>
   `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 11)}`;
+
+export function starterDraft(current: string, suggestion: string) {
+  return current.length ? current : suggestion;
+}
+
+export function plainTextPreview(text: string) {
+  return text
+    .replace(/```[^\n]*\n([\s\S]*?)```/g, "$1")
+    .replace(/!?\[([^\]]+)\]\([^)]*\)/g, "$1")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    .replace(/\*\*|__|`/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 export const colors = ["#246B58", "#826348", "#7464A2", "#477897", "#A85C5C"];
 export const protocolDefaults: Record<
   Protocol,

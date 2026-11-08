@@ -7,6 +7,15 @@ appId: com.nylohq.nylo
 - assertVisible: "(?s).*Start with one meaningful task.*"
 - takeScreenshot: gallery-02-response
 - tapOn: "Copy response"
+- tapOn: "Choose model connection.*"
+- assertVisible: "Choose a model"
+- assertNotVisible: "Conversation title"
+- takeScreenshot: gallery-02b-model-picker
+- tapOn: "Offline QA alternate.*"
+- assertNotVisible: "Close model picker"
+- assertVisible: "synthetic-alternate"
+- tapOn: "Choose model connection.*"
+- tapOn: "Close model picker"
 - tapOn: "Go back"
 - tapOn: "Open Example: A clear project update.*"
 - assertVisible: "(?s).*Hi team.*"
@@ -28,24 +37,30 @@ appId: com.nylohq.nylo
 - tapOn: "Go back"
 - tapOn: "Settings, tab, 3 of 3"
 - scrollUntilVisible:
-    element: "Live device check"
+    element: "Live device check.*"
     direction: DOWN
-- tapOn: "Live device check"
+- tapOn: "Live device check.*"
 - tapOn: "Prepare local test"
 - assertVisible: "Not run"
 - tapOn: "Go back"
 - tapOn: "Chats, tab, 1 of 3"
 - tapOn: "New chat"
+- tapOn: "Help me write"
+- assertVisible:
+    id: "chat-message"
+    text: "(?s)Help me write.*"
 - tapOn:
     id: "chat-message"
 - inputText: "Personal draft kept outside device check"
 - tapOn: "Dismiss keyboard"
+- assertNotVisible: "Help me write"
+- assertNotVisible: "Think it through"
 - tapOn: "Go back"
 - tapOn: "Settings, tab, 3 of 3"
 - scrollUntilVisible:
-    element: "Live device check"
+    element: "Live device check.*"
     direction: DOWN
-- tapOn: "Live device check"
+- tapOn: "Live device check.*"
 - scrollUntilVisible:
     element: "Approve & save test memory"
     direction: DOWN
@@ -57,9 +72,9 @@ appId: com.nylohq.nylo
 - launchApp
 - tapOn: "Settings, tab, 3 of 3"
 - scrollUntilVisible:
-    element: "Live device check"
+    element: "Live device check.*"
     direction: DOWN
-- tapOn: "Live device check"
+- tapOn: "Live device check.*"
 - scrollUntilVisible:
     element: "Check after reopening"
     direction: DOWN
@@ -76,3 +91,27 @@ appId: com.nylohq.nylo
 - tapOn: "Chats, tab, 1 of 3"
 - assertVisible: "(?s).*Personal draft kept outside device check.*"
 - takeScreenshot: gallery-08-personal-draft-preserved
+- tapOn: "Agents, tab, 2 of 3"
+- tapOn: "Create agent"
+- scrollUntilVisible:
+    element:
+      id: "agent-name"
+    direction: DOWN
+- tapOn:
+    id: "agent-name"
+- inputText: "Keep this role draft"
+- tapOn: "Dismiss keyboard"
+- scrollUntilVisible:
+    element: "Writing partner"
+    direction: UP
+- tapOn: "Writing partner"
+- tapOn: "Cancel"
+- assertVisible:
+    id: "agent-name"
+    text: "Keep this role draft"
+- tapOn: "Writing partner"
+- tapOn: "Use role"
+- assertVisible:
+    id: "agent-name"
+    text: "Writing partner"
+- takeScreenshot: gallery-09-role-replacement-confirmed

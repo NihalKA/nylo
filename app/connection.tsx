@@ -208,30 +208,28 @@ export default function Settings() {
     <Page>
       <Header title="AI providers" dismissKeyboard />
       <FormScroll>
-        <View style={{ gap: 10 }}>
-          <Badge text="DEVICE EDITION" />
-          <Text style={s.title}>Choose your AI</Text>
-          <Text style={s.sub}>
-            Connect a provider you already use. Nylo has no subscription or
-            account. Your provider’s API charges still apply.
-          </Text>
-        </View>
-        <View style={[s.between, { marginTop: 10 }]}>
-          <Text style={s.h2}>Connections</Text>
-          {!draft ? (
-            <Button
-              title="Add connection"
-              secondary
-              icon="add"
-              onPress={() => {
-                setDraft(draftConnection());
-                setKey("");
-                setError("");
-                setNotice("");
-              }}
-            />
-          ) : null}
-        </View>
+        <Text style={s.sub}>
+          Connect your provider with an API key. Its charges and data policies
+          apply.
+        </Text>
+        {data.connections.length ? (
+          <View style={[s.between, { marginTop: 4 }]}>
+            <Text style={s.h2}>Saved providers</Text>
+            {!draft ? (
+              <Button
+                title="Add connection"
+                secondary
+                icon="add"
+                onPress={() => {
+                  setDraft(draftConnection());
+                  setKey("");
+                  setError("");
+                  setNotice("");
+                }}
+              />
+            ) : null}
+          </View>
+        ) : null}
         {data.connections.map((c) => (
           <View key={c.id} style={[s.card, { gap: 12 }]}>
             <View style={[s.between, { gap: 12 }]}>
@@ -317,23 +315,25 @@ export default function Settings() {
         ))}
         {draft ? (
           <View style={{ gap: 20 }}>
-            <View style={s.between}>
-              <Text style={s.h2}>
-                {data.connections.some((c) => c.id === draft.id)
-                  ? "Edit connection"
-                  : "Connect a provider"}
-              </Text>
-              {data.connections.length ? (
-                <IconButton
-                  name="close"
-                  label="Cancel connection"
-                  onPress={() => {
-                    setDraft(null);
-                    setKey("");
-                  }}
-                />
-              ) : null}
-            </View>
+            {data.connections.length ? (
+              <View style={s.between}>
+                <Text style={s.h2}>
+                  {data.connections.some((c) => c.id === draft.id)
+                    ? "Edit connection"
+                    : "Connect a provider"}
+                </Text>
+                {data.connections.length ? (
+                  <IconButton
+                    name="close"
+                    label="Cancel connection"
+                    onPress={() => {
+                      setDraft(null);
+                      setKey("");
+                    }}
+                  />
+                ) : null}
+              </View>
+            ) : null}
             <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
               {providerPresets.map((preset) => (
                 <Pressable
@@ -389,14 +389,6 @@ export default function Settings() {
                 </Pressable>
               ))}
             </View>
-            {advanced ? (
-              <Field
-                label="Connection name"
-                value={draft.name}
-                onChangeText={(name) => setDraft({ ...draft, name })}
-                maxLength={60}
-              />
-            ) : null}
             {connectionProvider(draft) === "custom" &&
             (advanced || selectedPreset(draft) === "custom") ? (
               <Field
@@ -415,70 +407,6 @@ export default function Settings() {
                       : "Uses the Anthropic Messages API."
                 }
               />
-            ) : null}
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={
-                advanced ? "Hide advanced settings" : "Advanced settings"
-              }
-              onPress={() => setAdvanced(!advanced)}
-              style={[s.row, { minHeight: 44, gap: 6 }]}
-            >
-              <Text
-                style={{ fontSize: 14, fontWeight: "600", color: theme.ink }}
-              >
-                {advanced ? "Hide advanced settings" : "Advanced settings"}
-              </Text>
-              <Icon
-                name={advanced ? "chevron-up" : "chevron-down"}
-                size={14}
-                color={theme.ink}
-              />
-            </Pressable>
-            {advanced && connectionProvider(draft) === "custom" ? (
-              <View style={{ gap: 8 }}>
-                <Text style={s.text}>API format</Text>
-                <View style={[s.row, { flexWrap: "wrap", gap: 8 }]}>
-                  {(
-                    [
-                      { id: "compatible", label: "Chat Completions" },
-                      { id: "openai", label: "Responses" },
-                      { id: "anthropic", label: "Messages" },
-                    ] as const
-                  ).map((format) => (
-                    <Pressable
-                      key={format.id}
-                      accessibilityRole="radio"
-                      accessibilityState={{
-                        checked: draft.protocol === format.id,
-                      }}
-                      onPress={() => {
-                        setDraft({ ...draft, protocol: format.id });
-                        setKey("");
-                      }}
-                      style={{
-                        minHeight: 44,
-                        padding: 12,
-                        borderRadius: 10,
-                        backgroundColor:
-                          draft.protocol === format.id
-                            ? theme.pale
-                            : theme.card,
-                        borderWidth: 1,
-                        borderColor: theme.line,
-                      }}
-                    >
-                      <Text style={{ fontSize: 14, color: theme.ink }}>
-                        {format.label}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <Text style={s.sub}>
-                  Use the format your provider supports. Codex-style services
-                  commonly use Responses.
-                </Text>
-              </View>
             ) : null}
             <Field
               label="API key"
@@ -577,6 +505,79 @@ export default function Settings() {
               placeholder="Paste a model ID from your provider"
               help="Choose a model above, or enter its ID manually. A listed model may not support text chat or memory tools."
             />
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                advanced ? "Hide advanced settings" : "Advanced settings"
+              }
+              onPress={() => setAdvanced(!advanced)}
+              style={[s.row, { minHeight: 44, gap: 6 }]}
+            >
+              <Text
+                style={{ fontSize: 14, fontWeight: "600", color: theme.ink }}
+              >
+                {advanced ? "Hide advanced settings" : "Advanced settings"}
+              </Text>
+              <Icon
+                name={advanced ? "chevron-up" : "chevron-down"}
+                size={14}
+                color={theme.ink}
+              />
+            </Pressable>
+            {advanced && connectionProvider(draft) === "custom" ? (
+              <View style={{ gap: 8 }}>
+                <Text style={s.text}>API format</Text>
+                <View style={[s.row, { flexWrap: "wrap", gap: 8 }]}>
+                  {(
+                    [
+                      { id: "compatible", label: "Chat Completions" },
+                      { id: "openai", label: "Responses" },
+                      { id: "anthropic", label: "Messages" },
+                    ] as const
+                  ).map((format) => (
+                    <Pressable
+                      key={format.id}
+                      accessibilityRole="radio"
+                      accessibilityState={{
+                        checked: draft.protocol === format.id,
+                      }}
+                      onPress={() => {
+                        setDraft({ ...draft, protocol: format.id });
+                        setKey("");
+                      }}
+                      style={{
+                        minHeight: 44,
+                        padding: 12,
+                        borderRadius: 10,
+                        backgroundColor:
+                          draft.protocol === format.id
+                            ? theme.pale
+                            : theme.card,
+                        borderWidth: 1,
+                        borderColor: theme.line,
+                      }}
+                    >
+                      <Text style={{ fontSize: 14, color: theme.ink }}>
+                        {format.label}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+                <Text style={s.sub}>
+                  Use the format your provider supports. Codex-style services
+                  commonly use Responses. Changing the format clears an entered
+                  key; enter it again before saving.
+                </Text>
+              </View>
+            ) : null}
+            {advanced ? (
+              <Field
+                label="Connection name"
+                value={draft.name}
+                onChangeText={(name) => setDraft({ ...draft, name })}
+                maxLength={60}
+              />
+            ) : null}
             <Text style={s.sub}>
               Your API key goes only to{" "}
               {draft.baseUrl || "the provider you choose"}. Saving does not send

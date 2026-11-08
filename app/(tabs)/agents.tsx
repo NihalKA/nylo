@@ -1,5 +1,11 @@
 import React from "react";
-import { FlatList, Pressable, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
 import {
@@ -12,6 +18,7 @@ import {
   theme,
 } from "../../src/ui";
 export default function Agents() {
+  const { fontScale } = useWindowDimensions();
   const { data } = useStore();
   const agents = data.agents.filter((a) => a.id !== data.deviceCheck?.agentId);
   const create = () => router.push("/agent/edit");
@@ -89,19 +96,22 @@ export default function Agents() {
         ListEmptyComponent={
           <View
             style={{
-              flex: 1,
+              flexGrow: 1,
               paddingBottom: 40,
               paddingTop: 28,
             }}
           >
             <View style={{ gap: 12 }}>
-              <Text style={[s.h2, { fontSize: 24, letterSpacing: -0.6 }]}>
-                Built around how you work
+              <Text style={[s.h2, { fontSize: 20, letterSpacing: -0.4 }]}>
+                No agents yet
               </Text>
-              <Text style={[s.text, { color: theme.sub, maxWidth: 350 }]}>
-                Give an agent instructions once. Keep the facts you approve
-                across its conversations.
-              </Text>
+              {fontScale <= 1.6 ? (
+                <Text style={[s.text, { color: theme.sub, maxWidth: 350 }]}>
+                  Give an agent instructions once. Keep the facts you approve
+                  across its conversations.
+                </Text>
+              ) : null}
+              <Button title="Create agent" icon="add" onPress={create} />
             </View>
             <View style={{ marginVertical: 24 }}>
               {[
@@ -145,13 +155,14 @@ export default function Agents() {
                   <Icon name={icon} color={theme.ink} size={22} />
                   <View style={{ flex: 1 }}>
                     <Text style={[s.text, { fontWeight: "600" }]}>{title}</Text>
-                    <Text style={s.sub}>{body}</Text>
+                    {fontScale <= 1.6 ? (
+                      <Text style={s.sub}>{body}</Text>
+                    ) : null}
                   </View>
                   <Icon name="chevron-forward" color={theme.sub} size={14} />
                 </Pressable>
               ))}
             </View>
-            <Button title="Create an agent" icon="add" onPress={create} />
           </View>
         }
       />

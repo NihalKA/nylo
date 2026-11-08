@@ -18,6 +18,8 @@ Useful patterns: conversation content dominates; navigation is compact; user bub
 
 ## Verification required
 
-Source typecheck, 40 behavioral tests and credential checks pass. Neutral palette contrast: ink/white 17.00:1, secondary/white 5.45:1, secondary/filled surface 4.96:1. These measure solid colors, not complete rendered accessibility.
+Source typecheck, 42 behavioral tests and credential checks pass. Neutral palette contrast: ink/white 17.00:1, secondary/white 5.45:1, secondary/filled surface 4.96:1. These measure solid colors, not complete rendered accessibility.
+
+Review 014 found that the first reset still fell short of the requested product quality. Follow-up removes raw formatting from previews, prevents quick starters replacing drafts, confirms replacement of edited role setup, makes the frequent model action a focused picker, consolidates provider headings and puts Advanced after key/model essentials. Short empty-state headings and earlier actions replace promotional copy at accessibility sizes. Keyboard dismissal uses a fixed navigation target and explicitly blurs the composer; the original single-tap native assertion remains required. The gallery now checks actual model selection, starter safety and cancelled/confirmed role replacement with synthetic offline data.
 
 Run compact, large and maximum-text smoke against this exact app bundle. Inspect populated inbox, ordinary/agent responses, memory, provider setup, Settings and keyboard frames. Strengthen the long-history fixture with full last-answer visibility; opening near the end is insufficient. Retain synthetic fixture disclosure, exact clipboard comparison, restart and personal-draft preservation checks. Obtain a fresh independent design review after actual renders, then build a new signed TestFlight candidate. Existing build 8 remains the previous design and is not silently replaced.

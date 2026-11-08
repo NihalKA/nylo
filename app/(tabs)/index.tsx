@@ -1,5 +1,12 @@
 import React, { useMemo, useState } from "react";
-import { FlatList, Pressable, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  Text,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
 import { isDeviceCheckConversation } from "../../src/domain";
@@ -13,6 +20,7 @@ import {
   theme,
 } from "../../src/ui";
 export default function Chats() {
+  const { fontScale } = useWindowDimensions();
   const { data, newChat } = useStore();
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
@@ -143,8 +151,8 @@ export default function Chats() {
         ListEmptyComponent={
           <View
             style={{
-              flex: 1,
-              justifyContent: "center",
+              flexGrow: 1,
+              justifyContent: fontScale > 1.6 ? "flex-start" : "center",
               alignItems: "center",
               paddingBottom: 56,
               paddingTop: 32,
@@ -154,32 +162,34 @@ export default function Chats() {
               style={[
                 s.h2,
                 {
-                  fontSize: 26,
+                  fontSize: 20,
                   textAlign: "center",
                   marginBottom: 10,
                   letterSpacing: -0.7,
                 },
               ]}
             >
-              {query ? "No chats found" : "Start with a conversation"}
+              {query ? "No chats found" : "No chats yet"}
             </Text>
-            <Text
-              style={[
-                s.text,
-                {
-                  color: theme.sub,
-                  textAlign: "center",
-                  maxWidth: 285,
-                  marginBottom: 28,
-                },
-              ]}
-            >
-              {query
-                ? "Try a different word or search an agent’s name."
-                : "Your questions, drafts and ideas.\nSaved here as you go."}
-            </Text>
+            {fontScale <= 1.6 ? (
+              <Text
+                style={[
+                  s.text,
+                  {
+                    color: theme.sub,
+                    textAlign: "center",
+                    maxWidth: 285,
+                    marginBottom: 28,
+                  },
+                ]}
+              >
+                {query
+                  ? "Try a different word or search an agent’s name."
+                  : "Your questions, drafts and ideas.\nSaved here as you go."}
+              </Text>
+            ) : null}
             {!query ? (
-              <Button title="New conversation" onPress={() => void start()} />
+              <Button title="New chat" onPress={() => void start()} />
             ) : (
               <Button
                 title="Clear search"

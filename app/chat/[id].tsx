@@ -16,7 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { isDeviceCheckConversation } from "../../src/domain";
+import { isDeviceCheckConversation, starterDraft } from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -109,6 +109,7 @@ export default function Chat() {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [modelPicker, setModelPicker] = useState(false);
   const [title, setTitle] = useState(conversation?.title || "");
   const [copied, setCopied] = useState<string | null>(null);
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
@@ -205,6 +206,11 @@ export default function Chat() {
   return (
     <Page>
       <Header
+        dismissKeyboard={keyboardVisible}
+        onDismissKeyboard={() => {
+          composer.current?.blur();
+          Keyboard.dismiss();
+        }}
         title={
           agent?.name ||
           (conversation.messages.length ? conversation.title : "New chat")
@@ -326,17 +332,20 @@ export default function Chat() {
                   title="Connect your first model"
                   onPress={() => router.push("/connection")}
                 />
-              ) : (
+              ) : text.length === 0 ? (
                 <View style={{ gap: 4, marginTop: 8 }}>
                   {["Help me write", "Think it through"].map((label) => (
                     <Pressable
                       key={label}
                       accessibilityRole="button"
                       onPress={() => {
-                        setText(
-                          label === "Help me write"
-                            ? "Help me write "
-                            : "Help me think through ",
+                        setText((current) =>
+                          starterDraft(
+                            current,
+                            label === "Help me write"
+                              ? "Help me write "
+                              : "Help me think through ",
+                          ),
                         );
                         composer.current?.focus();
                       }}
@@ -358,7 +367,7 @@ export default function Chat() {
                     </Pressable>
                   ))}
                 </View>
-              )}
+              ) : null}
             </View>
           ) : (
             <>
@@ -514,12 +523,14 @@ export default function Chat() {
           <View style={s.between}>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Choose model connection"
-              onPress={() =>
+              accessibilityLabel={`Choose model connection${connection ? `. ${connection.name}, ${connection.model}` : ""}`}
+              onPress={() => {
+                composer.current?.blur();
+                Keyboard.dismiss();
                 data.connections.length
-                  ? setMenu(true)
-                  : router.push("/connection")
-              }
+                  ? setModelPicker(true)
+                  : router.push("/connection");
+              }}
               style={[
                 s.row,
                 {
@@ -532,18 +543,15 @@ export default function Chat() {
                 },
               ]}
             >
-              <Text style={{ fontSize: 13, color: theme.sub, flexShrink: 1 }}>
+              <Text
+                numberOfLines={1}
+                maxFontSizeMultiplier={1.6}
+                style={{ fontSize: 13, color: theme.sub, flexShrink: 1 }}
+              >
                 {connection ? `${connection.model}` : "Choose a model"}
               </Text>
               <Icon name="chevron-down" size={12} color={theme.sub} />
             </Pressable>
-            {keyboardVisible ? (
-              <IconButton
-                name="chevron-down"
-                label="Dismiss keyboard"
-                onPress={Keyboard.dismiss}
-              />
-            ) : null}
           </View>
           <View
             style={[
@@ -643,6 +651,115 @@ export default function Chat() {
         </View>
       </KeyboardAvoidingView>
       <Modal
+        visible={modelPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setModelPicker(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "#00000055",
+          }}
+        >
+          <Pressable
+            accessible={false}
+            onPress={() => setModelPicker(false)}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+          />
+          <View
+            accessibilityViewIsModal
+            style={{
+              maxHeight: "80%",
+              padding: 20,
+              paddingBottom: Math.max(insets.bottom, 16),
+              gap: 12,
+              backgroundColor: theme.card,
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+            }}
+          >
+            <View style={s.between}>
+              <Text
+                accessibilityRole="header"
+                maxFontSizeMultiplier={1.6}
+                style={s.h2}
+              >
+                Choose a model
+              </Text>
+              <IconButton
+                name="close"
+                label="Close model picker"
+                onPress={() => setModelPicker(false)}
+              />
+            </View>
+            <ScrollView style={{ flexGrow: 0, flexShrink: 1 }}>
+              {data.connections.map((c) => (
+                <Pressable
+                  key={c.id}
+                  accessibilityRole="radio"
+                  accessibilityLabel={`${c.name}. ${c.model}`}
+                  accessibilityState={{ checked: c.id === connection?.id }}
+                  disabled={!!runningId}
+                  onPress={() =>
+                    void action(async () => {
+                      await update((d) => ({
+                        ...d,
+                        conversations: d.conversations.map((item) =>
+                          item.id === id
+                            ? { ...item, connectionId: c.id }
+                            : item,
+                        ),
+                      }));
+                      setModelPicker(false);
+                    })
+                  }
+                  style={[
+                    s.row,
+                    {
+                      minHeight: 68,
+                      gap: 14,
+                      paddingVertical: 16,
+                      borderBottomWidth: 1,
+                      borderBottomColor: theme.line,
+                    },
+                  ]}
+                >
+                  <View style={{ flex: 1, gap: 4 }}>
+                    <Text style={[s.text, { fontWeight: "600" }]}>
+                      {c.name}
+                    </Text>
+                    <Text style={s.sub}>{c.model}</Text>
+                  </View>
+                  {c.id === connection?.id ? (
+                    <Icon name="checkmark" size={20} />
+                  ) : null}
+                </Pressable>
+              ))}
+              <Text style={s.sub}>
+                Conversation context goes with your next message. Selecting a
+                model sends nothing.
+              </Text>
+              <Button
+                title="Manage providers"
+                secondary
+                onPress={() => {
+                  setModelPicker(false);
+                  router.push("/connection");
+                }}
+              />
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
+      <Modal
         visible={menu}
         transparent
         animationType="fade"
@@ -671,7 +788,14 @@ export default function Chat() {
             ]}
           >
             <View style={s.between}>
-              <Text style={s.h2}>Conversation settings</Text>
+              <Text
+                accessibilityRole="header"
+                maxFontSizeMultiplier={1.6}
+                numberOfLines={1}
+                style={[s.h2, { flex: 1 }]}
+              >
+                Conversation settings
+              </Text>
               <IconButton
                 name="close"
                 label="Close conversation settings"
@@ -705,50 +829,6 @@ export default function Chat() {
                   })
                 }
               />
-              <Text style={s.eyebrow}>MODEL CONNECTION</Text>
-              {data.connections.length ? (
-                data.connections.map((c) => (
-                  <Pressable
-                    accessibilityRole="radio"
-                    accessibilityState={{ checked: connection?.id === c.id }}
-                    disabled={!!runningId}
-                    key={c.id}
-                    onPress={() =>
-                      void action(async () => {
-                        await update((d) => ({
-                          ...d,
-                          conversations: d.conversations.map((item) =>
-                            item.id === id
-                              ? { ...item, connectionId: c.id }
-                              : item,
-                          ),
-                        }));
-                        setMenu(false);
-                      })
-                    }
-                    style={[
-                      s.card,
-                      {
-                        padding: 13,
-                        backgroundColor:
-                          connection?.id === c.id ? theme.pale : "#FFF",
-                      },
-                    ]}
-                  >
-                    <Text style={s.text}>{c.name}</Text>
-                    <Text style={s.sub}>{c.model}</Text>
-                  </Pressable>
-                ))
-              ) : (
-                <Button
-                  title="Add a connection"
-                  secondary
-                  onPress={() => {
-                    setMenu(false);
-                    router.push("/connection");
-                  }}
-                />
-              )}
               {!agent ? (
                 <View
                   style={{

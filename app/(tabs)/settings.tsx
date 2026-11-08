@@ -35,7 +35,7 @@ function SettingsRow({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={title}
+      accessibilityLabel={[title, detail].filter(Boolean).join(". ")}
       disabled={disabled}
       onPress={onPress}
       style={({ pressed }) => [

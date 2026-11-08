@@ -13,6 +13,7 @@ import {
   Page,
   s,
   theme,
+  confirm,
 } from "../../src/ui";
 
 const templates = [
@@ -67,6 +68,7 @@ export default function AgentEdit() {
   const [color, setColor] = useState(original?.color || colors[0]);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [roleEdited, setRoleEdited] = useState(false);
   if (
     (id && id === data.deviceCheck?.agentId) ||
     (fromChat && isDeviceCheckConversation(data, fromChat))
@@ -134,11 +136,25 @@ export default function AgentEdit() {
                 <Pressable
                   accessibilityRole="button"
                   key={t.name}
-                  onPress={() => {
-                    setName(t.name);
-                    setDescription(t.description);
-                    setInstructions(t.instructions);
-                  }}
+                  disabled={busy}
+                  onPress={() =>
+                    void (async () => {
+                      if (
+                        roleEdited &&
+                        !(await confirm(
+                          "Replace this setup?",
+                          "This replaces the name, purpose and instructions you edited. Your current text is kept if you cancel.",
+                          "Use role",
+                          false,
+                        ))
+                      )
+                        return;
+                      setName(t.name);
+                      setDescription(t.description);
+                      setInstructions(t.instructions);
+                      setRoleEdited(false);
+                    })()
+                  }
                   style={{
                     backgroundColor: theme.surface,
                     minHeight: 44,
@@ -157,9 +173,13 @@ export default function AgentEdit() {
           </View>
         ) : null}
         <Field
+          testID="agent-name"
           label="Name"
           value={name}
-          onChangeText={setName}
+          onChangeText={(value) => {
+            setName(value);
+            setRoleEdited(true);
+          }}
           placeholder="What should we call your agent?"
           maxLength={50}
         />
@@ -185,14 +205,20 @@ export default function AgentEdit() {
         <Field
           label="Its purpose"
           value={description}
-          onChangeText={setDescription}
+          onChangeText={(value) => {
+            setDescription(value);
+            setRoleEdited(true);
+          }}
           placeholder="What would you like help with?"
           maxLength={200}
         />
         <Field
           label="How it should work"
           value={instructions}
-          onChangeText={setInstructions}
+          onChangeText={(value) => {
+            setInstructions(value);
+            setRoleEdited(true);
+          }}
           multiline
           placeholder="Be thoughtful and direct. Help me explore options and choose the next step…"
           maxLength={8000}

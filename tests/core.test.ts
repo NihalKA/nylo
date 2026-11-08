@@ -11,6 +11,8 @@ import {
   validateConnection,
   reusableConversation,
   removeDeviceCheckData,
+  plainTextPreview,
+  starterDraft,
 } from "../src/domain";
 import {
   buildRequest,
@@ -42,6 +44,26 @@ const agent: Agent = {
   memories: [{ id: "memory-1", text: "Use British English.", createdAt: 1 }],
   createdAt: 1,
 };
+test("conversation previews flatten formatting while keeping readable link and code text", () => {
+  assert.equal(
+    plainTextPreview(
+      "### Update\n\n**Done:** see [the notes](https://example.com).\nUse `draft_id`.",
+    ),
+    "Update Done: see the notes. Use draft_id.",
+  );
+  assert.equal(
+    plainTextPreview("```ts\nconst ready = true;\n```"),
+    "const ready = true;",
+  );
+});
+test("quick starters cannot replace a restored or newly typed draft", () => {
+  assert.equal(starterDraft("", "Help me write "), "Help me write ");
+  assert.equal(
+    starterDraft("A personal draft", "Help me write "),
+    "A personal draft",
+  );
+  assert.equal(starterDraft(" ", "Help me write "), " ");
+});
 function stream(events: unknown[], ending = true) {
   const payload = events
     .map(
