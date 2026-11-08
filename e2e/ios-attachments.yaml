@@ -42,6 +42,13 @@ appId: com.nylohq.nylo
 - tapOn:
     text: "Done"
     retryTapIfNoChange: false
+# Wait for preparation to settle, including its bounded failure path; preview
+# remains mandatory. A timeout error must fail this assertion, never pass it.
+- extendedWaitUntil:
+    visible:
+      text: "Add attachment"
+      enabled: true
+    timeout: 30000
 - assertVisible: "Preview Photo.jpg"
 - assertVisible: "Remove Photo.jpg"
 - takeScreenshot: attachments-01b-selected-owned-photo

@@ -1,3 +1,8 @@
+import {
+  assertAttachmentActive,
+  attachmentStep,
+  prepareAttachments,
+} from "./attachment-operation";
 import { utf8Size } from "./byte-size";
 import { processAttachmentBatch } from "./attachment-batch";
 import * as DocumentPicker from "expo-document-picker";
@@ -7,7 +12,8 @@ import { File, Paths } from "expo-file-system";
 import { Attachment } from "./types";
 import { uid } from "./domain";
 import { MAX_ATTACHMENT_BYTES } from "./attachments";
-export type AttachmentPreparation = "preparing" | "encoding" | "reading";
+export type AttachmentPreparation =
+  "inspecting" | "opening" | "decoding" | "encoding" | "reading";
 export type AttachmentSource = "files" | "photos" | "camera";
 export async function pickAttachments(
   source: AttachmentSource,
@@ -28,45 +34,54 @@ export async function pickAttachments(
       copyToCacheDirectory: true,
     });
     if (result.canceled) return [];
-    onPreparing?.("preparing");
-    return processAttachmentBatch(result.assets, {
-      sourceSize: (asset) => new File(asset.uri).size,
-      maxSourceFileBytes: MAX_ATTACHMENT_BYTES,
-      maxSourceTotalBytes: 4 * 1024 * 1024,
-      convert: async (asset) => {
-        const file = new File(asset.uri);
-        if (asset.mimeType?.startsWith("image/"))
-          return image(asset.uri, onPreparing);
-        if (asset.mimeType === "application/pdf" || /\.pdf$/i.test(asset.name))
-          return {
-            id: uid(),
-            name: asset.name.slice(0, 200),
-            mimeType: "application/pdf",
-            size: file.size,
-            data: await file.base64(),
-          };
-        if (
-          /\.(txt|md|csv|json|log)$/i.test(asset.name) ||
-          asset.mimeType?.startsWith("text/")
-        ) {
-          const data = await file.text();
-          return {
-            id: uid(),
-            name: asset.name.slice(0, 200),
-            mimeType: "text/plain",
-            size: utf8Size(data),
-            data,
-          };
-        }
-        throw new Error("Choose a PDF, text file, JPEG or PNG photo.");
-      },
-      cleanup: (asset) => {
-        if (asset.uri.startsWith(Paths.cache.uri)) {
+    onPreparing?.("inspecting");
+    return prepareAttachments((signal) =>
+      processAttachmentBatch(result.assets, {
+        sourceSize: (asset) => {
+          assertAttachmentActive(signal);
+          return new File(asset.uri).size;
+        },
+        maxSourceFileBytes: MAX_ATTACHMENT_BYTES,
+        maxSourceTotalBytes: 4 * 1024 * 1024,
+        convert: async (asset) => {
+          assertAttachmentActive(signal);
           const file = new File(asset.uri);
-          if (file.exists) file.delete();
-        }
-      },
-    });
+          if (asset.mimeType?.startsWith("image/"))
+            return image(asset.uri, signal, onPreparing);
+          if (
+            asset.mimeType === "application/pdf" ||
+            /\.pdf$/i.test(asset.name)
+          )
+            return {
+              id: uid(),
+              name: asset.name.slice(0, 200),
+              mimeType: "application/pdf",
+              size: file.size,
+              data: await attachmentStep(file.base64(), signal),
+            };
+          if (
+            /\.(txt|md|csv|json|log)$/i.test(asset.name) ||
+            asset.mimeType?.startsWith("text/")
+          ) {
+            const data = await attachmentStep(file.text(), signal);
+            return {
+              id: uid(),
+              name: asset.name.slice(0, 200),
+              mimeType: "text/plain",
+              size: utf8Size(data),
+              data,
+            };
+          }
+          throw new Error("Choose a PDF, text file, JPEG or PNG photo.");
+        },
+        cleanup: (asset) => {
+          if (asset.uri.startsWith(Paths.cache.uri)) {
+            const file = new File(asset.uri);
+            if (file.exists) file.delete();
+          }
+        },
+      }),
+    );
   }
   if (source === "camera") {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
@@ -94,26 +109,34 @@ export async function pickAttachments(
           exif: false,
         });
   if (result.canceled) return [];
-  onPreparing?.("preparing");
-  return processAttachmentBatch(result.assets, {
-    sourceSize: (asset) => asset.fileSize || new File(asset.uri).size,
-    maxSourceFileBytes: 20 * 1024 * 1024,
-    maxSourceTotalBytes: 80 * 1024 * 1024,
-    convert: (asset) => image(asset.uri, onPreparing),
-    cleanup: (asset) => {
-      if (asset.uri.startsWith(Paths.cache.uri)) {
-        const file = new File(asset.uri);
-        if (file.exists) file.delete();
-      }
-    },
-  });
+  onPreparing?.("inspecting");
+  return prepareAttachments((signal) =>
+    processAttachmentBatch(result.assets, {
+      sourceSize: (asset) => {
+        assertAttachmentActive(signal);
+        return asset.fileSize || new File(asset.uri).size;
+      },
+      maxSourceFileBytes: 20 * 1024 * 1024,
+      maxSourceTotalBytes: 80 * 1024 * 1024,
+      convert: (asset) => image(asset.uri, signal, onPreparing),
+      cleanup: (asset) => {
+        if (asset.uri.startsWith(Paths.cache.uri)) {
+          const file = new File(asset.uri);
+          if (file.exists) file.delete();
+        }
+      },
+    }),
+  );
 }
 async function image(
   uri: string,
+  signal: AbortSignal,
   onPreparing?: (stage: AttachmentPreparation) => void,
 ): Promise<Attachment> {
   // Decode within bounds rather than loading a full camera image and upscaling
   // small images. Re-encoding pixels excludes the original EXIF metadata.
+  assertAttachmentActive(signal);
+  onPreparing?.("opening");
   const context = ImageManipulator.manipulate(uri, {
     maxWidth: 1600,
     maxHeight: 1600,
@@ -121,15 +144,26 @@ async function image(
   let rendered: Awaited<ReturnType<typeof context.renderAsync>> | undefined;
   let file: File | undefined;
   try {
-    rendered = await context.renderAsync();
+    onPreparing?.("decoding");
+    rendered = await attachmentStep(context.renderAsync(), signal, (late) =>
+      late.release(),
+    );
     onPreparing?.("encoding");
-    const result = await rendered.saveAsync({
-      compress: 0.75,
-      format: SaveFormat.JPEG,
-      base64: true,
-    });
+    const result = await attachmentStep(
+      rendered.saveAsync({
+        compress: 0.75,
+        format: SaveFormat.JPEG,
+        base64: true,
+      }),
+      signal,
+      (late) => {
+        const lateFile = new File(late.uri);
+        if (lateFile.exists) lateFile.delete();
+      },
+    );
     file = new File(result.uri);
     onPreparing?.("reading");
+    assertAttachmentActive(signal);
     if (!result.base64) throw new Error("This photo could not be prepared.");
     const bytes =
       (result.base64.length * 3) / 4 -

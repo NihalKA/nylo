@@ -695,9 +695,13 @@ function Chat() {
                 ? "Reading attachment…"
                 : attachmentPreparation === "encoding"
                   ? "Finishing photo…"
-                  : attachmentPreparation === "preparing"
-                    ? "Preparing attachment…"
-                    : "Choosing attachment…"}
+                  : attachmentPreparation === "decoding"
+                    ? "Preparing photo…"
+                    : attachmentPreparation === "opening"
+                      ? "Opening photo…"
+                      : attachmentPreparation === "inspecting"
+                        ? "Checking attachment…"
+                        : "Choosing attachment…"}
             </Text>
           ) : null}
           <View style={s.between}>

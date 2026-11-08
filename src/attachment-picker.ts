@@ -1,5 +1,6 @@
 import { Attachment } from "./types";
-export type AttachmentPreparation = "preparing" | "encoding" | "reading";
+export type AttachmentPreparation =
+  "inspecting" | "opening" | "decoding" | "encoding" | "reading";
 export type AttachmentSource = "files" | "photos" | "camera";
 export async function pickAttachments(
   _source: AttachmentSource,
