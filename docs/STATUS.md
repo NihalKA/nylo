@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent score: 86/100; see docs/reviews/008-memory-relaunch-review.md. Compact/large full smoke and exact saved-memory relaunch pass. Maximum-text setup stops when scrolling opens the keyboard; a compact empty-state heading clips while typing. No high/critical finding is established; source/test fixes await verification. The 88 release gate and separate physical/live/VoiceOver gates remain unmet.
+- Latest independent score: 86/100; see docs/reviews/009-maximum-text-tabs.md. Compact/large full smoke, exact-memory relaunch and agent multiline composition pass. Maximum-text creation is fixed, but its Memory tab overflows horizontally; a wrapping-row correction awaits native verification. No high/critical finding is established. The 88 release gate and separate physical/live/VoiceOver gates remain unmet.
 
 ## In progress
 

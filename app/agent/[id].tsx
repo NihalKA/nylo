@@ -102,7 +102,13 @@ export default function AgentDetail() {
         <View
           style={[
             s.row,
-            { borderBottomWidth: 1, borderColor: theme.line, gap: 26 },
+            {
+              borderBottomWidth: 1,
+              borderColor: theme.line,
+              columnGap: 26,
+              rowGap: 4,
+              flexWrap: "wrap",
+            },
           ]}
         >
           {(["conversations", "memory"] as const).map((t) => (
@@ -112,6 +118,9 @@ export default function AgentDetail() {
               key={t}
               onPress={() => setTab(t)}
               style={{
+                minHeight: 44,
+                maxWidth: "100%",
+                flexShrink: 1,
                 paddingVertical: 14,
                 borderBottomWidth: 2,
                 borderBottomColor: tab === t ? theme.green : "transparent",
