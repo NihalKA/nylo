@@ -13,6 +13,11 @@ on:
         description: Embed current JS into a compatible simulator runtime (UI evidence only)
         type: boolean
         default: false
+      scenario:
+        description: First-use smoke or synthetic populated-state gallery
+        type: choice
+        options: [smoke, gallery]
+        default: smoke
 permissions:
   contents: read
   actions: read
@@ -26,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: [compact, large, large-text]
+        profile: ${{ inputs.scenario == 'gallery' && fromJSON('["large"]') || fromJSON('["compact","large","large-text"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -44,6 +49,7 @@ jobs:
         env:
           SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
           UI_PROFILE: ${{ matrix.profile }}
+          UI_SCENARIO: ${{ inputs.scenario || 'smoke' }}
           REFRESH_JS_BUNDLE: ${{ inputs.refresh_js_bundle && 'true' || 'false' }}
           GH_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

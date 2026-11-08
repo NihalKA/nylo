@@ -63,6 +63,14 @@ xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8
 xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
+scenario="${UI_SCENARIO:-smoke}"
+case "$scenario" in smoke|gallery) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+if [ "$scenario" = gallery ]; then
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 scripts/seed-ios-gallery.py --container "$app_container"
+  echo 'Synthetic offline QA data, not live model output or customer history.' > artifacts/e2e/gallery-disclosure.txt
+fi
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
@@ -71,4 +79,12 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$(git rev-parse HEAD)" > artifacts/e2e/source.txt
 printf 'Profile: %s\nDevice type: %s\nRuntime: %s\n' "$profile" "$device_type" "$runtime_id" >> artifacts/e2e/source.txt
 printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$(git rev-parse HEAD)" >> artifacts/e2e/source.txt
-"$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml e2e/ios-smoke.yaml
+printf 'Scenario: %s\n' "$scenario" >> artifacts/e2e/source.txt
+"$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = gallery ]; then
+  xcrun simctl pbpaste "$simulator_id" > artifacts/e2e/copied-example.txt
+  python3 - <<'PY'
+from pathlib import Path
+assert Path('artifacts/e2e/copied-example.txt').read_text().startswith('Start with one meaningful task.'), 'Copied response differs from the synthetic example'
+PY
+fi
