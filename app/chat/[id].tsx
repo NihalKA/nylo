@@ -185,6 +185,42 @@ export default function Chat() {
           />
         }
       />
+      {agent ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`View ${agent.name} memory. ${agent.memories.length} saved facts shared across this agent’s conversations.`}
+          onPress={() =>
+            router.push({
+              pathname: "/agent/[id]",
+              params: { id: agent.id, section: "memory" },
+            })
+          }
+          style={[
+            s.row,
+            {
+              minHeight: 52,
+              gap: 10,
+              paddingVertical: 10,
+              paddingHorizontal: 12,
+              borderRadius: 12,
+              backgroundColor: theme.pale,
+              marginBottom: 8,
+            },
+          ]}
+        >
+          <Icon name="leaf-outline" color={theme.green} size={20} />
+          <View style={{ flex: 1, gap: 2 }}>
+            <Text style={[s.text, { fontSize: 14, fontWeight: "600" }]}>
+              {agent.memories.length} saved{" "}
+              {agent.memories.length === 1 ? "fact" : "facts"} · View memory
+            </Text>
+            <Text style={s.sub}>
+              Your agent keeps the preferences you approve.
+            </Text>
+          </View>
+          <Icon name="chevron-forward" color={theme.green} size={16} />
+        </Pressable>
+      ) : null}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={
@@ -254,8 +290,8 @@ export default function Chat() {
                 ]}
               >
                 {agent
-                  ? `${agent.description || "A familiar place to think."}\n${agent.memories.length} saved memories are available in this conversation.`
-                  : "Ask a question or start with an idea."}
+                  ? `${agent.description || "Your assistant, with its own instructions."}\nInstructions and approved memories carry into new chats. Earlier transcripts stay in their own conversations.`
+                  : "A fresh conversation, without saved preferences. Use an agent when you want it to remember how you work."}
               </Text>
               {!connection ? (
                 <Button
@@ -466,6 +502,7 @@ export default function Chat() {
           >
             <TextInput
               accessibilityLabel="Message"
+              testID="chat-message"
               value={text}
               onChangeText={setText}
               maxLength={20000}

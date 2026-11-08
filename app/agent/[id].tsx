@@ -143,7 +143,7 @@ export default function AgentDetail() {
             <Empty
               icon="chatbubbles-outline"
               title="A fresh conversation, familiar context"
-              body="Every conversation uses this agent’s instructions and saved memory."
+              body="Instructions and approved memories carry into every new chat. To continue an earlier discussion, reopen its conversation here."
             />
           )
         ) : (

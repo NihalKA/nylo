@@ -26,8 +26,10 @@ appId: com.nylohq.nylo
     text: "Chats, tab, 1 of 3"
     retryTapIfNoChange: true
 - tapOn: "New chat"
-- assertVisible: "Message"
-- tapOn: "Message"
+- assertVisible:
+    id: "chat-message"
+- tapOn:
+    id: "chat-message"
 - inputText: "A draft that should survive reopening"
 - takeScreenshot: 05-chat-keyboard
 - hideKeyboard
@@ -60,9 +62,9 @@ appId: com.nylohq.nylo
     direction: DOWN
 - tapOn: "Memory"
 - scrollUntilVisible:
-    element: "A fact to remember"
+    element: "A fact to remember.*"
     direction: DOWN
-- tapOn: "A fact to remember"
+- tapOn: "A fact to remember.*"
 - inputText: "QA sample: I prefer concise answers."
 - hideKeyboard
 - scrollUntilVisible:
