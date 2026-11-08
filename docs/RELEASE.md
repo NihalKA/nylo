@@ -1,6 +1,6 @@
 # iOS release runbook
 
-Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. The user has an Apple Developer account; team, bundle identifier, app record and signing credentials have been configured; actual archive/upload verification is pending. Android publication is deferred.
+Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed builds 3 and 4 uploaded and Apple processing is VALID; build 4 is assigned to internal device QA. Android publication is deferred.
 
 ## Native evidence without local compilation
 
@@ -18,7 +18,7 @@ Use the `apple-release` GitHub environment with deployment limited to main. No s
 
 Create app record, confirm package/name availability and roles, back up credentials privately, and enable API access. Provisioning profile and certificate expiry are release dependencies. Do not revoke certificates used by other apps. Upload permissions do not necessarily include certificate creation.
 
-Trigger `iOS signed beta` on main. It checks source, uses ephemeral signing files/keychain, builds and uploads to TestFlight. Initially the lane is unverified until real credentials and a successful run exist. CI build numbers must increase; if migrating an existing app with higher build numbers set an offset before first upload. Keep a single beta numbering workflow and do not reset its run counter after releases.
+Trigger `iOS signed beta` on main. It checks source, uses ephemeral signing files/keychain, builds and uploads to TestFlight. Runs 42475045265 and 42476376051 verified the lane. CI build numbers must increase; if migrating an existing app with higher build numbers set an offset before first upload. Keep a single beta numbering workflow and do not reset its run counter after releases.
 
 ## Production gates
 

@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent milestone score: 68/100 at fc9c4bb, including an actual native Chats render from 337d99e. Still below the 88 release gate; see docs/reviews/003-native-review.md. New source fixes await re-review.
+- Latest independent milestone score: 72/100 at 267b3ff, with historical native evidence only. Still below the 88 release gate; see docs/reviews/004-consent-recovery-review.md. Its five medium findings are being corrected and require re-review.
 
 ## In progress
 

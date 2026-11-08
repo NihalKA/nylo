@@ -19,6 +19,10 @@ jobs:
   smoke:
     if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
     runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [compact, large, large-text]
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -28,10 +32,11 @@ jobs:
         run: bash scripts/ios-smoke.sh
         env:
           SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
+          UI_PROFILE: ${{ matrix.profile }}
           GH_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: iphone-ui-${{ github.run_id }}
+          name: iphone-ui-${{ github.run_id }}-${{ matrix.profile }}
           path: artifacts/e2e
           retention-days: 7

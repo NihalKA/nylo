@@ -16,6 +16,10 @@ appId: com.nylohq.nylo
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "Choose your AI"
+- scrollUntilVisible:
+    element: "NyloHQ"
+    direction: DOWN
+- tapOn: "NyloHQ"
 - takeScreenshot: 04-provider-setup
 - tapOn: "Go back"
 - tapOn:
@@ -25,13 +29,61 @@ appId: com.nylohq.nylo
 - assertVisible: "Message"
 - tapOn: "Message"
 - inputText: "A draft that should survive reopening"
+- takeScreenshot: 05-chat-keyboard
 - hideKeyboard
 - takeScreenshot: 05-chat-draft
 - tapOn: "Go back"
-- tapOn: "Open New conversation"
+- tapOn: "Open New conversation.*"
 - assertVisible: "A draft that should survive reopening"
 - stopApp
 - launchApp
-- tapOn: "Open New conversation"
+- tapOn: "Open New conversation.*"
 - assertVisible: "A draft that should survive reopening"
 - takeScreenshot: 06-restored-draft
+- tapOn: "Go back"
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: true
+- tapOn: "Create agent"
+- scrollUntilVisible:
+    element: "Writing partner"
+    direction: DOWN
+- tapOn: "Writing partner"
+- takeScreenshot: 07-agent-template
+- scrollUntilVisible:
+    element: "Create agent"
+    direction: DOWN
+- tapOn: "Create agent"
+- assertVisible: "Your agent"
+- scrollUntilVisible:
+    element: "Memory"
+    direction: DOWN
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "A fact to remember"
+    direction: DOWN
+- tapOn: "A fact to remember"
+- inputText: "QA sample: I prefer concise answers."
+- hideKeyboard
+- scrollUntilVisible:
+    element: "Save memory"
+    direction: DOWN
+- tapOn: "Save memory"
+- scrollUntilVisible:
+    element: "QA sample: I prefer concise answers."
+    direction: UP
+- takeScreenshot: 08-agent-memory
+- stopApp
+- launchApp
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: true
+- tapOn: "Open Writing partner"
+- scrollUntilVisible:
+    element: "Memory"
+    direction: DOWN
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "QA sample: I prefer concise answers."
+    direction: DOWN
+- takeScreenshot: 09-restored-memory
