@@ -1,0 +1,11 @@
+# Current native UI and live-check evidence
+
+8 November 2026. Independent GPT-6 Astra reviewed app eae0718, repository 4269107, actual current PNGs, commands, results, failure accessibility tree and provenance. **87/100 provisional; release gate unmet.** Task 24/25, navigation 18/20, visual 17/20, accessibility 12/15, trust 9/10, native 7/10. No new high/critical product defect established.
+
+Resolved: all three profiles in smoke 42490250273 succeed, including maximum-text Memory navigation, save, stop/launch, restored memory and multiline agent composition with keyboard clearance. Each provenance file identifies native seed 9fc4d9a, refreshed app JS/flows eae0718, iOS 26.2. Compact is SE third generation; large/max text are iPhone 17 Pro Max. Evidence is retained in artifacts/review-live-matrix.
+
+Gallery 42490247848 rendered the synthetic populated inbox, formatted ordinary/agent responses, retry presentation, 200-message history and approved test memory. It created a separate personal draft, stopped/launched and restored the saved memory display. Its centering failure occurred before tapping the reopen control, cleanup/personal-draft preservation and final exact clipboard comparison. AX bounds [20,677][420,727] and the screenshot show the enabled reopen button fully visible. Fixture-only fabe458 removes centering, retains full visibility and does not require a new beta. Rerun 42491568232 was still running at review (14:52:46 UTC).
+
+Low: the long-history PNG partially clips its last answer. Existing visibility evidence proves navigation near the end, not complete last-answer readability or a persistent scrolling defect. Strengthen the settled full-visibility/manual-scrolling check before changing app layout. Low: mocked shared-send lifecycle coverage remains incomplete; no remaining deletion defect was observed.
+
+Full native eae run 42490247686 remained running. Signed run 42490400098 succeeded on eae; parent directly verified Apple VALID build 0.1.0 (8), ID 0e4c605f-3fac-4bc0-ac5e-b49b2df4a66a, internal QA assignment and saved test instructions. Physical/live/VoiceOver outcomes remain unconfirmed. Displayed Retry and synthetic answers do not prove live recovery or provider recall. Continue internal validation; do not submit for production yet.
