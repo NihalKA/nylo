@@ -28,7 +28,12 @@ export default function Chats() {
     () =>
       data.conversations
         .filter((c) => !isDeviceCheckConversation(data, c.id))
-        .filter((c) => c.messages.length > 0 || c.draft?.trim())
+        .filter(
+          (c) =>
+            c.messages.length > 0 ||
+            c.draft?.trim() ||
+            !!c.draftAttachments?.length,
+        )
         .filter((c) => {
           const agent = data.agents.find((a) => a.id === c.agentId);
           const needle = query.trim().toLocaleLowerCase();

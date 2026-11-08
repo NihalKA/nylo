@@ -30,7 +30,15 @@
       "expo-sqlite",
       "expo-secure-store",
       "expo-sharing",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": false,
+          "cameraPermission": "Nylo uses the camera only when you choose to attach a photo to a conversation.",
+          "microphonePermission": false
+        }
+      ]
     ],
     "scheme": "nylo"
   }

@@ -67,6 +67,23 @@ data = dict(version=1, connections=[dict(id="gallery-provider", name="Offline QA
     chat("gallery-history", "Example: A longer conversation", history, age=3000),
 ])
 
+# Harmless owned pixel fixture; never a live provider answer or customer file.
+import base64
+import struct
+import zlib
+
+def png_chunk(kind, content):
+    return struct.pack(">I", len(content)) + kind + content + struct.pack(">I", zlib.crc32(kind + content) & 0xffffffff)
+owned_png = b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", struct.pack(">IIBBBBB", 32, 32, 8, 2, 0, 0, 0)) + png_chunk(b"IDAT", zlib.compress(b"".join(b"\x00" + bytes([36,107,88]) * 32 for _ in range(32)))) + png_chunk(b"IEND", b"")
+photo = dict(id="gallery-owned-image",name="QA image.png",mimeType="image/png",size=len(owned_png),data=base64.b64encode(owned_png).decode())
+text_file = dict(id="gallery-owned-text",name="QA note.txt",mimeType="text/plain",size=25,data="Synthetic attachment note")
+data["connections"][0]["models"] = ["synthetic-no-network", "synthetic-secondary"]
+data["agents"][0].update(shareRecentChats=True,goal="Keep the project moving",workflow="plan")
+prior = chat("gallery-agent-prior","Example: Project context",[message("prior-user","user","Our launch date is Friday."),message("prior-answer","assistant","We will use Friday as the launch date.")],agent="gallery-writer",age=5000)
+attachments_chat = chat("gallery-attachments","Example: Attachments ready",[],age=6000)
+attachments_chat.update(draft="Review these files",draftAttachments=[photo,text_file])
+data["conversations"].extend([prior,attachments_chat])
+
 with sqlite3.connect(db_path) as db:
     row = db.execute("SELECT json FROM app_state WHERE id=1").fetchone()
     previous = json.loads(row[0]) if row else {}

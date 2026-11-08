@@ -1,8 +1,13 @@
 import { parseData } from "./domain";
 import { AppData } from "./types";
 export async function exportBackup(data: AppData) {
+  const content = JSON.stringify(parseData(data), null, 2);
+  if (new Blob([content]).size > 100 * 1024 * 1024)
+    throw new Error(
+      "This backup exceeds 100 MB. Remove unneeded attachment conversations before exporting.",
+    );
   const url = URL.createObjectURL(
-    new Blob([JSON.stringify(parseData(data), null, 2)], {
+    new Blob([content], {
       type: "application/json",
     }),
   );
@@ -22,8 +27,8 @@ export async function pickBackup(): Promise<unknown | null> {
       try {
         const file = input.files?.[0];
         if (!file) return resolve(null);
-        if (file.size > 20 * 1024 * 1024)
-          throw new Error("Choose a backup smaller than 20 MB.");
+        if (file.size > 100 * 1024 * 1024)
+          throw new Error("Choose a backup smaller than 100 MB.");
         resolve(JSON.parse(await file.text()));
       } catch (error) {
         reject(error);

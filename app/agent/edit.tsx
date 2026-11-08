@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Switch, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { colors, isDeviceCheckConversation } from "../../src/domain";
@@ -52,6 +52,13 @@ export default function AgentEdit() {
       (source ? `A partner for ${source.title.toLowerCase()}` : ""),
   );
   const [instructions, setInstructions] = useState(initial?.instructions || "");
+  const [goal, setGoal] = useState(original?.goal || "");
+  const [workflow, setWorkflow] = useState<"direct" | "plan" | "coach">(
+    original?.workflow || "direct",
+  );
+  const [shareRecentChats, setShareRecentChats] = useState(
+    original?.shareRecentChats || false,
+  );
   const [context, setContext] = useState(
     source
       ? source.messages
@@ -87,11 +94,25 @@ export default function AgentEdit() {
     setBusy(true);
     setError("");
     try {
+      if (
+        shareRecentChats &&
+        !original?.shareRecentChats &&
+        !(await confirm(
+          "Use this agent’s recent chats?",
+          "Future messages may send up to eight recent conversations from this agent, in bounded text excerpts, to your selected AI provider. Other agents and ordinary chats stay separate. Turn this off in the agent’s Memory section. Saved facts and original chats are managed separately.",
+          "Enable context",
+          false,
+        ))
+      )
+        return;
       const agentId = await saveAgent(
         {
           name: name.trim(),
           description: description.trim(),
           instructions: instructions.trim(),
+          goal: goal.trim(),
+          workflow,
+          shareRecentChats,
           connectionId,
           color,
         },
@@ -225,6 +246,45 @@ export default function AgentEdit() {
           style={{ minHeight: 150 }}
           help="These instructions guide every conversation with this agent."
         />
+        <Field
+          label="Current goal"
+          value={goal}
+          onChangeText={setGoal}
+          multiline
+          maxLength={2000}
+          placeholder="What outcome are you working toward?"
+          help="Shared across this agent’s chats until you change it."
+        />
+        <Text style={s.text}>Working approach</Text>
+        <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
+          {(["direct", "plan", "coach"] as const).map((value) => (
+            <Button
+              key={value}
+              title={
+                value === "direct"
+                  ? "Work directly"
+                  : value === "plan"
+                    ? "Plan & deliver"
+                    : "Coach me"
+              }
+              secondary={workflow !== value}
+              onPress={() => setWorkflow(value)}
+            />
+          ))}
+        </View>
+        <View style={{ gap: 8 }}>
+          <Text style={s.text}>Use recent chats</Text>
+          <Switch
+            accessibilityLabel="Use recent chats from this agent"
+            value={shareRecentChats}
+            onValueChange={setShareRecentChats}
+          />
+          <Text style={s.sub}>
+            Carry relevant text context between this agent’s conversations. You
+            approve enabling this before it is shared. Other agents stay
+            separate; attached files are not carried into a different chat.
+          </Text>
+        </View>
         {source ? (
           <Field
             label="Context to carry forward"
@@ -273,9 +333,9 @@ export default function AgentEdit() {
         <View style={[s.card, { gap: 9 }]}>
           <Badge text="LOCAL MEMORY" icon="sparkles-outline" />
           <Text style={s.sub}>
-            Tell it “remember that…” to save a fact, or manage its memory
-            yourself. This version has local memory tools; browsing and external
-            actions are not connected.
+            Useful preferences and decisions can be proposed as memories. You
+            approve each save, or add facts yourself. This version has local
+            memory tools; browsing and external actions are not connected.
           </Text>
         </View>
         {error ? <Text style={s.error}>{error}</Text> : null}

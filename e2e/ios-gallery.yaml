@@ -10,6 +10,9 @@ appId: com.nylohq.nylo
 - assertVisible: "Choose a model"
 - assertNotVisible: "Conversation title"
 - takeScreenshot: gallery-02b-model-picker
+- tapOn: "Offline QA provider[.] synthetic-secondary"
+- assertVisible: "Choose model connection[.] Offline QA provider, synthetic-secondary"
+- tapOn: "Choose model connection.*"
 - tapOn: "Offline QA alternate.*"
 - assertNotVisible: "Close model picker"
 - assertVisible: "Choose model connection[.] Offline QA alternate, synthetic-alternate"
@@ -18,6 +21,22 @@ appId: com.nylohq.nylo
 - tapOn: "Choose model connection.*"
 - tapOn: "Manage providers"
 - assertVisible: "AI providers"
+- tapOn: "Edit Offline QA provider"
+- scrollUntilVisible:
+    element: "Choose models"
+    direction: DOWN
+- tapOn: "Choose models"
+- assertVisible: "2 selected.*"
+- tapOn: "Clear selection"
+- assertVisible: "0 selected.*"
+- tapOn: "Select all 2 models"
+- assertVisible: "2 selected.*"
+- takeScreenshot: gallery-10-provider-model-library
+- tapOn: "Done choosing models"
+- scrollUntilVisible:
+    element: "Cancel connection"
+    direction: UP
+- tapOn: "Cancel connection"
 - tapOn: "Go back"
 - tapOn: "Go back"
 - tapOn: "(?s)Open Example: A clear project update.*"
@@ -119,6 +138,48 @@ appId: com.nylohq.nylo
     text: "Writing partner"
 - takeScreenshot: gallery-09-role-replacement-confirmed
 - tapOn: "Go back"
+- tapOn: "Open Writing partner"
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "Review recent context"
+    direction: DOWN
+- tapOn: "Review recent context"
+- assertVisible: "(?s).*Our launch date is Friday.*"
+- takeScreenshot: gallery-11-agent-shared-context
+- tapOn: "Go back"
 - tapOn: "Chats, tab, 1 of 3"
+- scrollUntilVisible:
+    element: "(?s)Open Example: Attachments ready.*"
+    direction: DOWN
+- tapOn: "(?s)Open Example: Attachments ready.*"
+- assertVisible: "QA note.txt.*"
+- assertVisible: "Review these files"
+- takeScreenshot: gallery-12-attachment-draft
+- tapOn: "Add attachment"
+- assertVisible: "Photo library"
+- assertVisible: "Take a photo"
+- assertVisible: "Choose files"
+- takeScreenshot: gallery-13-attachment-sources
+- tapOn: "Cancel attachments"
+- stopApp
+- launchApp
+- scrollUntilVisible:
+    element: "(?s)Open Example: Attachments ready.*"
+    direction: DOWN
+- tapOn: "(?s)Open Example: Attachments ready.*"
+- assertVisible: "QA note.txt.*"
+- assertVisible: "Review these files"
+- tapOn: "Remove QA note.txt"
+- assertNotVisible: "QA note.txt.*"
+- takeScreenshot: gallery-14-attachment-restored
+- tapOn: "Go back"
+- scrollUntilVisible:
+    element: "(?s)Open Example: A focused morning.*"
+    direction: UP
 - tapOn: "(?s)Open Example: A focused morning.*"
+- tapOn: "Report response"
+- assertVisible: "Report preview"
+- assertNotVisible: "(?s).*Start with one meaningful task.*"
+- takeScreenshot: gallery-15-report-preview
+- tapOn: "Go back"
 - tapOn: "Copy response"

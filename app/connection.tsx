@@ -1,3 +1,4 @@
+import { connectionModels } from "../src/model-library";
 import { credentialDestination } from "../src/credentials";
 import { listModels } from "../src/models";
 import { streamingFetch } from "../src/transport";
@@ -102,7 +103,7 @@ export default function Settings() {
   const draftRevision = useRef(0);
   useEffect(() => {
     draftRevision.current++;
-    setModels([]);
+    setModels(draft?.models || []);
     setModelsOpen(false);
     setModelSearch("");
     setError("");
@@ -142,7 +143,7 @@ export default function Settings() {
         >
           <View style={s.between}>
             <Text accessibilityRole="header" style={[s.h2, { fontSize: 24 }]}>
-              Choose a model
+              Choose models
             </Text>
             <IconButton
               name="close"
@@ -157,6 +158,28 @@ export default function Settings() {
             autoCapitalize="none"
             autoCorrect={false}
           />
+          <View style={[s.row, { gap: 10, flexWrap: "wrap" }]}>
+            <Button
+              title={`Select all ${models.length} models`}
+              secondary
+              onPress={() =>
+                setDraft((c) =>
+                  c ? { ...c, models, model: c.model || models[0] || "" } : c,
+                )
+              }
+            />
+            <Button
+              title="Clear selection"
+              secondary
+              onPress={() =>
+                setDraft((c) => (c ? { ...c, models: [], model: "" } : c))
+              }
+            />
+          </View>
+          <Text style={s.sub}>
+            {draft.model ? connectionModels(draft).length : 0} selected · choose
+            one in each chat
+          </Text>
           <FlatList
             data={models.filter((model) =>
               model.toLowerCase().includes(modelSearch.toLowerCase()),
@@ -167,14 +190,26 @@ export default function Settings() {
             contentContainerStyle={{ paddingBottom: 24 }}
             renderItem={({ item: model }) => (
               <Pressable
-                accessibilityRole="radio"
+                accessibilityRole="checkbox"
                 accessibilityLabel={model}
-                accessibilityState={{ checked: draft?.model === model }}
+                accessibilityState={{
+                  checked: connectionModels(draft).includes(model),
+                }}
                 onPress={() => {
-                  setDraft((current) =>
-                    current ? { ...current, model } : current,
-                  );
-                  setModelsOpen(false);
+                  setDraft((current) => {
+                    if (!current) return current;
+                    const selected = connectionModels(current);
+                    const next = selected.includes(model)
+                      ? selected.filter((m) => m !== model)
+                      : [...selected, model];
+                    return {
+                      ...current,
+                      models: next,
+                      model: next.includes(current.model)
+                        ? current.model
+                        : next[0] || "",
+                    };
+                  });
                 }}
                 style={[
                   s.between,
@@ -188,7 +223,7 @@ export default function Settings() {
                 ]}
               >
                 <Text style={[s.text, { flex: 1 }]}>{model}</Text>
-                {draft?.model === model ? (
+                {connectionModels(draft).includes(model) ? (
                   <Icon name="checkmark-circle" color={theme.green} />
                 ) : null}
               </Pressable>
@@ -197,9 +232,14 @@ export default function Settings() {
               <Text style={s.sub}>No matching model. Try another search.</Text>
             }
           />
+          <Button
+            title="Done choosing models"
+            disabled={!draft.model}
+            onPress={() => setModelsOpen(false)}
+          />
           <Text style={s.sub}>
-            Choose a text model. Listing a model does not verify its chat or
-            memory-tool access.
+            Choose models supported by this API. Listing a model does not verify
+            its chat or memory-tool access.
           </Text>
         </View>
       </Page>
@@ -235,7 +275,11 @@ export default function Settings() {
             <View style={[s.between, { gap: 12 }]}>
               <View style={{ flex: 1 }}>
                 <Text style={[s.text, { fontWeight: "600" }]}>{c.name}</Text>
-                <Text style={s.sub}>{c.model}</Text>
+                <Text style={s.sub}>
+                  {connectionModels(c).length}{" "}
+                  {connectionModels(c).length === 1 ? "model" : "models"} ·
+                  default {c.model}
+                </Text>
                 <Text style={s.sub}>
                   {connectionProvider(c) === "custom" ? "Custom API · " : ""}
                   {new URL(c.baseUrl).host}
@@ -351,6 +395,7 @@ export default function Settings() {
                       name: preset.name,
                       baseUrl: preset.baseUrl,
                       model: "",
+                      models: [],
                     });
                     setKey("");
                     setModels([]);
@@ -432,9 +477,7 @@ export default function Settings() {
               ordinary chat subscription may use separate billing.
             </Text>
             <Button
-              title={
-                models.length ? "Choose another model" : "Find available models"
-              }
+              title={models.length ? "Choose models" : "Find available models"}
               secondary
               loading={busy}
               onPress={() =>
@@ -479,31 +522,19 @@ export default function Settings() {
                   }
                   if (revision === draftRevision.current) {
                     setModels(found);
-                    if (!(
-                      selectedPreset(draft) === "nylohq" &&
-                      found.includes("gpt-6-luna")
-                    ))
-                      setModelsOpen(true);
-                    if (
-                      selectedPreset(draft) === "nylohq" &&
-                      !draft.model &&
-                      found.includes("gpt-6-luna")
-                    )
-                      setDraft((current) =>
-                        current ? { ...current, model: "gpt-6-luna" } : current,
-                      );
+                    setModelsOpen(true);
                   }
                 })
               }
             />
             <Field
-              label="Model"
+              label="Default model"
               value={draft.model}
               onChangeText={(model) => setDraft({ ...draft, model })}
               autoCapitalize="none"
               autoCorrect={false}
               placeholder="Paste a model ID from your provider"
-              help="Choose a model above, or enter its ID manually. A listed model may not support text chat or memory tools."
+              help="Select several models above, or type a default model ID. It is included in your saved models. Switch between them in any chat."
             />
             <Pressable
               accessibilityRole="button"
@@ -597,9 +628,10 @@ export default function Settings() {
               }
             />
             <Text style={s.sub}>
-              Saving does not verify model access. Available models shows a
-              limited first page; enter a model ID manually if missing. Consumer
-              ChatGPT/Claude subscriptions do not include API credits.
+              Saving does not verify model access. Select all includes the
+              returned catalog (up to 500 models); enter a model ID manually if
+              missing. Consumer ChatGPT/Claude subscriptions do not include API
+              credits.
             </Text>
           </View>
         ) : null}

@@ -393,9 +393,11 @@ export function ConversationRow({
   onPress: () => void;
 }) {
   const last = conversation.messages.filter((m) => m.text).at(-1);
-  const preview = conversation.draft?.length
-    ? `Draft: ${plainTextPreview(conversation.draft)}`
-    : plainTextPreview(last?.text || "New conversation");
+  const preview = conversation.draftAttachments?.length
+    ? `Draft: ${conversation.draftAttachments.length} attachment${conversation.draftAttachments.length === 1 ? "" : "s"}${conversation.draft ? ` · ${conversation.draft}` : ""}`
+    : conversation.draft?.length
+      ? `Draft: ${plainTextPreview(conversation.draft)}`
+      : plainTextPreview(last?.text || "New conversation");
   const date = new Date(conversation.updatedAt).toLocaleDateString(undefined, {
     month: "short",
     day: "numeric",

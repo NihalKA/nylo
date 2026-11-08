@@ -11,7 +11,7 @@ The user approved delivery on 8 November 2026 with iOS publication first, Androi
 - Trust and recovery: 10. Accurate data sharing, saved/tested distinction, errors, interrupted work, consent.
 - Native interaction: 10. Actual install, gestures, keyboard, safe areas, list performance and transitions.
 
-Target: at least 88/100 from the independent reviewer, no criterion below 80% of its available points, and no unresolved critical/high findings. This is a review threshold, not a claim of measured user satisfaction. Never award unverified native/rendered points based only on source code. Human first-use feedback and physical-device evidence remain separate release gates.
+Owner’s expanded-feature target: at least 95/100 from the independent reviewer, no criterion below 80% of its available points, and no unresolved critical/high findings. This is a review threshold, not a claim of measured user satisfaction. Never award unverified native/rendered points based only on source code. Human first-use feedback and physical-device evidence remain separate release gates.
 
 ## Milestones
 

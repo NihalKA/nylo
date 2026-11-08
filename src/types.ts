@@ -8,6 +8,14 @@ export type Connection = {
   credentialId?: string;
   baseUrl: string;
   model: string;
+  models?: string[];
+};
+export type Attachment = {
+  id: string;
+  name: string;
+  mimeType: "image/jpeg" | "image/png" | "application/pdf" | "text/plain";
+  size: number;
+  data: string;
 };
 export type Memory = { id: string; text: string; createdAt: number };
 export type Agent = {
@@ -15,6 +23,9 @@ export type Agent = {
   name: string;
   description: string;
   instructions: string;
+  shareRecentChats?: boolean;
+  goal?: string;
+  workflow?: "direct" | "plan" | "coach";
   connectionId: string;
   color: string;
   memories: Memory[];
@@ -28,12 +39,15 @@ export type Message = {
   status: "complete" | "streaming" | "interrupted" | "error";
   error?: string;
   actions?: string[];
+  attachments?: Attachment[];
   model?: string;
 };
 export type Conversation = {
   id: string;
   title: string;
   draft?: string;
+  draftAttachments?: Attachment[];
+  model?: string;
   agentId?: string;
   connectionId: string;
   messages: Message[];
@@ -56,7 +70,7 @@ export type AppData = {
   providerConsents?: {
     credentialId: string;
     destination: string;
-    revision: 2;
+    revision: 3;
     grantedAt: number;
   }[];
   connections: Connection[];

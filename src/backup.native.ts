@@ -8,7 +8,12 @@ export async function exportBackup(data: AppData) {
     Paths.cache,
     `nylo-backup-${new Date().toISOString().slice(0, 10)}.json`,
   );
-  file.write(JSON.stringify(parseData(data), null, 2));
+  const content = JSON.stringify(parseData(data), null, 2);
+  if (content.length > 100 * 1024 * 1024)
+    throw new Error(
+      "This backup exceeds 100 MB. Remove unneeded attachment conversations before exporting.",
+    );
+  file.write(content);
   try {
     await Sharing.shareAsync(file.uri, {
       mimeType: "application/json",
@@ -27,8 +32,8 @@ export async function pickBackup(): Promise<unknown | null> {
   if (result.canceled) return null;
   const file = new File(result.assets[0].uri);
   try {
-    if (file.size > 20 * 1024 * 1024)
-      throw new Error("Choose a backup smaller than 20 MB.");
+    if (file.size > 100 * 1024 * 1024)
+      throw new Error("Choose a backup smaller than 100 MB.");
     return JSON.parse(await file.text());
   } finally {
     if (file.uri.startsWith(Paths.cache.uri) && file.exists) file.delete();

@@ -161,7 +161,7 @@ test("sharing permissions stay local and cannot be granted by importing a backup
       {
         credentialId: "test-slot",
         destination: "openai:https://example.invalid/v1",
-        revision: 2,
+        revision: 3,
         grantedAt: 1,
       },
     ],

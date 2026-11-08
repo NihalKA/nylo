@@ -27,24 +27,35 @@
       <h2>On your device</h2>
       <p>
         Nylo saves conversations, drafts, agent instructions, memories and
-        connection settings locally. Native API keys are stored separately in
-        the platform’s secure storage. Chat databases are not protected by a
-        separate Nylo password. Device protection, uninstall and OS backup
-        behavior can differ by platform.
+        connection settings and selected attachments locally. The expanded beta
+        supports photos, optional camera capture, PDFs and readable text files.
+        Images are re-encoded before storage without original EXIF metadata;
+        visible image details and PDF/text content may still identify people.
+        Picking a file or photo does not upload it. Camera access is requested
+        only when you choose Take a photo, and can be denied without preventing
+        text chat. Native API keys are stored separately in the platform’s
+        secure storage. Chat databases are not protected by a separate Nylo
+        password. Device protection, uninstall and OS backup behavior can differ
+        by platform.
       </p>
       <h2>When you contact an AI provider</h2>
       <p>
         After your permission, Nylo sends conversation context to your selected
         provider. Agent conversations also include that agent’s instructions and
-        saved memories. The API key authenticates those requests. Model
-        discovery sends the key to the selected provider to retrieve model IDs,
-        without chat history.
+        saved memories. If you enable recent-chat context for an agent, bounded
+        text excerpts from up to eight recent chats with that same agent can
+        also be included (up to 12,000 characters). Other agents and ordinary
+        chats are excluded. Review or turn off this context in the agent’s
+        Memory section; attached file contents do not carry into a different
+        chat. The API key authenticates those requests. Model discovery sends
+        the key to the selected provider to retrieve model IDs, without chat
+        history.
       </p>
       <p>
         Sharing approval is remembered for conversations using the same saved
-        connection and destination. Reset it under Settings → Connect your AI
-        to require permission again before the next message. Changing the key
-        or destination requires new approval. Resetting approval does not erase
+        connection and destination. Reset it under Settings → Connect your AI to
+        require permission again before the next message. Changing the key or
+        destination requires new approval. Resetting approval does not erase
         information already received by a provider.
       </p>
       <p>
@@ -60,6 +71,21 @@
         private information. Do not enter passwords or API keys into chat
         messages.
       </p>
+      <p>
+        Each send involving attachments asks permission to send attached content
+        from that conversation to the named provider. The attachment remains
+        part of the conversation and can be sent again with later messages.
+        Model support varies; an available model is not proof of image, PDF or
+        memory-tool support. Provider charges can include file and image
+        processing.
+      </p>
+      <p>
+        Every durable memory proposed by an agent requires your approval. You
+        can edit or remove saved facts. Removing a memory does not erase
+        mentions from earlier conversations, exports or provider-held copies.
+        Disable recent-chat context or remove source conversations to stop those
+        excerpts from being included in future requests.
+      </p>
       <h2>No Nylo cloud account or analytics</h2>
       <p>
         The current app has no Nylo account, automatic chat synchronization,
@@ -73,26 +99,30 @@
       </p>
       <h2>Backups and deletion</h2>
       <p>
-        Exported backups contain readable chats, agent instructions and
-        memories, but exclude stored API keys. Keep exports private and delete
-        any copies you no longer need. Restoring replaces local application data
-        and removes saved provider keys. Conversations, agent memories and saved
-        connections can be removed in the app. There is no Nylo cloud account to
-        delete.
+        Exported backups contain readable chats, selected attachments, drafts,
+        agent instructions and memories, but exclude stored API keys. Keep
+        exports private and delete any copies you no longer need. Restoring
+        replaces local application data and removes saved provider keys.
+        Conversations, agent memories and saved connections can be removed in
+        the app. There is no Nylo cloud account to delete.
       </p>
       <h2>Support</h2>
       <p>
-        If you email support, your email and the information you choose to
-        include are received for handling that request. Avoid sending
-        credentials or entire private conversations. Ask support to delete your
-        correspondence when it is no longer needed; retention obligations and
-        the email provider’s processing may apply.
+        The response-report screen opens an email draft to support only after
+        you choose that action. It shows an exact preview and excludes keys,
+        other messages and attachments; a selected response excerpt is optional.
+        Nothing is delivered unless you send the email in your email app. If you
+        email support, your email and the information you choose to include are
+        received for handling that request. Avoid sending credentials or entire
+        private conversations. Ask support to delete your correspondence when it
+        is no longer needed; retention obligations and the email provider’s
+        processing may apply.
       </p>
       <h2>Changes</h2>
       <p>
-        If later versions add cloud services, reporting, accounts or analytics,
-        this policy and the store declarations must be updated before those
-        features are released.
+        If later versions add cloud services, accounts or analytics, this policy
+        and the store declarations must be updated before those features are
+        released.
       </p>
     </main>
     <footer><a href="support.html">Contact and deletion help</a></footer>

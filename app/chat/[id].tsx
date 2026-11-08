@@ -1,8 +1,14 @@
+import { modelChoices } from "../../src/model-library";
+import { Attachment } from "../../src/types";
+import { attachmentUri, validateAttachments } from "../../src/attachments";
+import { pickAttachments, AttachmentSource } from "../../src/attachment-picker";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   AppState,
   Keyboard,
+  Image,
+  useWindowDimensions,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -82,6 +88,7 @@ function MessageText({ text }: { text: string }) {
 
 export default function Chat() {
   const insets = useSafeAreaInsets();
+  const { fontScale } = useWindowDimensions();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const show = Keyboard.addListener("keyboardDidShow", () =>
@@ -102,9 +109,22 @@ export default function Chat() {
   const { data, update, send, runningId, stop } = useStore();
   const conversation = data.conversations.find((c) => c.id === id);
   const agent = data.agents.find((a) => a.id === conversation?.agentId);
-  const connection = data.connections.find(
+  const savedConnection = data.connections.find(
     (c) => c.id === (conversation?.connectionId || data.defaultConnectionId),
   );
+  const connection = savedConnection
+    ? {
+        ...savedConnection,
+        model: conversation?.model || savedConnection.model,
+      }
+    : undefined;
+  const [attachments, setAttachments] = useState<Attachment[]>(
+    conversation?.draftAttachments || [],
+  );
+  const [attachmentMenu, setAttachmentMenu] = useState(false);
+  const pendingAttachment = useRef<AttachmentSource | null>(null);
+  const [picking, setPicking] = useState(false);
+  const [modelSearch, setModelSearch] = useState("");
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -119,10 +139,11 @@ export default function Chat() {
   const last = conversation?.messages.at(-1);
   useEffect(() => {
     setText(prompt || conversation?.draft || "");
+    setAttachments(conversation?.draftAttachments || []);
     setError("");
   }, [id]);
-  const draftValue = useRef({ id, text });
-  draftValue.current = { id, text };
+  const draftValue = useRef({ id, text, attachments });
+  draftValue.current = { id, text, attachments };
   const persistDraft = useRef(update);
   persistDraft.current = update;
   const saveDraft = useCallback(() => {
@@ -134,8 +155,15 @@ export default function Chat() {
           : {
               ...d,
               conversations: d.conversations.map((c) =>
-                c.id === value.id && c.draft !== value.text
-                  ? { ...c, draft: value.text, updatedAt: Date.now() }
+                c.id === value.id &&
+                (c.draft !== value.text ||
+                  c.draftAttachments !== value.attachments)
+                  ? {
+                      ...c,
+                      draft: value.text,
+                      draftAttachments: value.attachments,
+                      updatedAt: Date.now(),
+                    }
                   : c,
               ),
             },
@@ -145,7 +173,7 @@ export default function Chat() {
   useEffect(() => {
     const timer = setTimeout(saveDraft, 400);
     return () => clearTimeout(timer);
-  }, [id, text, saveDraft]);
+  }, [id, text, attachments, saveDraft]);
   useFocusEffect(useCallback(() => saveDraft, [saveDraft]));
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (state) => {
@@ -174,8 +202,10 @@ export default function Chat() {
       </Page>
     );
   const submit = async () => {
-    if (!text.trim() || runningId || submitting) return;
+    if ((!text.trim() && !attachments.length) || runningId || submitting)
+      return;
     const value = text;
+    const files = attachments;
     setSubmitting(true);
     setError("");
     nearBottom.current = true;
@@ -183,12 +213,13 @@ export default function Chat() {
       await update((d) => ({
         ...d,
         conversations: d.conversations.map((c) =>
-          c.id === id ? { ...c, draft: value } : c,
+          c.id === id ? { ...c, draft: value, draftAttachments: files } : c,
         ),
       }));
-      await send(id, value, false, () =>
-        setText((current) => (current === value ? "" : current)),
-      );
+      await send(id, value, false, () => {
+        setText((current) => (current === value ? "" : current));
+        setAttachments((current) => (current === files ? [] : current));
+      });
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -201,6 +232,29 @@ export default function Chat() {
       await fn();
     } catch (e) {
       setError((e as Error).message);
+    }
+  };
+  const queueAttachment = (source: AttachmentSource) => {
+    if (picking || pendingAttachment.current) return;
+    if (Platform.OS === "ios") {
+      pendingAttachment.current = source;
+      setPicking(true);
+      setAttachmentMenu(false);
+    } else void attach(source);
+  };
+  const attach = async (source: AttachmentSource) => {
+    setAttachmentMenu(false);
+    setPicking(true);
+    try {
+      const picked = await pickAttachments(source);
+      if (draftValue.current.id === id)
+        setAttachments(
+          validateAttachments([...draftValue.current.attachments, ...picked]),
+        );
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setPicking(false);
     }
   };
   return (
@@ -289,11 +343,15 @@ export default function Chat() {
           }}
           scrollEventThrottle={100}
           onContentSizeChange={() => {
-            if (nearBottom.current)
+            if (!conversation.messages.length)
+              scroll.current?.scrollTo({ y: 0, animated: false });
+            else if (nearBottom.current)
               scroll.current?.scrollToEnd({ animated: false });
           }}
           onLayout={() => {
-            if (nearBottom.current)
+            if (!conversation.messages.length)
+              scroll.current?.scrollTo({ y: 0, animated: false });
+            else if (nearBottom.current)
               scroll.current?.scrollToEnd({ animated: false });
           }}
         >
@@ -301,9 +359,9 @@ export default function Chat() {
             <View
               style={{
                 display: keyboardVisible ? "none" : "flex",
-                flex: 1,
+                flexGrow: 1,
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: fontScale > 1.5 ? "flex-start" : "center",
                 gap: 16,
                 paddingVertical: 28,
               }}
@@ -315,7 +373,7 @@ export default function Chat() {
                   { textAlign: "center", fontSize: 26, letterSpacing: -0.7 },
                 ]}
               >
-                {agent ? `Work with ${agent.name}` : "Where should we start?"}
+                {agent ? `Work with ${agent.name}` : "Let’s begin"}
               </Text>
               <Text
                 style={[
@@ -332,7 +390,7 @@ export default function Chat() {
                   title="Connect your first model"
                   onPress={() => router.push("/connection")}
                 />
-              ) : text.length === 0 ? (
+              ) : text.length === 0 && !attachments.length ? (
                 <View style={{ gap: 4, marginTop: 8 }}>
                   {["Help me write", "Think it through"].map((label) => (
                     <Pressable
@@ -390,6 +448,26 @@ export default function Chat() {
                         maxWidth: "90%",
                       }}
                     >
+                      {message.attachments?.map((file) => (
+                        <View key={file.id} style={{ gap: 6, marginBottom: 8 }}>
+                          {file.mimeType.startsWith("image/") ? (
+                            <Image
+                              source={{ uri: attachmentUri(file) }}
+                              accessibilityLabel={`Attached photo: ${file.name}`}
+                              style={{
+                                width: 180,
+                                height: 140,
+                                borderRadius: 12,
+                                maxWidth: "100%",
+                              }}
+                              resizeMode="contain"
+                            />
+                          ) : null}
+                          <Text style={s.sub}>
+                            {file.name} · {Math.ceil(file.size / 1024)} KB
+                          </Text>
+                        </View>
+                      ))}
                       <Text
                         selectable
                         style={[s.text, { fontSize: 16, lineHeight: 25 }]}
@@ -499,6 +577,32 @@ export default function Chat() {
                               })
                             }
                           />
+                          <IconButton
+                            name="flag-outline"
+                            label="Report response"
+                            onPress={() =>
+                              router.push({
+                                pathname: "/report",
+                                params: { chatId: id, messageId: message.id },
+                              })
+                            }
+                          />
+                          {agent ? (
+                            <IconButton
+                              name="bookmark-outline"
+                              label="Review as memory"
+                              onPress={() =>
+                                router.push({
+                                  pathname: "/agent/[id]",
+                                  params: {
+                                    id: agent.id,
+                                    section: "memory",
+                                    draftMemory: message.text.slice(0, 1000),
+                                  },
+                                })
+                              }
+                            />
+                          ) : null}
                           {message.model &&
                           message.model !== connection?.model ? (
                             <Text style={[s.sub, { fontSize: 12, flex: 1 }]}>
@@ -519,6 +623,37 @@ export default function Chat() {
             <Text accessibilityRole="alert" style={s.error}>
               {error}
             </Text>
+          ) : null}
+          {attachments.length ? (
+            <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
+              {attachments.map((file) => (
+                <View
+                  key={file.id}
+                  style={[s.card, { padding: 10, gap: 4, width: 180 }]}
+                >
+                  {file.mimeType.startsWith("image/") ? (
+                    <Image
+                      source={{ uri: attachmentUri(file) }}
+                      accessibilityLabel={`Preview ${file.name}`}
+                      style={{ width: 140, height: 90, borderRadius: 8 }}
+                      resizeMode="contain"
+                    />
+                  ) : null}
+                  <Text numberOfLines={2} style={s.sub}>
+                    {file.name} · {Math.ceil(file.size / 1024)} KB
+                  </Text>
+                  <Button
+                    title={`Remove ${file.name}`}
+                    secondary
+                    onPress={() =>
+                      setAttachments((current) =>
+                        current.filter((a) => a.id !== file.id),
+                      )
+                    }
+                  />
+                </View>
+              ))}
+            </ScrollView>
           ) : null}
           <View style={s.between}>
             <Pressable
@@ -565,6 +700,16 @@ export default function Chat() {
               },
             ]}
           >
+            <IconButton
+              name="add"
+              label="Add attachment"
+              disabled={picking || submitting || !!runningId}
+              onPress={() => {
+                composer.current?.blur();
+                Keyboard.dismiss();
+                setAttachmentMenu(true);
+              }}
+            />
             <TextInput
               ref={composer}
               accessibilityLabel="Message"
@@ -617,14 +762,21 @@ export default function Chat() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Send message"
-                disabled={!text.trim() || !!runningId || submitting}
+                disabled={
+                  (!text.trim() && !attachments.length) ||
+                  !!runningId ||
+                  submitting ||
+                  picking
+                }
                 onPress={() => void submit()}
                 style={{
                   width: 44,
                   height: 44,
                   borderRadius: 22,
                   backgroundColor:
-                    text.trim() && !runningId ? theme.ink : "#E1E1E4",
+                    (text.trim() || attachments.length) && !runningId
+                      ? theme.ink
+                      : "#E1E1E4",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -632,7 +784,11 @@ export default function Chat() {
                 <Icon
                   name="arrow-up"
                   size={20}
-                  color={text.trim() && !runningId ? "#FFF" : "#9AA394"}
+                  color={
+                    (text.trim() || attachments.length) && !runningId
+                      ? "#FFF"
+                      : "#9AA394"
+                  }
                 />
               </Pressable>
             )}
@@ -650,6 +806,69 @@ export default function Chat() {
           ) : null}
         </View>
       </KeyboardAvoidingView>
+      <Modal
+        visible={attachmentMenu}
+        onDismiss={() => {
+          const source = pendingAttachment.current;
+          pendingAttachment.current = null;
+          if (source) void attach(source);
+        }}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setAttachmentMenu(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            backgroundColor: "#00000055",
+          }}
+        >
+          <View
+            accessibilityViewIsModal
+            style={{
+              padding: 20,
+              paddingBottom: Math.max(insets.bottom, 20),
+              gap: 12,
+              backgroundColor: theme.card,
+              borderTopLeftRadius: 24,
+              borderTopRightRadius: 24,
+            }}
+          >
+            <Text accessibilityRole="header" style={s.h2}>
+              Add to your message
+            </Text>
+            <Text style={s.sub}>
+              PDF, text or photos · 2 MB each, 4 MB total. Files stay on this
+              device until you send. Choose a model that supports your
+              attachment.
+            </Text>
+            <Button
+              title="Photo library"
+              secondary
+              icon="images-outline"
+              onPress={() => queueAttachment("photos")}
+            />
+            <Button
+              title="Take a photo"
+              secondary
+              icon="camera-outline"
+              onPress={() => queueAttachment("camera")}
+            />
+            <Button
+              title="Choose files"
+              secondary
+              icon="document-outline"
+              onPress={() => queueAttachment("files")}
+            />
+            <Button
+              title="Cancel attachments"
+              secondary
+              onPress={() => setAttachmentMenu(false)}
+            />
+          </View>
+        </View>
+      </Modal>
       <Modal
         visible={modelPicker}
         transparent
@@ -700,49 +919,68 @@ export default function Chat() {
                 onPress={() => setModelPicker(false)}
               />
             </View>
-            <ScrollView style={{ flexGrow: 0, flexShrink: 1 }}>
-              {data.connections.map((c) => (
-                <Pressable
-                  key={c.id}
-                  accessibilityRole="radio"
-                  accessibilityLabel={`${c.name}. ${c.model}`}
-                  accessibilityState={{ checked: c.id === connection?.id }}
-                  disabled={!!runningId}
-                  onPress={() =>
-                    void action(async () => {
-                      await update((d) => ({
-                        ...d,
-                        conversations: d.conversations.map((item) =>
-                          item.id === id
-                            ? { ...item, connectionId: c.id }
-                            : item,
-                        ),
-                      }));
-                      setModelPicker(false);
-                    })
-                  }
-                  style={[
-                    s.row,
-                    {
-                      minHeight: 68,
-                      gap: 14,
-                      paddingVertical: 16,
-                      borderBottomWidth: 1,
-                      borderBottomColor: theme.line,
-                    },
-                  ]}
-                >
-                  <View style={{ flex: 1, gap: 4 }}>
-                    <Text style={[s.text, { fontWeight: "600" }]}>
-                      {c.name}
-                    </Text>
-                    <Text style={s.sub}>{c.model}</Text>
-                  </View>
-                  {c.id === connection?.id ? (
-                    <Icon name="checkmark" size={20} />
-                  ) : null}
-                </Pressable>
-              ))}
+            <Field
+              label="Search models"
+              value={modelSearch}
+              onChangeText={setModelSearch}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              style={{ flexGrow: 0, flexShrink: 1 }}
+            >
+              {modelChoices(data.connections)
+                .filter((choice) =>
+                  `${choice.connection.name} ${choice.model}`
+                    .toLowerCase()
+                    .includes(modelSearch.toLowerCase()),
+                )
+                .map(({ connection: c, model, id: choiceId }) => (
+                  <Pressable
+                    key={choiceId}
+                    accessibilityRole="radio"
+                    accessibilityLabel={`${c.name}. ${model}`}
+                    accessibilityState={{
+                      checked:
+                        c.id === connection?.id && model === connection.model,
+                    }}
+                    disabled={!!runningId}
+                    onPress={() =>
+                      void action(async () => {
+                        await update((d) => ({
+                          ...d,
+                          conversations: d.conversations.map((item) =>
+                            item.id === id
+                              ? { ...item, connectionId: c.id, model }
+                              : item,
+                          ),
+                        }));
+                        setModelPicker(false);
+                      })
+                    }
+                    style={[
+                      s.row,
+                      {
+                        minHeight: 68,
+                        gap: 14,
+                        paddingVertical: 16,
+                        borderBottomWidth: 1,
+                        borderBottomColor: theme.line,
+                      },
+                    ]}
+                  >
+                    <View style={{ flex: 1, gap: 4 }}>
+                      <Text style={[s.text, { fontWeight: "600" }]}>
+                        {c.name}
+                      </Text>
+                      <Text style={s.sub}>{model}</Text>
+                    </View>
+                    {c.id === connection?.id && model === connection.model ? (
+                      <Icon name="checkmark" size={20} />
+                    ) : null}
+                  </Pressable>
+                ))}
               <Text style={s.sub}>
                 Conversation context goes with your next message. Selecting a
                 model sends nothing.

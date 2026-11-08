@@ -1,3 +1,6 @@
+import { recentAgentContext, sharedContextPrompt } from "./agent-context";
+import { selectedConnection } from "./model-library";
+import { assertAttachmentProtocol, validateAttachments } from "./attachments";
 import { credentialDestination, stageCredential } from "./credentials";
 import {
   createCheckpointBarrier,
@@ -334,13 +337,44 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       (c) => c.id === conversationId,
     );
     if (!conversation) throw new Error("Conversation not found.");
-    const connection = current.current.connections.find(
+    const savedConnection = current.current.connections.find(
       (c) =>
         c.id ===
         (conversation.connectionId || current.current.defaultConnectionId),
     );
+    const connection = savedConnection
+      ? selectedConnection(savedConnection, conversation.model)
+      : undefined;
     if (!connection)
       throw new Error("Add or choose a connection in Settings first.");
+    const attachments = validateAttachments(
+      retry ? undefined : conversation.draftAttachments,
+    );
+    const previousAttachments = conversation.messages.flatMap(
+      (m) => m.attachments || [],
+    );
+    assertAttachmentProtocol(
+      [...previousAttachments, ...attachments],
+      connection.protocol,
+    );
+    if (attachments.length || previousAttachments.length) {
+      if (
+        !(await askPermission(
+          "Send attached content?",
+          `Attached content (${[...previousAttachments, ...attachments]
+            .map((a) => a.name)
+            .join(", ")
+            .slice(
+              0,
+              600,
+            )}) will be sent with this conversation to ${connection.name} at ${new URL(connection.baseUrl).host}, using ${connection.model}. Attachments may include private information and are included in future messages in this chat. Provider charges and data policies apply.`,
+          "Send attachments",
+        ))
+      )
+        throw new Error(
+          "Nothing was sent. Your draft and attachments are kept.",
+        );
+    }
     const destination = credentialDestination(connection);
     const credentialId = connection.credentialId || connection.id;
     if (
@@ -348,12 +382,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         (c) =>
           c.credentialId === credentialId &&
           c.destination === destination &&
-          c.revision === 2,
+          c.revision === 3,
       )
     ) {
       const allowed = await askPermission(
         "Share with your AI provider?",
-        `Allow Nylo to send conversations to ${connection.name} at ${new URL(connection.baseUrl).host}? This approval is remembered for all chats using this connection. Agent chats also send that agent’s instructions and saved memories. The provider’s data policies and API charges apply. Reset sharing approval in AI providers at any time.`,
+        `Allow Nylo to send conversations to ${connection.name} at ${new URL(connection.baseUrl).host}? This approval is remembered for all chats using this connection. Agent chats also send that agent’s instructions, saved memories and, if enabled, recent chats from that same agent. The provider’s data policies and API charges apply. Reset sharing approval in AI providers at any time.`,
         "Allow & send",
       );
       if (!allowed)
@@ -364,7 +398,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           ...(d.providerConsents || []).filter(
             (c) => c.credentialId !== credentialId,
           ),
-          { credentialId, destination, revision: 2, grantedAt: Date.now() },
+          { credentialId, destination, revision: 3, grantedAt: Date.now() },
         ],
       }));
     }
@@ -380,7 +414,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error(
         "Another response is running. Stop it before sending a new message.",
       );
-    if (!retry && !input.trim()) return;
+    if (!retry && !input.trim() && !attachments.length) return;
     const last = conversation.messages.at(-1);
     const messages = options?.deviceCheck
       ? []
@@ -392,6 +426,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         id: uid(),
         role: "user",
         text: input.trim(),
+        attachments,
         status: "complete",
         createdAt: Date.now(),
       });
@@ -450,7 +485,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
                 ...c,
                 connectionId: connection.id,
                 draft: !retry && c.draft === input ? "" : c.draft,
-                title: c.messages.length ? c.title : conversationTitle(input),
+                draftAttachments: !retry ? [] : c.draftAttachments,
+                title: c.messages.length
+                  ? c.title
+                  : conversationTitle(
+                      input || attachments[0]?.name || "Attachment",
+                    ),
                 updatedAt: Date.now(),
                 messages: [
                   ...messages,
@@ -476,7 +516,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         connection,
         key,
         messages,
-        instructions: systemPrompt(agent),
+        instructions:
+          systemPrompt(agent) +
+          (agent
+            ? sharedContextPrompt(
+                recentAgentContext(current.current, agent, conversationId),
+              )
+            : ""),
         useTools: !!agent && options?.tools !== false,
         maxOutputTokens: options?.maxOutputTokens,
         signal: controller.signal,

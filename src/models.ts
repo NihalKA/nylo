@@ -56,7 +56,7 @@ export async function listModels(
       throw new Error(
         "No models were returned. Check account access or enter a model ID manually.",
       );
-    return ids.slice(0, 300);
+    return ids.slice(0, 500);
   } catch (error) {
     if (
       error instanceof Error &&

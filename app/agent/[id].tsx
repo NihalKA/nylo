@@ -1,5 +1,13 @@
+import { recentAgentContext } from "../../src/agent-context";
 import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Switch,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { uid } from "../../src/domain";
@@ -19,17 +27,20 @@ import {
 } from "../../src/ui";
 
 export default function AgentDetail() {
-  const { id, section } = useLocalSearchParams<{
+  const { fontScale } = useWindowDimensions();
+  const { id, section, draftMemory } = useLocalSearchParams<{
     id: string;
     section?: string;
+    draftMemory?: string;
   }>();
   const { data, newChat, update, runningId } = useStore();
   const agent = data.agents.find((a) => a.id === id);
   const [tab, setTab] = useState<"conversations" | "memory">(
     section === "memory" ? "memory" : "conversations",
   );
-  const [memory, setMemory] = useState("");
+  const [memory, setMemory] = useState(draftMemory?.slice(0, 1000) || "");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showContext, setShowContext] = useState(false);
   const [error, setError] = useState("");
   if (id === data.deviceCheck?.agentId)
     return (
@@ -57,7 +68,11 @@ export default function AgentDetail() {
     );
   const chats = data.conversations
     .filter(
-      (c) => c.agentId === id && (c.messages.length > 0 || c.draft?.trim()),
+      (c) =>
+        c.agentId === id &&
+        (c.messages.length > 0 ||
+          c.draft?.trim() ||
+          !!c.draftAttachments?.length),
     )
     .sort((a, b) => b.updatedAt - a.updatedAt);
   const action = async (fn: () => Promise<unknown>) => {
@@ -179,6 +194,66 @@ export default function AgentDetail() {
           )
         ) : (
           <View style={{ gap: 16, marginTop: 22 }}>
+            {agent.goal ? (
+              <View style={{ gap: 6 }}>
+                <Text style={s.h2}>Current goal</Text>
+                <Text style={s.text}>{agent.goal}</Text>
+              </View>
+            ) : null}
+            <Text style={s.h2}>Context between chats</Text>
+            <View style={[s.between, { gap: 12 }]}>
+              <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
+              <Switch
+                accessibilityLabel="Use recent chats from this agent"
+                value={!!agent.shareRecentChats}
+                disabled={!!runningId}
+                onValueChange={(value) =>
+                  void action(async () => {
+                    if (
+                      value &&
+                      !(await confirm(
+                        "Share recent agent chats?",
+                        "Future messages include bounded text excerpts from up to eight recent chats with this agent. They go to the selected provider. Other agents and file contents stay separate. Removing a saved memory does not remove its mentions in chat history; turn this off or delete the source chat too.",
+                        "Enable context",
+                        false,
+                      ))
+                    )
+                      return;
+                    await update((d) => ({
+                      ...d,
+                      agents: d.agents.map((a) =>
+                        a.id === id ? { ...a, shareRecentChats: value } : a,
+                      ),
+                    }));
+                  })
+                }
+              />
+            </View>
+            <Text style={s.sub}>
+              Saved memories are durable facts. Recent context helps continue
+              earlier work; it is a limited excerpt, not perfect recall of every
+              conversation. Deleting a memory does not erase the original chats.
+            </Text>
+            {agent.shareRecentChats ? (
+              <>
+                <Button
+                  title={
+                    showContext
+                      ? "Hide recent context"
+                      : "Review recent context"
+                  }
+                  secondary
+                  onPress={() => setShowContext(!showContext)}
+                />
+                {showContext ? (
+                  <Text selectable style={s.sub}>
+                    {recentAgentContext(data, agent, "") ||
+                      "No earlier conversation text yet."}
+                  </Text>
+                ) : null}
+              </>
+            ) : null}
+            <Text style={s.h2}>Saved memories</Text>
             <Text style={s.sub}>
               These facts are included when you message this agent. You can
               review, edit, or remove them at any time.
@@ -190,6 +265,8 @@ export default function AgentDetail() {
                   s.row,
                   {
                     gap: 8,
+                    flexDirection: fontScale > 1.5 ? "column" : "row",
+                    alignItems: fontScale > 1.5 ? "stretch" : "center",
                     paddingVertical: 18,
                     borderBottomWidth: 1,
                     borderBottomColor: theme.line,
