@@ -31,6 +31,19 @@ export default function AgentDetail() {
   const [memory, setMemory] = useState("");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [error, setError] = useState("");
+  if (id === data.deviceCheck?.agentId)
+    return (
+      <Page>
+        <Header title="Device check" />
+        <Text style={s.text}>
+          This test agent is managed by Live device check.
+        </Text>
+        <Button
+          title="Open live device check"
+          onPress={() => router.replace("/device-check")}
+        />
+      </Page>
+    );
   if (!agent)
     return (
       <Page>

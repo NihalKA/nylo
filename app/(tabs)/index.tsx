@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
+import { isDeviceCheckConversation } from "../../src/domain";
 import {
   Button,
   ConversationRow,
@@ -18,6 +19,7 @@ export default function Chats() {
   const chats = useMemo(
     () =>
       data.conversations
+        .filter((c) => !isDeviceCheckConversation(data, c.id))
         .filter((c) => c.messages.length > 0 || c.draft?.trim())
         .filter((c) => {
           const agent = data.agents.find((a) => a.id === c.agentId);
@@ -31,7 +33,7 @@ export default function Chats() {
           );
         })
         .sort((a, b) => b.updatedAt - a.updatedAt),
-    [data.conversations, data.agents, query],
+    [data.conversations, data.agents, data.deviceCheck, query],
   );
   const start = async () => {
     try {

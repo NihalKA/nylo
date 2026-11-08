@@ -24,6 +24,8 @@ import {
   systemPrompt,
   uid,
   validateConnection,
+  isDeviceCheckConversation,
+  reusableConversation,
 } from "./domain";
 import { readData, readKey, removeKey, writeData, writeKey } from "./storage";
 import { runAgent, safeError } from "./providers";
@@ -31,6 +33,7 @@ import { streamingFetch } from "./transport";
 
 type AgentDraft = Omit<Agent, "id" | "createdAt" | "memories">;
 type SendOptions = {
+  deviceCheck: true;
   maxOutputTokens: number;
   tools: false;
   onText?: () => void;
@@ -171,16 +174,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const newChat = async (agentId?: string) => {
+    if (agentId && agentId === current.current.deviceCheck?.agentId)
+      throw new Error("Use Live device check to run this test agent.");
     const agent = current.current.agents.find((a) => a.id === agentId);
     const connectionId =
       agent?.connectionId || current.current.defaultConnectionId;
-    const blank = current.current.conversations.find(
-      (c) =>
-        c.agentId === agentId &&
-        c.connectionId === connectionId &&
-        !c.messages.length &&
-        !c.draft?.trim(),
-    );
+    const blank = reusableConversation(current.current, connectionId, agentId);
     if (blank) return blank.id;
     const conversation = createConversation(connectionId, agentId);
     await update((d) => ({
@@ -195,6 +194,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     fromChat?: string,
     initialContext = "",
   ) => {
+    if (id && id === current.current.deviceCheck?.agentId)
+      throw new Error("This agent belongs to Live device check.");
+    if (fromChat && isDeviceCheckConversation(current.current, fromChat))
+      throw new Error(
+        "Test conversations cannot be converted to ordinary agents.",
+      );
     if (!draft.name.trim()) throw new Error("Give your agent a name.");
     if (fromChat) {
       let created = "";
@@ -318,6 +323,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     onAccepted?: () => void,
     options?: SendOptions,
   ) => {
+    const reserved = isDeviceCheckConversation(current.current, conversationId);
+    if (reserved !== !!options?.deviceCheck)
+      throw new Error("Run test conversations only from Live device check.");
     if (active.current)
       throw new Error(
         "Another response is running. Stop it before sending a new message.",
@@ -374,8 +382,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       );
     if (!retry && !input.trim()) return;
     const last = conversation.messages.at(-1);
-    const messages =
-      retry && last?.role === "assistant"
+    const messages = options?.deviceCheck
+      ? []
+      : retry && last?.role === "assistant"
         ? conversation.messages.slice(0, -1)
         : [...conversation.messages];
     if (!retry)
@@ -431,6 +440,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     try {
       await update((d) => ({
         ...d,
+        deviceCheck:
+          options?.deviceCheck && d.deviceCheck?.streamChatId === conversationId
+            ? { ...d.deviceCheck, streamEvents: undefined }
+            : d.deviceCheck,
         conversations: d.conversations.map((c) =>
           c.id === conversationId
             ? {

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import Constants from "expo-constants";
-import { createConversation, uid } from "../src/domain";
+import { createConversation, uid, removeDeviceCheckData } from "../src/domain";
 import { useStore } from "../src/store";
 import { Button, FormScroll, Header, Page, confirm, s, theme } from "../src/ui";
 
@@ -83,21 +83,6 @@ export default function DeviceCheck() {
       )
         return;
       const id = kind === "stream" ? check.streamChatId : check.recallChatId;
-      // Keep each attempt a fresh conversation context; never resend old test output.
-      await update((d) => ({
-        ...d,
-        conversations: d.conversations.map((c) =>
-          c.id === id
-            ? {
-                ...c,
-                messages: [],
-                draft: "",
-                connectionId: check.connectionId,
-                agentId: kind === "recall" ? check.agentId : undefined,
-              }
-            : c,
-        ),
-      }));
       let count = 0;
       setEvents(0);
       await send(
@@ -108,6 +93,7 @@ export default function DeviceCheck() {
         false,
         undefined,
         {
+          deviceCheck: true,
           maxOutputTokens: 128,
           tools: false,
           onText: () => {
@@ -121,7 +107,14 @@ export default function DeviceCheck() {
           ...d,
           deviceCheck:
             d.deviceCheck?.agentId === check.agentId
-              ? { ...d.deviceCheck, streamEvents: count }
+              ? {
+                  ...d.deviceCheck,
+                  streamEvents:
+                    d.conversations.find((c) => c.id === id)?.messages.at(-1)
+                      ?.status === "complete"
+                      ? count
+                      : undefined,
+                }
               : d.deviceCheck,
         }));
     });
@@ -246,11 +239,13 @@ export default function DeviceCheck() {
               {result(stream, "Nylo live stream is working.")}
             </Text>
             <Text style={s.sub}>
-              {testRunning && runningId === check.streamChatId
-                ? events
-                : check.streamEvents || 0}{" "}
-              text events observed. Multiple events show incremental text
-              delivery; a single event does not establish gradual streaming.
+              {testRunning && runningId === check.streamChatId && events > 0
+                ? `${events} text events observed so far.`
+                : check.streamEvents !== undefined
+                  ? `${check.streamEvents} text events observed.`
+                  : "Text-event count unavailable until a test completes."}{" "}
+              Multiple events show incremental text delivery; a single event
+              does not establish gradual streaming.
             </Text>
             {stream?.role === "assistant" && stream.text ? (
               <Text selectable style={[s.text, s.card]}>
@@ -359,22 +354,12 @@ export default function DeviceCheck() {
                   if (
                     !(await confirm(
                       "Remove device-check data?",
-                      "This removes the test agent, its conversations, the live-reply test and these results. Other agents, conversations and provider keys are kept.",
+                      "This removes the test agent, its two test conversations and these results. Other agents, conversations and provider keys are kept.",
                       "Remove",
                     ))
                   )
                     return;
-                  await update((d) => ({
-                    ...d,
-                    deviceCheck: undefined,
-                    agents: d.agents.filter((a) => a.id !== check.agentId),
-                    conversations: d.conversations.filter(
-                      (c) =>
-                        c.id !== check.streamChatId &&
-                        c.id !== check.recallChatId &&
-                        c.agentId !== check.agentId,
-                    ),
-                  }));
+                  await update(removeDeviceCheckData);
                   setRestartResult("");
                 })
               }

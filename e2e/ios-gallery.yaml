@@ -29,6 +29,19 @@ appId: com.nylohq.nylo
 - tapOn: "Live device check"
 - tapOn: "Prepare local test"
 - assertVisible: "Not run"
+- tapOn: "Go back"
+- tapOn: "Chats, tab, 1 of 3"
+- tapOn: "New chat"
+- tapOn:
+    id: "chat-message"
+- inputText: "Personal draft kept outside device check"
+- tapOn: "Dismiss keyboard"
+- tapOn: "Go back"
+- tapOn: "Settings, tab, 3 of 3"
+- scrollUntilVisible:
+    element: "Live device check"
+    direction: DOWN
+- tapOn: "Live device check"
 - scrollUntilVisible:
     element: "Approve & save test memory"
     direction: DOWN
@@ -50,3 +63,13 @@ appId: com.nylohq.nylo
 - tapOn: "Check after reopening"
 - assertVisible: "(?s)Passed: a new app session restored.*"
 - takeScreenshot: gallery-07-device-check-reopened
+- scrollUntilVisible:
+    element: "Remove test data"
+    direction: DOWN
+- tapOn: "Remove test data"
+- tapOn: "Remove"
+- assertVisible: "Prepare local test"
+- tapOn: "Go back"
+- tapOn: "Chats, tab, 1 of 3"
+- assertVisible: "(?s).*Personal draft kept outside device check.*"
+- takeScreenshot: gallery-08-personal-draft-preserved

@@ -13,6 +13,7 @@ import {
 } from "../../src/ui";
 export default function Agents() {
   const { data } = useStore();
+  const agents = data.agents.filter((a) => a.id !== data.deviceCheck?.agentId);
   const create = () => router.push("/agent/edit");
   return (
     <Page>
@@ -32,12 +33,12 @@ export default function Agents() {
         />
       </View>
       <FlatList
-        data={data.agents}
+        data={agents}
         keyExtractor={(a) => a.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
         ListHeaderComponent={
-          data.agents.length ? (
+          agents.length ? (
             <Text style={[s.sub, { marginBottom: 14 }]}>
               Your assistants. Each with a memory of its own.
             </Text>

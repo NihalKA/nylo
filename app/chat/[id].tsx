@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
+import { isDeviceCheckConversation } from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -125,14 +126,18 @@ export default function Chat() {
   const saveDraft = useCallback(() => {
     const value = draftValue.current;
     void persistDraft
-      .current((d) => ({
-        ...d,
-        conversations: d.conversations.map((c) =>
-          c.id === value.id && c.draft !== value.text
-            ? { ...c, draft: value.text, updatedAt: Date.now() }
-            : c,
-        ),
-      }))
+      .current((d) =>
+        isDeviceCheckConversation(d, value.id)
+          ? d
+          : {
+              ...d,
+              conversations: d.conversations.map((c) =>
+                c.id === value.id && c.draft !== value.text
+                  ? { ...c, draft: value.text, updatedAt: Date.now() }
+                  : c,
+              ),
+            },
+      )
       .catch(() => {});
   }, []);
   useEffect(() => {
@@ -146,6 +151,19 @@ export default function Chat() {
     });
     return () => subscription.remove();
   }, [saveDraft]);
+  if (isDeviceCheckConversation(data, id))
+    return (
+      <Page>
+        <Header title="Device check" />
+        <Text style={s.text}>
+          This test conversation is managed by Live device check.
+        </Text>
+        <Button
+          title="Open live device check"
+          onPress={() => router.replace("/device-check")}
+        />
+      </Page>
+    );
   if (!conversation)
     return (
       <Page>

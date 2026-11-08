@@ -83,6 +83,40 @@ export function createConversation(
   };
 }
 
+export function isDeviceCheckConversation(data: AppData, id: string) {
+  return (
+    id === data.deviceCheck?.streamChatId ||
+    id === data.deviceCheck?.recallChatId
+  );
+}
+
+export function reusableConversation(
+  data: AppData,
+  connectionId: string,
+  agentId?: string,
+) {
+  return data.conversations.find(
+    (c) =>
+      !isDeviceCheckConversation(data, c.id) &&
+      c.agentId === agentId &&
+      c.connectionId === connectionId &&
+      !c.messages.length &&
+      !c.draft?.trim(),
+  );
+}
+
+export function removeDeviceCheckData(data: AppData): AppData {
+  if (!data.deviceCheck) return data;
+  return {
+    ...data,
+    deviceCheck: undefined,
+    agents: data.agents.filter((a) => a.id !== data.deviceCheck!.agentId),
+    conversations: data.conversations.filter(
+      (c) => !isDeviceCheckConversation(data, c.id),
+    ),
+  };
+}
+
 export function conversationTitle(text: string) {
   const clean = text.replace(/\s+/g, " ").trim();
   return clean.length > 48

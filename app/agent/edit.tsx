@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { colors } from "../../src/domain";
+import { colors, isDeviceCheckConversation } from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -67,6 +67,20 @@ export default function AgentEdit() {
   const [color, setColor] = useState(original?.color || colors[0]);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  if (
+    (id && id === data.deviceCheck?.agentId) ||
+    (fromChat && isDeviceCheckConversation(data, fromChat))
+  )
+    return (
+      <Page>
+        <Header title="Device check" />
+        <Text style={s.text}>Test data is managed by Live device check.</Text>
+        <Button
+          title="Open live device check"
+          onPress={() => router.replace("/device-check")}
+        />
+      </Page>
+    );
   const save = async () => {
     setBusy(true);
     setError("");

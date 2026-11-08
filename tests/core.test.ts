@@ -9,6 +9,8 @@ import {
   recoverInterrupted,
   systemPrompt,
   validateConnection,
+  reusableConversation,
+  removeDeviceCheckData,
 } from "../src/domain";
 import {
   buildRequest,
@@ -294,6 +296,44 @@ test("device-check restart evidence remains local and cannot be imported as a pa
     ).deviceCheck,
     undefined,
   );
+});
+test("ordinary new chats cannot reuse test conversations and test cleanup preserves personal work", () => {
+  const check = {
+    agentId: "test-agent",
+    streamChatId: "test-stream",
+    recallChatId: "test-recall",
+    connectionId: connection.id,
+    word: "cedar-test",
+    sessionId: "session",
+    createdAt: 1,
+  };
+  const data = {
+    ...emptyData(),
+    deviceCheck: check,
+    connections: [connection],
+    conversations: [
+      { ...createConversation(connection.id), id: check.streamChatId },
+      {
+        ...createConversation(connection.id, check.agentId),
+        id: check.recallChatId,
+      },
+    ],
+  };
+  assert.equal(reusableConversation(data, connection.id), undefined);
+  const personal =
+    reusableConversation(data, connection.id) ||
+    createConversation(connection.id);
+  assert.notEqual(personal.id, check.streamChatId);
+  personal.draft = "A personal draft that must survive";
+  personal.messages = [message("user", "Private personal message")];
+  data.conversations.push(personal);
+  const removed = removeDeviceCheckData(data);
+  assert.deepEqual(removed.conversations, [personal]);
+  assert.equal(
+    removed.conversations[0].draft,
+    "A personal draft that must survive",
+  );
+  assert.equal(removed.deviceCheck, undefined);
 });
 test("memory tool output is returned to the model and the final answer is streamed", async () => {
   let requests = 0;
