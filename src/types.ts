@@ -3,6 +3,7 @@ export type Connection = {
   id: string;
   name: string;
   protocol: Protocol;
+  credentialId?: string;
   baseUrl: string;
   model: string;
 };
@@ -39,6 +40,7 @@ export type Conversation = {
 };
 export type AppData = {
   version: 1;
+  retiredCredentialIds?: string[];
   connections: Connection[];
   defaultConnectionId: string;
   agents: Agent[];

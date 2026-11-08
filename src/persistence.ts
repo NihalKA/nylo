@@ -18,3 +18,30 @@ export function createDurableUpdater<T>(options: {
     return operation;
   };
 }
+
+// A recovering write queue must not hide a failed response checkpoint.
+export function createCheckpointBarrier(onFailure: () => void) {
+  const writes: Promise<void>[] = [];
+  let failed = false;
+  let failure: unknown;
+  return {
+    track(write: Promise<void>) {
+      const handled = write.catch((error) => {
+        if (!failed) {
+          failed = true;
+          failure = error;
+          onFailure();
+        }
+      });
+      writes.push(handled);
+      return handled;
+    },
+    async finish() {
+      await Promise.all(writes);
+      if (failed)
+        throw failure instanceof Error
+          ? failure
+          : new Error("The response could not be saved.");
+    },
+  };
+}

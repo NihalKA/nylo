@@ -20,4 +20,4 @@ echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNE
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
 export MAESTRO_CLI_NO_ANALYTICS=1
 printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$(git rev-parse HEAD)" > artifacts/e2e/source.txt
-"$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test -e OUTPUT_DIR="$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml e2e/ios-smoke.yaml
+"$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml e2e/ios-smoke.yaml

@@ -1,9 +1,11 @@
+import { credentialDestination } from "../src/credentials";
 import { listModels } from "../src/models";
 import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
 import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
+import { router } from "expo-router";
 import { Connection, Protocol } from "../src/types";
 import { protocolDefaults, uid, sameDestination } from "../src/domain";
 import { useStore } from "../src/store";
@@ -30,7 +32,9 @@ const draftConnection = (protocol: Protocol = "openai"): Connection => ({
 export default function Settings() {
   const { data, saveConnection, deleteConnection, update, runningId } =
     useStore();
-  const [draft, setDraft] = useState<Connection | null>(draftConnection());
+  const [draft, setDraft] = useState<Connection | null>(
+    data.connections.length ? null : draftConnection(),
+  );
   const [advanced, setAdvanced] = useState(false);
   const [models, setModels] = useState<string[]>([]);
   const [modelSearch, setModelSearch] = useState("");
@@ -43,7 +47,7 @@ export default function Settings() {
     draftRevision.current++;
     setModels([]);
     setModelSearch("");
-  }, [draft?.id, draft?.protocol, draft?.baseUrl]);
+  }, [draft?.id, draft?.protocol, draft?.baseUrl, key]);
   const action = async (fn: () => Promise<unknown>, success?: string) => {
     setBusy(true);
     setError("");
@@ -183,6 +187,7 @@ export default function Settings() {
                       setModels([]);
                     }}
                     style={{
+                      minHeight: 44,
                       borderWidth: 1,
                       borderColor:
                         draft.protocol === protocol ? theme.green : theme.line,
@@ -258,6 +263,10 @@ export default function Settings() {
                   : "Encrypted in this phone’s secure storage. Keys are excluded from backups."
               }
             />
+            <Text style={s.sub}>
+              Get an API key from your provider’s developer dashboard. An
+              ordinary chat subscription may use separate billing.
+            </Text>
             <Button
               title="Find available models"
               secondary
@@ -276,7 +285,12 @@ export default function Settings() {
                     throw new Error(
                       "Enter the API key again when changing provider or destination.",
                     );
-                  const secret = key.trim() || (await readKey(draft.id));
+                  const secret =
+                    key.trim() ||
+                    (await readKey(
+                      previous?.credentialId || draft.id,
+                      credentialDestination(draft),
+                    ));
                   if (!secret) throw new Error("Enter your API key first.");
                   if (
                     !(await askPermission(
@@ -365,6 +379,15 @@ export default function Settings() {
           <Text accessibilityRole="alert" style={s.error}>
             {error}
           </Text>
+        ) : null}
+        {!draft && notice ? (
+          <Button
+            title="Done"
+            icon="checkmark"
+            onPress={() =>
+              router.canGoBack() ? router.back() : router.replace("/")
+            }
+          />
         ) : null}
         {notice ? (
           <Text

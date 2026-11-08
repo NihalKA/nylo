@@ -1,3 +1,4 @@
+import { parseData } from "./domain";
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as DocumentPicker from "expo-document-picker";
@@ -7,7 +8,7 @@ export async function exportBackup(data: AppData) {
     Paths.cache,
     `nylo-backup-${new Date().toISOString().slice(0, 10)}.json`,
   );
-  file.write(JSON.stringify(data, null, 2));
+  file.write(JSON.stringify(parseData(data), null, 2));
   await Sharing.shareAsync(file.uri, {
     mimeType: "application/json",
     dialogTitle: "Save your Nylo backup",

@@ -1,7 +1,10 @@
+import { parseData } from "./domain";
 import { AppData } from "./types";
 export async function exportBackup(data: AppData) {
   const url = URL.createObjectURL(
-    new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }),
+    new Blob([JSON.stringify(parseData(data), null, 2)], {
+      type: "application/json",
+    }),
   );
   const link = document.createElement("a");
   link.href = url;

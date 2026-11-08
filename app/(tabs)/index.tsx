@@ -194,6 +194,17 @@ export default function Chats() {
                 onPress={() => setQuery("")}
               />
             )}
+            {!query && !data.connections.length ? (
+              <Text
+                style={[
+                  s.sub,
+                  { textAlign: "center", maxWidth: 290, marginTop: 16 },
+                ]}
+              >
+                You’ll need your own AI provider API key for replies. Provider
+                charges apply.
+              </Text>
+            ) : null}
             {!query ? (
               <View style={[s.row, { gap: 6, marginTop: 28 }]}>
                 <Icon

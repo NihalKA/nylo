@@ -66,3 +66,31 @@ test("concurrent streaming checkpoints retain every fragment in order", async ()
   );
   assert.equal(data, "Hello world 🌱");
 });
+test("a failed final response checkpoint stays failed even after the storage queue recovers", async () => {
+  const { createCheckpointBarrier } = await import("../src/persistence");
+  let text = "partial";
+  let count = 0;
+  let aborted = false;
+  let complete = false;
+  const update = createDurableUpdater({
+    read: () => text,
+    write: async () => {
+      if (++count === 1) throw new Error("Disk checkpoint failed");
+    },
+    commit: (next) => {
+      text = next;
+    },
+  });
+  const checkpoints = createCheckpointBarrier(() => {
+    aborted = true;
+  });
+  checkpoints.track(update((current) => current + " missing tail"));
+  checkpoints.track(update((current) => current + " later write"));
+  await assert.rejects(async () => {
+    await checkpoints.finish();
+    complete = true;
+  }, /Disk checkpoint failed/);
+  assert.equal(aborted, true);
+  assert.equal(complete, false);
+  assert.equal(text, "partial later write");
+});

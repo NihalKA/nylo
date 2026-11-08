@@ -133,7 +133,7 @@ export function contextMessages(messages: Message[]) {
   );
 }
 
-export function parseData(value: unknown): AppData {
+export function parseData(value: unknown, local = false): AppData {
   if (!value || typeof value !== "object")
     throw new Error("This is not a Nylo backup.");
   const d = value as AppData;
@@ -214,9 +214,21 @@ export function parseData(value: unknown): AppData {
   // Explicit projection prevents an imported key or unknown field from entering ordinary app storage.
   return recoverInterrupted({
     version: 1,
+    retiredCredentialIds:
+      local && Array.isArray(d.retiredCredentialIds)
+        ? d.retiredCredentialIds.filter(
+            (id) => typeof id === "string" && /^[a-z0-9-]{1,80}$/.test(id),
+          )
+        : [],
     defaultConnectionId: d.defaultConnectionId,
     connections: d.connections.map((c) => ({
       id: c.id,
+      credentialId:
+        local &&
+        typeof c.credentialId === "string" &&
+        /^[a-z0-9-]{1,80}$/.test(c.credentialId)
+          ? c.credentialId
+          : undefined,
       name: c.name,
       protocol: c.protocol,
       baseUrl: c.baseUrl,

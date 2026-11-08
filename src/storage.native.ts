@@ -1,3 +1,4 @@
+import { decodeCredential, encodeCredential } from "./credentials";
 import * as SQLite from "expo-sqlite";
 import * as SecureStore from "expo-secure-store";
 import { AppData, emptyData } from "./types";
@@ -13,7 +14,7 @@ export async function readData(): Promise<AppData> {
   const row = await (
     await db
   ).getFirstAsync<{ json: string }>("SELECT json FROM app_state WHERE id = 1");
-  return row ? parseData(JSON.parse(row.json)) : emptyData();
+  return row ? parseData(JSON.parse(row.json), true) : emptyData();
 }
 export async function writeData(data: AppData) {
   await (
@@ -24,9 +25,10 @@ export async function writeData(data: AppData) {
   );
 }
 const keyName = (id: string) => `nylo.provider.${id}`;
-export const readKey = (id: string) => SecureStore.getItemAsync(keyName(id));
-export const writeKey = (id: string, key: string) =>
-  SecureStore.setItemAsync(keyName(id), key, {
+export const readKey = async (id: string, destination: string) =>
+  decodeCredential(await SecureStore.getItemAsync(keyName(id)), destination);
+export const writeKey = (id: string, key: string, destination: string) =>
+  SecureStore.setItemAsync(keyName(id), encodeCredential(key, destination), {
     keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
   });
 export const removeKey = (id: string) =>

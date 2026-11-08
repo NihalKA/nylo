@@ -190,7 +190,7 @@ Sequence work by exit gates, not a promised calendar date. Initial account verif
 
 ## 11. Definition of done and ongoing operation
 
-The project is finished when v1 is publicly available on both stores with reproducible tested source, protected signing credentials, CI/release records, truthful listings/privacy disclosures, functioning reporting/support, and a recovery runbook. Maintain an honest status for each platform separately.
+Under the approved iOS-first amendment, the current delivery is finished when v1 is publicly available on the iOS App Store. Android publication is a later milestone after iOS success and account purchase. The complete two-platform roadmap is finished when v1 is publicly available on both stores with reproducible tested source, protected signing credentials, CI/release records, truthful listings/privacy disclosures, functioning reporting/support, and a recovery runbook. Maintain an honest status for each platform separately.
 
 Until then, continue every authorized unblocked step; surface the smallest specific external action needed when one remains. Do not stop at a demo, web export, APK, TestFlight upload, or “ready to submit.” Autonomous handling of a particular future rejection or expired credential requires an active agent session or an explicitly configured follow-up; GitHub CI handles the deterministic build/release pipeline.
 

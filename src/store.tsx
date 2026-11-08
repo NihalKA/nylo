@@ -1,4 +1,5 @@
-import { createDurableUpdater } from "./persistence";
+import { credentialDestination } from "./credentials";
+import { createCheckpointBarrier, createDurableUpdater } from "./persistence";
 import { askPermission } from "./consent";
 import React, {
   createContext,
@@ -89,6 +90,36 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error("Could not save on this device.");
     }
   };
+  const cleanupRetiredCredentials = async () => {
+    const activeIds = new Set(
+      current.current.connections.map((c) => c.credentialId || c.id),
+    );
+    const removed: string[] = [];
+    for (const id of current.current.retiredCredentialIds || []) {
+      if (!activeIds.has(id)) {
+        try {
+          await removeKey(id);
+          removed.push(id);
+        } catch {
+          /* keep retirement journal for retry */
+        }
+      }
+    }
+    if (removed.length)
+      await update((d) => ({
+        ...d,
+        retiredCredentialIds: (d.retiredCredentialIds || []).filter(
+          (id) => !removed.includes(id),
+        ),
+      }));
+    if (current.current.retiredCredentialIds?.length)
+      setStorageError(
+        "Some old API keys could not be erased. Reopen Nylo to retry secure cleanup.",
+      );
+  };
+  useEffect(() => {
+    if (ready) void cleanupRetiredCredentials().catch(() => {});
+  }, [ready]);
   useEffect(() => {
     let mounted = true;
     readData()
@@ -170,32 +201,53 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error(
         "Enter the API key again when changing a provider or endpoint.",
       );
-    if (key.trim()) await writeKey(connection.id, key.trim());
-    else if (!(await readKey(connection.id)))
-      throw new Error("Enter your API key.");
-    await update((d) => ({
-      ...d,
-      connections: [
-        ...d.connections.filter((c) => c.id !== connection.id),
-        connection,
-      ],
-      defaultConnectionId: d.defaultConnectionId || connection.id,
-    }));
+    const previousId = previous?.credentialId || previous?.id;
+    const nextId = key.trim() ? uid() : previousId;
+    if (!nextId) throw new Error("Enter your API key.");
+    if (key.trim())
+      await writeKey(nextId, key.trim(), credentialDestination(connection));
+    else if (!(await readKey(nextId, credentialDestination(connection))))
+      throw new Error(
+        "Re-enter your API key to bind it securely to this provider.",
+      );
+    try {
+      await update((d) => ({
+        ...d,
+        connections: [
+          ...d.connections.filter((c) => c.id !== connection.id),
+          { ...connection, credentialId: nextId },
+        ],
+        retiredCredentialIds: [
+          ...(d.retiredCredentialIds || []),
+          ...(previousId && previousId !== nextId ? [previousId] : []),
+        ],
+        defaultConnectionId: d.defaultConnectionId || connection.id,
+      }));
+    } catch (error) {
+      if (key.trim()) await removeKey(nextId).catch(() => {});
+      throw error;
+    }
+    await cleanupRetiredCredentials();
   };
   const deleteConnection = async (id: string) => {
     if (active.current)
       throw new Error(
         "Stop the current response before removing a connection.",
       );
-    await removeKey(id);
+    const removed = current.current.connections.find((c) => c.id === id);
     await update((d) => ({
       ...d,
       connections: d.connections.filter((c) => c.id !== id),
+      retiredCredentialIds: [
+        ...(d.retiredCredentialIds || []),
+        ...(removed ? [removed.credentialId || removed.id] : []),
+      ],
       defaultConnectionId:
         d.defaultConnectionId === id
           ? d.connections.find((c) => c.id !== id)?.id || ""
           : d.defaultConnectionId,
     }));
+    await cleanupRetiredCredentials();
   };
   const send = async (
     conversationId: string,
@@ -229,7 +281,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Nothing was sent. Your message is ready to edit.");
       consentedDestinations.current.add(destination);
     }
-    const key = await readKey(connection.id);
+    const key = await readKey(
+      connection.credentialId || connection.id,
+      credentialDestination(connection),
+    );
     if (!key)
       throw new Error(
         "Add your API key in Settings. Browser preview keys must be re-entered after a reload.",
@@ -260,7 +315,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setRunningId(conversationId);
     let pending = "";
     let lastFlush = Date.now();
-    let stateError: unknown;
+    const checkpoints = createCheckpointBarrier(() => controller.abort());
     let accepted = false;
     const patch = async (
       delta:
@@ -286,14 +341,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ),
       }));
     const flush = () => {
-      if (!pending) return;
+      if (!pending) return Promise.resolve();
       const part = pending;
       pending = "";
       lastFlush = Date.now();
-      void patch((m) => ({ text: m.text + part })).catch((e) => {
-        stateError = e;
-        controller.abort();
-      });
+      return checkpoints.track(patch((m) => ({ text: m.text + part })));
     };
     const timeout = setTimeout(() => controller.abort(), 180000);
     const flushTimer = setInterval(flush, 200);
@@ -341,14 +393,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           if (Date.now() - lastFlush > 100) flush();
         },
         onAction: (label) => {
-          const actions =
-            current.current.conversations
-              .find((c) => c.id === conversationId)
-              ?.messages.find((m) => m.id === assistantId)?.actions || [];
-          void patch({ actions: [...actions, label] }).catch((e) => {
-            stateError = e;
-            controller.abort();
-          });
+          checkpoints.track(
+            patch((m) => ({ actions: [...(m.actions || []), label] })),
+          );
         },
         executeTool: async (call) => {
           if (!agent) throw new Error("No agent selected.");
@@ -424,8 +471,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           return output;
         },
       });
-      flush();
-      if (stateError) throw stateError;
+      await flush();
+      await checkpoints.finish();
       await patch({ status: "complete" });
     } catch (error) {
       if (!accepted) throw error;
@@ -447,9 +494,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     if (active.current)
       throw new Error("Stop the current response before restoring a backup.");
     const imported = parseData(value);
-    for (const connection of current.current.connections)
-      await removeKey(connection.id);
-    await update(() => imported);
+    const retired = [
+      ...(current.current.retiredCredentialIds || []),
+      ...current.current.connections.map((c) => c.credentialId || c.id),
+    ];
+    await update(() => ({
+      ...imported,
+      retiredCredentialIds: [...new Set(retired)],
+    }));
+    await cleanupRetiredCredentials();
   };
   return (
     <StoreContext.Provider
