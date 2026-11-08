@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import {
+  InputAccessoryView,
+  Keyboard,
+  Platform,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { uid } from "../../src/domain";
@@ -205,6 +213,10 @@ export default function AgentDetail() {
               />
             ) : null}
             <Field
+              testID="agent-memory-input"
+              inputAccessoryViewID={
+                Platform.OS === "ios" ? "memory-keyboard-toolbar" : undefined
+              }
               label={editingId ? "Edit this memory" : "A fact to remember"}
               value={memory}
               onChangeText={setMemory}
@@ -290,6 +302,25 @@ export default function AgentDetail() {
           />
         </View>
       </ScrollView>
+      {Platform.OS === "ios" ? (
+        <InputAccessoryView nativeID="memory-keyboard-toolbar">
+          <View
+            style={{
+              alignItems: "flex-end",
+              backgroundColor: theme.card,
+              borderTopWidth: 1,
+              borderColor: theme.line,
+              paddingHorizontal: 16,
+            }}
+          >
+            <Button
+              title="Done editing memory"
+              secondary
+              onPress={Keyboard.dismiss}
+            />
+          </View>
+        </InputAccessoryView>
+      ) : null}
     </Page>
   );
 }

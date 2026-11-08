@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   AppState,
+  Keyboard,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -11,6 +12,7 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
@@ -78,6 +80,20 @@ function MessageText({ text }: { text: string }) {
 }
 
 export default function Chat() {
+  const insets = useSafeAreaInsets();
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  useEffect(() => {
+    const show = Keyboard.addListener("keyboardDidShow", () =>
+      setKeyboardVisible(true),
+    );
+    const hide = Keyboard.addListener("keyboardDidHide", () =>
+      setKeyboardVisible(false),
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
   const { id, prompt } = useLocalSearchParams<{
     id: string;
     prompt?: string;
@@ -223,6 +239,7 @@ export default function Chat() {
       ) : null}
       <KeyboardAvoidingView
         style={{ flex: 1 }}
+        keyboardVerticalOffset={insets.top}
         behavior={
           Platform.OS === "ios"
             ? "padding"
@@ -235,6 +252,9 @@ export default function Chat() {
           ref={scroll}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode={
+            Platform.OS === "ios" ? "interactive" : "on-drag"
+          }
           contentContainerStyle={{
             paddingTop: 12,
             paddingBottom: 28,
@@ -460,32 +480,41 @@ export default function Chat() {
               {error}
             </Text>
           ) : null}
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Choose model connection"
-            onPress={() =>
-              data.connections.length
-                ? setMenu(true)
-                : router.push("/connection")
-            }
-            style={[
-              s.row,
-              {
-                gap: 6,
-                alignSelf: "flex-start",
-                minHeight: 44,
-                paddingVertical: 6,
-              },
-            ]}
-          >
-            <Icon name="flash-outline" size={12} color={theme.green} />
-            <Text style={{ fontSize: 11, color: theme.sub }}>
-              {connection
-                ? `${connection.name} · ${connection.model}`
-                : "Choose a connection"}
-            </Text>
-            <Icon name="chevron-down" size={12} color={theme.sub} />
-          </Pressable>
+          <View style={s.between}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Choose model connection"
+              onPress={() =>
+                data.connections.length
+                  ? setMenu(true)
+                  : router.push("/connection")
+              }
+              style={[
+                s.row,
+                {
+                  gap: 6,
+                  alignSelf: "flex-start",
+                  minHeight: 44,
+                  paddingVertical: 6,
+                },
+              ]}
+            >
+              <Icon name="flash-outline" size={12} color={theme.green} />
+              <Text style={{ fontSize: 11, color: theme.sub }}>
+                {connection
+                  ? `${connection.name} · ${connection.model}`
+                  : "Choose a connection"}
+              </Text>
+              <Icon name="chevron-down" size={12} color={theme.sub} />
+            </Pressable>
+            {keyboardVisible ? (
+              <IconButton
+                name="chevron-down"
+                label="Dismiss keyboard"
+                onPress={Keyboard.dismiss}
+              />
+            ) : null}
+          </View>
           <View
             style={[
               s.row,

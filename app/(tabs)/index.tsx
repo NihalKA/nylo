@@ -44,7 +44,11 @@ export default function Chats() {
   return (
     <Page>
       <View style={[s.between, { paddingTop: 16, paddingBottom: 18 }]}>
-        <Text accessibilityRole="header" style={s.title}>
+        <Text
+          accessibilityRole="header"
+          maxFontSizeMultiplier={1.6}
+          style={s.title}
+        >
           Chats
         </Text>
         <IconButton

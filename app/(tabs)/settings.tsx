@@ -34,13 +34,14 @@ export default function Settings() {
   };
   return (
     <Page>
-      <Text
-        accessibilityRole="header"
-        style={[s.title, { paddingTop: 16, paddingBottom: 24 }]}
-      >
-        Settings
-      </Text>
       <FormScroll>
+        <Text
+          accessibilityRole="header"
+          maxFontSizeMultiplier={1.6}
+          style={[s.title, { paddingTop: 16, paddingBottom: 24 }]}
+        >
+          Settings
+        </Text>
         <View style={[s.row, { gap: 14, paddingBottom: 8 }]}>
           <NyloMark size={52} />
           <View style={{ flex: 1 }}>

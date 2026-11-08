@@ -12,7 +12,10 @@ appId: com.nylohq.nylo
 - tapOn:
     text: "Settings, tab, 3 of 3"
     retryTapIfNoChange: true
-- assertVisible: ".*Connect your AI.*"
+- scrollUntilVisible:
+    element: ".*Connect your AI.*"
+    direction: DOWN
+    centerElement: true
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "Choose your AI"
@@ -31,16 +34,21 @@ appId: com.nylohq.nylo
 - tapOn:
     id: "chat-message"
 - inputText: "A draft that should survive reopening"
+- waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard
-- hideKeyboard
+- inputText: "\nA second line."
+- waitForAnimationToEnd
+- takeScreenshot: 05-chat-keyboard-multiline
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
 - takeScreenshot: 05-chat-draft
 - tapOn: "Go back"
-- tapOn: "Open New conversation.*"
-- assertVisible: "A draft that should survive reopening"
+- tapOn: "(?s)Open New conversation.*"
+- assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-- tapOn: "Open New conversation.*"
-- assertVisible: "A draft that should survive reopening"
+- tapOn: "(?s)Open New conversation.*"
+- assertVisible: "(?s).*A draft that should survive reopening.*"
 - takeScreenshot: 06-restored-draft
 - tapOn: "Go back"
 - tapOn:
@@ -62,14 +70,24 @@ appId: com.nylohq.nylo
     direction: DOWN
 - tapOn: "Memory"
 - scrollUntilVisible:
-    element: "A fact to remember.*"
+    element:
+      id: "agent-memory-input"
     direction: DOWN
-- tapOn: "A fact to remember.*"
+    centerElement: true
+- tapOn:
+    id: "agent-memory-input"
 - inputText: "QA sample: I prefer concise answers."
-- hideKeyboard
+- assertVisible:
+    id: "agent-memory-input"
+    text: "QA sample: I prefer concise answers."
+- tapOn: "Done editing memory"
+- assertNotVisible: "Done editing memory"
 - scrollUntilVisible:
     element: "Save memory"
     direction: DOWN
+- assertVisible:
+    text: "Save memory"
+    enabled: true
 - tapOn: "Save memory"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
