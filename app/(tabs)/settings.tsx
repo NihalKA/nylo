@@ -51,6 +51,10 @@ export default function Settings() {
         <Text style={s.eyebrow}>AI PROVIDERS</Text>
         <Pressable
           accessibilityRole="button"
+          accessibilityLabel={
+            data.connections.length ? "Manage AI providers" : "Connect your AI"
+          }
+          accessibilityHint="Add or edit a provider API key and model."
           onPress={() => router.push("/connection")}
           style={[
             s.row,

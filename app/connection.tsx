@@ -4,7 +4,7 @@ import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
 import React, { useEffect, useRef, useState } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { FlatList, Modal, Platform, Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Connection, Protocol } from "../src/types";
 import {
@@ -28,6 +28,49 @@ import {
   theme,
 } from "../src/ui";
 
+const providerPresets = [
+  {
+    id: "openai",
+    label: "OpenAI",
+    provider: "openai",
+    protocol: "openai",
+    name: "OpenAI",
+    baseUrl: "https://api.openai.com/v1",
+  },
+  {
+    id: "anthropic",
+    label: "Claude",
+    provider: "anthropic",
+    protocol: "anthropic",
+    name: "Claude",
+    baseUrl: "https://api.anthropic.com/v1",
+  },
+  {
+    id: "nylohq",
+    label: "NyloHQ",
+    provider: "custom",
+    protocol: "openai",
+    name: "NyloHQ",
+    baseUrl: "https://codex.nylohq.com/v1",
+  },
+  {
+    id: "custom",
+    label: "Custom API",
+    provider: "custom",
+    protocol: "compatible",
+    name: "Custom provider",
+    baseUrl: "",
+  },
+] as const;
+function selectedPreset(connection: Connection) {
+  if (connectionProvider(connection) !== "custom")
+    return connectionProvider(connection);
+  return connection.protocol === "openai" &&
+    connection.baseUrl.replace(/\/+$/, "") === "https://codex.nylohq.com/v1"
+    ? "nylohq"
+    : "custom";
+}
+
 const draftConnection = (protocol: Protocol = "openai"): Connection => ({
   id: uid(),
   protocol,
@@ -43,6 +86,7 @@ export default function Settings() {
   );
   const [advanced, setAdvanced] = useState(false);
   const [models, setModels] = useState<string[]>([]);
+  const [modelsOpen, setModelsOpen] = useState(false);
   const [modelSearch, setModelSearch] = useState("");
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState(false);
@@ -52,7 +96,9 @@ export default function Settings() {
   useEffect(() => {
     draftRevision.current++;
     setModels([]);
+    setModelsOpen(false);
     setModelSearch("");
+    setError("");
   }, [draft?.id, draft?.protocol, draft?.baseUrl, key]);
   const action = async (fn: () => Promise<unknown>, success?: string) => {
     setBusy(true);
@@ -177,64 +223,60 @@ export default function Settings() {
                 />
               ) : null}
             </View>
-            <View style={[s.row, { gap: 7, flexWrap: "wrap" }]}>
-              {(["openai", "anthropic", "compatible"] as const).map(
-                (protocol) => (
-                  <Pressable
-                    key={protocol}
-                    accessibilityRole="radio"
-                    accessibilityState={{
-                      checked:
-                        connectionProvider(draft) ===
-                        (protocol === "compatible" ? "custom" : protocol),
-                    }}
-                    onPress={() => {
-                      setDraft({
-                        ...draft,
-                        ...protocolDefaults[protocol],
-                        protocol,
-                        provider:
-                          protocol === "compatible" ? "custom" : protocol,
-                        model: "",
-                      });
-                      setKey("");
-                      setModels([]);
-                    }}
+            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
+              {providerPresets.map((preset) => (
+                <Pressable
+                  key={preset.id}
+                  accessibilityRole="radio"
+                  accessibilityLabel={preset.label}
+                  accessibilityState={{
+                    checked: selectedPreset(draft) === preset.id,
+                  }}
+                  onPress={() => {
+                    setDraft({
+                      ...draft,
+                      provider: preset.provider,
+                      protocol: preset.protocol,
+                      name: preset.name,
+                      baseUrl: preset.baseUrl,
+                      model: "",
+                    });
+                    setKey("");
+                    setModels([]);
+                    setAdvanced(false);
+                  }}
+                  style={{
+                    minHeight: 48,
+                    minWidth: "45%",
+                    flexGrow: 1,
+                    borderWidth: 1,
+                    borderColor:
+                      selectedPreset(draft) === preset.id
+                        ? theme.green
+                        : theme.line,
+                    backgroundColor:
+                      selectedPreset(draft) === preset.id
+                        ? theme.pale
+                        : theme.card,
+                    borderRadius: 12,
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                  }}
+                >
+                  <Text
                     style={{
-                      minHeight: 44,
-                      borderWidth: 1,
-                      borderColor:
-                        connectionProvider(draft) ===
-                        (protocol === "compatible" ? "custom" : protocol)
+                      fontSize: 16,
+                      fontWeight: "600",
+                      color:
+                        selectedPreset(draft) === preset.id
                           ? theme.green
-                          : theme.line,
-                      backgroundColor:
-                        connectionProvider(draft) ===
-                        (protocol === "compatible" ? "custom" : protocol)
-                          ? theme.pale
-                          : "#FFF",
-                      borderRadius: 9,
-                      paddingHorizontal: 13,
-                      paddingVertical: 10,
+                          : theme.ink,
                     }}
                   >
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color:
-                          connectionProvider(draft) ===
-                          (protocol === "compatible" ? "custom" : protocol)
-                            ? theme.green
-                            : theme.sub,
-                      }}
-                    >
-                      {protocol === "compatible"
-                        ? "Custom API"
-                        : protocolDefaults[protocol].name}
-                    </Text>
-                  </Pressable>
-                ),
-              )}
+                    {preset.label}
+                  </Text>
+                </Pressable>
+              ))}
             </View>
             {advanced ? (
               <Field
@@ -244,7 +286,8 @@ export default function Settings() {
                 maxLength={60}
               />
             ) : null}
-            {connectionProvider(draft) === "custom" ? (
+            {connectionProvider(draft) === "custom" &&
+            (advanced || selectedPreset(draft) === "custom") ? (
               <Field
                 label="API base URL"
                 value={draft.baseUrl}
@@ -262,11 +305,25 @@ export default function Settings() {
                 }
               />
             ) : null}
-            <Button
-              title={advanced ? "Hide advanced settings" : "Advanced settings"}
-              secondary
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={
+                advanced ? "Hide advanced settings" : "Advanced settings"
+              }
               onPress={() => setAdvanced(!advanced)}
-            />
+              style={[s.row, { minHeight: 44, gap: 6 }]}
+            >
+              <Text
+                style={{ fontSize: 14, fontWeight: "600", color: theme.green }}
+              >
+                {advanced ? "Hide advanced settings" : "Advanced settings"}
+              </Text>
+              <Icon
+                name={advanced ? "chevron-up" : "chevron-down"}
+                size={14}
+                color={theme.green}
+              />
+            </Pressable>
             {advanced && connectionProvider(draft) === "custom" ? (
               <View style={{ gap: 8 }}>
                 <Text style={s.text}>API format</Text>
@@ -336,11 +393,17 @@ export default function Settings() {
               ordinary chat subscription may use separate billing.
             </Text>
             <Button
-              title="Find available models"
+              title={
+                models.length ? "Choose another model" : "Find available models"
+              }
               secondary
               loading={busy}
               onPress={() =>
                 void action(async () => {
+                  if (models.length) {
+                    setModelsOpen(true);
+                    return;
+                  }
                   const revision = draftRevision.current;
                   const previous = data.connections.find(
                     (c) => c.id === draft.id,
@@ -368,47 +431,32 @@ export default function Settings() {
                     ))
                   )
                     return;
-                  const found = await listModels(draft, secret, streamingFetch);
-                  if (revision === draftRevision.current) setModels(found);
+                  let found: string[];
+                  try {
+                    found = await listModels(draft, secret, streamingFetch);
+                  } catch (error) {
+                    if (revision !== draftRevision.current) return;
+                    throw error;
+                  }
+                  if (revision === draftRevision.current) {
+                    setModels(found);
+                    if (!(
+                      selectedPreset(draft) === "nylohq" &&
+                      found.includes("gpt-6-luna")
+                    ))
+                      setModelsOpen(true);
+                    if (
+                      selectedPreset(draft) === "nylohq" &&
+                      !draft.model &&
+                      found.includes("gpt-6-luna")
+                    )
+                      setDraft((current) =>
+                        current ? { ...current, model: "gpt-6-luna" } : current,
+                      );
+                  }
                 })
               }
             />
-            {models.length ? (
-              <View style={{ gap: 8 }}>
-                <Field
-                  label="Search available models"
-                  value={modelSearch}
-                  onChangeText={setModelSearch}
-                  autoCapitalize="none"
-                />
-                <Text style={s.sub}>
-                  Showing up to 20 matches. Choose a text model.
-                </Text>
-                {models
-                  .filter((model) =>
-                    model.toLowerCase().includes(modelSearch.toLowerCase()),
-                  )
-                  .slice(0, 20)
-                  .map((model) => (
-                    <Pressable
-                      key={model}
-                      accessibilityRole="radio"
-                      accessibilityState={{ checked: draft.model === model }}
-                      onPress={() => setDraft({ ...draft, model })}
-                      style={{
-                        minHeight: 44,
-                        justifyContent: "center",
-                        paddingHorizontal: 12,
-                        backgroundColor:
-                          draft.model === model ? theme.pale : theme.card,
-                        borderRadius: 10,
-                      }}
-                    >
-                      <Text style={s.text}>{model}</Text>
-                    </Pressable>
-                  ))}
-              </View>
-            ) : null}
             <Field
               label="Model"
               value={draft.model}
@@ -466,6 +514,84 @@ export default function Settings() {
           </Text>
         ) : null}
       </FormScroll>
+      <Modal
+        visible={modelsOpen && !!draft}
+        presentationStyle="pageSheet"
+        animationType="slide"
+        onRequestClose={() => setModelsOpen(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            padding: 20,
+            paddingTop: 24,
+            backgroundColor: theme.card,
+            gap: 16,
+          }}
+        >
+          <View style={s.between}>
+            <Text accessibilityRole="header" style={[s.h2, { fontSize: 24 }]}>
+              Choose a model
+            </Text>
+            <IconButton
+              name="close"
+              label="Close models"
+              onPress={() => setModelsOpen(false)}
+            />
+          </View>
+          <Field
+            label="Search available models"
+            value={modelSearch}
+            onChangeText={setModelSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <FlatList
+            data={models.filter((model) =>
+              model.toLowerCase().includes(modelSearch.toLowerCase()),
+            )}
+            keyExtractor={(model) => model}
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets
+            contentContainerStyle={{ paddingBottom: 24 }}
+            renderItem={({ item: model }) => (
+              <Pressable
+                accessibilityRole="radio"
+                accessibilityLabel={model}
+                accessibilityState={{ checked: draft?.model === model }}
+                onPress={() => {
+                  setDraft((current) =>
+                    current ? { ...current, model } : current,
+                  );
+                  setModelsOpen(false);
+                }}
+                style={[
+                  s.between,
+                  {
+                    minHeight: 56,
+                    gap: 12,
+                    paddingVertical: 14,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.line,
+                  },
+                ]}
+              >
+                <Text style={[s.text, { flex: 1 }]}>{model}</Text>
+                {draft?.model === model ? (
+                  <Icon name="checkmark-circle" color={theme.green} />
+                ) : null}
+              </Pressable>
+            )}
+            ListEmptyComponent={
+              <Text style={s.sub}>No matching model. Try another search.</Text>
+            }
+          />
+          <Text style={s.sub}>
+            Choose a text model. Listing a model does not verify its chat or
+            memory-tool access.
+          </Text>
+        </View>
+      </Modal>
     </Page>
   );
 }

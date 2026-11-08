@@ -43,3 +43,7 @@ Research checked 8 November 2026:
 Use reference images to study hierarchy, touch reach and density, not to copy branding, assets or an entire screen. Revisit relevant reference images at each UI milestone (inbox, provider setup, chat composer, agent memory), record the takeaway, and evaluate real Nylo screen states.
 
 Direction: conversation-first universal Chats inbox, separate Agents library, stable bottom Settings location, familiar iOS large titles and search, restrained jade accent, readable white surfaces. No landing-page hero, decorative dashboard metrics, unnecessary gradients, or fictional sample history in the real app. Polished empty states must explain the next action. Populated states must preserve visual calm and support large text.
+
+## Provider setup research, 8 November 2026
+
+Consulted Apple sheet/search guidance and iOS list references for the model picker: https://developer.apple.com/design/human-interface-guidelines/sheets and https://developer.apple.com/design/human-interface-guidelines/searching. The takeaway is one focused, dismissible selection task with search, a visible selection and an immediate return to the form; avoid an unbounded inline catalog that pushes Save offscreen. Current source adds a model sheet and an explicit NyloHQ preset after its Responses endpoint was verified live. These changes require native-render review before receiving craft points.
