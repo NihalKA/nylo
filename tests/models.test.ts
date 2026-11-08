@@ -115,3 +115,27 @@ test("credential destination comparison tolerates trailing slash only", async ()
     false,
   );
 });
+test("an explicitly custom provider can use Responses without impersonating the built-in provider", async () => {
+  const custom = {
+    ...connection,
+    provider: "custom" as const,
+    protocol: "openai" as const,
+    model: "fixture-text-model",
+  };
+  const { validateConnection, parseData } = await import("../src/domain");
+  const { buildRequest } = await import("../src/providers");
+  const { emptyData } = await import("../src/types");
+  const valid = validateConnection(custom);
+  assert.equal(valid.provider, "custom");
+  const request = buildRequest(
+    valid,
+    [{ role: "user", text: "Hello" }],
+    "Be concise",
+    false,
+  );
+  assert.equal(request.url, "https://example.invalid/v1/responses");
+  assert.equal((request.body as { store?: boolean }).store, false);
+  const restored = parseData({ ...emptyData(), connections: [valid] });
+  assert.equal(restored.connections[0].provider, "custom");
+  assert.equal(restored.connections[0].protocol, "openai");
+});

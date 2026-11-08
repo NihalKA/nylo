@@ -7,7 +7,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Connection, Protocol } from "../src/types";
-import { protocolDefaults, uid, sameDestination } from "../src/domain";
+import {
+  protocolDefaults,
+  uid,
+  sameDestination,
+  connectionProvider,
+} from "../src/domain";
 import { useStore } from "../src/store";
 import {
   Badge,
@@ -26,6 +31,7 @@ import {
 const draftConnection = (protocol: Protocol = "openai"): Connection => ({
   id: uid(),
   protocol,
+  provider: protocol === "compatible" ? "custom" : protocol,
   ...protocolDefaults[protocol],
   model: "",
 });
@@ -95,6 +101,10 @@ export default function Settings() {
               <View style={{ flex: 1 }}>
                 <Text style={[s.text, { fontWeight: "600" }]}>{c.name}</Text>
                 <Text style={s.sub}>{c.model}</Text>
+                <Text style={s.sub}>
+                  {connectionProvider(c) === "custom" ? "Custom API · " : ""}
+                  {new URL(c.baseUrl).host}
+                </Text>
               </View>
               <IconButton
                 name="create-outline"
@@ -174,13 +184,17 @@ export default function Settings() {
                     key={protocol}
                     accessibilityRole="radio"
                     accessibilityState={{
-                      checked: draft.protocol === protocol,
+                      checked:
+                        connectionProvider(draft) ===
+                        (protocol === "compatible" ? "custom" : protocol),
                     }}
                     onPress={() => {
                       setDraft({
                         ...draft,
                         ...protocolDefaults[protocol],
                         protocol,
+                        provider:
+                          protocol === "compatible" ? "custom" : protocol,
                         model: "",
                       });
                       setKey("");
@@ -190,9 +204,15 @@ export default function Settings() {
                       minHeight: 44,
                       borderWidth: 1,
                       borderColor:
-                        draft.protocol === protocol ? theme.green : theme.line,
+                        connectionProvider(draft) ===
+                        (protocol === "compatible" ? "custom" : protocol)
+                          ? theme.green
+                          : theme.line,
                       backgroundColor:
-                        draft.protocol === protocol ? theme.pale : "#FFF",
+                        connectionProvider(draft) ===
+                        (protocol === "compatible" ? "custom" : protocol)
+                          ? theme.pale
+                          : "#FFF",
                       borderRadius: 9,
                       paddingHorizontal: 13,
                       paddingVertical: 10,
@@ -200,9 +220,12 @@ export default function Settings() {
                   >
                     <Text
                       style={{
-                        fontSize: 12,
+                        fontSize: 14,
                         color:
-                          draft.protocol === protocol ? theme.green : theme.sub,
+                          connectionProvider(draft) ===
+                          (protocol === "compatible" ? "custom" : protocol)
+                            ? theme.green
+                            : theme.sub,
                       }}
                     >
                       {protocol === "compatible"
@@ -221,7 +244,7 @@ export default function Settings() {
                 maxLength={60}
               />
             ) : null}
-            {advanced || draft.protocol === "compatible" ? (
+            {connectionProvider(draft) === "custom" ? (
               <Field
                 label="API base URL"
                 value={draft.baseUrl}
@@ -231,8 +254,8 @@ export default function Settings() {
                 keyboardType="url"
                 placeholder="https://your-provider.com/v1"
                 help={
-                  draft.protocol === "compatible"
-                    ? "Uses the OpenAI-compatible Chat Completions API."
+                  connectionProvider(draft) === "custom"
+                    ? "Enter your provider’s HTTPS URL. Choose its API format in Advanced settings."
                     : draft.protocol === "openai"
                       ? "Uses the OpenAI Responses API."
                       : "Uses the Anthropic Messages API."
@@ -244,6 +267,51 @@ export default function Settings() {
               secondary
               onPress={() => setAdvanced(!advanced)}
             />
+            {advanced && connectionProvider(draft) === "custom" ? (
+              <View style={{ gap: 8 }}>
+                <Text style={s.text}>API format</Text>
+                <View style={[s.row, { flexWrap: "wrap", gap: 8 }]}>
+                  {(
+                    [
+                      { id: "compatible", label: "Chat Completions" },
+                      { id: "openai", label: "Responses" },
+                      { id: "anthropic", label: "Messages" },
+                    ] as const
+                  ).map((format) => (
+                    <Pressable
+                      key={format.id}
+                      accessibilityRole="radio"
+                      accessibilityState={{
+                        checked: draft.protocol === format.id,
+                      }}
+                      onPress={() => {
+                        setDraft({ ...draft, protocol: format.id });
+                        setKey("");
+                      }}
+                      style={{
+                        minHeight: 44,
+                        padding: 12,
+                        borderRadius: 10,
+                        backgroundColor:
+                          draft.protocol === format.id
+                            ? theme.pale
+                            : theme.card,
+                        borderWidth: 1,
+                        borderColor: theme.line,
+                      }}
+                    >
+                      <Text style={{ fontSize: 14, color: theme.ink }}>
+                        {format.label}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </View>
+                <Text style={s.sub}>
+                  Use the format your provider supports. Codex-style services
+                  commonly use Responses.
+                </Text>
+              </View>
+            ) : null}
             <Field
               label="API key"
               value={key}

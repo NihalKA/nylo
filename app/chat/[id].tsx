@@ -477,7 +477,7 @@ export default function Chat() {
               maxLength={20000}
               multiline
               placeholder={agent ? `Message ${agent.name}…` : "Message Nylo…"}
-              placeholderTextColor="#969E95"
+              placeholderTextColor={theme.sub}
               style={{
                 flex: 1,
                 fontSize: 16,

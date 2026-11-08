@@ -19,6 +19,13 @@ export const protocolDefaults: Record<
   compatible: { name: "Custom provider", baseUrl: "" },
 };
 
+export function connectionProvider(connection: Connection) {
+  return (
+    connection.provider ||
+    (connection.protocol === "compatible" ? "custom" : connection.protocol)
+  );
+}
+
 export function validateConnection(connection: Connection) {
   if (!connection.name.trim()) throw new Error("Give this connection a name.");
   if (!connection.model.trim())
@@ -35,14 +42,18 @@ export function validateConnection(connection: Connection) {
     throw new Error(
       "The base URL must not contain credentials, query parameters, or a fragment.",
     );
+  const provider = connectionProvider(connection);
+  if (!["openai", "anthropic", "custom"].includes(provider))
+    throw new Error("Choose a supported provider type.");
   if (
-    connection.protocol !== "compatible" &&
-    url.toString().replace(/\/+$/, "") !==
-      protocolDefaults[connection.protocol].baseUrl
+    provider !== "custom" &&
+    (connection.protocol !== provider ||
+      url.toString().replace(/\/+$/, "") !== protocolDefaults[provider].baseUrl)
   )
     throw new Error("Use Custom provider for a different API destination.");
   return {
     ...connection,
+    provider,
     name: connection.name.trim(),
     model: connection.model.trim(),
     baseUrl: url.toString().replace(/\/+$/, ""),
@@ -230,6 +241,7 @@ export function parseData(value: unknown, local = false): AppData {
           ? c.credentialId
           : undefined,
       name: c.name,
+      provider: connectionProvider(c),
       protocol: c.protocol,
       baseUrl: c.baseUrl,
       model: c.model,

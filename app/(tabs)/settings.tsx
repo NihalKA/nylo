@@ -1,6 +1,8 @@
+import Constants from "expo-constants";
 import React, { useState } from "react";
 import { Linking, Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
+import { emptyData } from "../../src/types";
 import { useStore } from "../../src/store";
 import { exportBackup, pickBackup } from "../../src/backup";
 import {
@@ -103,6 +105,7 @@ export default function Settings() {
                     "Export private conversations?",
                     "The backup contains your chats and memories as readable text. Keep it somewhere private. API keys are excluded.",
                     "Export",
+                    false,
                   )
                 )
                   await exportBackup(data);
@@ -172,8 +175,28 @@ export default function Settings() {
             {notice}
           </Text>
         ) : null}
+        <Button
+          title="Delete all local data"
+          secondary
+          destructive
+          disabled={busy || !!runningId}
+          onPress={() =>
+            void action(async () => {
+              if (
+                await confirm(
+                  "Delete all local data?",
+                  "This removes Nylo’s chats, agents, memories and saved provider connections from this device. Exported backups are not affected. This cannot be undone.",
+                  "Delete all",
+                )
+              ) {
+                await importBackup(emptyData());
+                setNotice("Chats, agents and provider connections removed.");
+              }
+            })
+          }
+        />
         <Text style={[s.sub, { textAlign: "center", paddingVertical: 8 }]}>
-          Nylo 0.1.0 · Made for your own space
+          Nylo {Constants.expoConfig?.version || "Development"} · Your own space
         </Text>
       </FormScroll>
     </Page>

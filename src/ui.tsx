@@ -192,6 +192,7 @@ export function Button({
   title,
   onPress,
   secondary,
+  destructive,
   disabled,
   icon,
   loading,
@@ -200,6 +201,7 @@ export function Button({
   title: string;
   onPress: () => void;
   secondary?: boolean;
+  destructive?: boolean;
   disabled?: boolean;
   icon?: React.ComponentProps<typeof Ionicons>["name"];
   loading?: boolean;
@@ -221,7 +223,11 @@ export function Button({
           gap: 8,
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: secondary ? theme.card : theme.green,
+          backgroundColor: secondary
+            ? theme.card
+            : destructive
+              ? theme.error
+              : theme.green,
           borderWidth: secondary ? 1 : 0,
           borderColor: theme.line,
           opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
@@ -230,15 +236,21 @@ export function Button({
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={secondary ? theme.ink : "#FFF"} />
+        <ActivityIndicator
+          color={secondary ? (destructive ? theme.error : theme.ink) : "#FFF"}
+        />
       ) : icon ? (
-        <Icon name={icon} color={secondary ? theme.ink : "#FFF"} size={17} />
+        <Icon
+          name={icon}
+          color={secondary ? (destructive ? theme.error : theme.ink) : "#FFF"}
+          size={17}
+        />
       ) : null}
       <Text
         style={{
-          fontSize: 14,
+          fontSize: 16,
           fontWeight: "600",
-          color: secondary ? theme.ink : "#FFF",
+          color: secondary ? (destructive ? theme.error : theme.ink) : "#FFF",
         }}
       >
         {title}
@@ -253,12 +265,12 @@ export function Field({
 }: TextInputProps & { label: string; help?: string }) {
   return (
     <View style={{ gap: 7 }}>
-      <Text style={{ fontSize: 12, fontWeight: "600", color: theme.ink }}>
+      <Text style={{ fontSize: 14, fontWeight: "600", color: theme.ink }}>
         {label}
       </Text>
       <TextInput
         accessibilityLabel={label}
-        placeholderTextColor="#A2A79E"
+        placeholderTextColor={theme.sub}
         {...props}
         style={[
           s.input,
@@ -424,6 +436,7 @@ export async function confirm(
   title: string,
   message: string,
   action = "Delete",
+  destructive = true,
 ): Promise<boolean> {
   if (Platform.OS === "web") return window.confirm(`${title}\n\n${message}`);
   return new Promise((resolve) =>
@@ -432,7 +445,11 @@ export async function confirm(
       message,
       [
         { text: "Cancel", style: "cancel", onPress: () => resolve(false) },
-        { text: action, style: "destructive", onPress: () => resolve(true) },
+        {
+          text: action,
+          style: destructive ? "destructive" : "default",
+          onPress: () => resolve(true),
+        },
       ],
       { cancelable: true, onDismiss: () => resolve(false) },
     ),

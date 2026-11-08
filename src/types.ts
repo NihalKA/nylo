@@ -1,8 +1,10 @@
 export type Protocol = "openai" | "anthropic" | "compatible";
+export type ProviderKind = "openai" | "anthropic" | "custom";
 export type Connection = {
   id: string;
   name: string;
   protocol: Protocol;
+  provider?: ProviderKind;
   credentialId?: string;
   baseUrl: string;
   model: string;
