@@ -136,19 +136,11 @@ async function image(
   // Decode within bounds rather than loading a full camera image and upscaling
   // small images. Re-encoding pixels excludes the original EXIF metadata.
   assertAttachmentActive(signal);
-  // Selection has already passed source-size admission. Decode owned bytes
-  // directly rather than routing a cache URL through the SDK/React URI loader.
-  onPreparing?.("reading");
-  const sourceData = await attachmentStep(new File(uri).base64(), signal);
-  assertAttachmentActive(signal);
   onPreparing?.("opening");
-  const context = ImageManipulator.manipulate(
-    `data:application/octet-stream;base64,${sourceData}`,
-    {
-      maxWidth: 1600,
-      maxHeight: 1600,
-    },
-  );
+  const context = ImageManipulator.manipulate(uri, {
+    maxWidth: 1600,
+    maxHeight: 1600,
+  });
   let rendered: Awaited<ReturnType<typeof context.renderAsync>> | undefined;
   let file: File | undefined;
   try {
