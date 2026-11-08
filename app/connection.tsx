@@ -316,7 +316,7 @@ export default function Settings() {
           </View>
         ))}
         {draft ? (
-          <View style={[s.card, { gap: 18 }]}>
+          <View style={{ gap: 20 }}>
             <View style={s.between}>
               <Text style={s.h2}>
                 {data.connections.some((c) => c.id === draft.id)
@@ -363,13 +363,13 @@ export default function Settings() {
                     borderWidth: 1,
                     borderColor:
                       selectedPreset(draft) === preset.id
-                        ? theme.green
+                        ? theme.ink
                         : theme.line,
                     backgroundColor:
                       selectedPreset(draft) === preset.id
-                        ? theme.pale
-                        : theme.card,
-                    borderRadius: 12,
+                        ? theme.ink
+                        : theme.surface,
+                    borderRadius: 14,
                     paddingHorizontal: 16,
                     paddingVertical: 12,
                   }}
@@ -380,7 +380,7 @@ export default function Settings() {
                       fontWeight: "600",
                       color:
                         selectedPreset(draft) === preset.id
-                          ? theme.green
+                          ? "#FFFFFF"
                           : theme.ink,
                     }}
                   >
@@ -425,14 +425,14 @@ export default function Settings() {
               style={[s.row, { minHeight: 44, gap: 6 }]}
             >
               <Text
-                style={{ fontSize: 14, fontWeight: "600", color: theme.green }}
+                style={{ fontSize: 14, fontWeight: "600", color: theme.ink }}
               >
                 {advanced ? "Hide advanced settings" : "Advanced settings"}
               </Text>
               <Icon
                 name={advanced ? "chevron-up" : "chevron-down"}
                 size={14}
-                color={theme.green}
+                color={theme.ink}
               />
             </Pressable>
             {advanced && connectionProvider(draft) === "custom" ? (

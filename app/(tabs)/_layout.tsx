@@ -6,9 +6,9 @@ export default function MainTabs() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.green,
+        tabBarActiveTintColor: theme.ink,
         tabBarInactiveTintColor: theme.sub,
-        tabBarLabelStyle: { fontSize: 12, fontWeight: "600" },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "500" },
         tabBarStyle: {
           backgroundColor: theme.card,
           borderTopColor: theme.line,

@@ -40,7 +40,7 @@ function MessageText({ text }: { text: string }) {
           <View
             key={index}
             style={{
-              backgroundColor: "#EDEFEB",
+              backgroundColor: theme.surface,
               padding: 14,
               borderRadius: 12,
             }}
@@ -112,6 +112,7 @@ export default function Chat() {
   const [title, setTitle] = useState(conversation?.title || "");
   const [copied, setCopied] = useState<string | null>(null);
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const composer = useRef<React.ComponentRef<typeof TextInput>>(null);
   const nearBottom = useRef(true);
   const isRunning = runningId === id;
   const last = conversation?.messages.at(-1);
@@ -232,27 +233,21 @@ export default function Chat() {
           style={[
             s.row,
             {
-              minHeight: 52,
-              gap: 10,
-              paddingVertical: 10,
-              paddingHorizontal: 12,
-              borderRadius: 12,
-              backgroundColor: theme.pale,
-              marginBottom: 8,
+              minHeight: 44,
+              gap: 8,
+              paddingVertical: 6,
+              marginBottom: 4,
             },
           ]}
         >
-          <Icon name="leaf-outline" color={theme.green} size={20} />
-          <View style={{ flex: 1, gap: 2 }}>
-            <Text style={[s.text, { fontSize: 14, fontWeight: "600" }]}>
-              {agent.memories.length} saved{" "}
-              {agent.memories.length === 1 ? "fact" : "facts"} · View memory
-            </Text>
-            <Text style={s.sub}>
-              Your agent keeps the preferences you approve.
+          <Icon name="albums-outline" color={theme.sub} size={16} />
+          <View style={{ flex: 1 }}>
+            <Text style={[s.sub, { fontSize: 13 }]}>
+              Memory · {agent.memories.length} saved{" "}
+              {agent.memories.length === 1 ? "fact" : "facts"}
             </Text>
           </View>
-          <Icon name="chevron-forward" color={theme.green} size={16} />
+          <Icon name="chevron-forward" color={theme.sub} size={12} />
         </Pressable>
       ) : null}
       <KeyboardAvoidingView
@@ -291,6 +286,10 @@ export default function Chat() {
             if (nearBottom.current)
               scroll.current?.scrollToEnd({ animated: false });
           }}
+          onLayout={() => {
+            if (nearBottom.current)
+              scroll.current?.scrollToEnd({ animated: false });
+          }}
         >
           {!conversation.messages.length ? (
             <View
@@ -299,28 +298,18 @@ export default function Chat() {
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 18,
-                paddingVertical: 40,
+                gap: 16,
+                paddingVertical: 28,
               }}
             >
-              {agent ? (
-                <AgentAvatar agent={agent} large />
-              ) : (
-                <View
-                  style={{
-                    width: 66,
-                    height: 66,
-                    borderRadius: 23,
-                    backgroundColor: theme.pale,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Icon name="aperture-outline" color={theme.green} size={38} />
-                </View>
-              )}
-              <Text style={[s.title, { textAlign: "center", fontSize: 32 }]}>
-                {agent ? `Chat with ${agent.name}` : "What’s on your mind?"}
+              {agent ? <AgentAvatar agent={agent} /> : null}
+              <Text
+                style={[
+                  s.h2,
+                  { textAlign: "center", fontSize: 26, letterSpacing: -0.7 },
+                ]}
+              >
+                {agent ? `Work with ${agent.name}` : "Where should we start?"}
               </Text>
               <Text
                 style={[
@@ -329,25 +318,50 @@ export default function Chat() {
                 ]}
               >
                 {agent
-                  ? `${agent.description || "Your assistant, with its own instructions."}\nInstructions and approved memories carry into new chats. Earlier transcripts stay in their own conversations.`
-                  : "A fresh conversation, without saved preferences. Use an agent when you want it to remember how you work."}
+                  ? `${agent.description || "Your instructions and approved memories are ready."}`
+                  : "A question, a draft, or a fresh idea."}
               </Text>
               {!connection ? (
                 <Button
                   title="Connect your first model"
-                  secondary
-                  icon="key-outline"
                   onPress={() => router.push("/connection")}
                 />
               ) : (
-                <Badge text={connection.name} icon="flash-outline" />
+                <View style={{ gap: 4, marginTop: 8 }}>
+                  {["Help me write", "Think it through"].map((label) => (
+                    <Pressable
+                      key={label}
+                      accessibilityRole="button"
+                      onPress={() => {
+                        setText(
+                          label === "Help me write"
+                            ? "Help me write "
+                            : "Help me think through ",
+                        );
+                        composer.current?.focus();
+                      }}
+                      style={[
+                        s.row,
+                        { gap: 10, minHeight: 44, paddingHorizontal: 16 },
+                      ]}
+                    >
+                      <Icon
+                        name={
+                          label === "Help me write"
+                            ? "create-outline"
+                            : "bulb-outline"
+                        }
+                        size={17}
+                        color={theme.sub}
+                      />
+                      <Text style={s.sub}>{label}</Text>
+                    </Pressable>
+                  ))}
+                </View>
               )}
             </View>
           ) : (
             <>
-              <Text numberOfLines={2} style={[s.eyebrow, { marginBottom: 2 }]}>
-                {conversation.title.toUpperCase()}
-              </Text>
               {conversation.messages.map((message, index) => (
                 <View
                   key={message.id}
@@ -360,11 +374,10 @@ export default function Chat() {
                   {message.role === "user" ? (
                     <View
                       style={{
-                        backgroundColor: "#E8EDE4",
-                        paddingVertical: 14,
-                        paddingHorizontal: 18,
-                        borderRadius: 18,
-                        borderBottomRightRadius: 5,
+                        backgroundColor: theme.surface,
+                        paddingVertical: 12,
+                        paddingHorizontal: 16,
+                        borderRadius: 22,
                         maxWidth: "90%",
                       }}
                     >
@@ -377,48 +390,44 @@ export default function Chat() {
                     </View>
                   ) : (
                     <View style={{ gap: 12 }}>
-                      <View style={[s.row, { gap: 8 }]}>
-                        {agent ? (
-                          <View
-                            style={{
-                              width: 22,
-                              height: 22,
-                              borderRadius: 7,
-                              backgroundColor: agent.color + "15",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <Text
+                      {agent || message.status === "streaming" ? (
+                        <View style={[s.row, { gap: 8 }]}>
+                          {agent ? (
+                            <View
                               style={{
-                                color: agent.color,
-                                fontSize: 12,
-                                fontWeight: "600",
+                                width: 22,
+                                height: 22,
+                                borderRadius: 7,
+                                backgroundColor: agent.color + "15",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
-                              {agent.name[0]}
-                            </Text>
-                          </View>
-                        ) : (
-                          <Icon
-                            name="aperture-outline"
-                            size={20}
-                            color={theme.green}
-                          />
-                        )}
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            fontWeight: "600",
-                            color: theme.green,
-                          }}
-                        >
-                          {agent?.name || "Nylo"}
-                        </Text>
-                        {message.status === "streaming" ? (
-                          <ActivityIndicator size="small" color={theme.green} />
-                        ) : null}
-                      </View>
+                              <Text
+                                style={{
+                                  color: agent.color,
+                                  fontSize: 12,
+                                  fontWeight: "600",
+                                }}
+                              >
+                                {agent.name[0]}
+                              </Text>
+                            </View>
+                          ) : null}
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              fontWeight: "600",
+                              color: theme.sub,
+                            }}
+                          >
+                            {agent?.name || "Nylo"}
+                          </Text>
+                          {message.status === "streaming" ? (
+                            <ActivityIndicator size="small" color={theme.sub} />
+                          ) : null}
+                        </View>
+                      ) : null}
                       {message.actions?.map((label, i) => (
                         <View key={i} style={[s.row, { gap: 5 }]}>
                           <Icon
@@ -481,9 +490,12 @@ export default function Chat() {
                               })
                             }
                           />
-                          <Text style={{ fontSize: 10, color: theme.sub }}>
-                            {message.model}
-                          </Text>
+                          {message.model &&
+                          message.model !== connection?.model ? (
+                            <Text style={[s.sub, { fontSize: 12, flex: 1 }]}>
+                              {message.model}
+                            </Text>
+                          ) : null}
                         </View>
                       ) : null}
                     </View>
@@ -520,11 +532,8 @@ export default function Chat() {
                 },
               ]}
             >
-              <Icon name="flash-outline" size={12} color={theme.green} />
-              <Text style={{ fontSize: 11, color: theme.sub, flexShrink: 1 }}>
-                {connection
-                  ? `${connection.name} · ${connection.model}`
-                  : "Choose a connection"}
+              <Text style={{ fontSize: 13, color: theme.sub, flexShrink: 1 }}>
+                {connection ? `${connection.model}` : "Choose a model"}
               </Text>
               <Icon name="chevron-down" size={12} color={theme.sub} />
             </Pressable>
@@ -542,15 +551,14 @@ export default function Chat() {
               {
                 alignItems: "flex-end",
                 gap: 10,
-                padding: 11,
-                borderWidth: 1,
-                borderColor: theme.line,
-                borderRadius: 19,
-                backgroundColor: "#FFF",
+                padding: 8,
+                borderRadius: 28,
+                backgroundColor: theme.surface,
               },
             ]}
           >
             <TextInput
+              ref={composer}
               accessibilityLabel="Message"
               testID="chat-message"
               value={text}
@@ -589,7 +597,7 @@ export default function Chat() {
                 style={{
                   width: 44,
                   height: 44,
-                  borderRadius: 13,
+                  borderRadius: 22,
                   backgroundColor: theme.ink,
                   alignItems: "center",
                   justifyContent: "center",
@@ -606,9 +614,9 @@ export default function Chat() {
                 style={{
                   width: 44,
                   height: 44,
-                  borderRadius: 13,
+                  borderRadius: 22,
                   backgroundColor:
-                    text.trim() && !runningId ? theme.green : "#E6EAE2",
+                    text.trim() && !runningId ? theme.ink : "#E1E1E4",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -621,13 +629,17 @@ export default function Chat() {
               </Pressable>
             )}
           </View>
-          <Text style={{ textAlign: "center", fontSize: 10, color: theme.sub }}>
-            {runningId && !isRunning
-              ? "Another conversation is responding."
-              : isRunning
-                ? "Working on this device. Keep the app open."
-                : "Saved on this device. AI can make mistakes."}
-          </Text>
+          {runningId ? (
+            <Text
+              style={{ textAlign: "center", fontSize: 12, color: theme.sub }}
+            >
+              {runningId && !isRunning
+                ? "Another conversation is responding."
+                : isRunning
+                  ? "Working on this device. Keep the app open."
+                  : "Saved on this device. AI can make mistakes."}
+            </Text>
+          ) : null}
         </View>
       </KeyboardAvoidingView>
       <Modal
@@ -652,6 +664,7 @@ export default function Chat() {
                 width: "100%",
                 maxWidth: 440,
                 maxHeight: "85%",
+                backgroundColor: theme.card,
                 gap: 18,
                 padding: 24,
               },

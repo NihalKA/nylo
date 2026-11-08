@@ -71,7 +71,7 @@ export default function AgentDetail() {
   return (
     <Page>
       <Header
-        title="Your agent"
+        title="Agent"
         dismissKeyboard
         right={
           <IconButton
@@ -90,16 +90,18 @@ export default function AgentDetail() {
         contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ gap: 16, paddingTop: 16, paddingBottom: 28 }}>
-          <AgentAvatar agent={agent} large />
-          <Text style={s.title}>{agent.name}</Text>
-          <Text style={[s.text, { color: theme.sub }]}>
-            {agent.description || "An assistant with a little continuity."}
-          </Text>
-          <Badge
-            text={`${agent.memories.length} SAVED MEMORIES`}
-            icon="sparkles-outline"
-          />
+        <View style={{ gap: 20, paddingTop: 20, paddingBottom: 24 }}>
+          <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
+            <AgentAvatar agent={agent} />
+            <View style={{ flex: 1, gap: 7 }}>
+              <Text style={[s.h2, { fontSize: 26, letterSpacing: -0.7 }]}>
+                {agent.name}
+              </Text>
+              <Text style={s.sub}>
+                {agent.description || "Your instructions. Your saved context."}
+              </Text>
+            </View>
+          </View>
           <Button
             title="New conversation"
             icon="add"
@@ -109,17 +111,16 @@ export default function AgentDetail() {
                 router.push({ pathname: "/chat/[id]", params: { id: chatId } });
               })
             }
-            style={{ alignSelf: "flex-start", marginTop: 4 }}
           />
         </View>
         <View
           style={[
             s.row,
             {
-              borderBottomWidth: 1,
-              borderColor: theme.line,
-              columnGap: 26,
-              rowGap: 4,
+              backgroundColor: theme.surface,
+              borderRadius: 14,
+              padding: 4,
+              gap: 4,
               flexWrap: "wrap",
             },
           ]}
@@ -134,16 +135,23 @@ export default function AgentDetail() {
                 minHeight: 44,
                 maxWidth: "100%",
                 flexShrink: 1,
-                paddingVertical: 14,
-                borderBottomWidth: 2,
-                borderBottomColor: tab === t ? theme.green : "transparent",
+                flexGrow: 1,
+                minWidth: "40%",
+                alignItems: "center",
+                justifyContent: "center",
+                paddingVertical: 10,
+                paddingHorizontal: 12,
+                borderRadius: 10,
+                backgroundColor: tab === t ? theme.card : "transparent",
               }}
             >
               <Text
                 style={{
-                  color: tab === t ? theme.green : theme.sub,
+                  color: tab === t ? theme.ink : theme.sub,
                   fontWeight: "600",
-                  fontSize: 14,
+                  fontSize: 15,
+                  maxWidth: "100%",
+                  textAlign: "center",
                 }}
               >
                 {t === "conversations" ? "Conversations" : "Memory"}
@@ -176,10 +184,21 @@ export default function AgentDetail() {
               review, edit, or remove them at any time.
             </Text>
             {agent.memories.map((m) => (
-              <View key={m.id} style={[s.card, s.row, { gap: 12 }]}>
+              <View
+                key={m.id}
+                style={[
+                  s.row,
+                  {
+                    gap: 8,
+                    paddingVertical: 18,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.line,
+                  },
+                ]}
+              >
                 <View style={{ flex: 1 }}>
                   <Text style={s.text}>{m.text}</Text>
-                  <Text style={[s.sub, { fontSize: 11, marginTop: 8 }]}>
+                  <Text style={[s.sub, { fontSize: 12, marginTop: 6 }]}>
                     {new Date(m.createdAt).toLocaleDateString()}
                   </Text>
                 </View>
@@ -291,7 +310,9 @@ export default function AgentDetail() {
           <Button
             title="Delete agent"
             secondary
+            destructive
             disabled={!!runningId}
+            style={{ backgroundColor: "transparent" }}
             onPress={() =>
               void action(async () => {
                 if (

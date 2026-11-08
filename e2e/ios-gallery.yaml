@@ -20,6 +20,10 @@ appId: com.nylohq.nylo
 - extendedWaitUntil:
     visible: "Latest example answer: history is intact."
     timeout: 30000
+- scrollUntilVisible:
+    element: "Latest example answer: history is intact."
+    direction: DOWN
+- assertVisible: "Latest example answer: history is intact."
 - takeScreenshot: gallery-05-long-history
 - tapOn: "Go back"
 - tapOn: "Settings, tab, 3 of 3"

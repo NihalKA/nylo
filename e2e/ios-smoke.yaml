@@ -2,12 +2,12 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
-- assertVisible: "Your next idea starts here"
+- assertVisible: "Start with a conversation"
 - takeScreenshot: 01-chats-empty
 - tapOn:
     text: "Agents, tab, 2 of 3"
     retryTapIfNoChange: true
-- assertVisible: "A little more familiar"
+- assertVisible: "Built around how you work"
 - takeScreenshot: 02-agents-empty
 - tapOn:
     text: "Settings, tab, 3 of 3"
@@ -15,7 +15,6 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element: ".*Connect your AI.*"
     direction: DOWN
-    centerElement: true
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "Choose your AI"
@@ -86,7 +85,7 @@ appId: com.nylohq.nylo
                   - assertNotVisible: "Dismiss keyboard"
 - assertVisible: "Create agent"
 - tapOn: "Create agent"
-- assertVisible: "Your agent"
+- assertVisible: "Agent"
 - scrollUntilVisible:
     element: "Memory"
     direction: DOWN

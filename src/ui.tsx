@@ -23,9 +23,10 @@ import { Agent, Conversation } from "./types";
 export const theme = {
   bg: "#FFFFFF",
   card: "#FFFFFF",
-  ink: "#172421",
-  sub: "#626C68",
-  line: "#E8ECEA",
+  surface: "#F4F4F5",
+  ink: "#1C1C1F",
+  sub: "#69696F",
+  line: "#E8E8EB",
   green: "#087B65",
   pale: "#EAF5F0",
   error: "#9C3E38",
@@ -46,10 +47,10 @@ export const s = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
-    fontSize: 34,
-    fontWeight: "600",
+    fontSize: 32,
+    fontWeight: "700",
     color: theme.ink,
-    letterSpacing: -1,
+    letterSpacing: -0.9,
   },
   h2: {
     fontSize: 19,
@@ -58,30 +59,27 @@ export const s = StyleSheet.create({
     letterSpacing: -0.4,
   },
   text: { fontSize: 16, lineHeight: 24, color: theme.ink },
-  sub: { fontSize: 13, lineHeight: 20, color: theme.sub },
+  sub: { fontSize: 14, lineHeight: 21, color: theme.sub },
   eyebrow: {
-    fontSize: 10,
-    fontWeight: "700",
-    letterSpacing: 1.6,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 0.5,
     color: theme.sub,
   },
   card: {
-    padding: 20,
-    borderRadius: 18,
-    backgroundColor: theme.card,
-    borderWidth: 1,
-    borderColor: theme.line,
+    padding: 18,
+    borderRadius: 16,
+    backgroundColor: theme.surface,
   },
   gap: { gap: 16 },
   section: { marginTop: 28, marginBottom: 14 },
   input: {
-    borderWidth: 1,
-    borderColor: theme.line,
-    borderRadius: 12,
+    borderWidth: 0,
+    borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 13,
-    backgroundColor: "#FFF",
-    fontSize: 15,
+    backgroundColor: theme.surface,
+    fontSize: 16,
     color: theme.ink,
     minHeight: 50,
   },
@@ -141,7 +139,7 @@ export function Header({
   dismissKeyboard?: boolean;
 }) {
   return (
-    <View style={[s.between, { minHeight: 64, gap: 12 }]}>
+    <View style={[s.between, { minHeight: 56, gap: 8 }]}>
       <View style={[s.row, { flex: 1, gap: 10 }]}>
         <IconButton
           name={Platform.OS === "ios" ? "chevron-back" : "arrow-back"}
@@ -153,6 +151,7 @@ export function Header({
         <Text
           accessibilityRole="header"
           numberOfLines={1}
+          maxFontSizeMultiplier={1.6}
           style={[s.h2, { flex: 1 }]}
         >
           {title}
@@ -250,20 +249,20 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         {
-          minHeight: 50,
+          minHeight: 48,
           paddingHorizontal: 18,
           paddingVertical: 12,
-          borderRadius: 13,
+          borderRadius: 24,
           flexDirection: "row",
           gap: 8,
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: secondary
-            ? theme.card
+            ? theme.surface
             : destructive
               ? theme.error
-              : theme.green,
-          borderWidth: secondary ? 1 : 0,
+              : theme.ink,
+          borderWidth: 0,
           borderColor: theme.line,
           opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
         },
@@ -357,18 +356,20 @@ export function AgentAvatar({
       style={{
         width: large ? 64 : 44,
         height: large ? 64 : 44,
-        borderRadius: large ? 21 : 15,
-        backgroundColor: agent.color + "15",
+        borderRadius: large ? 22 : 16,
+        backgroundColor: agent.color,
         alignItems: "center",
         justifyContent: "center",
       }}
     >
       <Text
         style={{
-          color: agent.color,
+          color: "#FFFFFF",
+          maxWidth: "100%",
           fontWeight: "600",
           fontSize: large ? 28 : 20,
         }}
+        maxFontSizeMultiplier={1.4}
       >
         {agent.name.slice(0, 1).toUpperCase() || "A"}
       </Text>
@@ -399,53 +400,56 @@ export function ConversationRow({
         .join(". ")}
       onPress={onPress}
       style={({ pressed }) => [
-        s.between,
+        s.row,
         {
-          gap: 14,
-          paddingVertical: 18,
+          gap: 12,
+          paddingVertical: 17,
           borderBottomWidth: 1,
           borderBottomColor: theme.line,
           opacity: pressed ? 0.5 : 1,
         },
       ]}
     >
-      {agent ? (
-        <AgentAvatar agent={agent} />
-      ) : (
-        <View
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 13,
-            backgroundColor: theme.pale,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Icon name="chatbubble-outline" size={18} color={theme.green} />
+      <View style={{ flex: 1, gap: 6 }}>
+        <View style={[s.row, { gap: 12, alignItems: "baseline" }]}>
+          <Text
+            numberOfLines={1}
+            style={{
+              flex: 1,
+              fontSize: 17,
+              fontWeight: "600",
+              color: theme.ink,
+              letterSpacing: -0.3,
+            }}
+          >
+            {conversation.title}
+          </Text>
+          <Text style={{ fontSize: 12, color: theme.sub }}>
+            {new Date(conversation.updatedAt).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+            })}
+          </Text>
         </View>
-      )}
-      <View style={{ flex: 1, gap: 4 }}>
-        <Text
-          numberOfLines={1}
-          style={{ fontSize: 15, fontWeight: "500", color: theme.ink }}
-        >
-          {conversation.title}
-        </Text>
-        <Text numberOfLines={1} style={s.sub}>
-          {agent ? `${agent.name} · ` : ""}
+        {agent ? (
+          <View style={[s.row, { gap: 6 }]}>
+            <View
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: 3,
+                backgroundColor: agent.color,
+              }}
+            />
+            <Text style={{ fontSize: 12, color: theme.sub }}>{agent.name}</Text>
+          </View>
+        ) : null}
+        <Text numberOfLines={2} style={s.sub}>
           {conversation.draft?.trim()
             ? `Draft: ${conversation.draft}`
             : last?.text || "New conversation"}
         </Text>
       </View>
-      <Text style={{ fontSize: 11, color: theme.sub }}>
-        {new Date(conversation.updatedAt).toLocaleDateString(undefined, {
-          month: "short",
-          day: "numeric",
-        })}
-      </Text>
-      <Icon name="chevron-forward" size={14} color={theme.sub} />
     </Pressable>
   );
 }
@@ -459,21 +463,9 @@ export function Empty({
   body: string;
 }) {
   return (
-    <View style={{ alignItems: "center", paddingVertical: 36, gap: 10 }}>
-      <View
-        style={{
-          padding: 15,
-          borderRadius: 20,
-          backgroundColor: theme.pale,
-          marginBottom: 6,
-        }}
-      >
-        <Icon name={icon} color={theme.green} size={25} />
-      </View>
-      <Text style={s.h2}>{title}</Text>
-      <Text style={[s.sub, { textAlign: "center", maxWidth: 310 }]}>
-        {body}
-      </Text>
+    <View style={{ alignItems: "flex-start", paddingVertical: 28, gap: 8 }}>
+      <Text style={[s.h2, { fontSize: 20 }]}>{title}</Text>
+      <Text style={[s.sub, { maxWidth: 350 }]}>{body}</Text>
     </View>
   );
 }

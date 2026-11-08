@@ -36,21 +36,21 @@ const templates = [
   },
 ];
 export default function AgentEdit() {
-  const { id, fromChat } = useLocalSearchParams<{
+  const { id, fromChat, template } = useLocalSearchParams<{
     id?: string;
     fromChat?: string;
+    template?: string;
   }>();
   const { data, saveAgent } = useStore();
   const original = data.agents.find((a) => a.id === id);
+  const initial = original || templates.find((t) => t.name === template);
   const source = data.conversations.find((c) => c.id === fromChat);
-  const [name, setName] = useState(original?.name || "");
+  const [name, setName] = useState(initial?.name || "");
   const [description, setDescription] = useState(
-    original?.description ||
+    initial?.description ||
       (source ? `A partner for ${source.title.toLowerCase()}` : ""),
   );
-  const [instructions, setInstructions] = useState(
-    original?.instructions || "",
-  );
+  const [instructions, setInstructions] = useState(initial?.instructions || "");
   const [context, setContext] = useState(
     source
       ? source.messages
@@ -117,19 +117,18 @@ export default function AgentEdit() {
         }
       />
       <FormScroll>
-        <View style={{ gap: 15 }}>
-          <AgentAvatar agent={{ name, color }} large />
-          <Text style={s.title}>
-            {original ? "A little fine-tuning." : "Make it your own."}
-          </Text>
-          <Text style={s.sub}>
-            A name, a purpose, and a way of working. Its memory stays separate
-            from your other agents.
-          </Text>
+        <View style={[s.row, { gap: 14, paddingVertical: 8 }]}>
+          <AgentAvatar agent={{ name, color }} />
+          <View style={{ flex: 1, gap: 4 }}>
+            <Text style={s.h2}>{name || "Your agent"}</Text>
+            <Text style={s.sub}>
+              Instructions and memory for the work you return to.
+            </Text>
+          </View>
         </View>
         {!original && !source ? (
           <View style={{ gap: 10 }}>
-            <Text style={s.eyebrow}>START WITH A ROLE, OR YOUR OWN IDEA</Text>
+            <Text style={s.sub}>Start with a role</Text>
             <View style={[s.row, { gap: 7, flexWrap: "wrap" }]}>
               {templates.map((t) => (
                 <Pressable
@@ -141,15 +140,15 @@ export default function AgentEdit() {
                     setInstructions(t.instructions);
                   }}
                   style={{
-                    backgroundColor: theme.pale,
+                    backgroundColor: theme.surface,
                     minHeight: 44,
                     justifyContent: "center",
                     paddingVertical: 10,
                     paddingHorizontal: 12,
-                    borderRadius: 9,
+                    borderRadius: 22,
                   }}
                 >
-                  <Text style={{ color: theme.green, fontSize: 12 }}>
+                  <Text style={{ color: theme.ink, fontSize: 13 }}>
                     {t.name}
                   </Text>
                 </Pressable>

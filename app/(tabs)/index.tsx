@@ -45,7 +45,7 @@ export default function Chats() {
   };
   return (
     <Page>
-      <View style={[s.between, { paddingTop: 16, paddingBottom: 18 }]}>
+      <View style={[s.between, { paddingTop: 12, paddingBottom: 18, gap: 16 }]}>
         <Text
           accessibilityRole="header"
           maxFontSizeMultiplier={1.6}
@@ -53,19 +53,21 @@ export default function Chats() {
         >
           Chats
         </Text>
-        <IconButton
-          name="create-outline"
-          label="New chat"
-          color={theme.green}
-          onPress={() => void start()}
-        />
+        <View style={{ borderRadius: 22, backgroundColor: theme.ink }}>
+          <IconButton
+            name="create-outline"
+            label="New chat"
+            color="#FFFFFF"
+            onPress={() => void start()}
+          />
+        </View>
       </View>
       <View
         style={[
           s.row,
           {
-            backgroundColor: "#F1F4F2",
-            borderRadius: 12,
+            backgroundColor: theme.surface,
+            borderRadius: 22,
             paddingHorizontal: 12,
             gap: 8,
             marginBottom: 16,
@@ -118,7 +120,7 @@ export default function Chats() {
                 },
               ]}
             >
-              <Icon name="key-outline" color={theme.green} />
+              <Icon name="key-outline" color={theme.ink} />
               <View style={{ flex: 1 }}>
                 <Text style={[s.text, { fontWeight: "600" }]}>
                   Connect an AI provider
@@ -144,34 +146,22 @@ export default function Chats() {
               flex: 1,
               justifyContent: "center",
               alignItems: "center",
-              paddingBottom: 70,
-              paddingTop: 42,
+              paddingBottom: 56,
+              paddingTop: 32,
             }}
           >
-            <View
-              style={{
-                width: 82,
-                height: 82,
-                borderRadius: 27,
-                backgroundColor: theme.pale,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 24,
-              }}
-            >
-              <Icon
-                name={query ? "search-outline" : "chatbubbles-outline"}
-                size={38}
-                color={theme.green}
-              />
-            </View>
             <Text
               style={[
                 s.h2,
-                { fontSize: 24, textAlign: "center", marginBottom: 10 },
+                {
+                  fontSize: 26,
+                  textAlign: "center",
+                  marginBottom: 10,
+                  letterSpacing: -0.7,
+                },
               ]}
             >
-              {query ? "No chats found" : "Your next idea starts here"}
+              {query ? "No chats found" : "Start with a conversation"}
             </Text>
             <Text
               style={[
@@ -186,14 +176,10 @@ export default function Chats() {
             >
               {query
                 ? "Try a different word or search an agent’s name."
-                : "Ask a question, work through an idea, or find the right words."}
+                : "Your questions, drafts and ideas.\nSaved here as you go."}
             </Text>
             {!query ? (
-              <Button
-                title="Start a chat"
-                icon="add"
-                onPress={() => void start()}
-              />
+              <Button title="New conversation" onPress={() => void start()} />
             ) : (
               <Button
                 title="Clear search"
@@ -211,16 +197,6 @@ export default function Chats() {
                 You’ll need your own AI provider API key for replies. Provider
                 charges apply.
               </Text>
-            ) : null}
-            {!query ? (
-              <View style={[s.row, { gap: 6, marginTop: 28 }]}>
-                <Icon
-                  name="phone-portrait-outline"
-                  size={14}
-                  color={theme.sub}
-                />
-                <Text style={s.sub}>Your history stays on this device.</Text>
-              </View>
             ) : null}
           </View>
         }
