@@ -1,8 +1,8 @@
 # iOS release
 
-Current expanded candidate: **1.0.0(13)**, app source4d3687d, signed run42532356732, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Exact exported-IPA privacy audit and fresh native/matrix/photo/gallery tests pass; see STATUS.md for provenance and gaps. Internal QA assignment is pending a fresh independent review; build10 is the older assigned design. No store build association, submission or production approval.
+Current expanded candidate: **1.0.0(13)**, app source4d3687d, signed run42532356732, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Exact exported-IPA privacy audit and fresh native/matrix/photo/gallery tests pass; see STATUS.md for provenance and gaps. Assigned to internal Nylo Device QA after fresh review020(86/100), English notes saved, POST204 and exact-build group GET verified; build10 is the older design. No store build association, submission or production approval.
 
-App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Final screenshots, age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the latest completed83point review of earlierf72. Physical/live/VoiceOver/owner design remain separate gates.
+App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Final screenshots, age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the current86point review of4d3687d. Physical/live/VoiceOver/owner design remain separate gates.
 
 ## Native evidence without local compilation
 

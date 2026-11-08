@@ -1,6 +1,6 @@
 # Expanded iPhone beta check
 
-Prepared candidate **1.0.0(13)**, source4d3687d, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Assignment is pending; do not claim it is available until the QA-group relationship is verified. The historical build10 guide below is superseded only after13is assigned.
+Prepared candidate **1.0.0(13)**, source4d3687d, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Assigned to internal Nylo Device QA with English notes; POST204 and subsequent group GET verify the exact VALID build. Update through TestFlight. Review020supports this narrow feedback/device-validation beta at86/100;95target and production gates remain open. The historical build10 guide below is superseded.
 
 For the expanded feedback beta, check these on your iPhone:
 

@@ -104,8 +104,11 @@ appId: com.nylohq.nylo
 - assertVisible:
     text: "Add attachment"
     enabled: true
+# The observed center tap placed the caret before the final word. Target the
+# trailing/bottom space of this AX-resolved field to deliberately append.
 - tapOn:
     id: "chat-message"
+    point: "95%,90%"
 - inputText: " after camera fallback"
 - assertVisible: "QA photo draft stays safe after camera fallback"
 - tapOn: "Dismiss keyboard"
