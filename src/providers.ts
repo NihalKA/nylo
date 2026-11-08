@@ -355,6 +355,43 @@ export function safeError(error: unknown, key: string) {
   return (key ? message.split(key).join("[redacted]") : message).slice(0, 600);
 }
 
+export function preflightRequest(
+  messages: Message[],
+  instructions: string,
+  protocol: Protocol,
+): WireTurn[] {
+  const turns: WireTurn[] = contextMessages(messages).map((m) => ({
+    role: m.role,
+    text: m.text,
+    attachments: m.attachments,
+  }));
+  if (
+    instructions.length +
+      turns.reduce(
+        (size, turn) =>
+          size + attachmentText(turn.text, turn.attachments || []).length,
+        0,
+      ) >
+    80000
+  )
+    throw new Error(
+      "This request has too much text. Remove or shorten text attachments, or start a new chat. Agent chats keep their saved memories.",
+    );
+  if (
+    turns.reduce(
+      (n, t) => n + (t.attachments || []).reduce((sum, a) => sum + a.size, 0),
+      0,
+    ) >
+    8 * 1024 * 1024
+  )
+    throw new Error(
+      "This conversation has more than 8 MB of attachment context. Start a new chat and attach only the files you need.",
+    );
+  for (const turn of turns)
+    assertAttachmentProtocol(validateAttachments(turn.attachments), protocol);
+  return turns;
+}
+
 export async function runAgent(options: {
   maxOutputTokens?: number;
   connection: Connection;
@@ -379,33 +416,11 @@ export async function runAgent(options: {
     onAction,
     executeTool,
   } = options;
-  const turns: WireTurn[] = contextMessages(options.messages).map((m) => ({
-    role: m.role,
-    text: m.text,
-    attachments: m.attachments,
-  }));
-  if (
-    instructions.length +
-      turns.reduce(
-        (size, turn) =>
-          size + attachmentText(turn.text, turn.attachments || []).length,
-        0,
-      ) >
-    80000
-  )
-    throw new Error(
-      "This conversation is too long to send safely. Start a new chat; agent chats keep their saved memories.",
-    );
-  if (
-    turns.reduce(
-      (n, t) => n + (t.attachments || []).reduce((sum, a) => sum + a.size, 0),
-      0,
-    ) >
-    8 * 1024 * 1024
-  )
-    throw new Error(
-      "This conversation has more than 8 MB of attachment context. Start a new chat and attach only the files you need.",
-    );
+  const turns = preflightRequest(
+    options.messages,
+    instructions,
+    connection.protocol,
+  );
   // Bound the local tool loop so a malformed model cannot run indefinitely.
   for (let step = 0; step < 5; step++) {
     if (signal.aborted) throw new Error("Response stopped.");

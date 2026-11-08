@@ -1,10 +1,11 @@
+import { modelCatalogReducer } from "../src/model-catalog";
 import { connectionModels } from "../src/model-library";
 import { credentialDestination } from "../src/credentials";
 import { listModels } from "../src/models";
 import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import {
   BackHandler,
   FlatList,
@@ -93,7 +94,19 @@ export default function Settings() {
     data.connections.length ? null : draftConnection(),
   );
   const [advanced, setAdvanced] = useState(false);
-  const [models, setModels] = useState<string[]>([]);
+  const [catalog, dispatchCatalog] = useReducer(modelCatalogReducer, {
+    kind: "unloaded",
+    revision: 0,
+  });
+  const [savedModels, setSavedModels] = useState<string[]>([]);
+  const models = catalog.kind === "ready" ? catalog.models : [];
+  const shownModels = [
+    ...new Set([
+      ...models,
+      ...savedModels,
+      ...(draft ? connectionModels(draft) : []),
+    ]),
+  ];
   const [modelsOpen, setModelsOpen] = useState(false);
   const [modelSearch, setModelSearch] = useState("");
   const [key, setKey] = useState("");
@@ -101,14 +114,18 @@ export default function Settings() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const draftRevision = useRef(0);
+  const actionLocked = useRef(false);
   useEffect(() => {
     draftRevision.current++;
-    setModels(draft?.models || []);
+    setSavedModels(draft ? connectionModels(draft) : []);
+    dispatchCatalog({ type: "reset", revision: draftRevision.current });
     setModelsOpen(false);
     setModelSearch("");
     setError("");
   }, [draft?.id, draft?.protocol, draft?.baseUrl, key]);
   const action = async (fn: () => Promise<unknown>, success?: string) => {
+    if (actionLocked.current) return;
+    actionLocked.current = true;
     setBusy(true);
     setError("");
     setNotice("");
@@ -118,6 +135,7 @@ export default function Settings() {
     } catch (e) {
       setError((e as Error).message);
     } finally {
+      actionLocked.current = false;
       setBusy(false);
     }
   };
@@ -160,11 +178,17 @@ export default function Settings() {
           />
           <View style={[s.row, { gap: 10, flexWrap: "wrap" }]}>
             <Button
-              title={`Select all ${models.length} models`}
+              title={`Select all ${shownModels.length} shown models`}
               secondary
               onPress={() =>
                 setDraft((c) =>
-                  c ? { ...c, models, model: c.model || models[0] || "" } : c,
+                  c
+                    ? {
+                        ...c,
+                        models: shownModels,
+                        model: c.model || shownModels[0] || "",
+                      }
+                    : c,
                 )
               }
             />
@@ -181,7 +205,7 @@ export default function Settings() {
             one in each chat
           </Text>
           <FlatList
-            data={models.filter((model) =>
+            data={shownModels.filter((model) =>
               model.toLowerCase().includes(modelSearch.toLowerCase()),
             )}
             keyExtractor={(model) => model}
@@ -238,6 +262,9 @@ export default function Settings() {
             onPress={() => setModelsOpen(false)}
           />
           <Text style={s.sub}>
+            {catalog.kind === "ready"
+              ? "Showing the returned catalog and saved models."
+              : "Showing saved models. Refresh the provider model list to discover more."}{" "}
             Choose models supported by this API. Listing a model does not verify
             its chat or memory-tool access.
           </Text>
@@ -398,7 +425,10 @@ export default function Settings() {
                       models: [],
                     });
                     setKey("");
-                    setModels([]);
+                    dispatchCatalog({
+                      type: "reset",
+                      revision: ++draftRevision.current,
+                    });
                     setAdvanced(false);
                   }}
                   style={{
@@ -476,16 +506,23 @@ export default function Settings() {
               Get an API key from your provider’s developer dashboard. An
               ordinary chat subscription may use separate billing.
             </Text>
+            {shownModels.length ? (
+              <Button
+                title="Manage selected models"
+                secondary
+                onPress={() => setModelsOpen(true)}
+              />
+            ) : null}
             <Button
-              title={models.length ? "Choose models" : "Find available models"}
+              title={
+                savedModels.length
+                  ? "Refresh provider model list"
+                  : "Find available models"
+              }
               secondary
               loading={busy}
               onPress={() =>
                 void action(async () => {
-                  if (models.length) {
-                    setModelsOpen(true);
-                    return;
-                  }
                   const revision = draftRevision.current;
                   const previous = data.connections.find(
                     (c) => c.id === draft.id,
@@ -513,15 +550,26 @@ export default function Settings() {
                     ))
                   )
                     return;
+                  if (revision !== draftRevision.current) return;
+                  dispatchCatalog({ type: "load", revision });
                   let found: string[];
                   try {
                     found = await listModels(draft, secret, streamingFetch);
                   } catch (error) {
                     if (revision !== draftRevision.current) return;
+                    dispatchCatalog({
+                      type: "failed",
+                      revision,
+                      message: "Could not refresh the model catalog.",
+                    });
                     throw error;
                   }
                   if (revision === draftRevision.current) {
-                    setModels(found);
+                    dispatchCatalog({
+                      type: "loaded",
+                      revision,
+                      models: found,
+                    });
                     setModelsOpen(true);
                   }
                 })

@@ -23,13 +23,13 @@ appId: com.nylohq.nylo
 - assertVisible: "AI providers"
 - tapOn: "Edit Offline QA provider"
 - scrollUntilVisible:
-    element: "Choose models"
+    element: "Manage selected models"
     direction: DOWN
-- tapOn: "Choose models"
+- tapOn: "Manage selected models"
 - assertVisible: "2 selected.*"
 - tapOn: "Clear selection"
 - assertVisible: "0 selected.*"
-- tapOn: "Select all 2 models"
+- tapOn: "Select all 2 shown models"
 - assertVisible: "2 selected.*"
 - takeScreenshot: gallery-10-provider-model-library
 - tapOn: "Done choosing models"

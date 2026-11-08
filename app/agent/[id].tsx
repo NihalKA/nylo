@@ -1,5 +1,5 @@
 import { recentAgentContext } from "../../src/agent-context";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -26,7 +26,12 @@ import {
   theme,
 } from "../../src/ui";
 
-export default function AgentDetail() {
+export default function AgentRoute() {
+  const params = useLocalSearchParams<{ id: string }>();
+  return <AgentDetail key={params.id} />;
+}
+
+function AgentDetail() {
   const { fontScale } = useWindowDimensions();
   const { id, section, draftMemory } = useLocalSearchParams<{
     id: string;
@@ -41,6 +46,7 @@ export default function AgentDetail() {
   const [memory, setMemory] = useState(draftMemory?.slice(0, 1000) || "");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showContext, setShowContext] = useState(false);
+  const actionLocked = useRef(false);
   const [error, setError] = useState("");
   if (id === data.deviceCheck?.agentId)
     return (
@@ -76,11 +82,15 @@ export default function AgentDetail() {
     )
     .sort((a, b) => b.updatedAt - a.updatedAt);
   const action = async (fn: () => Promise<unknown>) => {
+    if (actionLocked.current) return;
+    actionLocked.current = true;
     try {
       setError("");
       await fn();
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      actionLocked.current = false;
     }
   };
   return (

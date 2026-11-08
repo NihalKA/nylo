@@ -2,6 +2,14 @@
 
 Updated: 8 November 2026. Active target: iOS App Store. Android publication deferred until iOS is published and validated; do not purchase a Google developer account yet.
 
+## Active expanded beta work
+
+Owner now requests95/100 quality, multi/all-returned model selection, file/photo/camera attachments, same-agent cross-chat context like GrokBot/dots, a new beta and parallel App Store preparation. The state-machine audit inventories27 app-owned machines; see STATE_MACHINES.md and EXPANDED_BETA.md. Build10 below is the previous feature set and remains available while expanded validation runs.
+
+Initial expanded source c16471e passed source CI42503476243, ExpoDoctor20/20 and fresh native build42503476277; updated privacy/support site42503476218 deployed. Source audit017 found five medium issues (no confirmed high/critical source defect), addressed in the following candidate alongside explicit picker/catalog/send contracts and transactional attachment storage. Typecheck and67 tests now pass. Fresh-current smoke/gallery, independent rendered review, signed expanded candidate and assignment remain pending. No95score or new native-feature pass is claimed.
+
+A private card requested a new maximum8requests/128tokens synthetic test allowance; it expired without a key. No expanded live requests used. The older smoke-key authorization is not extended. Separate App Review credentials and truthful final console declarations remain required; see app-store-readiness.md.
+
 ## Current evidence
 
 - App source: `64709129f17968031bd000b9898162d87f4a6d92`. Subsequent commits through `0e55469` change only gallery fixtures; app/native configuration/assets are identical.

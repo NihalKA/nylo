@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Pressable, Switch, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
@@ -36,7 +36,18 @@ const templates = [
       "Help me move my project forward. Keep decisions clear, identify open questions, and suggest manageable next steps. Be honest about what you know and what still needs to be checked.",
   },
 ];
-export default function AgentEdit() {
+export default function AgentEditRoute() {
+  const params = useLocalSearchParams<{
+    id?: string;
+    fromChat?: string;
+    template?: string;
+  }>();
+  return (
+    <AgentEdit key={params.id || params.fromChat || params.template || "new"} />
+  );
+}
+
+function AgentEdit() {
   const { id, fromChat, template } = useLocalSearchParams<{
     id?: string;
     fromChat?: string;
@@ -75,6 +86,7 @@ export default function AgentEdit() {
   const [color, setColor] = useState(original?.color || colors[0]);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const saveLocked = useRef(false);
   const [roleEdited, setRoleEdited] = useState(false);
   if (
     (id && id === data.deviceCheck?.agentId) ||
@@ -91,6 +103,8 @@ export default function AgentEdit() {
       </Page>
     );
   const save = async () => {
+    if (saveLocked.current) return;
+    saveLocked.current = true;
     setBusy(true);
     setError("");
     try {
@@ -124,6 +138,7 @@ export default function AgentEdit() {
     } catch (e) {
       setError((e as Error).message);
     } finally {
+      saveLocked.current = false;
       setBusy(false);
     }
   };

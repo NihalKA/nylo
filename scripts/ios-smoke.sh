@@ -87,4 +87,22 @@ if [ "$scenario" = gallery ]; then
 from pathlib import Path
 assert Path('artifacts/e2e/copied-example.txt').read_text() == Path('artifacts/e2e/expected-copy.txt').read_text(), 'Copied response differs from the complete synthetic example'
 PY
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 - "$app_container" <<'PYBLOBS'
+import json, sqlite3, sys
+from pathlib import Path
+with sqlite3.connect(Path(sys.argv[1]) / "Documents/SQLite/nylo.db") as db:
+    metadata=json.loads(db.execute("SELECT json FROM app_state WHERE id=1").fetchone()[0])
+    references=[]
+    for chat in metadata["conversations"]:
+        attachments=chat.get("draftAttachments", []) + [a for message in chat["messages"] for a in message.get("attachments", [])]
+        for attachment in attachments:
+            assert "data" not in attachment, "File payload was rewritten into streaming metadata"
+            references.append(attachment["blobId"])
+    stored={row[0] for row in db.execute("SELECT id FROM attachment_blobs")}
+    assert stored == set(references), "Orphaned or missing attachment blob"
+    assert "gallery-owned-image" in stored, "Restored image was lost"
+    assert "gallery-owned-text" not in stored, "Removed draft file was retained"
+Path("artifacts/e2e/attachment-storage-check.txt").write_text("PASS: native metadata and file blobs match; restored image retained, removed text blob deleted. Synthetic data only.\n")
+PYBLOBS
 fi

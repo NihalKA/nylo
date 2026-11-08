@@ -1,3 +1,4 @@
+import { utf8Size } from "./byte-size";
 import { Attachment, Protocol } from "./types";
 export const MAX_ATTACHMENT_BYTES = 2 * 1024 * 1024;
 export const MAX_MESSAGE_BYTES = 4 * 1024 * 1024;
@@ -32,7 +33,7 @@ export function validateAttachments(value: unknown): Attachment[] {
     if (a.mimeType === "text/plain") {
       if (
         a.data.length > 100000 ||
-        new TextEncoder().encode(a.data).length !== a.size ||
+        utf8Size(a.data) !== a.size ||
         a.data.includes("\u0000")
       )
         throw new Error(

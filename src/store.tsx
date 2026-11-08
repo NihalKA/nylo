@@ -1,6 +1,4 @@
-import { recentAgentContext, sharedContextPrompt } from "./agent-context";
-import { selectedConnection } from "./model-library";
-import { assertAttachmentProtocol, validateAttachments } from "./attachments";
+import { prepareSend } from "./send-plan";
 import { credentialDestination, stageCredential } from "./credentials";
 import {
   createCheckpointBarrier,
@@ -333,30 +331,23 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error(
         "Another response is running. Stop it before sending a new message.",
       );
-    const conversation = current.current.conversations.find(
-      (c) => c.id === conversationId,
+    const {
+      conversation,
+      connection,
+      attachments,
+      messages,
+      agent,
+      instructions,
+    } = prepareSend(
+      current.current,
+      conversationId,
+      input,
+      retry,
+      !!options?.deviceCheck,
     );
-    if (!conversation) throw new Error("Conversation not found.");
-    const savedConnection = current.current.connections.find(
-      (c) =>
-        c.id ===
-        (conversation.connectionId || current.current.defaultConnectionId),
-    );
-    const connection = savedConnection
-      ? selectedConnection(savedConnection, conversation.model)
-      : undefined;
-    if (!connection)
-      throw new Error("Add or choose a connection in Settings first.");
-    const attachments = validateAttachments(
-      retry ? undefined : conversation.draftAttachments,
-    );
-    const previousAttachments = conversation.messages.flatMap(
-      (m) => m.attachments || [],
-    );
-    assertAttachmentProtocol(
-      [...previousAttachments, ...attachments],
-      connection.protocol,
-    );
+    const previousAttachments = messages
+      .slice(0, retry ? messages.length : -1)
+      .flatMap((m) => m.attachments || []);
     if (attachments.length || previousAttachments.length) {
       if (
         !(await askPermission(
@@ -414,24 +405,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error(
         "Another response is running. Stop it before sending a new message.",
       );
-    if (!retry && !input.trim() && !attachments.length) return;
-    const last = conversation.messages.at(-1);
-    const messages = options?.deviceCheck
-      ? []
-      : retry && last?.role === "assistant"
-        ? conversation.messages.slice(0, -1)
-        : [...conversation.messages];
-    if (!retry)
-      messages.push({
-        id: uid(),
-        role: "user",
-        text: input.trim(),
-        attachments,
-        status: "complete",
-        createdAt: Date.now(),
-      });
-    if (!contextMessages(messages).length || messages.at(-1)?.role !== "user")
-      throw new Error("There is no message to retry.");
+    if (AppState.currentState && AppState.currentState !== "active")
+      throw new Error("Return to Nylo to send. Your draft is kept.");
     const assistantId = uid();
     const controller = new AbortController();
     active.current = { controller, id: conversationId };
@@ -509,20 +484,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       }));
       accepted = true;
       onAccepted?.();
-      const agent = current.current.agents.find(
-        (a) => a.id === conversation.agentId,
-      );
       await runAgent({
         connection,
         key,
         messages,
-        instructions:
-          systemPrompt(agent) +
-          (agent
-            ? sharedContextPrompt(
-                recentAgentContext(current.current, agent, conversationId),
-              )
-            : ""),
+        instructions,
         useTools: !!agent && options?.tools !== false,
         maxOutputTokens: options?.maxOutputTokens,
         signal: controller.signal,

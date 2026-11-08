@@ -1,3 +1,4 @@
+import { assertBackupSize, utf8Size } from "./byte-size";
 import { parseData } from "./domain";
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
@@ -9,10 +10,7 @@ export async function exportBackup(data: AppData) {
     `nylo-backup-${new Date().toISOString().slice(0, 10)}.json`,
   );
   const content = JSON.stringify(parseData(data), null, 2);
-  if (content.length > 100 * 1024 * 1024)
-    throw new Error(
-      "This backup exceeds 100 MB. Remove unneeded attachment conversations before exporting.",
-    );
+  assertBackupSize(utf8Size(content));
   file.write(content);
   try {
     await Sharing.shareAsync(file.uri, {
@@ -32,8 +30,7 @@ export async function pickBackup(): Promise<unknown | null> {
   if (result.canceled) return null;
   const file = new File(result.assets[0].uri);
   try {
-    if (file.size > 100 * 1024 * 1024)
-      throw new Error("Choose a backup smaller than 100 MB.");
+    assertBackupSize(file.size);
     return JSON.parse(await file.text());
   } finally {
     if (file.uri.startsWith(Paths.cache.uri) && file.exists) file.delete();

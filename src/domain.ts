@@ -288,9 +288,24 @@ export function parseData(value: unknown, local = false): AppData {
     )
   )
     throw new Error("Invalid conversation in backup.");
+  const attachmentIdentities = new Map<string, string>();
+  const checkAttachments = (value: unknown) => {
+    for (const attachment of validateAttachments(value)) {
+      if (
+        attachmentIdentities.has(attachment.id) &&
+        attachmentIdentities.get(attachment.id) !== attachment.data
+      )
+        throw new Error("Conflicting attachment identity in backup.");
+      attachmentIdentities.set(attachment.id, attachment.data);
+    }
+  };
   for (const c of d.conversations) {
-    validateAttachments(c.draftAttachments);
-    for (const m of c.messages || []) validateAttachments(m.attachments);
+    checkAttachments(c.draftAttachments);
+    for (const m of c.messages) {
+      if (m.role !== "user" && m.attachments?.length)
+        throw new Error("Invalid assistant attachment in backup.");
+      checkAttachments(m.attachments);
+    }
   }
   const ids = [...d.agents, ...d.conversations, ...d.connections].map(
     (x) => x.id,

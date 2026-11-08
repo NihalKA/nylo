@@ -1,8 +1,15 @@
+import { attachmentFlowReducer } from "../../src/attachment-flow";
 import { modelChoices } from "../../src/model-library";
 import { Attachment } from "../../src/types";
 import { attachmentUri, validateAttachments } from "../../src/attachments";
 import { pickAttachments, AttachmentSource } from "../../src/attachment-picker";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   AppState,
@@ -22,7 +29,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { isDeviceCheckConversation, starterDraft } from "../../src/domain";
+import { isDeviceCheckConversation, starterDraft, uid } from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -86,7 +93,12 @@ function MessageText({ text }: { text: string }) {
   );
 }
 
-export default function Chat() {
+export default function ChatRoute() {
+  const params = useLocalSearchParams<{ id: string }>();
+  return <Chat key={params.id} />;
+}
+
+function Chat() {
   const insets = useSafeAreaInsets();
   const { fontScale } = useWindowDimensions();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -121,9 +133,13 @@ export default function Chat() {
   const [attachments, setAttachments] = useState<Attachment[]>(
     conversation?.draftAttachments || [],
   );
-  const [attachmentMenu, setAttachmentMenu] = useState(false);
-  const pendingAttachment = useRef<AttachmentSource | null>(null);
-  const [picking, setPicking] = useState(false);
+  const [attachmentFlow, dispatchAttachment] = useReducer(
+    attachmentFlowReducer,
+    { kind: "idle" },
+  );
+  const attachmentMenu = attachmentFlow.kind === "menu";
+  const picking =
+    attachmentFlow.kind === "closing" || attachmentFlow.kind === "picking";
   const [modelSearch, setModelSearch] = useState("");
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
@@ -181,6 +197,30 @@ export default function Chat() {
     });
     return () => subscription.remove();
   }, [saveDraft]);
+  const startedAttachment = useRef<string | null>(null);
+  useEffect(() => {
+    if (
+      attachmentFlow.kind !== "picking" ||
+      startedAttachment.current === attachmentFlow.operation
+    )
+      return;
+    const { source, operation } = attachmentFlow;
+    const chatId = id;
+    startedAttachment.current = operation;
+    void (async () => {
+      try {
+        const picked = await pickAttachments(source);
+        if (draftValue.current.id === chatId)
+          setAttachments(
+            validateAttachments([...draftValue.current.attachments, ...picked]),
+          );
+      } catch (e) {
+        if (draftValue.current.id === chatId) setError((e as Error).message);
+      } finally {
+        dispatchAttachment({ type: "finished", operation });
+      }
+    })();
+  }, [attachmentFlow, id]);
   if (isDeviceCheckConversation(data, id))
     return (
       <Page>
@@ -235,27 +275,12 @@ export default function Chat() {
     }
   };
   const queueAttachment = (source: AttachmentSource) => {
-    if (picking || pendingAttachment.current) return;
-    if (Platform.OS === "ios") {
-      pendingAttachment.current = source;
-      setPicking(true);
-      setAttachmentMenu(false);
-    } else void attach(source);
-  };
-  const attach = async (source: AttachmentSource) => {
-    setAttachmentMenu(false);
-    setPicking(true);
-    try {
-      const picked = await pickAttachments(source);
-      if (draftValue.current.id === id)
-        setAttachments(
-          validateAttachments([...draftValue.current.attachments, ...picked]),
-        );
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setPicking(false);
-    }
+    dispatchAttachment({
+      type: "choose",
+      source,
+      operation: uid(),
+      waitForDismiss: Platform.OS === "ios",
+    });
   };
   return (
     <Page>
@@ -707,7 +732,7 @@ export default function Chat() {
               onPress={() => {
                 composer.current?.blur();
                 Keyboard.dismiss();
-                setAttachmentMenu(true);
+                dispatchAttachment({ type: "open" });
               }}
             />
             <TextInput
@@ -809,13 +834,13 @@ export default function Chat() {
       <Modal
         visible={attachmentMenu}
         onDismiss={() => {
-          const source = pendingAttachment.current;
-          pendingAttachment.current = null;
-          if (source) void attach(source);
+          if (attachmentFlow.kind === "closing") {
+            dispatchAttachment({ type: "dismissed" });
+          }
         }}
         transparent
         animationType="slide"
-        onRequestClose={() => setAttachmentMenu(false)}
+        onRequestClose={() => dispatchAttachment({ type: "cancel" })}
       >
         <View
           style={{
@@ -864,7 +889,7 @@ export default function Chat() {
             <Button
               title="Cancel attachments"
               secondary
-              onPress={() => setAttachmentMenu(false)}
+              onPress={() => dispatchAttachment({ type: "cancel" })}
             />
           </View>
         </View>

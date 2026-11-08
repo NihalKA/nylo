@@ -1,10 +1,12 @@
+import { utf8Size } from "./byte-size";
+import { processAttachmentBatch } from "./attachment-batch";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { File, Paths } from "expo-file-system";
 import { Attachment } from "./types";
 import { uid } from "./domain";
-import { MAX_ATTACHMENT_BYTES, validateAttachments } from "./attachments";
+import { MAX_ATTACHMENT_BYTES } from "./attachments";
 export type AttachmentSource = "files" | "photos" | "camera";
 export async function pickAttachments(
   source: AttachmentSource,
@@ -24,48 +26,43 @@ export async function pickAttachments(
       copyToCacheDirectory: true,
     });
     if (result.canceled) return [];
-    const output: Attachment[] = [];
-    try {
-      for (const asset of result.assets) {
+    return processAttachmentBatch(result.assets, {
+      sourceSize: (asset) => new File(asset.uri).size,
+      maxSourceFileBytes: MAX_ATTACHMENT_BYTES,
+      maxSourceTotalBytes: 4 * 1024 * 1024,
+      convert: async (asset) => {
         const file = new File(asset.uri);
-        if (!file.size || file.size > MAX_ATTACHMENT_BYTES)
-          throw new Error("Choose files up to 2 MB each.");
-        if (asset.mimeType?.startsWith("image/")) {
-          output.push(await image(asset.uri));
-        } else if (
-          asset.mimeType === "application/pdf" ||
-          /\.pdf$/i.test(asset.name)
-        ) {
-          output.push({
+        if (asset.mimeType?.startsWith("image/")) return image(asset.uri);
+        if (asset.mimeType === "application/pdf" || /\.pdf$/i.test(asset.name))
+          return {
             id: uid(),
             name: asset.name.slice(0, 200),
             mimeType: "application/pdf",
             size: file.size,
             data: await file.base64(),
-          });
-        } else if (
+          };
+        if (
           /\.(txt|md|csv|json|log)$/i.test(asset.name) ||
           asset.mimeType?.startsWith("text/")
         ) {
           const data = await file.text();
-          output.push({
+          return {
             id: uid(),
             name: asset.name.slice(0, 200),
             mimeType: "text/plain",
-            size: new TextEncoder().encode(data).length,
+            size: utf8Size(data),
             data,
-          });
-        } else throw new Error("Choose a PDF, text file, JPEG or PNG photo.");
-      }
-      return validateAttachments(output);
-    } finally {
-      for (const asset of result.assets) {
-        try {
-          if (asset.uri.startsWith(Paths.cache.uri))
-            new File(asset.uri).delete();
-        } catch {}
-      }
-    }
+          };
+        }
+        throw new Error("Choose a PDF, text file, JPEG or PNG photo.");
+      },
+      cleanup: (asset) => {
+        if (asset.uri.startsWith(Paths.cache.uri)) {
+          const file = new File(asset.uri);
+          if (file.exists) file.delete();
+        }
+      },
+    });
   }
   if (source === "camera") {
     const permission = await ImagePicker.requestCameraPermissionsAsync();
@@ -89,17 +86,18 @@ export async function pickAttachments(
           exif: false,
         });
   if (result.canceled) return [];
-  const output: Attachment[] = [];
-  for (const asset of result.assets) {
-    try {
-      output.push(await image(asset.uri));
-    } finally {
-      try {
-        if (asset.uri.startsWith(Paths.cache.uri)) new File(asset.uri).delete();
-      } catch {}
-    }
-  }
-  return validateAttachments(output);
+  return processAttachmentBatch(result.assets, {
+    sourceSize: (asset) => asset.fileSize || new File(asset.uri).size,
+    maxSourceFileBytes: 20 * 1024 * 1024,
+    maxSourceTotalBytes: 80 * 1024 * 1024,
+    convert: (asset) => image(asset.uri),
+    cleanup: (asset) => {
+      if (asset.uri.startsWith(Paths.cache.uri)) {
+        const file = new File(asset.uri);
+        if (file.exists) file.delete();
+      }
+    },
+  });
 }
 async function image(uri: string): Promise<Attachment> {
   // Re-encode selected pixels so EXIF/location metadata never enters chat state.
