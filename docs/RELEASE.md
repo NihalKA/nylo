@@ -1,7 +1,8 @@
 # iOS release runbook
 
-Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed build 8 (source eae0718) uploaded through run 42490400098, Apple processing is VALID, and it is assigned to internal device QA. It includes the live device-check screen and earlier keyboard/maximum-text fixes. It is a validation beta, not final release approval. Android publication is deferred.
+Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Signing is configured. Signed **0.1.0 (10)** (app source 6470912) uploaded through run 42497581610 and Apple processing is VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Internal design-feedback/device-validation QA assignment awaits completed gallery 42499737557. Build 8 remains the older owner-QA candidate until assignment is verified. No production approval. Android publication is deferred.
 
+Full native run 42497575404 and all three profiles of fresh-native smoke 42498930753 passed at 6470912 with no JS refresh. Earlier refreshed smoke 42497578413 also passed all profiles. Exact source/native provenance and synthetic versus live evidence remain separate.
 App Store Connect was rechecked on 8 November 2026: version 1.0 remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is still 0.1.0; align it before building the final 1.0 candidate. The age rating is unset. No submission or production release has occurred.
 
 ## Native evidence without local compilation

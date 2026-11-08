@@ -1,14 +1,25 @@
 # iPhone device check
 
-Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. Current device beta: **0.1.0 (8)**, source eae0718, uploaded by run 42490400098. Apple processing VALID; build ID 0e4c605f-3fac-4bc0-ac5e-b49b2df4a66a. Assigned to internal Nylo Device QA alongside builds 6 and 4. Build 7's workflow was cancelled before upload after independent findings; source fixes were independently rechecked before build 8 distribution.
+Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. New design candidate: **0.1.0 (10)**, app source `6470912`, uploaded by [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610). Apple processing VALID; build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assignment awaits the final synthetic gallery. Build 8 remains the older owner-QA design until assignment is verified.
 
-This is a device-validation beta, not App Store publication or final UI approval. Later source improvements will reach a newer candidate.
+This is a design-feedback/device-validation beta. Owner design acceptance and production approval remain open. Build 9 was cancelled and never assigned.
 
-## Live check on iPad or iPhone in build 8
+## iPhone checks for build 10
 
-Update Nylo through TestFlight, then open Settings → Live device check. Choose your saved provider, prepare the local test, run a live reply, approve the generated test fact and run memory recall. Each live action confirms one request capped at 128 output tokens with tools disabled. Fully close/reopen Nylo and return to Check after reopening. Results remain on device; they are not automatically sent to the agent. See live-device-check.md for scope and limitations. Existing build 6 does not have this screen.
+1. Update through TestFlight and verify **0.1.0 (10)**. Judge the conversation, model picker, inbox and Settings against the requested ChatGPT/Grok quality direction; identify screens that still feel unfinished.
+2. Type a multiline draft, dismiss the keyboard once, navigate away and fully close/reopen. Confirm the draft survives and controls remain reachable. Quick starters must not replace an existing draft.
+3. Open Settings → Live device check. Choose your saved provider and prepare the local test. Run live reply, approve the generated test fact and run recall. Each live action asks consent for one request capped at 128 output tokens, tools disabled. The provider can charge for these requests. Never share keys in chat or feedback.
+4. Fully close/reopen Nylo, return to Live device check and select Check after reopening. Confirm approved test memory and local state restored. Remove test data and confirm personal chats/drafts remain.
+5. If testing an ordinary live conversation, stop a response and background/return during another. Check the interrupted state and usable draft/history. Ordinary chats use the normal provider settings and output limit; the live-check cap does not apply to them.
+6. Enable larger text and VoiceOver. Check reading order and operation of Message, Send, model selection, Memory and navigation. Report clipped or unreachable controls.
 
-Current-source simulator smoke passed large and maximum-text profiles; compact remains running at this update. Gallery 42490247848 rendered synthetic responses, recovery, long history, approved test memory and restored memory after relaunch, then failed because its scroll driver required an already-visible bottom button to be centered. fabe458 removes that centering requirement while preserving full visibility; rerun 42491568232 is pending. No completed recall/live request, VoiceOver or physical-device pass is inferred from this evidence.
+Report phone model, iOS version, build and actual outcomes. Results remain on device; no automatic report reaches the agent. Do not include keys or private conversations. See live-device-check.md for isolation and request limits.
+
+## Simulator evidence
+
+[42497578413](https://github.com/NihalKA/nylo/actions/runs/42497578413) passed all three profiles with refreshed 6470912 JS. [42498930753](https://github.com/NihalKA/nylo/actions/runs/42498930753) passed all three using fresh native/JS/flows 6470912 without refresh: compact iPhone SE third generation, iPhone 17 Pro Max, and maximum accessibility text on iOS 26.2. This includes strict single-tap keyboard dismissal, draft relaunch, approved memory save/relaunch and agent composition. It is real Apple Simulator evidence, not a physical-device, VoiceOver or live-provider pass.
+
+Gallery 42499737557 remains pending. Its responses/recovery are synthetic offline fixtures, not evidence of live generation or recovery.
 
 ## Connect NyloHQ in build 6
 

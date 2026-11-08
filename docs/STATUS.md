@@ -2,25 +2,27 @@
 
 Updated: 8 November 2026. Active target: iOS App Store. Android publication deferred until iOS is published and validated; do not purchase a Google developer account yet.
 
-## Confirmed
+## Current evidence
 
-- User approved end-to-end implementation, public GitHub source, free hosted runners, scored independent model reviews and deployment/submission.
-- Support email: admin@colorforfun.app.
-- GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
-- Original prototype imported without touching its original folder; dependency install complete.
-- Expo Doctor: 20/20 checks passed.
-- Latest independent score: 81/100 for corrected product source 6350e69; see reviews/015-corrected-product-evidence.md. Current normal-size inbox/Settings/setup improved and compact/large smoke passed. Stale gallery selectors and a wrong-direction maximum-text Settings scroll blocked remaining runtime evidence; fixture fixes retain full visibility. Preview-formatting fixes pass typecheck and 43 tests. Store/design acceptance remains on hold. A new traceable internal feedback beta is narrowly justified with disclosed gaps; build 8 remains owner QA until a corrected candidate is valid and assigned.
+- App source: `64709129f17968031bd000b9898162d87f4a6d92`. Subsequent commits through `0e55469` change only gallery fixtures; app/native configuration/assets are identical.
+- Source checks: 43 behavioral tests, typecheck, formatting and credential audit passed. No new live provider requests were used.
+- Full native build [42497575404](https://github.com/NihalKA/nylo/actions/runs/42497575404) passed for app 6470912.
+- Smoke [42497578413](https://github.com/NihalKA/nylo/actions/runs/42497578413) passed compact, large and maximum text with refreshed current JS. Strict single-tap keyboard dismissal, draft relaunch, saved memory/relaunch and agent composition completed.
+- Fresh-native smoke [42498930753](https://github.com/NihalKA/nylo/actions/runs/42498930753) also passed all three profiles. Maximum-text provenance identifies native/JS/flows 6470912, refresh false, iOS 26.2; keyboard and restored-memory PNGs inspected. This resolves the earlier stale-source and maximum-text fixture blockers.
+- Current populated gallery [42499737557](https://github.com/NihalKA/nylo/actions/runs/42499737557) is running. It checks focused picker selection/provider navigation, starter and role draft safety, full long-history answer visibility, exact clipboard and scoped device-check restart/cleanup. All answers are explicitly synthetic.
+- Signed [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610) uploaded **0.1.0 (10)** from 6470912. Apple VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Internal QA assignment awaits gallery completion. Build 8 remains the older owner-QA design.
 
-## In progress
+## Product acceptance
 
-- Owner rejected build 8's interface as a generic generated prototype and selected ChatGPT/Grok as product-quality references. A coherent native UI reset is implemented in source across shared controls, Chats, conversation, Agents, agent setup/detail, provider setup and Settings; see PRODUCT_DESIGN.md. Production submission is on hold. Earlier score 87 applies to the previous app and does not approve this redesign. Fresh native renders, independent review and a new signed beta are required.
-- Live device-check build 8 (eae0718, run 42490400098) uploaded successfully, is Apple VALID and is assigned to Nylo Device QA; test notes are saved. No automated provider requests were used to implement it. First candidate signed run 42489757061 was cancelled before upload after review findings. Smoke 42490250273 passed all three profiles. Gallery 42490247848 reached restored test memory after relaunch, then failed its bottom-button centering requirement despite a fully visible enabled control; fixture-only fabe458 corrects this and gallery 42491568232 reruns it. Native 42490247686 remains running. See testing/live-device-check.md.
-- Fresh device-enabled session confirms T3 local iOS tools are ready. Apple developer pairing succeeded for the wired iPad A16 (iOS 26.6.1); detailed inventory confirms paired, connected, Developer Mode enabled and developer services available. Finder already had access; no new owner Trust action was needed. T3 still lists only the iPhone 17 Pro simulator (iOS 26.4), and physical device_open rejects the iPad as absent. Physical UI testing remains blocked by device discovery, not owner trust.
-- Local simulator installation reused native seed 24aaba2 with app JS 9fc4d9a (no full local native compilation). Launch and Chats-to-Agents navigation succeeded via the supported agent-device command. device_screenshot failed twice with a device-hub request error, including after its advised device-list refresh; local device interaction stopped. No visual, physical or VoiceOver pass is inferred.
-- Tab-wrap matrix 42487498090 was cancelled before interaction evidence was produced. Replacement matrix 42487655705 failed maximum text on old app 2f7b4f0; gallery 42487941622 failed its first assertion. Native build 42487451946 remains running. Smoke/gallery concurrency groups are separated to prevent unrelated scenarios cancelling one another. Fresh explicitly refreshed-current-JS reruns are required; see review 010.
-- iOS-oriented tab navigation, universal inbox, simpler Settings and progressive provider setup.
-- Provider discovery, explicit sharing consent, memory change approval, durable credential staging/retirement and failed-checkpoint completion protection.
-- Full native simulator builds through d77f2c0 passed. Matrix 42481190022 produced 22 actual native images and exposed the composer/large-text issues in review 006. Source fixes at 3001389/48064ba/1ba6db3 add the safe-area keyboard offset, explicit dismissal, scrollable/adaptive display heading and memory-input test ID/value/enabled checks. Rerun 42482545085 and independent review are in progress; no full UI smoke pass yet. Refreshed-JS provenance is explicit and never substitutes for final signed-build verification. Public privacy/support site is live at https://nihalka.github.io/nylo/; current source suite has 37 passing tests and CI source checks pass.
+Owner rejected the earlier interface and named ChatGPT/Grok as quality references. Current source implements conversation-first hierarchy, focused model selection, quieter controls, grouped Settings, simpler provider setup and protected drafts. Actual native screenshots are retained in ignored artifacts/native-product-captures. See PRODUCT_DESIGN.md.
+
+Latest independent assessment remains **81/100 provisional** for earlier 6350e69, documented in reviews/015-corrected-product-evidence.md. Its blocked maximum-text path now passes, but no new independent score or owner acceptance is claimed. That review permits a traceable internal design-feedback/device-validation beta with disclosed gaps. Design and production acceptance remain on hold.
+
+## Physical and live checks
+
+Settings → Live device check implements explicit per-action consent, one request capped at 128 output tokens, approved test-memory recall, restart verification and scoped cleanup. Results remain on device; no owner results have been received.
+
+The wired iPad A16/iOS 26.6.1 is paired, connected and Developer Mode enabled. Finder trust is complete. T3 Beta 0.1.7 exposes only simulators; physical device_open rejected the iPad. Local simulator navigation succeeded, but screenshot capture failed twice after refresh, so local interaction stopped. No physical-device or VoiceOver pass is inferred. CI uses real Apple iPhone Simulator runtimes, not a browser mockup; it does not establish physical iPhone behavior.
 
 ## External dependencies
 
