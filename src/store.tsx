@@ -1,5 +1,9 @@
 import { credentialDestination, stageCredential } from "./credentials";
-import { createCheckpointBarrier, createDurableUpdater } from "./persistence";
+import {
+  createCheckpointBarrier,
+  createDurableUpdater,
+  createSerialExecutor,
+} from "./persistence";
 import { askPermission } from "./consent";
 import React, {
   createContext,
@@ -64,6 +68,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [storageError, setStorageError] = useState("");
   const [runningId, setRunningId] = useState<string | null>(null);
   const stagingCredentials = useRef(new Set<string>());
+  const credentialOperations = useRef(createSerialExecutor());
   const active = useRef<{ controller: AbortController; id: string } | null>(
     null,
   );
@@ -119,7 +124,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       );
   };
   useEffect(() => {
-    if (ready) void cleanupRetiredCredentials().catch(() => {});
+    if (ready)
+      void credentialOperations
+        .current(cleanupRetiredCredentials)
+        .catch(() => {});
   }, [ready]);
   useEffect(() => {
     let mounted = true;
@@ -203,95 +211,100 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     }));
     return agentId;
   };
-  const saveConnection = async (input: Connection, key: string) => {
-    const connection = validateConnection(input);
-    const previous = current.current.connections.find(
-      (c) => c.id === connection.id,
-    );
-    if (
-      !key.trim() &&
-      previous &&
-      (previous.protocol !== connection.protocol ||
-        previous.baseUrl !== connection.baseUrl)
-    )
-      throw new Error(
-        "Enter the API key again when changing a provider or endpoint.",
+  const saveConnection = (input: Connection, key: string) =>
+    credentialOperations.current(async () => {
+      const connection = validateConnection(input);
+      const previous = current.current.connections.find(
+        (c) => c.id === connection.id,
       );
-    const previousId = previous?.credentialId || previous?.id;
-    const nextId = key.trim() ? uid() : previousId;
-    if (!nextId) throw new Error("Enter your API key.");
-    if (
-      !key.trim() &&
-      !(await readKey(nextId, credentialDestination(connection)))
-    )
-      throw new Error(
-        "Re-enter your API key to bind it securely to this provider.",
-      );
-    const activate = async () => {
+      if (
+        !key.trim() &&
+        previous &&
+        (previous.protocol !== connection.protocol ||
+          previous.baseUrl !== connection.baseUrl)
+      )
+        throw new Error(
+          "Enter the API key again when changing a provider or endpoint.",
+        );
+      const previousId = previous?.credentialId || previous?.id;
+      const nextId = key.trim() ? uid() : previousId;
+      if (!nextId) throw new Error("Enter your API key.");
+      if (
+        !key.trim() &&
+        !(await readKey(nextId, credentialDestination(connection)))
+      )
+        throw new Error(
+          "Re-enter your API key to bind it securely to this provider.",
+        );
+      const activate = async () => {
+        await update((d) => ({
+          ...d,
+          connections: [
+            ...d.connections.filter((c) => c.id !== connection.id),
+            { ...connection, credentialId: nextId },
+          ],
+          retiredCredentialIds: [
+            ...(d.retiredCredentialIds || []).filter((id) => id !== nextId),
+            ...(previousId && previousId !== nextId ? [previousId] : []),
+          ],
+          providerConsents: (d.providerConsents || []).filter(
+            (c) =>
+              !previousId ||
+              previousId === nextId ||
+              c.credentialId !== previousId,
+          ),
+          defaultConnectionId: d.defaultConnectionId || connection.id,
+        }));
+      };
+      if (key.trim()) {
+        stagingCredentials.current.add(nextId);
+        try {
+          await stageCredential({
+            journal: () =>
+              update((d) => ({
+                ...d,
+                retiredCredentialIds: [
+                  ...(d.retiredCredentialIds || []),
+                  nextId,
+                ],
+              })),
+            write: () =>
+              writeKey(nextId, key.trim(), credentialDestination(connection)),
+            activate,
+            rollback: () => removeKey(nextId),
+          });
+        } finally {
+          stagingCredentials.current.delete(nextId);
+        }
+      } else {
+        await activate();
+      }
+      await cleanupRetiredCredentials();
+    });
+  const deleteConnection = (id: string) =>
+    credentialOperations.current(async () => {
+      if (active.current)
+        throw new Error(
+          "Stop the current response before removing a connection.",
+        );
+      const removed = current.current.connections.find((c) => c.id === id);
       await update((d) => ({
         ...d,
-        connections: [
-          ...d.connections.filter((c) => c.id !== connection.id),
-          { ...connection, credentialId: nextId },
-        ],
-        retiredCredentialIds: [
-          ...(d.retiredCredentialIds || []).filter((id) => id !== nextId),
-          ...(previousId && previousId !== nextId ? [previousId] : []),
-        ],
+        connections: d.connections.filter((c) => c.id !== id),
         providerConsents: (d.providerConsents || []).filter(
-          (c) =>
-            !previousId ||
-            previousId === nextId ||
-            c.credentialId !== previousId,
+          (c) => c.credentialId !== (removed?.credentialId || removed?.id),
         ),
-        defaultConnectionId: d.defaultConnectionId || connection.id,
+        retiredCredentialIds: [
+          ...(d.retiredCredentialIds || []),
+          ...(removed ? [removed.credentialId || removed.id] : []),
+        ],
+        defaultConnectionId:
+          d.defaultConnectionId === id
+            ? d.connections.find((c) => c.id !== id)?.id || ""
+            : d.defaultConnectionId,
       }));
-    };
-    if (key.trim()) {
-      stagingCredentials.current.add(nextId);
-      try {
-        await stageCredential({
-          journal: () =>
-            update((d) => ({
-              ...d,
-              retiredCredentialIds: [...(d.retiredCredentialIds || []), nextId],
-            })),
-          write: () =>
-            writeKey(nextId, key.trim(), credentialDestination(connection)),
-          activate,
-          rollback: () => removeKey(nextId),
-        });
-      } finally {
-        stagingCredentials.current.delete(nextId);
-      }
-    } else {
-      await activate();
-    }
-    await cleanupRetiredCredentials();
-  };
-  const deleteConnection = async (id: string) => {
-    if (active.current)
-      throw new Error(
-        "Stop the current response before removing a connection.",
-      );
-    const removed = current.current.connections.find((c) => c.id === id);
-    await update((d) => ({
-      ...d,
-      connections: d.connections.filter((c) => c.id !== id),
-      providerConsents: (d.providerConsents || []).filter(
-        (c) => c.credentialId !== (removed?.credentialId || removed?.id),
-      ),
-      retiredCredentialIds: [
-        ...(d.retiredCredentialIds || []),
-        ...(removed ? [removed.credentialId || removed.id] : []),
-      ],
-      defaultConnectionId:
-        d.defaultConnectionId === id
-          ? d.connections.find((c) => c.id !== id)?.id || ""
-          : d.defaultConnectionId,
-    }));
-    await cleanupRetiredCredentials();
-  };
+      await cleanupRetiredCredentials();
+    });
   const send = async (
     conversationId: string,
     input: string,
@@ -320,7 +333,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         (c) =>
           c.credentialId === credentialId &&
           c.destination === destination &&
-          c.revision === 1,
+          c.revision === 2,
       )
     ) {
       const allowed = await askPermission(
@@ -336,7 +349,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           ...(d.providerConsents || []).filter(
             (c) => c.credentialId !== credentialId,
           ),
-          { credentialId, destination, revision: 1, grantedAt: Date.now() },
+          { credentialId, destination, revision: 2, grantedAt: Date.now() },
         ],
       }));
     }
@@ -549,20 +562,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       setRunningId(null);
     }
   };
-  const importBackup = async (value: unknown) => {
-    if (active.current)
-      throw new Error("Stop the current response before restoring a backup.");
-    const imported = parseData(value);
-    const retired = [
-      ...(current.current.retiredCredentialIds || []),
-      ...current.current.connections.map((c) => c.credentialId || c.id),
-    ];
-    await update(() => ({
-      ...imported,
-      retiredCredentialIds: [...new Set(retired)],
-    }));
-    await cleanupRetiredCredentials();
-  };
+  const importBackup = (value: unknown) =>
+    credentialOperations.current(async () => {
+      if (active.current)
+        throw new Error("Stop the current response before restoring a backup.");
+      const imported = parseData(value);
+      const retired = [
+        ...(current.current.retiredCredentialIds || []),
+        ...current.current.connections.map((c) => c.credentialId || c.id),
+      ];
+      await update(() => ({
+        ...imported,
+        retiredCredentialIds: [...new Set(retired)],
+      }));
+      await cleanupRetiredCredentials();
+    });
   return (
     <StoreContext.Provider
       value={{

@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent milestone score: 72/100 at 267b3ff, with historical native evidence only. Still below the 88 release gate; see docs/reviews/004-consent-recovery-review.md. Its five medium findings are being corrected and require re-review.
+- Latest independent current-evidence score: 58/100 at 1079f85 (58/70 assessed, 30 current visual/native points withheld). This changes the historical-credit convention used for 72/100; see docs/reviews/005-recovery-recheck.md. Five prior findings are corrected; two follow-up medium findings have source fixes and regression checks. Current native evidence and final re-review remain required for the 88 release gate.
 
 ## In progress
 

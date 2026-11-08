@@ -46,7 +46,7 @@ export type AppData = {
   providerConsents?: {
     credentialId: string;
     destination: string;
-    revision: 1;
+    revision: 2;
     grantedAt: number;
   }[];
   connections: Connection[];

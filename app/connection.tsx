@@ -255,7 +255,7 @@ export default function Settings() {
               <IconButton
                 name="trash-outline"
                 label={`Remove ${c.name}`}
-                disabled={!!runningId}
+                disabled={!!runningId || busy}
                 onPress={() =>
                   void action(async () => {
                     if (

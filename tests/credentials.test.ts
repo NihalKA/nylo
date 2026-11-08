@@ -8,6 +8,60 @@ import {
 } from "../src/credentials";
 import { parseData } from "../src/domain";
 import { emptyData } from "../src/types";
+import { createSerialExecutor } from "../src/persistence";
+test("overlapping credential replacements and removal cannot resurrect a connection or orphan a key", async () => {
+  const serial = createSerialExecutor();
+  let active: string | undefined = "original";
+  const keys = new Set(["original"]);
+  const journal = new Set<string>();
+  let release!: () => void;
+  const pausedWrite = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  const save = (slot: string) =>
+    serial(async () => {
+      const previous = active;
+      await stageCredential({
+        journal: async () => {
+          journal.add(slot);
+        },
+        write: async () => {
+          if (slot === "first") await pausedWrite;
+          keys.add(slot);
+        },
+        activate: async () => {
+          active = slot;
+          journal.delete(slot);
+          if (previous) {
+            journal.add(previous);
+            keys.delete(previous);
+            journal.delete(previous);
+          }
+        },
+        rollback: async () => {
+          keys.delete(slot);
+        },
+      });
+    });
+  const first = save("first");
+  const second = save("second");
+  const remove = serial(async () => {
+    const previous = active;
+    active = undefined;
+    if (previous) keys.delete(previous);
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(
+    active,
+    "original",
+    "later operations wait for the entire staged transaction",
+  );
+  release();
+  await Promise.all([first, second, remove]);
+  assert.equal(active, undefined);
+  assert.equal(keys.size, 0);
+  assert.equal(journal.size, 0);
+});
 test("staged credentials remain discoverable at every failed save boundary", async () => {
   for (const boundary of ["journal", "write", "activate"] as const) {
     let journal: string[] = [];
@@ -107,11 +161,22 @@ test("sharing permissions stay local and cannot be granted by importing a backup
       {
         credentialId: "test-slot",
         destination: "openai:https://example.invalid/v1",
-        revision: 1,
+        revision: 2,
         grantedAt: 1,
       },
     ],
   };
   assert.equal(parseData(value, true).providerConsents?.length, 1);
   assert.deepEqual(parseData(value).providerConsents, []);
+  assert.deepEqual(
+    parseData(
+      {
+        ...value,
+        providerConsents: [{ ...value.providerConsents[0], revision: 1 }],
+      },
+      true,
+    ).providerConsents,
+    [],
+    "old narrower disclosure requires renewed approval",
+  );
 });

@@ -242,13 +242,13 @@ export function parseData(value: unknown, local = false): AppData {
                 c &&
                 typeof c.credentialId === "string" &&
                 typeof c.destination === "string" &&
-                c.revision === 1 &&
+                c.revision === 2 &&
                 Number.isFinite(c.grantedAt),
             )
             .map((c) => ({
               credentialId: c.credentialId,
               destination: c.destination,
-              revision: 1 as const,
+              revision: 2 as const,
               grantedAt: c.grantedAt,
             }))
         : [],
