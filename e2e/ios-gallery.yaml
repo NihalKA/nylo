@@ -59,7 +59,6 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element: "Check after reopening"
     direction: DOWN
-    centerElement: true
 - tapOn: "Check after reopening"
 - assertVisible: "(?s)Passed: a new app session restored.*"
 - takeScreenshot: gallery-07-device-check-reopened
