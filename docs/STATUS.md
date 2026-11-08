@@ -13,7 +13,8 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 
 ## In progress
 
-- Fresh device-enabled session confirms T3 local iOS tools are ready. T3 lists the iPhone 17 Pro simulator (iOS 26.4), but no physical device. Apple inventory detects the wired iPad (iOS 26.6.1) and reports it is unpaired; owner Trust Computer action is pending. No physical pass is claimed.
+- Fresh device-enabled session confirms T3 local iOS tools are ready. Apple developer pairing succeeded for the wired iPad A16 (iOS 26.6.1); detailed inventory confirms paired, connected, Developer Mode enabled and developer services available. Finder already had access; no new owner Trust action was needed. T3 still lists only the iPhone 17 Pro simulator (iOS 26.4), and physical device_open rejects the iPad as absent. Physical UI testing remains blocked by device discovery, not owner trust.
+- Local simulator installation reused native seed 24aaba2 with app JS 9fc4d9a (no full local native compilation). Launch and Chats-to-Agents navigation succeeded via the supported agent-device command. device_screenshot failed twice with a device-hub request error, including after its advised device-list refresh; local device interaction stopped. No visual, physical or VoiceOver pass is inferred.
 - Tab-wrap matrix 42487498090 was cancelled before interaction evidence was produced. Replacement matrix 42487655705 and synthetic gallery 42487941622 are running; native build 42487451946 is also running. Smoke/gallery concurrency groups are now separated to prevent unrelated manual scenarios cancelling one another. Partial cancelled evidence is retained locally under ignored artifacts/review-tabs-cancelled.
 - iOS-oriented tab navigation, universal inbox, simpler Settings and progressive provider setup.
 - Provider discovery, explicit sharing consent, memory change approval, durable credential staging/retirement and failed-checkpoint completion protection.
