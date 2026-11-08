@@ -1,6 +1,7 @@
 import React from "react";
 import {
   ColorValue,
+  Image,
   ActivityIndicator,
   Alert,
   Platform,
@@ -15,7 +16,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router } from "expo-router";
+import { router, useSegments } from "expo-router";
 import { Agent, Conversation } from "./types";
 
 export const theme = {
@@ -102,9 +103,26 @@ export function Icon({
     />
   );
 }
-export function Page({ children }: { children: React.ReactNode }) {
+export function NyloMark({ size = 52 }: { size?: number }) {
   return (
-    <SafeAreaView style={s.page}>
+    <Image
+      source={require("../assets/icon.png")}
+      accessible={false}
+      style={{ width: size, height: size, borderRadius: size * 0.28 }}
+    />
+  );
+}
+export function Page({ children }: { children: React.ReactNode }) {
+  const segments = useSegments();
+  return (
+    <SafeAreaView
+      edges={
+        segments[0] === "(tabs)"
+          ? ["top", "left", "right"]
+          : ["top", "left", "right", "bottom"]
+      }
+      style={s.page}
+    >
       <View style={s.shell}>{children}</View>
     </SafeAreaView>
   );
@@ -120,7 +138,7 @@ export function Header({
     <View style={[s.between, { minHeight: 64, gap: 12 }]}>
       <View style={[s.row, { flex: 1, gap: 10 }]}>
         <IconButton
-          name="arrow-back"
+          name={Platform.OS === "ios" ? "chevron-back" : "arrow-back"}
           label="Go back"
           onPress={() =>
             router.canGoBack() ? router.back() : router.replace("/")

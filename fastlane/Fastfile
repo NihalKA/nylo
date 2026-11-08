@@ -54,6 +54,9 @@ platform :ios do
       begin
         create_keychain(name: keychain_name, password: keychain_password, default_keychain: false, unlock: true, timeout: 3600)
         import_certificate(certificate_path: certificate, certificate_password: required("IOS_CERT_PASSWORD"), keychain_name: keychain_name, keychain_password: keychain_password)
+        identities = sh("security", "find-identity", "-v", "-p", "codesigning", keychain_name, log: false)
+        certificate_sha1 = Digest::SHA1.hexdigest(p12.certificate.to_der).upcase
+        UI.user_error!("Imported distribution identity is not usable") unless identities.upcase.include?(certificate_sha1)
         FileUtils.mkdir_p(profile_dir)
         FileUtils.cp(profile, installed)
         sh("cd .. && node scripts/set-ios-build.mjs #{build_number}")
@@ -71,7 +74,7 @@ platform :ios do
           configuration.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = parsed.fetch("Name")
         end
         project.save
-        build_app(workspace: "ios/Nylo.xcworkspace", scheme: "Nylo", clean: true, export_method: "app-store-connect", output_directory: "artifacts/release", output_name: "Nylo.ipa", export_options: { signingStyle: "manual", teamID: team, provisioningProfiles: { "com.nylohq.nylo" => parsed.fetch("Name") } })
+        build_app(workspace: "ios/Nylo.xcworkspace", scheme: "Nylo", clean: true, export_method: "app-store", output_directory: "artifacts/release", output_name: "Nylo.ipa", export_options: { method: "app-store-connect", signingStyle: "manual", teamID: team, provisioningProfiles: { "com.nylohq.nylo" => parsed.fetch("Name") } })
         upload_to_testflight(api_key: key, ipa: "artifacts/release/Nylo.ipa", skip_waiting_for_build_processing: true, distribute_external: false)
       ensure
         FileUtils.rm_f(installed)

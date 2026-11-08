@@ -7,6 +7,7 @@ import {
   Button,
   FormScroll,
   Icon,
+  NyloMark,
   Page,
   confirm,
   s,
@@ -39,18 +40,7 @@ export default function Settings() {
       </Text>
       <FormScroll>
         <View style={[s.row, { gap: 14, paddingBottom: 8 }]}>
-          <View
-            style={{
-              width: 52,
-              height: 52,
-              borderRadius: 17,
-              backgroundColor: theme.green,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Icon name="aperture-outline" color="#FFFFFF" size={32} />
-          </View>
+          <NyloMark size={52} />
           <View style={{ flex: 1 }}>
             <Text style={[s.h2, { fontSize: 23 }]}>Nylo</Text>
             <Text style={s.sub}>Your conversations. Your choice of AI.</Text>

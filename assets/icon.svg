@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#dc2626"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="#ffffff">N</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect width="1024" height="1024" fill="#087F68"/><path d="M330 690V365M330 495a180 180 0 0 1 360 0v195" fill="none" stroke="#fff" stroke-width="80" stroke-linecap="round"/><circle cx="724" cy="295" r="34" fill="#fff"/></svg>

@@ -37,3 +37,9 @@ jobs:
             artifacts/*.log
           if-no-files-found: ignore
           retention-days: 7
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: success()
+        with:
+          name: ios-screenshots-${{ github.sha }}
+          path: artifacts/*.png
+          retention-days: 7
