@@ -44,16 +44,28 @@ simulator_id="$(xcrun simctl create "Nylo $profile QA" "$device_type" "$runtime_
 test -n "$simulator_id"
 xcrun simctl boot "$simulator_id" || true
 xcrun simctl bootstatus "$simulator_id" -b
-trap 'xcrun simctl shutdown "$simulator_id" || true; xcrun simctl delete "$simulator_id" || true' EXIT
+collect_diagnostics() {
+  if [ -d "$HOME/.maestro/tests" ]; then
+    mkdir -p artifacts/e2e/driver-diagnostics
+    cp -R "$HOME/.maestro/tests/." artifacts/e2e/driver-diagnostics/ || true
+  fi
+  xcrun simctl shutdown "$simulator_id" || true
+  xcrun simctl delete "$simulator_id" || true
+}
+trap collect_diagnostics EXIT
 if [ "$profile" = large-text ]; then
   xcrun simctl ui "$simulator_id" content_size accessibility-extra-extra-extra-large
 fi
 xcrun simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi --wifiMode active --wifiBars 3 --batteryState charged --batteryLevel 100
 xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
+xcrun simctl launch "$simulator_id" com.nylohq.nylo
+sleep 8
+xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
 export MAESTRO_CLI_NO_ANALYTICS=1
+export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$(git rev-parse HEAD)" > artifacts/e2e/source.txt
 printf 'Profile: %s\nDevice type: %s\nRuntime: %s\n' "$profile" "$device_type" "$runtime_id" >> artifacts/e2e/source.txt
 printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$(git rev-parse HEAD)" >> artifacts/e2e/source.txt
