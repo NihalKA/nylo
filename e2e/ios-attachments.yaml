@@ -100,3 +100,20 @@ appId: com.nylohq.nylo
 - assertVisible: "(?si).*camera.*"
 - waitForAnimationToEnd
 - takeScreenshot: attachments-03-simulator-camera-fallback
+# Recovery must permit another action, not merely leave the chat visible.
+- assertVisible:
+    text: "Add attachment"
+    enabled: true
+- tapOn:
+    id: "chat-message"
+- inputText: " after camera fallback"
+- assertVisible: "QA photo draft stays safe after camera fallback"
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
+- tapOn: "Add attachment"
+- assertVisible: "Photo library"
+- tapOn: "Cancel attachments"
+- assertVisible:
+    id: "chat-message"
+    enabled: true
+- takeScreenshot: attachments-04-camera-recovery-interaction
