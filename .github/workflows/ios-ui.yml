@@ -1,4 +1,5 @@
 name: iPhone UI smoke
+run-name: UI ${{ inputs.scenario || 'smoke' }} · native run ${{ inputs.source_run_id || github.event.workflow_run.id }}
 on:
   workflow_run:
     workflows: ['iOS native validation']
@@ -25,8 +26,71 @@ concurrency:
   group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}
   cancel-in-progress: true
 jobs:
-  smoke:
+  eligibility:
+    name: Check source relevance (no UI tests)
     if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run_ui: ${{ steps.source.outputs.run_ui }}
+      checkout_sha: ${{ steps.source.outputs.checkout_sha }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
+      - name: Compare native source with current app inputs
+        id: source
+        shell: bash
+        env:
+          RUN_EVENT: ${{ github.event_name }}
+          NATIVE_SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/ui-eligibility
+          checkout_sha="$(git rev-parse HEAD)"
+          run_ui=true
+          decision=manual_explicit
+          reason='Explicit manual run; native/JS provenance will be validated by the UI runner.'
+          if [ "$RUN_EVENT" = workflow_run ]; then
+            [[ "$NATIVE_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+            git fetch --no-tags origin "$NATIVE_SOURCE_SHA" --depth=1
+            git diff --name-only "$NATIVE_SOURCE_SHA" "$checkout_sha" -- \
+              app src assets plugins config ios android app.json 'app.config.*' 'package*.json' \
+              tsconfig.json 'babel.config.*' 'metro.config.*' .nvmrc \
+              scripts/ios-simulator.sh scripts/native-privacy-audit.py scripts/set-ios-build.mjs .github/workflows/ios.yml \
+              > artifacts/ui-eligibility/runtime-drift.txt
+            if [ -s artifacts/ui-eligibility/runtime-drift.txt ]; then
+              run_ui=false
+              decision=skipped_stale_auto
+              reason='Native source differs from current main app/build inputs. No UI tests ran; wait for a current native build or dispatch an explicit compatible run.'
+            else
+              decision=automatic_compatible
+              reason='Current main app/build inputs match the native source; use the latest compatible fixtures.'
+            fi
+          fi
+          printf 'run_ui=%s\ncheckout_sha=%s\n' "$run_ui" "$checkout_sha" >> "$GITHUB_OUTPUT"
+          python3 - "$RUN_EVENT" "$NATIVE_SOURCE_SHA" "$checkout_sha" "$SOURCE_RUN_ID" "$decision" "$reason" "$run_ui" <<'PYRESULT'
+          import json, sys
+          from pathlib import Path
+          event, native, checkout, run, decision, reason, enabled = sys.argv[1:]
+          Path('artifacts/ui-eligibility/decision.json').write_text(json.dumps({
+              'event': event, 'nativeSource': native or None, 'fixtureSource': checkout,
+              'nativeRun': run, 'decision': decision, 'reason': reason,
+              'uiRequested': enabled == 'true',
+              'uiResult': 'await_separate_ui_results' if enabled == 'true' else 'not_run'
+          }, indent=2) + '\n')
+          PYRESULT
+          printf '### UI eligibility: %s\n\n%s\n\nNative source: `%s` · Fixture source: `%s`\n' "$decision" "$reason" "${NATIVE_SOURCE_SHA:-resolved by manual runner}" "$checkout_sha" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: ui-eligibility-${{ github.run_id }}
+          path: artifacts/ui-eligibility
+          retention-days: 7
+  smoke:
+    needs: eligibility
+    if: needs.eligibility.outputs.run_ui == 'true'
     runs-on: macos-26
     strategy:
       fail-fast: false
@@ -36,7 +100,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ needs.eligibility.outputs.checkout_sha }}
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         if: inputs.refresh_js_bundle
         with:

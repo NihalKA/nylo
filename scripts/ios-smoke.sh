@@ -53,7 +53,8 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
   git fetch --no-tags origin "$source_sha" --depth=1
   # Native modules, Expo config and native icon assets must match the seed app.
   # This path supplies UI iteration evidence, never a signed release candidate.
-  git diff --exit-code "$source_sha" HEAD -- package.json package-lock.json app.json assets
+  git diff --exit-code "$source_sha" HEAD -- package.json package-lock.json app.json \
+    'app.config.*' assets plugins config ios android
   npx expo export:embed --platform ios --dev false --bytecode \
     --entry-file node_modules/expo-router/entry.js \
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
