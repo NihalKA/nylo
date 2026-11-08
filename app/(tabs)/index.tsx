@@ -18,12 +18,13 @@ export default function Chats() {
   const chats = useMemo(
     () =>
       data.conversations
+        .filter((c) => c.messages.length > 0 || c.draft?.trim())
         .filter((c) => {
           const agent = data.agents.find((a) => a.id === c.agentId);
           const needle = query.trim().toLocaleLowerCase();
           return (
             !needle ||
-            `${c.title} ${agent?.name || ""}`
+            `${c.title} ${c.draft || ""} ${agent?.name || ""}`
               .toLocaleLowerCase()
               .includes(needle) ||
             c.messages.some((m) => m.text.toLocaleLowerCase().includes(needle))
@@ -96,7 +97,7 @@ export default function Chats() {
         keyboardDismissMode="on-drag"
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 16 }}
         ListHeaderComponent={
-          !data.connections.length && data.conversations.length ? (
+          !data.connections.length && chats.length ? (
             <Pressable
               accessibilityRole="button"
               onPress={() => router.push("/connection")}

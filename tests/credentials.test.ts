@@ -49,3 +49,18 @@ test("credential references persist locally but are stripped from exported or im
   assert.deepEqual(backup.retiredCredentialIds, []);
   assert.doesNotMatch(JSON.stringify(backup), /credential-1|retired-1/);
 });
+test("sharing permissions stay local and cannot be granted by importing a backup", () => {
+  const value = {
+    ...emptyData(),
+    providerConsents: [
+      {
+        credentialId: "test-slot",
+        destination: "openai:https://example.invalid/v1",
+        revision: 1,
+        grantedAt: 1,
+      },
+    ],
+  };
+  assert.equal(parseData(value, true).providerConsents?.length, 1);
+  assert.deepEqual(parseData(value).providerConsents, []);
+});

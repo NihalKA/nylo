@@ -43,6 +43,12 @@ export type Conversation = {
 export type AppData = {
   version: 1;
   retiredCredentialIds?: string[];
+  providerConsents?: {
+    credentialId: string;
+    destination: string;
+    revision: 1;
+    grantedAt: number;
+  }[];
   connections: Connection[];
   defaultConnectionId: string;
   agents: Agent[];

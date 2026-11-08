@@ -43,7 +43,9 @@ export default function AgentDetail() {
       </Page>
     );
   const chats = data.conversations
-    .filter((c) => c.agentId === id)
+    .filter(
+      (c) => c.agentId === id && (c.messages.length > 0 || c.draft?.trim()),
+    )
     .sort((a, b) => b.updatedAt - a.updatedAt);
   const action = async (fn: () => Promise<unknown>) => {
     try {
@@ -68,6 +70,8 @@ export default function AgentDetail() {
         }
       />
       <ScrollView
+        automaticallyAdjustKeyboardInsets
+        keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}

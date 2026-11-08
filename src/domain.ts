@@ -225,6 +225,24 @@ export function parseData(value: unknown, local = false): AppData {
   // Explicit projection prevents an imported key or unknown field from entering ordinary app storage.
   return recoverInterrupted({
     version: 1,
+    providerConsents:
+      local && Array.isArray(d.providerConsents)
+        ? d.providerConsents
+            .filter(
+              (c) =>
+                c &&
+                typeof c.credentialId === "string" &&
+                typeof c.destination === "string" &&
+                c.revision === 1 &&
+                Number.isFinite(c.grantedAt),
+            )
+            .map((c) => ({
+              credentialId: c.credentialId,
+              destination: c.destination,
+              revision: 1 as const,
+              grantedAt: c.grantedAt,
+            }))
+        : [],
     retiredCredentialIds:
       local && Array.isArray(d.retiredCredentialIds)
         ? d.retiredCredentialIds.filter(

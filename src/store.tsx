@@ -77,7 +77,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         setData(next);
       },
     });
-  const consentedDestinations = useRef(new Set<string>());
   const update = async (change: (d: AppData) => AppData) => {
     const operation = durableUpdate.current!(change);
     try {
@@ -157,10 +156,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const newChat = async (agentId?: string) => {
     const agent = current.current.agents.find((a) => a.id === agentId);
-    const conversation = createConversation(
-      agent?.connectionId || current.current.defaultConnectionId,
-      agentId,
+    const connectionId =
+      agent?.connectionId || current.current.defaultConnectionId;
+    const blank = current.current.conversations.find(
+      (c) =>
+        c.agentId === agentId &&
+        c.connectionId === connectionId &&
+        !c.messages.length &&
+        !c.draft?.trim(),
     );
+    if (blank) return blank.id;
+    const conversation = createConversation(connectionId, agentId);
     await update((d) => ({
       ...d,
       conversations: [conversation, ...d.conversations],
@@ -228,6 +234,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           ...(d.retiredCredentialIds || []),
           ...(previousId && previousId !== nextId ? [previousId] : []),
         ],
+        providerConsents: (d.providerConsents || []).filter(
+          (c) =>
+            !previousId ||
+            previousId === nextId ||
+            c.credentialId !== previousId,
+        ),
         defaultConnectionId: d.defaultConnectionId || connection.id,
       }));
     } catch (error) {
@@ -245,6 +257,9 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     await update((d) => ({
       ...d,
       connections: d.connections.filter((c) => c.id !== id),
+      providerConsents: (d.providerConsents || []).filter(
+        (c) => c.credentialId !== (removed?.credentialId || removed?.id),
+      ),
       retiredCredentialIds: [
         ...(d.retiredCredentialIds || []),
         ...(removed ? [removed.credentialId || removed.id] : []),
@@ -277,8 +292,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     );
     if (!connection)
       throw new Error("Add or choose a connection in Settings first.");
-    const destination = `${connection.protocol}:${connection.baseUrl}`;
-    if (!consentedDestinations.current.has(destination)) {
+    const destination = credentialDestination(connection);
+    const credentialId = connection.credentialId || connection.id;
+    if (
+      !(current.current.providerConsents || []).some(
+        (c) =>
+          c.credentialId === credentialId &&
+          c.destination === destination &&
+          c.revision === 1,
+      )
+    ) {
       const allowed = await askPermission(
         "Share with your AI provider?",
         `This chat’s context will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Agent chats also send that agent’s instructions and saved memories. The provider’s data policies and API charges apply.`,
@@ -286,7 +309,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       );
       if (!allowed)
         throw new Error("Nothing was sent. Your message is ready to edit.");
-      consentedDestinations.current.add(destination);
+      await update((d) => ({
+        ...d,
+        providerConsents: [
+          ...(d.providerConsents || []).filter(
+            (c) => c.credentialId !== credentialId,
+          ),
+          { credentialId, destination, revision: 1, grantedAt: Date.now() },
+        ],
+      }));
     }
     const key = await readKey(
       connection.credentialId || connection.id,

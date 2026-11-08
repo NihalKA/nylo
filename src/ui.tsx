@@ -394,7 +394,9 @@ export function ConversationRow({
         </Text>
         <Text numberOfLines={1} style={s.sub}>
           {agent ? `${agent.name} · ` : ""}
-          {last?.text || "New conversation"}
+          {conversation.draft?.trim()
+            ? `Draft: ${conversation.draft}`
+            : last?.text || "New conversation"}
         </Text>
       </View>
       <Text style={{ fontSize: 11, color: theme.sub }}>
@@ -461,6 +463,8 @@ export async function confirm(
 export function FormScroll({ children }: { children: React.ReactNode }) {
   return (
     <ScrollView
+      automaticallyAdjustKeyboardInsets
+      keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{ gap: 20, paddingBottom: 44 }}
       showsVerticalScrollIndicator={false}

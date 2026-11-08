@@ -113,7 +113,7 @@ export default function Chat() {
           ...d,
           conversations: d.conversations.map((c) =>
             c.id === value.id && c.draft !== value.text
-              ? { ...c, draft: value.text }
+              ? { ...c, draft: value.text, updatedAt: Date.now() }
               : c,
           ),
         }))
@@ -129,7 +129,9 @@ export default function Chat() {
         .current((d) => ({
           ...d,
           conversations: d.conversations.map((c) =>
-            c.id === value.id ? { ...c, draft: value.text } : c,
+            c.id === value.id && c.draft !== value.text
+              ? { ...c, draft: value.text, updatedAt: Date.now() }
+              : c,
           ),
         }))
         .catch(() => {});
