@@ -1,6 +1,6 @@
 # Agent continuity feedback and verification
 
-The owner tested internal TestFlight 0.1.0 (4), source `ce00b58`. Feedback: other functionality appears to work; the assistant cannot discuss other chats, and agents do not feel meaningfully different from normal chats. Its reported response says it cannot see the other conversation and asks the user to paste it. The iPhone model/iOS version and the exact saved memory/request were not supplied; do not record a complete physical-device pass.
+The owner tested internal TestFlight 0.1.0 (4), source `ce00b58`, on an **iPhone 17, iOS 26.6.2** (owner-reported). Feedback: other functionality appears to work; the assistant cannot discuss other chats, and agents do not feel meaningfully different from normal chats. Its reported response says it cannot see the other conversation and asks the user to paste it. On follow-up, the owner confirmed the approved fact is **listed** in that agent’s Memory screen. This confirms saved-memory visibility on the phone; the exact saved fact/request and its explicit recall in a new chat remain unverified. Do not record a complete physical-device pass.
 
 The approved v1 scope shares each agent’s instructions and approved memory across conversations. It does not share full earlier transcripts automatically. A generic request to discuss another chat does not establish whether a saved fact was supplied correctly.
 
