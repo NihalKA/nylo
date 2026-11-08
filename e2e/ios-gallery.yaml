@@ -6,7 +6,6 @@ appId: com.nylohq.nylo
 - tapOn: "(?s)Open Example: A focused morning.*"
 - assertVisible: "(?s).*Start with one meaningful task.*"
 - takeScreenshot: gallery-02-response
-- tapOn: "Copy response"
 - tapOn: "Choose model connection.*"
 - assertVisible: "Choose a model"
 - assertNotVisible: "Conversation title"
@@ -119,3 +118,7 @@ appId: com.nylohq.nylo
     id: "agent-name"
     text: "Writing partner"
 - takeScreenshot: gallery-09-role-replacement-confirmed
+- tapOn: "Go back"
+- tapOn: "Chats, tab, 1 of 3"
+- tapOn: "(?s)Open Example: A focused morning.*"
+- tapOn: "Copy response"
