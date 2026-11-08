@@ -2,15 +2,16 @@ import { utf8Size } from "./byte-size";
 import { processAttachmentBatch } from "./attachment-batch";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
-import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { ImageManipulator, SaveFormat } from "expo-image-manipulator";
 import { File, Paths } from "expo-file-system";
 import { Attachment } from "./types";
 import { uid } from "./domain";
 import { MAX_ATTACHMENT_BYTES } from "./attachments";
+export type AttachmentPreparation = "preparing" | "encoding" | "reading";
 export type AttachmentSource = "files" | "photos" | "camera";
 export async function pickAttachments(
   source: AttachmentSource,
-  onPreparing?: () => void,
+  onPreparing?: (stage: AttachmentPreparation) => void,
 ): Promise<Attachment[]> {
   if (source === "files") {
     const result = await DocumentPicker.getDocumentAsync({
@@ -27,14 +28,15 @@ export async function pickAttachments(
       copyToCacheDirectory: true,
     });
     if (result.canceled) return [];
-    onPreparing?.();
+    onPreparing?.("preparing");
     return processAttachmentBatch(result.assets, {
       sourceSize: (asset) => new File(asset.uri).size,
       maxSourceFileBytes: MAX_ATTACHMENT_BYTES,
       maxSourceTotalBytes: 4 * 1024 * 1024,
       convert: async (asset) => {
         const file = new File(asset.uri);
-        if (asset.mimeType?.startsWith("image/")) return image(asset.uri);
+        if (asset.mimeType?.startsWith("image/"))
+          return image(asset.uri, onPreparing);
         if (asset.mimeType === "application/pdf" || /\.pdf$/i.test(asset.name))
           return {
             id: uid(),
@@ -92,12 +94,12 @@ export async function pickAttachments(
           exif: false,
         });
   if (result.canceled) return [];
-  onPreparing?.();
+  onPreparing?.("preparing");
   return processAttachmentBatch(result.assets, {
     sourceSize: (asset) => asset.fileSize || new File(asset.uri).size,
     maxSourceFileBytes: 20 * 1024 * 1024,
     maxSourceTotalBytes: 80 * 1024 * 1024,
-    convert: (asset) => image(asset.uri),
+    convert: (asset) => image(asset.uri, onPreparing),
     cleanup: (asset) => {
       if (asset.uri.startsWith(Paths.cache.uri)) {
         const file = new File(asset.uri);
@@ -106,26 +108,46 @@ export async function pickAttachments(
     },
   });
 }
-async function image(uri: string): Promise<Attachment> {
-  // Re-encode selected pixels so EXIF/location metadata never enters chat state.
-  const result = await manipulateAsync(uri, [{ resize: { width: 1600 } }], {
-    compress: 0.75,
-    format: SaveFormat.JPEG,
+async function image(
+  uri: string,
+  onPreparing?: (stage: AttachmentPreparation) => void,
+): Promise<Attachment> {
+  // Decode within bounds rather than loading a full camera image and upscaling
+  // small images. Re-encoding pixels excludes the original EXIF metadata.
+  const context = ImageManipulator.manipulate(uri, {
+    maxWidth: 1600,
+    maxHeight: 1600,
   });
-  const file = new File(result.uri);
+  let rendered: Awaited<ReturnType<typeof context.renderAsync>> | undefined;
+  let file: File | undefined;
   try {
-    if (file.size > MAX_ATTACHMENT_BYTES)
+    rendered = await context.renderAsync();
+    onPreparing?.("encoding");
+    const result = await rendered.saveAsync({
+      compress: 0.75,
+      format: SaveFormat.JPEG,
+      base64: true,
+    });
+    file = new File(result.uri);
+    onPreparing?.("reading");
+    if (!result.base64) throw new Error("This photo could not be prepared.");
+    const bytes =
+      (result.base64.length * 3) / 4 -
+      (result.base64.endsWith("==") ? 2 : result.base64.endsWith("=") ? 1 : 0);
+    if (bytes > MAX_ATTACHMENT_BYTES)
       throw new Error("This photo is still too large. Choose a smaller image.");
     return {
       id: uid(),
       name: "Photo.jpg",
       mimeType: "image/jpeg",
-      size: file.size,
-      data: await file.base64(),
+      size: bytes,
+      data: result.base64,
     };
   } finally {
+    rendered?.release();
+    context.release();
     try {
-      file.delete();
+      if (file?.exists) file.delete();
     } catch {}
   }
 }

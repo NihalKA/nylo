@@ -111,6 +111,15 @@ appId: com.nylohq.nylo
       id: "agent-memory-input"
     direction: DOWN
     centerElement: true
+# Maximum text can overscroll the editor to y0–118 behind the fixed header.
+# Screen visibility alone counted that occluded frame as 100%; bring the whole
+# editor below the header before the existing single focus tap.
+- scrollUntilVisible:
+    element:
+      id: "agent-memory-input"
+      below: "Agent"
+    direction: UP
+    centerElement: true
 - tapOn:
     id: "agent-memory-input"
 - inputText: "QA sample: I prefer concise answers."

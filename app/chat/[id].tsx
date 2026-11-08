@@ -2,7 +2,11 @@ import { attachmentFlowReducer } from "../../src/attachment-flow";
 import { modelChoices } from "../../src/model-library";
 import { Attachment } from "../../src/types";
 import { attachmentUri, validateAttachments } from "../../src/attachments";
-import { pickAttachments, AttachmentSource } from "../../src/attachment-picker";
+import {
+  pickAttachments,
+  AttachmentSource,
+  AttachmentPreparation,
+} from "../../src/attachment-picker";
 import React, {
   useCallback,
   useEffect,
@@ -137,7 +141,8 @@ function Chat() {
     attachmentFlowReducer,
     { kind: "idle" },
   );
-  const [preparingAttachment, setPreparingAttachment] = useState(false);
+  const [attachmentPreparation, setAttachmentPreparation] =
+    useState<AttachmentPreparation | null>(null);
   const attachmentMenu = attachmentFlow.kind === "menu";
   const picking =
     attachmentFlow.kind === "closing" || attachmentFlow.kind === "picking";
@@ -208,11 +213,11 @@ function Chat() {
     const { source, operation } = attachmentFlow;
     const chatId = id;
     startedAttachment.current = operation;
-    setPreparingAttachment(false);
+    setAttachmentPreparation(null);
     void (async () => {
       try {
-        const picked = await pickAttachments(source, () => {
-          if (draftValue.current.id === chatId) setPreparingAttachment(true);
+        const picked = await pickAttachments(source, (stage) => {
+          if (draftValue.current.id === chatId) setAttachmentPreparation(stage);
         });
         if (draftValue.current.id === chatId)
           setAttachments(
@@ -686,9 +691,13 @@ function Chat() {
           ) : null}
           {picking ? (
             <Text accessibilityLiveRegion="polite" style={s.sub}>
-              {preparingAttachment
-                ? "Preparing attachment…"
-                : "Choosing attachment…"}
+              {attachmentPreparation === "reading"
+                ? "Reading attachment…"
+                : attachmentPreparation === "encoding"
+                  ? "Finishing photo…"
+                  : attachmentPreparation === "preparing"
+                    ? "Preparing attachment…"
+                    : "Choosing attachment…"}
             </Text>
           ) : null}
           <View style={s.between}>
