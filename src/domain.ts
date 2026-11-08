@@ -227,6 +227,7 @@ export function parseData(value: unknown): AppData {
       id: c.id,
       title: c.title,
       agentId: c.agentId,
+      draft: string(c.draft) ? c.draft.slice(0, 20000) : undefined,
       connectionId: c.connectionId,
       createdAt: c.createdAt,
       updatedAt: c.updatedAt,

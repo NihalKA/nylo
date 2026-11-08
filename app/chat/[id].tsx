@@ -87,7 +87,7 @@ export default function Chat() {
   const connection = data.connections.find(
     (c) => c.id === (conversation?.connectionId || data.defaultConnectionId),
   );
-  const [text, setText] = useState(prompt || "");
+  const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
   const [menu, setMenu] = useState(false);
   const [title, setTitle] = useState(conversation?.title || "");
@@ -97,9 +97,44 @@ export default function Chat() {
   const isRunning = runningId === id;
   const last = conversation?.messages.at(-1);
   useEffect(() => {
-    setText(prompt || "");
+    setText(prompt || conversation?.draft || "");
     setError("");
   }, [id]);
+  const draftValue = useRef({ id, text });
+  draftValue.current = { id, text };
+  const persistDraft = useRef(update);
+  persistDraft.current = update;
+  useEffect(() => {
+    const save = () => {
+      const value = draftValue.current;
+      void persistDraft
+        .current((d) => ({
+          ...d,
+          conversations: d.conversations.map((c) =>
+            c.id === value.id && c.draft !== value.text
+              ? { ...c, draft: value.text }
+              : c,
+          ),
+        }))
+        .catch(() => {});
+    };
+    const timer = setTimeout(save, 400);
+    return () => clearTimeout(timer);
+  }, [id, text]);
+  useEffect(
+    () => () => {
+      const value = draftValue.current;
+      void persistDraft
+        .current((d) => ({
+          ...d,
+          conversations: d.conversations.map((c) =>
+            c.id === value.id ? { ...c, draft: value.text } : c,
+          ),
+        }))
+        .catch(() => {});
+    },
+    [],
+  );
   if (!conversation)
     return (
       <Page>
@@ -395,7 +430,12 @@ export default function Chat() {
             }
             style={[
               s.row,
-              { gap: 6, alignSelf: "flex-start", paddingVertical: 3 },
+              {
+                gap: 6,
+                alignSelf: "flex-start",
+                minHeight: 44,
+                paddingVertical: 6,
+              },
             ]}
           >
             <Icon name="flash-outline" size={12} color={theme.green} />
@@ -424,6 +464,7 @@ export default function Chat() {
               accessibilityLabel="Message"
               value={text}
               onChangeText={setText}
+              maxLength={20000}
               multiline
               placeholder={agent ? `Message ${agent.name}…` : "Message Nylo…"}
               placeholderTextColor="#969E95"

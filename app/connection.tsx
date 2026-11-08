@@ -40,6 +40,7 @@ export default function Settings() {
   const [draft, setDraft] = useState<Connection | null>(draftConnection());
   const [advanced, setAdvanced] = useState(false);
   const [models, setModels] = useState<string[]>([]);
+  const [modelSearch, setModelSearch] = useState("");
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -280,24 +281,38 @@ export default function Settings() {
             />
             {models.length ? (
               <View style={{ gap: 8 }}>
-                {models.map((model) => (
-                  <Pressable
-                    key={model}
-                    accessibilityRole="radio"
-                    accessibilityState={{ checked: draft.model === model }}
-                    onPress={() => setDraft({ ...draft, model })}
-                    style={{
-                      minHeight: 44,
-                      justifyContent: "center",
-                      paddingHorizontal: 12,
-                      backgroundColor:
-                        draft.model === model ? theme.pale : theme.card,
-                      borderRadius: 10,
-                    }}
-                  >
-                    <Text style={s.text}>{model}</Text>
-                  </Pressable>
-                ))}
+                <Field
+                  label="Search available models"
+                  value={modelSearch}
+                  onChangeText={setModelSearch}
+                  autoCapitalize="none"
+                />
+                <Text style={s.sub}>
+                  Showing up to 20 matches. Choose a text model.
+                </Text>
+                {models
+                  .filter((model) =>
+                    model.toLowerCase().includes(modelSearch.toLowerCase()),
+                  )
+                  .slice(0, 20)
+                  .map((model) => (
+                    <Pressable
+                      key={model}
+                      accessibilityRole="radio"
+                      accessibilityState={{ checked: draft.model === model }}
+                      onPress={() => setDraft({ ...draft, model })}
+                      style={{
+                        minHeight: 44,
+                        justifyContent: "center",
+                        paddingHorizontal: 12,
+                        backgroundColor:
+                          draft.model === model ? theme.pale : theme.card,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Text style={s.text}>{model}</Text>
+                    </Pressable>
+                  ))}
               </View>
             ) : null}
             <Field

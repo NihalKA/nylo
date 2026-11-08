@@ -155,6 +155,16 @@ export default function Settings() {
           </Text>
         </View>
         <Button
+          title="Privacy policy"
+          secondary
+          icon="shield-checkmark-outline"
+          onPress={() =>
+            void action(() =>
+              Linking.openURL("https://nihalka.github.io/nylo/privacy.html"),
+            )
+          }
+        />
+        <Button
           title="Contact support"
           secondary
           icon="mail-outline"
