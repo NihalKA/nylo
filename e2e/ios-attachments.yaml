@@ -23,6 +23,11 @@ appId: com.nylohq.nylo
     id: "chat-message"
 # Disposable CI Photos is seeded with our green PNG after the stock photos.
 # The inspected failure PNG/AX identifies it as the first/newest grid item.
+- tapOn:
+    id: "chat-message"
+- inputText: "QA photo draft stays safe"
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
 - tapOn: "Add attachment"
 - tapOn: "Photo library"
 - extendedWaitUntil:
@@ -49,12 +54,15 @@ appId: com.nylohq.nylo
       text: "Add attachment"
       enabled: true
     timeout: 30000
+- assertVisible: "QA photo draft stays safe"
+- takeScreenshot: attachments-01a-preparation-settled
 - assertVisible: "Preview Photo.jpg"
 - assertVisible: "Remove Photo.jpg"
 - takeScreenshot: attachments-01b-selected-owned-photo
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Example: A focused morning.*"
+- assertVisible: "QA photo draft stays safe"
 - assertVisible: "Preview Photo.jpg"
 - assertVisible: "Remove Photo.jpg"
 - takeScreenshot: attachments-01c-restored-owned-photo
