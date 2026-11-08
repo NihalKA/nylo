@@ -93,6 +93,7 @@ export default function AgentEdit() {
   return (
     <Page>
       <Header
+        dismissKeyboard
         title={
           original
             ? "Edit agent"

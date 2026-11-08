@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColorValue,
   Image,
+  Keyboard,
   ActivityIndicator,
   Alert,
   Platform,
@@ -133,9 +134,11 @@ export function Page({ children }: { children: React.ReactNode }) {
 export function Header({
   title,
   right,
+  dismissKeyboard,
 }: {
   title: string;
   right?: React.ReactNode;
+  dismissKeyboard?: boolean;
 }) {
   return (
     <View style={[s.between, { minHeight: 64, gap: 12 }]}>
@@ -151,9 +154,34 @@ export function Header({
           {title}
         </Text>
       </View>
-      {right}
+      <View style={s.row}>
+        {dismissKeyboard ? <KeyboardDismissButton /> : null}
+        {right}
+      </View>
     </View>
   );
+}
+export function KeyboardDismissButton() {
+  const [visible, setVisible] = useState(Keyboard.isVisible());
+  useEffect(() => {
+    const show = Keyboard.addListener("keyboardDidShow", () =>
+      setVisible(true),
+    );
+    const hide = Keyboard.addListener("keyboardDidHide", () =>
+      setVisible(false),
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+  return visible ? (
+    <IconButton
+      name="chevron-down"
+      label="Dismiss keyboard"
+      onPress={Keyboard.dismiss}
+    />
+  ) : null;
 }
 export function IconButton({
   name,

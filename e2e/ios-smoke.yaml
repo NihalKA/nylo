@@ -37,6 +37,9 @@ appId: com.nylohq.nylo
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard
 - inputText: "\nA second line."
+- assertVisible:
+    id: "chat-message"
+    text: "(?s).*A second line.*"
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
 - tapOn: "Dismiss keyboard"
@@ -59,6 +62,12 @@ appId: com.nylohq.nylo
     element: "Writing partner"
     direction: DOWN
 - tapOn: "Writing partner"
+- runFlow:
+    when:
+      visible: "Dismiss keyboard"
+    commands:
+      - tapOn: "Dismiss keyboard"
+      - assertNotVisible: "Dismiss keyboard"
 - takeScreenshot: 07-agent-template
 - scrollUntilVisible:
     element: "Create agent"
@@ -80,8 +89,8 @@ appId: com.nylohq.nylo
 - assertVisible:
     id: "agent-memory-input"
     text: "QA sample: I prefer concise answers."
-- tapOn: "Done"
-- assertNotVisible: "Done"
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
 - scrollUntilVisible:
     element: "Save memory"
     direction: DOWN

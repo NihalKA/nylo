@@ -494,13 +494,15 @@ export default function Chat() {
                 {
                   gap: 6,
                   alignSelf: "flex-start",
+                  flex: 1,
+                  minWidth: 0,
                   minHeight: 44,
                   paddingVertical: 6,
                 },
               ]}
             >
               <Icon name="flash-outline" size={12} color={theme.green} />
-              <Text style={{ fontSize: 11, color: theme.sub }}>
+              <Text style={{ fontSize: 11, color: theme.sub, flexShrink: 1 }}>
                 {connection
                   ? `${connection.name} · ${connection.model}`
                   : "Choose a connection"}

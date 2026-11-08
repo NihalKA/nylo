@@ -206,7 +206,7 @@ export default function Settings() {
     );
   return (
     <Page>
-      <Header title="AI providers" />
+      <Header title="AI providers" dismissKeyboard />
       <FormScroll>
         <View style={{ gap: 10 }}>
           <Badge text="DEVICE EDITION" />

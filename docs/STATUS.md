@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent score: 76/100 on app source d77f2c0 with actual three-profile simulator evidence; see docs/reviews/006-native-ui-matrix.md. Consent/credential findings are resolved. A high keyboard/composer occlusion issue, maximum-text heading layout, and unreliable memory input selection block release. Source fixes are being validated; the 88 release gate remains unmet.
+- Latest independent score: 82/100 after native keyboard recheck; see docs/reviews/007-keyboard-recheck.md. The high composer overlap, maximum-text Settings and draft restart are corrected/verified. Missing memory dismissal, a clipped maximum-text dismissal target and incomplete settled multiline/agent/memory tests remain medium findings with source fixes awaiting validation. The 88 release gate remains unmet.
 
 ## In progress
 
