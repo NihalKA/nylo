@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { colors, uid } from "../../src/domain";
+import { colors } from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -40,7 +40,7 @@ export default function AgentEdit() {
     id?: string;
     fromChat?: string;
   }>();
-  const { data, saveAgent, update } = useStore();
+  const { data, saveAgent } = useStore();
   const original = data.agents.find((a) => a.id === id);
   const source = data.conversations.find((c) => c.id === fromChat);
   const [name, setName] = useState(original?.name || "");
@@ -81,21 +81,8 @@ export default function AgentEdit() {
         },
         id,
         fromChat,
+        context,
       );
-      if (!id && context.trim())
-        await update((d) => ({
-          ...d,
-          agents: d.agents.map((a) =>
-            a.id === agentId
-              ? {
-                  ...a,
-                  memories: [
-                    { id: uid(), text: context.trim(), createdAt: Date.now() },
-                  ],
-                }
-              : a,
-          ),
-        }));
       router.replace({ pathname: "/agent/[id]", params: { id: agentId } });
     } catch (e) {
       setError((e as Error).message);
@@ -140,6 +127,8 @@ export default function AgentEdit() {
                   }}
                   style={{
                     backgroundColor: theme.pale,
+                    minHeight: 44,
+                    justifyContent: "center",
                     paddingVertical: 10,
                     paddingHorizontal: 12,
                     borderRadius: 9,

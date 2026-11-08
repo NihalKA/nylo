@@ -4,9 +4,60 @@ import {
   credentialDestination,
   decodeCredential,
   encodeCredential,
+  stageCredential,
 } from "../src/credentials";
 import { parseData } from "../src/domain";
 import { emptyData } from "../src/types";
+test("staged credentials remain discoverable at every failed save boundary", async () => {
+  for (const boundary of ["journal", "write", "activate"] as const) {
+    let journal: string[] = [];
+    let secret: string | null = null;
+    let active = "old-slot";
+    await assert.rejects(
+      stageCredential({
+        journal: async () => {
+          if (boundary === "journal") throw new Error("disk full");
+          journal = ["new-slot"];
+        },
+        write: async () => {
+          assert.deepEqual(journal, ["new-slot"]);
+          secret = "fixture-secret";
+          if (boundary === "write") throw new Error("interrupted write");
+        },
+        activate: async () => {
+          if (boundary === "activate") throw new Error("metadata write failed");
+          active = "new-slot";
+          journal = [];
+        },
+        rollback: async () => {
+          throw new Error("secure deletion unavailable");
+        },
+      }),
+    );
+    assert.equal(active, "old-slot");
+    if (secret)
+      assert.deepEqual(journal, ["new-slot"], "startup can retry deletion");
+    else assert.deepEqual(journal, []);
+  }
+});
+test("credential journaling precedes secret storage and activation", async () => {
+  const operations: string[] = [];
+  await stageCredential({
+    journal: async () => {
+      operations.push("journal");
+    },
+    write: async () => {
+      operations.push("write");
+    },
+    activate: async () => {
+      operations.push("activate");
+    },
+    rollback: async () => {
+      operations.push("rollback");
+    },
+  });
+  assert.deepEqual(operations, ["journal", "write", "activate"]);
+});
 test("a stored credential can only be used with its exact normalized protocol and destination", () => {
   const destination = credentialDestination({
     protocol: "compatible",

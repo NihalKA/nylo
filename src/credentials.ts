@@ -1,4 +1,21 @@
 import { Connection } from "./types";
+// A durable retirement entry must exist before SecureStore can receive a new
+// secret. Activation removes that entry in the same write as connection metadata.
+export async function stageCredential(steps: {
+  journal: () => Promise<void>;
+  write: () => Promise<void>;
+  activate: () => Promise<void>;
+  rollback: () => Promise<void>;
+}) {
+  await steps.journal();
+  try {
+    await steps.write();
+    await steps.activate();
+  } catch (error) {
+    await steps.rollback().catch(() => {});
+    throw error;
+  }
+}
 export function credentialDestination(
   connection: Pick<Connection, "protocol" | "baseUrl">,
 ) {

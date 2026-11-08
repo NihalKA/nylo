@@ -1,4 +1,4 @@
-import { credentialDestination } from "./credentials";
+import { credentialDestination, stageCredential } from "./credentials";
 import { createCheckpointBarrier, createDurableUpdater } from "./persistence";
 import { askPermission } from "./consent";
 import React, {
@@ -37,6 +37,7 @@ type Store = {
     draft: AgentDraft,
     id?: string,
     fromChat?: string,
+    initialContext?: string,
   ) => Promise<string>;
   saveConnection: (connection: Connection, key: string) => Promise<void>;
   deleteConnection: (id: string) => Promise<void>;
@@ -62,6 +63,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState("");
   const [runningId, setRunningId] = useState<string | null>(null);
+  const stagingCredentials = useRef(new Set<string>());
   const active = useRef<{ controller: AbortController; id: string } | null>(
     null,
   );
@@ -95,7 +97,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     );
     const removed: string[] = [];
     for (const id of current.current.retiredCredentialIds || []) {
-      if (!activeIds.has(id)) {
+      if (!activeIds.has(id) && !stagingCredentials.current.has(id)) {
         try {
           await removeKey(id);
           removed.push(id);
@@ -177,12 +179,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     draft: AgentDraft,
     id?: string,
     fromChat?: string,
+    initialContext = "",
   ) => {
     if (!draft.name.trim()) throw new Error("Give your agent a name.");
     if (fromChat) {
       let created = "";
       await update((d) => {
-        const next = promoteConversation(d, fromChat, draft);
+        const next = promoteConversation(d, fromChat, draft, initialContext);
         created = next.agents.at(-1)!.id;
         return next;
       });
@@ -217,13 +220,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const previousId = previous?.credentialId || previous?.id;
     const nextId = key.trim() ? uid() : previousId;
     if (!nextId) throw new Error("Enter your API key.");
-    if (key.trim())
-      await writeKey(nextId, key.trim(), credentialDestination(connection));
-    else if (!(await readKey(nextId, credentialDestination(connection))))
+    if (
+      !key.trim() &&
+      !(await readKey(nextId, credentialDestination(connection)))
+    )
       throw new Error(
         "Re-enter your API key to bind it securely to this provider.",
       );
-    try {
+    const activate = async () => {
       await update((d) => ({
         ...d,
         connections: [
@@ -231,7 +235,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           { ...connection, credentialId: nextId },
         ],
         retiredCredentialIds: [
-          ...(d.retiredCredentialIds || []),
+          ...(d.retiredCredentialIds || []).filter((id) => id !== nextId),
           ...(previousId && previousId !== nextId ? [previousId] : []),
         ],
         providerConsents: (d.providerConsents || []).filter(
@@ -242,9 +246,26 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ),
         defaultConnectionId: d.defaultConnectionId || connection.id,
       }));
-    } catch (error) {
-      if (key.trim()) await removeKey(nextId).catch(() => {});
-      throw error;
+    };
+    if (key.trim()) {
+      stagingCredentials.current.add(nextId);
+      try {
+        await stageCredential({
+          journal: () =>
+            update((d) => ({
+              ...d,
+              retiredCredentialIds: [...(d.retiredCredentialIds || []), nextId],
+            })),
+          write: () =>
+            writeKey(nextId, key.trim(), credentialDestination(connection)),
+          activate,
+          rollback: () => removeKey(nextId),
+        });
+      } finally {
+        stagingCredentials.current.delete(nextId);
+      }
+    } else {
+      await activate();
     }
     await cleanupRetiredCredentials();
   };
@@ -304,7 +325,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     ) {
       const allowed = await askPermission(
         "Share with your AI provider?",
-        `This chat’s context will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Agent chats also send that agent’s instructions and saved memories. The provider’s data policies and API charges apply.`,
+        `Allow Nylo to send conversations to ${connection.name} at ${new URL(connection.baseUrl).host}? This approval is remembered for all chats using this connection. Agent chats also send that agent’s instructions and saved memories. The provider’s data policies and API charges apply. Reset sharing approval in AI providers at any time.`,
         "Allow & send",
       );
       if (!allowed)

@@ -356,7 +356,15 @@ export function ConversationRow({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={`Open ${conversation.title}`}
+      accessibilityLabel={[
+        `Open ${conversation.title}`,
+        agent?.name,
+        conversation.draft?.trim()
+          ? `Draft: ${conversation.draft.trim().slice(0, 100)}`
+          : undefined,
+      ]
+        .filter(Boolean)
+        .join(". ")}
       onPress={onPress}
       style={({ pressed }) => [
         s.between,

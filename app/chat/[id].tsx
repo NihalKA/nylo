@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  AppState,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -11,7 +12,7 @@ import {
   View,
 } from "react-native";
 import * as Clipboard from "expo-clipboard";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import {
   AgentAvatar,
@@ -105,39 +106,30 @@ export default function Chat() {
   draftValue.current = { id, text };
   const persistDraft = useRef(update);
   persistDraft.current = update;
+  const saveDraft = useCallback(() => {
+    const value = draftValue.current;
+    void persistDraft
+      .current((d) => ({
+        ...d,
+        conversations: d.conversations.map((c) =>
+          c.id === value.id && c.draft !== value.text
+            ? { ...c, draft: value.text, updatedAt: Date.now() }
+            : c,
+        ),
+      }))
+      .catch(() => {});
+  }, []);
   useEffect(() => {
-    const save = () => {
-      const value = draftValue.current;
-      void persistDraft
-        .current((d) => ({
-          ...d,
-          conversations: d.conversations.map((c) =>
-            c.id === value.id && c.draft !== value.text
-              ? { ...c, draft: value.text, updatedAt: Date.now() }
-              : c,
-          ),
-        }))
-        .catch(() => {});
-    };
-    const timer = setTimeout(save, 400);
+    const timer = setTimeout(saveDraft, 400);
     return () => clearTimeout(timer);
-  }, [id, text]);
-  useEffect(
-    () => () => {
-      const value = draftValue.current;
-      void persistDraft
-        .current((d) => ({
-          ...d,
-          conversations: d.conversations.map((c) =>
-            c.id === value.id && c.draft !== value.text
-              ? { ...c, draft: value.text, updatedAt: Date.now() }
-              : c,
-          ),
-        }))
-        .catch(() => {});
-    },
-    [],
-  );
+  }, [id, text, saveDraft]);
+  useFocusEffect(useCallback(() => saveDraft, [saveDraft]));
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state !== "active") saveDraft();
+    });
+    return () => subscription.remove();
+  }, [saveDraft]);
   if (!conversation)
     return (
       <Page>

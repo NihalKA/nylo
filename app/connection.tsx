@@ -293,6 +293,26 @@ export default function Settings() {
               />
               <Text style={s.sub}>Default for new chats</Text>
             </Pressable>
+            {(data.providerConsents || []).some(
+              (grant) => grant.credentialId === (c.credentialId || c.id),
+            ) ? (
+              <Button
+                title={`Reset sharing approval for ${c.name}`}
+                secondary
+                disabled={!!runningId}
+                onPress={() =>
+                  void action(async () => {
+                    await update((d) => ({
+                      ...d,
+                      providerConsents: (d.providerConsents || []).filter(
+                        (grant) =>
+                          grant.credentialId !== (c.credentialId || c.id),
+                      ),
+                    }));
+                  }, "Sharing approval reset. Nylo will ask before the next message.")
+                }
+              />
+            ) : null}
           </View>
         ))}
         {draft ? (

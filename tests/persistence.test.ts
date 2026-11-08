@@ -1,6 +1,45 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createDurableUpdater } from "../src/persistence";
+import { createConversation, promoteConversation } from "../src/domain";
+import { AppData, emptyData } from "../src/types";
+test("agent promotion with reviewed memory commits together or leaves the original chat untouched", async () => {
+  const chat = createConversation("connection");
+  let data: AppData = { ...emptyData(), conversations: [chat] };
+  let fail = true;
+  const update = createDurableUpdater({
+    read: () => data,
+    write: async () => {
+      if (fail) throw new Error("disk full");
+    },
+    commit: (next) => {
+      data = next;
+    },
+  });
+  const promote = () =>
+    update((current) =>
+      promoteConversation(
+        current,
+        chat.id,
+        {
+          name: "Project guide",
+          description: "QA",
+          instructions: "Help clearly.",
+          connectionId: "connection",
+          color: "#246B58",
+        },
+        "I prefer brief answers.",
+      ),
+    );
+  await assert.rejects(promote(), /disk full/);
+  assert.equal(data.agents.length, 0);
+  assert.equal(data.conversations[0].agentId, undefined);
+  fail = false;
+  await promote();
+  assert.equal(data.agents.length, 1);
+  assert.equal(data.conversations[0].agentId, data.agents[0].id);
+  assert.equal(data.agents[0].memories[0].text, "I prefer brief answers.");
+});
 test("a submitted draft remains visible until its message is durably accepted", async () => {
   let data = { draft: "Keep this idea", messages: [] as string[] };
   let finish!: () => void;

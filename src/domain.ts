@@ -101,6 +101,7 @@ export function promoteConversation(
   data: AppData,
   conversationId: string,
   draft: Omit<Agent, "id" | "createdAt" | "memories">,
+  initialContext = "",
 ) {
   const original = data.conversations.find((c) => c.id === conversationId);
   if (!original) throw new Error("Conversation not found.");
@@ -108,7 +109,15 @@ export function promoteConversation(
     ...draft,
     id: uid(),
     createdAt: Date.now(),
-    memories: [],
+    memories: initialContext.trim()
+      ? [
+          {
+            id: uid(),
+            text: initialContext.trim().slice(0, 1000),
+            createdAt: Date.now(),
+          },
+        ]
+      : [],
   };
   return {
     ...data,
