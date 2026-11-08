@@ -1,0 +1,446 @@
+import { askPermission } from "./consent";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { AppState } from "react-native";
+import { Agent, AppData, Connection, emptyData } from "./types";
+import {
+  contextMessages,
+  conversationTitle,
+  createConversation,
+  parseData,
+  promoteConversation,
+  recoverInterrupted,
+  systemPrompt,
+  uid,
+  validateConnection,
+} from "./domain";
+import { readData, readKey, removeKey, writeData, writeKey } from "./storage";
+import { runAgent, safeError } from "./providers";
+import { streamingFetch } from "./transport";
+
+type AgentDraft = Omit<Agent, "id" | "createdAt" | "memories">;
+type Store = {
+  data: AppData;
+  ready: boolean;
+  storageError: string;
+  runningId: string | null;
+  update: (change: (d: AppData) => AppData) => Promise<void>;
+  newChat: (agentId?: string) => Promise<string>;
+  saveAgent: (
+    draft: AgentDraft,
+    id?: string,
+    fromChat?: string,
+  ) => Promise<string>;
+  saveConnection: (connection: Connection, key: string) => Promise<void>;
+  deleteConnection: (id: string) => Promise<void>;
+  send: (
+    conversationId: string,
+    text: string,
+    retry?: boolean,
+  ) => Promise<void>;
+  stop: () => void;
+  importBackup: (value: unknown) => Promise<void>;
+};
+const StoreContext = createContext<Store | null>(null);
+export function useStore() {
+  const s = useContext(StoreContext);
+  if (!s) throw new Error("Store missing");
+  return s;
+}
+
+export function StoreProvider({ children }: { children: React.ReactNode }) {
+  const [data, setData] = useState<AppData>(emptyData);
+  const current = useRef(data);
+  const [ready, setReady] = useState(false);
+  const [storageError, setStorageError] = useState("");
+  const [runningId, setRunningId] = useState<string | null>(null);
+  const active = useRef<{ controller: AbortController; id: string } | null>(
+    null,
+  );
+  const writes = useRef<Promise<void>>(Promise.resolve());
+  const consentedDestinations = useRef(new Set<string>());
+  const update = async (change: (d: AppData) => AppData) => {
+    const next = change(current.current);
+    current.current = next;
+    setData(next);
+    const operation = writes.current
+      .catch(() => {})
+      .then(() => writeData(next));
+    writes.current = operation;
+    try {
+      await operation;
+      setStorageError("");
+    } catch {
+      setStorageError(
+        "Your last change could not be saved. Check device storage, then try again.",
+      );
+      throw new Error("Could not save on this device.");
+    }
+  };
+  useEffect(() => {
+    let mounted = true;
+    readData()
+      .then(async (value) => {
+        const recovered = recoverInterrupted(value);
+        await writeData(recovered);
+        if (mounted) {
+          current.current = recovered;
+          setData(recovered);
+          setReady(true);
+        }
+      })
+      .catch(() => {
+        if (mounted)
+          setStorageError(
+            "Could not open local data. Your existing data has not been overwritten. Restart the app to try again.",
+          );
+      });
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state !== "active") active.current?.controller.abort();
+    });
+    return () => {
+      mounted = false;
+      subscription.remove();
+      active.current?.controller.abort();
+    };
+  }, []);
+
+  const newChat = async (agentId?: string) => {
+    const agent = current.current.agents.find((a) => a.id === agentId);
+    const conversation = createConversation(
+      agent?.connectionId || current.current.defaultConnectionId,
+      agentId,
+    );
+    await update((d) => ({
+      ...d,
+      conversations: [conversation, ...d.conversations],
+    }));
+    return conversation.id;
+  };
+  const saveAgent = async (
+    draft: AgentDraft,
+    id?: string,
+    fromChat?: string,
+  ) => {
+    if (!draft.name.trim()) throw new Error("Give your agent a name.");
+    if (fromChat) {
+      let created = "";
+      await update((d) => {
+        const next = promoteConversation(d, fromChat, draft);
+        created = next.agents.at(-1)!.id;
+        return next;
+      });
+      return created;
+    }
+    const agentId = id || uid();
+    await update((d) => ({
+      ...d,
+      agents: id
+        ? d.agents.map((a) => (a.id === id ? { ...a, ...draft } : a))
+        : [
+            ...d.agents,
+            { ...draft, id: agentId, memories: [], createdAt: Date.now() },
+          ],
+    }));
+    return agentId;
+  };
+  const saveConnection = async (input: Connection, key: string) => {
+    const connection = validateConnection(input);
+    const previous = current.current.connections.find(
+      (c) => c.id === connection.id,
+    );
+    if (
+      !key.trim() &&
+      previous &&
+      (previous.protocol !== connection.protocol ||
+        previous.baseUrl !== connection.baseUrl)
+    )
+      throw new Error(
+        "Enter the API key again when changing a provider or endpoint.",
+      );
+    if (key.trim()) await writeKey(connection.id, key.trim());
+    else if (!(await readKey(connection.id)))
+      throw new Error("Enter your API key.");
+    await update((d) => ({
+      ...d,
+      connections: [
+        ...d.connections.filter((c) => c.id !== connection.id),
+        connection,
+      ],
+      defaultConnectionId: d.defaultConnectionId || connection.id,
+    }));
+  };
+  const deleteConnection = async (id: string) => {
+    if (active.current)
+      throw new Error(
+        "Stop the current response before removing a connection.",
+      );
+    await removeKey(id);
+    await update((d) => ({
+      ...d,
+      connections: d.connections.filter((c) => c.id !== id),
+      defaultConnectionId:
+        d.defaultConnectionId === id
+          ? d.connections.find((c) => c.id !== id)?.id || ""
+          : d.defaultConnectionId,
+    }));
+  };
+  const send = async (conversationId: string, input: string, retry = false) => {
+    if (active.current)
+      throw new Error(
+        "Another response is running. Stop it before sending a new message.",
+      );
+    const conversation = current.current.conversations.find(
+      (c) => c.id === conversationId,
+    );
+    if (!conversation) throw new Error("Conversation not found.");
+    const connection = current.current.connections.find(
+      (c) =>
+        c.id ===
+        (conversation.connectionId || current.current.defaultConnectionId),
+    );
+    if (!connection)
+      throw new Error("Add or choose a connection in Settings first.");
+    const destination = `${connection.protocol}:${connection.baseUrl}`;
+    if (!consentedDestinations.current.has(destination)) {
+      const allowed = await askPermission(
+        "Share with your AI provider?",
+        `This chat’s context will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Agent chats also send that agent’s instructions and saved memories. The provider’s data policies and API charges apply.`,
+        "Allow & send",
+      );
+      if (!allowed)
+        throw new Error("Nothing was sent. Your message is ready to edit.");
+      consentedDestinations.current.add(destination);
+    }
+    const key = await readKey(connection.id);
+    if (!key)
+      throw new Error(
+        "Add your API key in Settings. Browser preview keys must be re-entered after a reload.",
+      );
+    if (active.current)
+      throw new Error(
+        "Another response is running. Stop it before sending a new message.",
+      );
+    if (!retry && !input.trim()) return;
+    const last = conversation.messages.at(-1);
+    const messages =
+      retry && last?.role === "assistant"
+        ? conversation.messages.slice(0, -1)
+        : [...conversation.messages];
+    if (!retry)
+      messages.push({
+        id: uid(),
+        role: "user",
+        text: input.trim(),
+        status: "complete",
+        createdAt: Date.now(),
+      });
+    if (!contextMessages(messages).length || messages.at(-1)?.role !== "user")
+      throw new Error("There is no message to retry.");
+    const assistantId = uid();
+    const controller = new AbortController();
+    active.current = { controller, id: conversationId };
+    setRunningId(conversationId);
+    let pending = "";
+    let lastFlush = Date.now();
+    let stateError: unknown;
+    const patch = async (delta: Record<string, unknown>) =>
+      update((d) => ({
+        ...d,
+        conversations: d.conversations.map((c) =>
+          c.id === conversationId
+            ? {
+                ...c,
+                updatedAt: Date.now(),
+                messages: c.messages.map((m) =>
+                  m.id === assistantId ? { ...m, ...delta } : m,
+                ),
+              }
+            : c,
+        ),
+      }));
+    const flush = () => {
+      if (!pending) return;
+      const part = pending;
+      pending = "";
+      lastFlush = Date.now();
+      const saved =
+        current.current.conversations
+          .find((c) => c.id === conversationId)
+          ?.messages.find((m) => m.id === assistantId)?.text || "";
+      void patch({ text: saved + part }).catch((e) => {
+        stateError = e;
+        controller.abort();
+      });
+    };
+    const timeout = setTimeout(() => controller.abort(), 180000);
+    const flushTimer = setInterval(flush, 200);
+    try {
+      await update((d) => ({
+        ...d,
+        conversations: d.conversations.map((c) =>
+          c.id === conversationId
+            ? {
+                ...c,
+                connectionId: connection.id,
+                title: c.messages.length ? c.title : conversationTitle(input),
+                updatedAt: Date.now(),
+                messages: [
+                  ...messages,
+                  {
+                    id: assistantId,
+                    role: "assistant",
+                    text: "",
+                    createdAt: Date.now(),
+                    status: "streaming",
+                    model: connection.model,
+                  },
+                ],
+              }
+            : c,
+        ),
+      }));
+      const agent = current.current.agents.find(
+        (a) => a.id === conversation.agentId,
+      );
+      await runAgent({
+        connection,
+        key,
+        messages,
+        instructions: systemPrompt(agent),
+        useTools: !!agent,
+        signal: controller.signal,
+        fetcher: streamingFetch,
+        onText: (text) => {
+          pending += text;
+          if (Date.now() - lastFlush > 100) flush();
+        },
+        onAction: (label) => {
+          const actions =
+            current.current.conversations
+              .find((c) => c.id === conversationId)
+              ?.messages.find((m) => m.id === assistantId)?.actions || [];
+          void patch({ actions: [...actions, label] }).catch((e) => {
+            stateError = e;
+            controller.abort();
+          });
+        },
+        executeTool: async (call) => {
+          if (!agent) throw new Error("No agent selected.");
+          const args = JSON.parse(call.arguments);
+          if (call.name !== "remember_fact" && call.name !== "forget_fact")
+            throw new Error("Unsupported memory action.");
+          const change =
+            call.name === "remember_fact"
+              ? args.text
+              : agent.memories.find((m) => m.id === args.id)?.text;
+          if (
+            typeof change !== "string" ||
+            !change.trim() ||
+            change.length > 1000
+          )
+            throw new Error("Invalid memory change.");
+          const allowed = await askPermission(
+            call.name === "remember_fact"
+              ? "Save this memory?"
+              : "Forget this memory?",
+            `${agent.name}: ${change}`,
+            call.name === "remember_fact" ? "Save memory" : "Forget",
+          );
+          if (!allowed)
+            return JSON.stringify({ approved: false, changed: false });
+          if (controller.signal.aborted) throw new Error("Response stopped.");
+          let output = "";
+          await update((d) => ({
+            ...d,
+            agents: d.agents.map((a) => {
+              if (a.id !== agent.id) return a;
+              if (call.name === "remember_fact") {
+                if (
+                  typeof args.text !== "string" ||
+                  !args.text.trim() ||
+                  args.text.length > 1000
+                )
+                  throw new Error("Invalid memory.");
+                const existing = a.memories.find(
+                  (m) =>
+                    m.text.toLowerCase() === args.text.trim().toLowerCase(),
+                );
+                if (existing) {
+                  output = JSON.stringify({ saved: true, id: existing.id });
+                  return a;
+                }
+                if (a.memories.length >= 50) throw new Error("Memory is full.");
+                const memory = {
+                  id: uid(),
+                  text: args.text.trim(),
+                  createdAt: Date.now(),
+                };
+                output = JSON.stringify({ saved: true, id: memory.id });
+                return { ...a, memories: [...a.memories, memory] };
+              }
+              if (call.name === "forget_fact" && typeof args.id === "string") {
+                output = JSON.stringify({ forgotten: true });
+                return {
+                  ...a,
+                  memories: a.memories.filter((m) => m.id !== args.id),
+                };
+              }
+              throw new Error("Unsupported local tool.");
+            }),
+          }));
+          return output;
+        },
+      });
+      flush();
+      if (stateError) throw stateError;
+      await patch({ status: "complete" });
+    } catch (error) {
+      flush();
+      await patch({
+        status: controller.signal.aborted ? "interrupted" : "error",
+        error: controller.signal.aborted
+          ? "Response paused. Retry to make a new request; the partial answer is kept until then."
+          : safeError(error, key),
+      }).catch(() => {});
+    } finally {
+      clearTimeout(timeout);
+      clearInterval(flushTimer);
+      active.current = null;
+      setRunningId(null);
+    }
+  };
+  const importBackup = async (value: unknown) => {
+    if (active.current)
+      throw new Error("Stop the current response before restoring a backup.");
+    const imported = parseData(value);
+    for (const connection of current.current.connections)
+      await removeKey(connection.id);
+    await update(() => imported);
+  };
+  return (
+    <StoreContext.Provider
+      value={{
+        data,
+        ready,
+        storageError,
+        runningId,
+        update,
+        newChat,
+        saveAgent,
+        saveConnection,
+        deleteConnection,
+        send,
+        stop: () => active.current?.controller.abort(),
+        importBackup,
+      }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
+}
