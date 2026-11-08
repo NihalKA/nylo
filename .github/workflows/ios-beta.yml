@@ -25,7 +25,7 @@ jobs:
           cache: npm
       - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199
         with:
-          ruby-version: '3.3'
+          ruby-version: '3.3.13'
       - run: npm ci --no-audit --no-fund
       - run: npm run check
       - run: node scripts/security-check.mjs

@@ -3,7 +3,7 @@ set -euo pipefail
 mkdir -p artifacts
 CI=1 npx expo prebuild --platform ios --no-install
 (cd ios && pod install)
-xcodebuild -workspace ios/Nylo.xcworkspace -scheme Nylo -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath artifacts/DerivedData CODE_SIGNING_ALLOWED=NO build > artifacts/ios-build.log 2>&1 || { tail -100 artifacts/ios-build.log; exit 1; }
+xcodebuild -workspace ios/Nylo.xcworkspace -scheme Nylo -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath artifacts/DerivedData CODE_SIGNING_ALLOWED=NO ARCHS="$(uname -m)" ONLY_ACTIVE_ARCH=YES build > artifacts/ios-build.log 2>&1 || { tail -100 artifacts/ios-build.log; exit 1; }
 app_path="$PWD/artifacts/DerivedData/Build/Products/Release-iphonesimulator/Nylo.app"
 test -d "$app_path"
 ditto -c -k --sequesterRsrc --keepParent "$app_path" artifacts/Nylo-simulator.zip

@@ -39,7 +39,7 @@ platform :ios do
       parsed = Plist.parse_xml(profile_data)
       UI.user_error!("Profile team mismatch") unless parsed["TeamIdentifier"].include?(team)
       UI.user_error!("Profile app mismatch") unless parsed.dig("Entitlements", "application-identifier") == "#{team}.com.nylohq.nylo"
-      UI.user_error!("Profile has expired") unless parsed["ExpirationDate"] && parsed["ExpirationDate"] > Time.now
+      UI.user_error!("Profile has expired") unless parsed["ExpirationDate"] && parsed["ExpirationDate"].to_time > Time.now
       UI.user_error!("Development/ad-hoc profile cannot be used for App Store") if parsed.dig("Entitlements", "get-task-allow") || parsed["ProvisionedDevices"] || parsed["ProvisionsAllDevices"]
       require "openssl"
       require "digest"
