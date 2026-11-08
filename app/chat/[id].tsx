@@ -137,6 +137,7 @@ function Chat() {
     attachmentFlowReducer,
     { kind: "idle" },
   );
+  const [preparingAttachment, setPreparingAttachment] = useState(false);
   const attachmentMenu = attachmentFlow.kind === "menu";
   const picking =
     attachmentFlow.kind === "closing" || attachmentFlow.kind === "picking";
@@ -207,9 +208,12 @@ function Chat() {
     const { source, operation } = attachmentFlow;
     const chatId = id;
     startedAttachment.current = operation;
+    setPreparingAttachment(false);
     void (async () => {
       try {
-        const picked = await pickAttachments(source);
+        const picked = await pickAttachments(source, () => {
+          if (draftValue.current.id === chatId) setPreparingAttachment(true);
+        });
         if (draftValue.current.id === chatId)
           setAttachments(
             validateAttachments([...draftValue.current.attachments, ...picked]),
@@ -679,6 +683,13 @@ function Chat() {
                 </View>
               ))}
             </ScrollView>
+          ) : null}
+          {picking ? (
+            <Text accessibilityLiveRegion="polite" style={s.sub}>
+              {preparingAttachment
+                ? "Preparing attachment…"
+                : "Choosing attachment…"}
+            </Text>
           ) : null}
           <View style={s.between}>
             <Pressable

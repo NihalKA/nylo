@@ -10,6 +10,7 @@ import { MAX_ATTACHMENT_BYTES } from "./attachments";
 export type AttachmentSource = "files" | "photos" | "camera";
 export async function pickAttachments(
   source: AttachmentSource,
+  onPreparing?: () => void,
 ): Promise<Attachment[]> {
   if (source === "files") {
     const result = await DocumentPicker.getDocumentAsync({
@@ -26,6 +27,7 @@ export async function pickAttachments(
       copyToCacheDirectory: true,
     });
     if (result.canceled) return [];
+    onPreparing?.();
     return processAttachmentBatch(result.assets, {
       sourceSize: (asset) => new File(asset.uri).size,
       maxSourceFileBytes: MAX_ATTACHMENT_BYTES,
@@ -82,10 +84,15 @@ export async function pickAttachments(
           mediaTypes: ["images"],
           allowsMultipleSelection: true,
           selectionLimit: 4,
-          quality: 0.8,
+          // Nylo re-encodes after enforcing source-size bounds. Avoid the
+          // picker's redundant data export/conversion before returning a file.
+          quality: 1,
+          preferredAssetRepresentationMode:
+            ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Current,
           exif: false,
         });
   if (result.canceled) return [];
+  onPreparing?.();
   return processAttachmentBatch(result.assets, {
     sourceSize: (asset) => asset.fileSize || new File(asset.uri).size,
     maxSourceFileBytes: 20 * 1024 * 1024,

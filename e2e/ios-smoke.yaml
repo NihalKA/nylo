@@ -126,9 +126,11 @@ appId: com.nylohq.nylo
     text: "Save memory"
     enabled: true
 - tapOn: "Save memory"
+# Saved memories follow the editor and Save action; compact/maximum text place
+# the new row below the viewport. Search toward it without reducing visibility.
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
-    direction: UP
+    direction: DOWN
 - takeScreenshot: 08-agent-memory
 - stopApp
 - launchApp
