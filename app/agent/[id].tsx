@@ -314,7 +314,7 @@ export default function AgentDetail() {
             }}
           >
             <Button
-              title="Done editing memory"
+              title="Done"
               secondary
               onPress={Keyboard.dismiss}
             />

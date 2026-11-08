@@ -80,8 +80,8 @@ appId: com.nylohq.nylo
 - assertVisible:
     id: "agent-memory-input"
     text: "QA sample: I prefer concise answers."
-- tapOn: "Done editing memory"
-- assertNotVisible: "Done editing memory"
+- tapOn: "Done"
+- assertNotVisible: "Done"
 - scrollUntilVisible:
     element: "Save memory"
     direction: DOWN
