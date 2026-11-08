@@ -7,6 +7,7 @@ import sqlite3
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--container", required=True)
+parser.add_argument("--expected-copy", required=True)
 args = parser.parse_args()
 container = Path(args.container).resolve()
 if os.environ.get("GITHUB_ACTIONS") != "true" or not {"CoreSimulator", "Devices", "Application"}.issubset(container.parts):
@@ -35,6 +36,8 @@ def chat(identifier, title, messages, agent=None, age=0):
     return value
 
 
+focused_response = "Start with one meaningful task.\n\n**Your first hour**\n• 10 minutes: clear your desk and choose a priority.\n• 40 minutes: work with notifications off.\n• 10 minutes: take a break and decide what comes next.\n\nLeave some room between tasks. A useful morning does not need to be a crowded one."
+
 history = []
 for index in range(100):
     history.extend([
@@ -50,7 +53,7 @@ data = dict(version=1, connections=[], defaultConnectionId="", agents=[dict(
 )], conversations=[
     chat("gallery-morning", "Example: A focused morning", [
         message("morning-user", "user", "Help me plan a calm, focused morning."),
-        message("morning-answer", "assistant", "Start with one meaningful task.\n\n**Your first hour**\n• 10 minutes: clear your desk and choose a priority.\n• 40 minutes: work with notifications off.\n• 10 minutes: take a break and decide what comes next.\n\nLeave some room between tasks. A useful morning does not need to be a crowded one."),
+        message("morning-answer", "assistant", focused_response),
     ]),
     chat("gallery-update", "Example: A clear project update", [
         message("update-user", "user", "Help me send a concise project update."),
@@ -70,4 +73,5 @@ with sqlite3.connect(db_path) as db:
     if any(previous.get(key) for key in ("connections", "agents", "conversations")):
         raise SystemExit("Refusing to replace a nonempty app database.")
     db.execute("INSERT INTO app_state(id,json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET json=excluded.json", (json.dumps(data),))
+Path(args.expected_copy).write_text(focused_response)
 print("Seeded four explicitly synthetic offline QA conversations; no keys or live provider calls.")

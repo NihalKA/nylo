@@ -1,7 +1,7 @@
 appId: com.nylohq.nylo
 ---
 - launchApp
-- assertVisible: "Example: A focused morning"
+- assertVisible: "Open Example: A focused morning"
 - takeScreenshot: gallery-01-inbox
 - tapOn: "Open Example: A focused morning"
 - assertVisible: "(?s).*Start with one meaningful task.*"

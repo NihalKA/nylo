@@ -68,7 +68,7 @@ case "$scenario" in smoke|gallery) ;; *) echo 'Unknown UI scenario'; exit 1 ;; e
 if [ "$scenario" = gallery ]; then
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
-  python3 scripts/seed-ios-gallery.py --container "$app_container"
+  python3 scripts/seed-ios-gallery.py --container "$app_container" --expected-copy artifacts/e2e/expected-copy.txt
   echo 'Synthetic offline QA data, not live model output or customer history.' > artifacts/e2e/gallery-disclosure.txt
 fi
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
@@ -85,6 +85,6 @@ if [ "$scenario" = gallery ]; then
   xcrun simctl pbpaste "$simulator_id" > artifacts/e2e/copied-example.txt
   python3 - <<'PY'
 from pathlib import Path
-assert Path('artifacts/e2e/copied-example.txt').read_text().startswith('Start with one meaningful task.'), 'Copied response differs from the synthetic example'
+assert Path('artifacts/e2e/copied-example.txt').read_text() == Path('artifacts/e2e/expected-copy.txt').read_text(), 'Copied response differs from the complete synthetic example'
 PY
 fi
