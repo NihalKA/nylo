@@ -313,11 +313,7 @@ export default function AgentDetail() {
               paddingHorizontal: 16,
             }}
           >
-            <Button
-              title="Done"
-              secondary
-              onPress={Keyboard.dismiss}
-            />
+            <Button title="Done" secondary onPress={Keyboard.dismiss} />
           </View>
         </InputAccessoryView>
       ) : null}
