@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent score: 82/100 after native keyboard recheck; see docs/reviews/007-keyboard-recheck.md. The high composer overlap, maximum-text Settings and draft restart are corrected/verified. Missing memory dismissal, a clipped maximum-text dismissal target and incomplete settled multiline/agent/memory tests remain medium findings with source fixes awaiting validation. The 88 release gate remains unmet.
+- Latest independent score: 86/100; see docs/reviews/008-memory-relaunch-review.md. Compact/large full smoke and exact saved-memory relaunch pass. Maximum-text setup stops when scrolling opens the keyboard; a compact empty-state heading clips while typing. No high/critical finding is established; source/test fixes await verification. The 88 release gate and separate physical/live/VoiceOver gates remain unmet.
 
 ## In progress
 

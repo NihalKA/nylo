@@ -201,7 +201,7 @@ export default function Chat() {
           />
         }
       />
-      {agent ? (
+      {agent && !keyboardVisible ? (
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`View ${agent.name} memory. ${agent.memories.length} saved facts shared across this agent’s conversations.`}
@@ -277,6 +277,7 @@ export default function Chat() {
           {!conversation.messages.length ? (
             <View
               style={{
+                display: keyboardVisible ? "none" : "flex",
                 flex: 1,
                 alignItems: "center",
                 justifyContent: "center",

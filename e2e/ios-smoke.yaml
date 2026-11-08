@@ -69,9 +69,22 @@ appId: com.nylohq.nylo
       - tapOn: "Dismiss keyboard"
       - assertNotVisible: "Dismiss keyboard"
 - takeScreenshot: 07-agent-template
-- scrollUntilVisible:
-    element: "Create agent"
-    direction: DOWN
+- repeat:
+    times: 10
+    commands:
+      - runFlow:
+          when:
+            notVisible: "Create agent"
+          commands:
+            - swipe:
+                direction: UP
+            - runFlow:
+                when:
+                  visible: "Dismiss keyboard"
+                commands:
+                  - tapOn: "Dismiss keyboard"
+                  - assertNotVisible: "Dismiss keyboard"
+- assertVisible: "Create agent"
 - tapOn: "Create agent"
 - assertVisible: "Your agent"
 - scrollUntilVisible:
@@ -116,3 +129,18 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 09-restored-memory
+- scrollUntilVisible:
+    element: "New conversation"
+    direction: UP
+- tapOn: "New conversation"
+- tapOn:
+    id: "chat-message"
+- inputText: "An agent draft\nwith a second line."
+- assertVisible:
+    id: "chat-message"
+    text: "(?s).*with a second line.*"
+- waitForAnimationToEnd
+- takeScreenshot: 10-agent-chat-keyboard
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
+- takeScreenshot: 11-agent-chat-context

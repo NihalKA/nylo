@@ -150,7 +150,11 @@ export function Header({
             router.canGoBack() ? router.back() : router.replace("/")
           }
         />
-        <Text numberOfLines={1} style={[s.h2, { flex: 1 }]}>
+        <Text
+          accessibilityRole="header"
+          numberOfLines={1}
+          style={[s.h2, { flex: 1 }]}
+        >
           {title}
         </Text>
       </View>
@@ -500,7 +504,7 @@ export function FormScroll({ children }: { children: React.ReactNode }) {
   return (
     <ScrollView
       automaticallyAdjustKeyboardInsets
-      keyboardDismissMode={Platform.OS === "ios" ? "interactive" : "on-drag"}
+      keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={{ gap: 20, paddingBottom: 44 }}
       showsVerticalScrollIndicator={false}
