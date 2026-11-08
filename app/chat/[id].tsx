@@ -852,6 +852,7 @@ function Chat() {
           <View
             accessibilityViewIsModal
             style={{
+              maxHeight: "85%",
               padding: 20,
               paddingBottom: Math.max(insets.bottom, 20),
               gap: 12,
@@ -860,37 +861,43 @@ function Chat() {
               borderTopRightRadius: 24,
             }}
           >
-            <Text accessibilityRole="header" style={s.h2}>
-              Add to your message
-            </Text>
-            <Text style={s.sub}>
-              PDF, text or photos · 2 MB each, 4 MB total. Files stay on this
-              device until you send. Choose a model that supports your
-              attachment.
-            </Text>
-            <Button
-              title="Photo library"
-              secondary
-              icon="images-outline"
-              onPress={() => queueAttachment("photos")}
-            />
-            <Button
-              title="Take a photo"
-              secondary
-              icon="camera-outline"
-              onPress={() => queueAttachment("camera")}
-            />
-            <Button
-              title="Choose files"
-              secondary
-              icon="document-outline"
-              onPress={() => queueAttachment("files")}
-            />
-            <Button
-              title="Cancel attachments"
-              secondary
-              onPress={() => dispatchAttachment({ type: "cancel" })}
-            />
+            <ScrollView
+              style={{ flexGrow: 0, flexShrink: 1 }}
+              contentContainerStyle={{ gap: 12 }}
+              keyboardShouldPersistTaps="handled"
+            >
+              <Text accessibilityRole="header" style={s.h2}>
+                Add to your message
+              </Text>
+              <Text style={s.sub}>
+                PDF, text or photos · 2 MB each, 4 MB total. Files stay on this
+                device until you send. Choose a model that supports your
+                attachment.
+              </Text>
+              <Button
+                title="Photo library"
+                secondary
+                icon="images-outline"
+                onPress={() => queueAttachment("photos")}
+              />
+              <Button
+                title="Take a photo"
+                secondary
+                icon="camera-outline"
+                onPress={() => queueAttachment("camera")}
+              />
+              <Button
+                title="Choose files"
+                secondary
+                icon="document-outline"
+                onPress={() => queueAttachment("files")}
+              />
+              <Button
+                title="Cancel attachments"
+                secondary
+                onPress={() => dispatchAttachment({ type: "cancel" })}
+              />
+            </ScrollView>
           </View>
         </View>
       </Modal>

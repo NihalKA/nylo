@@ -45,6 +45,15 @@ appId: com.nylohq.nylo
 - tapOn: "Dismiss keyboard"
 - assertNotVisible: "Dismiss keyboard"
 - takeScreenshot: 05-chat-draft
+- tapOn: "Add attachment"
+- assertVisible: "Photo library"
+- scrollUntilVisible:
+    element: "Cancel attachments"
+    direction: DOWN
+- takeScreenshot: 05-attachment-menu
+- tapOn: "Cancel attachments"
+- assertVisible:
+    id: "chat-message"
 - tapOn: "Go back"
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible: "(?s).*A draft that should survive reopening.*"

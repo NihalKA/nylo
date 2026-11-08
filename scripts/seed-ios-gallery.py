@@ -75,6 +75,7 @@ import zlib
 def png_chunk(kind, content):
     return struct.pack(">I", len(content)) + kind + content + struct.pack(">I", zlib.crc32(kind + content) & 0xffffffff)
 owned_png = b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", struct.pack(">IIBBBBB", 32, 32, 8, 2, 0, 0, 0)) + png_chunk(b"IDAT", zlib.compress(b"".join(b"\x00" + bytes([36,107,88]) * 32 for _ in range(32)))) + png_chunk(b"IEND", b"")
+Path("artifacts/e2e/owned-picker-photo.png").write_bytes(owned_png)
 photo = dict(id="gallery-owned-image",name="QA image.png",mimeType="image/png",size=len(owned_png),data=base64.b64encode(owned_png).decode())
 text_file = dict(id="gallery-owned-text",name="QA note.txt",mimeType="text/plain",size=25,data="Synthetic attachment note")
 data["connections"][0]["models"] = ["synthetic-no-network", "synthetic-secondary"]

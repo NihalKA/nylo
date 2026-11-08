@@ -1,0 +1,28 @@
+appId: com.nylohq.nylo
+---
+- launchApp
+- tapOn: "(?s)Open Example: A focused morning.*"
+- tapOn: "Add attachment"
+- tapOn: "Photo library"
+- takeScreenshot: attachments-01-system-photo-picker
+- assertVisible: "Cancel"
+- tapOn: "Cancel"
+- assertVisible:
+    id: "chat-message"
+- tapOn: "Add attachment"
+- tapOn: "Choose files"
+- takeScreenshot: attachments-02-system-file-picker
+- assertVisible: "Cancel"
+- tapOn: "Cancel"
+- assertVisible:
+    id: "chat-message"
+- tapOn: "Add attachment"
+- tapOn: "Take a photo"
+- runFlow:
+    when:
+      visible: "Allow"
+    commands:
+      - tapOn: "Allow"
+- assertVisible:
+    id: "chat-message"
+- takeScreenshot: attachments-03-simulator-camera-fallback

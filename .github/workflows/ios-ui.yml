@@ -16,7 +16,7 @@ on:
       scenario:
         description: First-use smoke or synthetic populated-state gallery
         type: choice
-        options: [smoke, gallery]
+        options: [smoke, gallery, attachments]
         default: smoke
 permissions:
   contents: read
@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: ${{ inputs.scenario == 'gallery' && fromJSON('["large"]') || fromJSON('["compact","large","large-text"]') }}
+        profile: ${{ inputs.scenario != 'smoke' && inputs.scenario != '' && fromJSON('["large"]') || fromJSON('["compact","large","large-text"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

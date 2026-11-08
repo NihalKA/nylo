@@ -64,12 +64,13 @@ xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8
 xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
 scenario="${UI_SCENARIO:-smoke}"
-case "$scenario" in smoke|gallery) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
-if [ "$scenario" = gallery ]; then
+case "$scenario" in smoke|gallery|attachments) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+if [ "$scenario" = gallery ] || [ "$scenario" = attachments ]; then
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
   python3 scripts/seed-ios-gallery.py --container "$app_container" --expected-copy artifacts/e2e/expected-copy.txt
   echo 'Synthetic offline QA data, not live model output or customer history.' > artifacts/e2e/gallery-disclosure.txt
+  if [ "$scenario" = attachments ]; then xcrun simctl addmedia "$simulator_id" artifacts/e2e/owned-picker-photo.png; fi
 fi
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -

@@ -1,5 +1,5 @@
 import Constants from "expo-constants";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Linking, Pressable, Text, View } from "react-native";
 import { router } from "expo-router";
 import { emptyData } from "../../src/types";
@@ -84,11 +84,13 @@ function Group({ children }: { children: React.ReactNode }) {
 export default function Settings() {
   const { data, importBackup, runningId } = useStore();
   const [busy, setBusy] = useState(false);
+  const actionLocked = useRef(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const disabled = busy || !!runningId;
   const action = async (fn: () => Promise<unknown>) => {
-    if (busy) return;
+    if (actionLocked.current) return;
+    actionLocked.current = true;
     setBusy(true);
     setError("");
     setNotice("");
@@ -97,6 +99,7 @@ export default function Settings() {
     } catch (e) {
       setError((e as Error).message);
     } finally {
+      actionLocked.current = false;
       setBusy(false);
     }
   };
@@ -146,7 +149,7 @@ export default function Settings() {
                   if (
                     await confirm(
                       "Export private conversations?",
-                      "The backup contains your chats and memories as readable text. Keep it somewhere private. API keys are excluded.",
+                      "The backup contains readable chats, drafts, memories and attached photos/files. Anyone with the backup can read them. Keep it private. API keys are excluded.",
                       "Export",
                       false,
                     )
@@ -166,7 +169,7 @@ export default function Settings() {
                     value &&
                     (await confirm(
                       "Replace local data?",
-                      "Your chats, agents, and connections will be replaced. Saved keys will be removed; enter them again afterward.",
+                      "Your chats, attached files, agents and connections will be replaced. Saved keys are removed; enter them again afterward. Recent-chat sharing is reset and can be enabled again in each agent.",
                       "Restore",
                     ))
                   ) {
@@ -231,7 +234,7 @@ export default function Settings() {
                   if (
                     await confirm(
                       "Delete all local data?",
-                      "This removes Nylo’s chats, agents, memories and saved provider connections from this device. Exported backups are not affected. This cannot be undone.",
+                      "This removes Nylo’s chats, its copies of attached files, agents, memories and saved provider connections from this device. Original files and photos outside Nylo are not removed. Exported backups are not affected. This cannot be undone.",
                       "Delete all",
                     )
                   ) {
