@@ -1,6 +1,6 @@
 # Release privacy inventory
 
-Checked against source 1079f85 on 8 November 2026. This inventory is preparation for the final App Store declaration, not a submitted label.
+Baseline checked against source 1079f85; live-device-check delta checked against 6470912 on 8 November 2026. This inventory is preparation for the final App Store declaration, not a submitted label.
 
 | Data | Device storage | Off-device transfer | Purpose / control |
 | --- | --- | --- | --- |
@@ -10,6 +10,7 @@ Checked against source 1079f85 on 8 November 2026. This inventory is preparation
 | Provider/model settings | Local database | Destination/model used for provider calls | User-configured service access. |
 | Network metadata | No app analytics inventory | Provider receives ordinary network information, including IP | Transport and provider operations; provider retention/policies vary. |
 | Backup export | Temporary local JSON, cleaned after sharing | Only through user-selected OS share destination | User-controlled plaintext backup; excludes keys, credential references and sharing grants. |
+| Live device check | Synthetic test chats, approved test fact and local restart/event bookkeeping | Synthetic text and approved fact sent only after each explicit request confirmation | One request capped at 128 output tokens per action, tools disabled. No automatic report. Bookkeeping is excluded from backup exports/imports; synthetic chats/facts remain in user-requested backups until removed. Scoped cleanup preserves personal data. |
 | Support correspondence | Outside app | Email provider and publisher when user sends email | Optional user-initiated support, no automated chat upload. |
 
 No Nylo backend, login, ad SDK, analytics SDK or automatic synchronization is implemented. The app has no contacts, photo, microphone, location or tracking feature. Provider requests are text-only. Provider-side retention is not established by setting Responses `store: false`.
