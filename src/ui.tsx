@@ -97,6 +97,9 @@ export function Icon({
 }) {
   return (
     <Ionicons
+      accessible={false}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
       name={name}
       size={size}
       color={typeof color === "number" ? theme.ink : (color ?? undefined)}

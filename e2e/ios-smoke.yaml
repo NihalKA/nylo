@@ -4,17 +4,17 @@ appId: com.nylohq.nylo
     clearState: true
 - assertVisible: "Your next idea starts here"
 - takeScreenshot: 01-chats-empty
-- tapOn: "Agents"
+- tapOn: "Agents, tab, 2 of 3"
 - assertVisible: "A little more familiar"
 - takeScreenshot: 02-agents-empty
-- tapOn: "Settings"
+- tapOn: "Settings, tab, 3 of 3"
 - assertVisible: "Connect your AI"
 - takeScreenshot: 03-settings
 - tapOn: "Connect your AI"
 - assertVisible: "Choose your AI"
 - takeScreenshot: 04-provider-setup
 - tapOn: "Go back"
-- tapOn: "Chats"
+- tapOn: "Chats, tab, 1 of 3"
 - tapOn: "New chat"
 - assertVisible: "Message"
 - tapOn: "Message"
