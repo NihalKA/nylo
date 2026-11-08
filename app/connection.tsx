@@ -4,7 +4,14 @@ import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
 import React, { useEffect, useRef, useState } from "react";
-import { FlatList, Modal, Platform, Pressable, Text, View } from "react-native";
+import {
+  BackHandler,
+  FlatList,
+  Platform,
+  Pressable,
+  Text,
+  View,
+} from "react-native";
 import { router } from "expo-router";
 import { Connection, Protocol } from "../src/types";
 import {
@@ -113,6 +120,90 @@ export default function Settings() {
       setBusy(false);
     }
   };
+  useEffect(() => {
+    if (!modelsOpen) return;
+    const listener = BackHandler.addEventListener("hardwareBackPress", () => {
+      setModelsOpen(false);
+      return true;
+    });
+    return () => listener.remove();
+  }, [modelsOpen]);
+  if (modelsOpen && draft)
+    return (
+      <Page>
+        <View
+          style={{
+            flex: 1,
+            padding: 20,
+            paddingTop: 24,
+            backgroundColor: theme.card,
+            gap: 16,
+          }}
+        >
+          <View style={s.between}>
+            <Text accessibilityRole="header" style={[s.h2, { fontSize: 24 }]}>
+              Choose a model
+            </Text>
+            <IconButton
+              name="close"
+              label="Close models"
+              onPress={() => setModelsOpen(false)}
+            />
+          </View>
+          <Field
+            label="Search available models"
+            value={modelSearch}
+            onChangeText={setModelSearch}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <FlatList
+            data={models.filter((model) =>
+              model.toLowerCase().includes(modelSearch.toLowerCase()),
+            )}
+            keyExtractor={(model) => model}
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets
+            contentContainerStyle={{ paddingBottom: 24 }}
+            renderItem={({ item: model }) => (
+              <Pressable
+                accessibilityRole="radio"
+                accessibilityLabel={model}
+                accessibilityState={{ checked: draft?.model === model }}
+                onPress={() => {
+                  setDraft((current) =>
+                    current ? { ...current, model } : current,
+                  );
+                  setModelsOpen(false);
+                }}
+                style={[
+                  s.between,
+                  {
+                    minHeight: 56,
+                    gap: 12,
+                    paddingVertical: 14,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.line,
+                  },
+                ]}
+              >
+                <Text style={[s.text, { flex: 1 }]}>{model}</Text>
+                {draft?.model === model ? (
+                  <Icon name="checkmark-circle" color={theme.green} />
+                ) : null}
+              </Pressable>
+            )}
+            ListEmptyComponent={
+              <Text style={s.sub}>No matching model. Try another search.</Text>
+            }
+          />
+          <Text style={s.sub}>
+            Choose a text model. Listing a model does not verify its chat or
+            memory-tool access.
+          </Text>
+        </View>
+      </Page>
+    );
   return (
     <Page>
       <Header title="AI providers" />
@@ -514,84 +605,6 @@ export default function Settings() {
           </Text>
         ) : null}
       </FormScroll>
-      <Modal
-        visible={modelsOpen && !!draft}
-        presentationStyle="pageSheet"
-        animationType="slide"
-        onRequestClose={() => setModelsOpen(false)}
-      >
-        <View
-          style={{
-            flex: 1,
-            padding: 20,
-            paddingTop: 24,
-            backgroundColor: theme.card,
-            gap: 16,
-          }}
-        >
-          <View style={s.between}>
-            <Text accessibilityRole="header" style={[s.h2, { fontSize: 24 }]}>
-              Choose a model
-            </Text>
-            <IconButton
-              name="close"
-              label="Close models"
-              onPress={() => setModelsOpen(false)}
-            />
-          </View>
-          <Field
-            label="Search available models"
-            value={modelSearch}
-            onChangeText={setModelSearch}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <FlatList
-            data={models.filter((model) =>
-              model.toLowerCase().includes(modelSearch.toLowerCase()),
-            )}
-            keyExtractor={(model) => model}
-            keyboardShouldPersistTaps="handled"
-            automaticallyAdjustKeyboardInsets
-            contentContainerStyle={{ paddingBottom: 24 }}
-            renderItem={({ item: model }) => (
-              <Pressable
-                accessibilityRole="radio"
-                accessibilityLabel={model}
-                accessibilityState={{ checked: draft?.model === model }}
-                onPress={() => {
-                  setDraft((current) =>
-                    current ? { ...current, model } : current,
-                  );
-                  setModelsOpen(false);
-                }}
-                style={[
-                  s.between,
-                  {
-                    minHeight: 56,
-                    gap: 12,
-                    paddingVertical: 14,
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.line,
-                  },
-                ]}
-              >
-                <Text style={[s.text, { flex: 1 }]}>{model}</Text>
-                {draft?.model === model ? (
-                  <Icon name="checkmark-circle" color={theme.green} />
-                ) : null}
-              </Pressable>
-            )}
-            ListEmptyComponent={
-              <Text style={s.sub}>No matching model. Try another search.</Text>
-            }
-          />
-          <Text style={s.sub}>
-            Choose a text model. Listing a model does not verify its chat or
-            memory-tool access.
-          </Text>
-        </View>
-      </Modal>
     </Page>
   );
 }
