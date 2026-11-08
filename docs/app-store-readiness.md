@@ -2,15 +2,15 @@
 
 Prepared 8 November 2026. This is a release worksheet, not an App Store submission or an assertion that the expanded features are implemented. The user authorized model libraries, file/photo/camera attachments, stronger agent behavior, a new tested beta and parallel store preparation. The requested quality goal is 95/100; an independent reviewer must determine the result from evidence.
 
-Parent follow-up: source and draft AppStore version are now1.0.0, confirmed by PATCH200 with PREPARE_FOR_SUBMISSION retained. No build was associated or submitted. The table below records the earlier read-only preparation snapshot. Actual image-SDK audit found an omitted SDWebImage privacy resource in the precompiled simulator; source-built packaging and exact-IPA pre-upload audit are pending verification.
+Current follow-up (9 November 2026 IST): source, signed build 12 and the draft App Store version are 1.0.0; the version remains PREPARE_FOR_SUBMISSION with no store build associated. Apple marks build 12 VALID. Its exact exported-IPA audit verifies the source-built SDWebImage privacy resource, 11 parsed manifests, camera purpose, no microphone purpose and no tracking declarations. This resolves the earlier packaging finding; it does not certify App Privacy answers or App Review approval. Build 12 uses e7ec9e0; the later attachment-sheet layout still requires a new signed candidate after current native tests.
 
-## Account state verified read-only
+## Verified account state
 
 The current App Store Connect record is [Nylo](https://appstoreconnect.apple.com/apps/6832224555), bundle `com.nylohq.nylo`, seller Nihal K A. API results are retained in ignored `artifacts/app-store-preparation/`.
 
 | Item                 | Observed state                                                                                                                                                                                                                       | Remaining work                                                                                         |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| Store version        | 1.0, PREPARE_FOR_SUBMISSION, release after approval                                                                                                                                                                                  | Align final source marketing version and select the exact tested signed build                          |
+| Store version        | 1.0.0, PREPARE_FOR_SUBMISSION, release after approval                                                                                                                                                                                  | Align final source marketing version and select the exact tested signed build                          |
 | Selected store build | Relationship is null                                                                                                                                                                                                                 | Do not select older build 10 as proof of expanded features                                             |
 | English listing      | Name, subtitle, description, keywords, promotion, support/privacy URLs saved                                                                                                                                                         | Apply updated feature copy only after verified implementation                                          |
 | Category             | Productivity                                                                                                                                                                                                                         | Retain unless actual final scope changes                                                               |
@@ -52,7 +52,7 @@ Concrete work for the implementation/release owner:
 
 ## Privacy and age declarations
 
-The existing policy and inventory say text-only/no-photo; they must change before attachment distribution. The draft policy explains local copies and readable backups, provider transfers and retained history, original-file preservation, no upload on pick and optional camera access. Reconcile it with final behavior before deploying.
+The current deployed policy and source inventory cover local attachment copies, readable backups, provider transfers and retained history, original-file preservation, no upload on pick and optional camera access. They explain that files themselves are excluded from recent-chat excerpts, while conversation text quoting or discussing files may carry over. Reconcile these disclosures with the final signed candidate and live provider behavior.
 
 Assess Photos or Videos and Other User Content for images/documents/prompts, optional Customer Support, provider authentication/account linkage and network metadata. No Nylo backend does not establish Data Not Collected; no Nylo login does not establish Not Linked. Third-party retention and linkage must be checked. [App Privacy Details](https://developer.apple.com/app-store/app-privacy-details/)
 
@@ -76,4 +76,4 @@ Account creation and signing are already configured; do not ask for them again. 
 - A responsible monitored reporting/support intake and retention practice if the existing support owner has not established one.
 - Genuine owner design judgment and physical iPhone/live/VoiceOver outcomes. These are product-evidence gates, not legal attestations and not replaceable by a higher reviewer score.
 
-No agreement was accepted, declaration changed, build selected, listing altered, purchase made or review submitted in this preparation task.
+The original preparation was read-only. Subsequent authorized account changes aligned the draft version to 1.0.0, set the free price and configured India/US availability only. No agreement was accepted, age/privacy declaration attested, store build selected, purchase made or review submitted.
