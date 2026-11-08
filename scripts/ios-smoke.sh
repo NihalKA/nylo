@@ -34,7 +34,9 @@ runtime_id="$(python3 - <<'PY'
 import json
 inventory = json.load(open('artifacts/e2e/simulator-inventory.json'))
 runtimes = [x for x in inventory['runtimes'] if x.get('isAvailable') and x['name'].startswith('iOS')]
-runtimes.sort(key=lambda x: tuple(map(int, x['version'].split('.'))), reverse=True)
+# Match the installed runtime used by the successful earlier XCTest session.
+# Newer installed runtimes are a separate compatibility target, not an implicit upgrade.
+runtimes.sort(key=lambda x: (not x['version'].startswith('26.2'), tuple(-int(n) for n in x['version'].split('.'))))
 print(runtimes[0]['identifier'] if runtimes else '')
 PY
 )"
