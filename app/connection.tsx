@@ -61,6 +61,14 @@ const providerPresets = [
     baseUrl: "https://codex.nylohq.com/v1",
   },
   {
+    id: "demonroute",
+    label: "Demon Route",
+    provider: "custom",
+    protocol: "compatible",
+    name: "Demon Route",
+    baseUrl: "https://api.demonroute.com/v1",
+  },
+  {
     id: "custom",
     label: "Custom API",
     provider: "custom",
@@ -72,10 +80,18 @@ const providerPresets = [
 function selectedPreset(connection: Connection) {
   if (connectionProvider(connection) !== "custom")
     return connectionProvider(connection);
-  return connection.protocol === "openai" &&
-    connection.baseUrl.replace(/\/+$/, "") === "https://codex.nylohq.com/v1"
-    ? "nylohq"
-    : "custom";
+  const baseUrl = connection.baseUrl.replace(/\/+$/, "");
+  if (
+    connection.protocol === "openai" &&
+    baseUrl === "https://codex.nylohq.com/v1"
+  )
+    return "nylohq";
+  if (
+    connection.protocol === "compatible" &&
+    baseUrl === "https://api.demonroute.com/v1"
+  )
+    return "demonroute";
+  return "custom";
 }
 
 const draftConnection = (protocol: Protocol = "openai"): Connection => ({
