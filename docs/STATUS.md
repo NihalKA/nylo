@@ -9,14 +9,14 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - Full native build [42497575404](https://github.com/NihalKA/nylo/actions/runs/42497575404) passed for app 6470912.
 - Smoke [42497578413](https://github.com/NihalKA/nylo/actions/runs/42497578413) passed compact, large and maximum text with refreshed current JS. Strict single-tap keyboard dismissal, draft relaunch, saved memory/relaunch and agent composition completed.
 - Fresh-native smoke [42498930753](https://github.com/NihalKA/nylo/actions/runs/42498930753) also passed all three profiles. Maximum-text provenance identifies native/JS/flows 6470912, refresh false, iOS 26.2; keyboard and restored-memory PNGs inspected. This resolves the earlier stale-source and maximum-text fixture blockers.
-- Current populated gallery [42499737557](https://github.com/NihalKA/nylo/actions/runs/42499737557) is running. It checks focused picker selection/provider navigation, starter and role draft safety, full long-history answer visibility, exact clipboard and scoped device-check restart/cleanup. All answers are explicitly synthetic.
-- Signed [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610) uploaded **0.1.0 (10)** from 6470912. Apple VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Internal QA assignment awaits gallery completion. Build 8 remains the older owner-QA design.
+- Current populated gallery [42499737557](https://github.com/NihalKA/nylo/actions/runs/42499737557) passed. It verifies focused picker selection/provider navigation, starter and role draft safety, full long-history answer visibility, exact clipboard and scoped device-check restart/cleanup. All answers are explicitly synthetic.
+- Signed [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610) uploaded **0.1.0 (10)** from 6470912. Apple VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assigned to internal Nylo Device QA with disclosed gaps; POST 204 and subsequent group GET verified. Build 8 is the older design.
 
 ## Product acceptance
 
 Owner rejected the earlier interface and named ChatGPT/Grok as quality references. Current source implements conversation-first hierarchy, focused model selection, quieter controls, grouped Settings, simpler provider setup and protected drafts. Actual native screenshots are retained in ignored artifacts/native-product-captures. See PRODUCT_DESIGN.md.
 
-Latest independent assessment remains **81/100 provisional** for earlier 6350e69, documented in reviews/015-corrected-product-evidence.md. Its blocked maximum-text path now passes, but no new independent score or owner acceptance is claimed. That review permits a traceable internal design-feedback/device-validation beta with disclosed gaps. Design and production acceptance remain on hold.
+Latest independent assessment is **85/100 provisional** for app6470912, documented in reviews/016-current-native-beta.md. Current gallery and fresh-native smoke resolve earlier blocked paths. Maximum-text empty-chat clipping and inefficient memory layout remain; owner acceptance, physical/live and VoiceOver evidence are still missing. Internal feedback beta is recommended and build10 assigned; design/production acceptance remain held.
 
 ## Physical and live checks
 

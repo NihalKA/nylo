@@ -1,6 +1,6 @@
 # iPhone device check
 
-Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. New design candidate: **0.1.0 (10)**, app source `6470912`, uploaded by [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610). Apple processing VALID; build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assignment awaits the final synthetic gallery. Build 8 remains the older owner-QA design until assignment is verified.
+Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. New design candidate: **0.1.0 (10)**, app source `6470912`, uploaded by [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610). Apple processing VALID; build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assigned to internal Nylo Device QA; assignment and English test notes verified. Build 8 remains available as the older design.
 
 This is a design-feedback/device-validation beta. Owner design acceptance and production approval remain open. Build 9 was cancelled and never assigned.
 
@@ -19,7 +19,7 @@ Report phone model, iOS version, build and actual outcomes. Results remain on de
 
 [42497578413](https://github.com/NihalKA/nylo/actions/runs/42497578413) passed all three profiles with refreshed 6470912 JS. [42498930753](https://github.com/NihalKA/nylo/actions/runs/42498930753) passed all three using fresh native/JS/flows 6470912 without refresh: compact iPhone SE third generation, iPhone 17 Pro Max, and maximum accessibility text on iOS 26.2. This includes strict single-tap keyboard dismissal, draft relaunch, approved memory save/relaunch and agent composition. It is real Apple Simulator evidence, not a physical-device, VoiceOver or live-provider pass.
 
-Gallery 42499737557 remains pending. Its responses/recovery are synthetic offline fixtures, not evidence of live generation or recovery.
+Gallery 42499737557 passed picker/provider navigation, draft/role protection, full latest history answer, exact copy and local-check restart/cleanup with personal-draft preservation. Its responses/recovery are synthetic offline fixtures, not evidence of live generation or recovery. Review 016 recommends build10 for internal feedback, 85/100 provisional. Maximum-text empty chat can start partly above the visible region after dismissal; memory rows remain spacious.
 
 ## Connect NyloHQ in build 6
 
