@@ -22,7 +22,7 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}
+  group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}
   cancel-in-progress: true
 jobs:
   smoke:

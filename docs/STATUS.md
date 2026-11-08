@@ -13,6 +13,8 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 
 ## In progress
 
+- Fresh device-enabled session confirms T3 local iOS tools are ready. T3 lists the iPhone 17 Pro simulator (iOS 26.4), but no physical device. Apple inventory detects the wired iPad (iOS 26.6.1) and reports it is unpaired; owner Trust Computer action is pending. No physical pass is claimed.
+- Tab-wrap matrix 42487498090 was cancelled before interaction evidence was produced. Replacement matrix 42487655705 and synthetic gallery 42487941622 are running; native build 42487451946 is also running. Smoke/gallery concurrency groups are now separated to prevent unrelated manual scenarios cancelling one another. Partial cancelled evidence is retained locally under ignored artifacts/review-tabs-cancelled.
 - iOS-oriented tab navigation, universal inbox, simpler Settings and progressive provider setup.
 - Provider discovery, explicit sharing consent, memory change approval, durable credential staging/retirement and failed-checkpoint completion protection.
 - Full native simulator builds through d77f2c0 passed. Matrix 42481190022 produced 22 actual native images and exposed the composer/large-text issues in review 006. Source fixes at 3001389/48064ba/1ba6db3 add the safe-area keyboard offset, explicit dismissal, scrollable/adaptive display heading and memory-input test ID/value/enabled checks. Rerun 42482545085 and independent review are in progress; no full UI smoke pass yet. Refreshed-JS provenance is explicit and never substitutes for final signed-build verification. Public privacy/support site is live at https://nihalka.github.io/nylo/; current source suite has 37 passing tests and CI source checks pass.
