@@ -110,18 +110,6 @@ export default function Settings() {
         >
           Settings
         </Text>
-        <View style={[s.row, { gap: 12, paddingBottom: 4 }]}>
-          <NyloMark size={40} />
-          <View style={{ gap: 2 }}>
-            <Text style={s.h2}>Nylo</Text>
-            <Text style={s.sub}>
-              Version {Constants.expoConfig?.version || "Development"}
-              {Constants.nativeBuildVersion
-                ? ` (${Constants.nativeBuildVersion})`
-                : ""}
-            </Text>
-          </View>
-        </View>
         <View style={{ gap: 9 }}>
           <Text style={[s.sub, { paddingLeft: 4 }]}>Your AI</Text>
           <Group>
@@ -270,6 +258,12 @@ export default function Settings() {
             {notice}
           </Text>
         ) : null}
+        <Text style={[s.sub, { paddingVertical: 8, textAlign: "center" }]}>
+          Nylo · {Constants.expoConfig?.version || "Development"}
+          {Constants.nativeBuildVersion
+            ? ` (${Constants.nativeBuildVersion})`
+            : ""}
+        </Text>
       </FormScroll>
     </Page>
   );
