@@ -1,10 +1,14 @@
 # iOS release runbook
 
-Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed builds 3 and 4 uploaded and Apple processing is VALID; build 4 is assigned to internal device QA. Android publication is deferred.
+Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed build 6 (source 24aaba2) uploaded, Apple processing is VALID, and it is assigned to internal device QA. Later source 9fc4d9a still requires a fresh signed candidate. Android publication is deferred.
+
+App Store Connect was rechecked on 8 November 2026: version 1.0 remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is still 0.1.0; align it before building the final 1.0 candidate. The age rating is unset. No submission or production release has occurred.
 
 ## Native evidence without local compilation
 
 `iOS native validation` on GitHub builds a Release simulator app, installs/launches it and captures the Chats screen. Download the matching commit's artifact and review the actual screenshot. This proves neither signed device installation nor full interaction/accessibility. Add native flow screenshots and physical-device evidence before release.
+
+The connected iPad A16 is now paired, connected and has Developer Mode enabled, but current T3 device discovery exposes only the simulator. Local simulator accessibility navigation succeeded; screenshot capture failed twice after the recommended refresh, so interaction stopped. These tool limitations leave physical testing and VoiceOver unverified. See STATUS.md for the current evidence runs and testing/native-privacy-manifests.md for the preliminary native dependency audit.
 
 For JavaScript-only UI iteration, manually dispatch `iPhone UI smoke` with a successful native `source_run_id` and `refresh_js_bundle=true`. The script refuses changes to package manifests/lockfile, Expo configuration or icon assets, then embeds current JS/Hermes bytecode into the seed simulator runtime. Provenance records both commits. This is simulator UI evidence only; final TestFlight/App Store candidates still require a fresh signed build. Profiles cover compact iPhone, Pro Max and maximum accessibility text. Tests use synthetic local drafts/memory and no live keys. Automation currently prefers the previously working installed iOS 26.2 runtime; newer runtime compatibility is a separate check. Launch screenshots and Maestro diagnostics are retained even if the test driver cannot start.
 
