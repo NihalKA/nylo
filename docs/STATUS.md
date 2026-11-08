@@ -9,7 +9,7 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Latest independent score: 79/100 for product reset e23f00e; see reviews/014-product-reset-review.md. Gallery and compact/large smoke passed, but maximum-text keyboard dismissal failed and the reviewer found draft replacement and unresolved product hierarchy/setup issues. Follow-up corrections pass typecheck and 42 tests, awaiting new native/review evidence. Earlier scores apply to earlier designs. Design-beta QA and production approval remain on hold; build 8 stays the owner-QA build.
+- Latest independent score: 81/100 for corrected product source 6350e69; see reviews/015-corrected-product-evidence.md. Current normal-size inbox/Settings/setup improved and compact/large smoke passed. Stale gallery selectors and a wrong-direction maximum-text Settings scroll blocked remaining runtime evidence; fixture fixes retain full visibility. Preview-formatting fixes pass typecheck and 43 tests. Store/design acceptance remains on hold. A new traceable internal feedback beta is narrowly justified with disclosed gaps; build 8 remains owner QA until a corrected candidate is valid and assigned.
 
 ## In progress
 

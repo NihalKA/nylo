@@ -64,6 +64,16 @@ test("quick starters cannot replace a restored or newly typed draft", () => {
   );
   assert.equal(starterDraft(" ", "Help me write "), " ");
 });
+test("preview cleanup handles emphasis and quotes without erasing arithmetic or identifiers", () => {
+  assert.equal(
+    plainTextPreview("> *A useful note* and ~~old text~~ with _emphasis_."),
+    "A useful note and old text with emphasis.",
+  );
+  assert.equal(
+    plainTextPreview("2 * 3 * 4 and user_name_id"),
+    "2 * 3 * 4 and user_name_id",
+  );
+});
 function stream(events: unknown[], ending = true) {
   const payload = events
     .map(

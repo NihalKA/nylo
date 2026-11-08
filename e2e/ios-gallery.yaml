@@ -1,9 +1,9 @@
 appId: com.nylohq.nylo
 ---
 - launchApp
-- assertVisible: "Open Example: A focused morning"
+- assertVisible: "(?s)Open Example: A focused morning.*"
 - takeScreenshot: gallery-01-inbox
-- tapOn: "Open Example: A focused morning"
+- tapOn: "(?s)Open Example: A focused morning.*"
 - assertVisible: "(?s).*Start with one meaningful task.*"
 - takeScreenshot: gallery-02-response
 - tapOn: "Copy response"
@@ -17,15 +17,15 @@ appId: com.nylohq.nylo
 - tapOn: "Choose model connection.*"
 - tapOn: "Close model picker"
 - tapOn: "Go back"
-- tapOn: "Open Example: A clear project update.*"
+- tapOn: "(?s)Open Example: A clear project update.*"
 - assertVisible: "(?s).*Hi team.*"
 - takeScreenshot: gallery-03-agent-response
 - tapOn: "Go back"
-- tapOn: "Open Example: Recover a connection"
+- tapOn: "(?s)Open Example: Recover a connection.*"
 - assertVisible: "Retry response"
 - takeScreenshot: gallery-04-recovery
 - tapOn: "Go back"
-- tapOn: "Open Example: A longer conversation"
+- tapOn: "(?s)Open Example: A longer conversation.*"
 - extendedWaitUntil:
     visible: "Latest example answer: history is intact."
     timeout: 30000

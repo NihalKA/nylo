@@ -20,6 +20,10 @@ export function plainTextPreview(text: string) {
     .replace(/!?\[([^\]]+)\]\([^)]*\)/g, "$1")
     .replace(/^\s{0,3}#{1,6}\s+/gm, "")
     .replace(/\*\*|__|`/g, "")
+    .replace(/^\s*>\s?/gm, "")
+    .replace(/~~([^~\n]+)~~/g, "$1")
+    .replace(/(^|[\s(])\*(\S(?:[^*\n]*\S)?)\*(?=$|[\s).,!?;:])/g, "$1$2")
+    .replace(/(^|[\s(])_(\S(?:[^_\n]*\S)?)_(?=$|[\s).,!?;:])/g, "$1$2")
     .replace(/\s+/g, " ")
     .trim();
 }
