@@ -2,12 +2,11 @@ import { listModels } from "../src/models";
 import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { Connection, Protocol } from "../src/types";
-import { protocolDefaults, uid } from "../src/domain";
+import { protocolDefaults, uid, sameDestination } from "../src/domain";
 import { useStore } from "../src/store";
-import { exportBackup, pickBackup } from "../src/backup";
 import {
   Badge,
   Button,
@@ -29,14 +28,8 @@ const draftConnection = (protocol: Protocol = "openai"): Connection => ({
   model: "",
 });
 export default function Settings() {
-  const {
-    data,
-    saveConnection,
-    deleteConnection,
-    update,
-    importBackup,
-    runningId,
-  } = useStore();
+  const { data, saveConnection, deleteConnection, update, runningId } =
+    useStore();
   const [draft, setDraft] = useState<Connection | null>(draftConnection());
   const [advanced, setAdvanced] = useState(false);
   const [models, setModels] = useState<string[]>([]);
@@ -45,6 +38,12 @@ export default function Settings() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
+  const draftRevision = useRef(0);
+  useEffect(() => {
+    draftRevision.current++;
+    setModels([]);
+    setModelSearch("");
+  }, [draft?.id, draft?.protocol, draft?.baseUrl]);
   const action = async (fn: () => Promise<unknown>, success?: string) => {
     setBusy(true);
     setError("");
@@ -130,7 +129,7 @@ export default function Settings() {
                   update((d) => ({ ...d, defaultConnectionId: c.id })),
                 )
               }
-              style={[s.row, { gap: 7 }]}
+              style={[s.row, { gap: 7, minHeight: 44 }]}
             >
               <Icon
                 name={
@@ -265,6 +264,18 @@ export default function Settings() {
               loading={busy}
               onPress={() =>
                 void action(async () => {
+                  const revision = draftRevision.current;
+                  const previous = data.connections.find(
+                    (c) => c.id === draft.id,
+                  );
+                  if (
+                    !key.trim() &&
+                    previous &&
+                    !sameDestination(previous, draft)
+                  )
+                    throw new Error(
+                      "Enter the API key again when changing provider or destination.",
+                    );
                   const secret = key.trim() || (await readKey(draft.id));
                   if (!secret) throw new Error("Enter your API key first.");
                   if (
@@ -275,7 +286,8 @@ export default function Settings() {
                     ))
                   )
                     return;
-                  setModels(await listModels(draft, secret, streamingFetch));
+                  const found = await listModels(draft, secret, streamingFetch);
+                  if (revision === draftRevision.current) setModels(found);
                 })
               }
             />
@@ -343,7 +355,9 @@ export default function Settings() {
               }
             />
             <Text style={s.sub}>
-              Saving does not contact the provider or verify model access.
+              Saving does not verify model access. Available models shows a
+              limited first page; enter a model ID manually if missing. Consumer
+              ChatGPT/Claude subscriptions do not include API credits.
             </Text>
           </View>
         ) : null}

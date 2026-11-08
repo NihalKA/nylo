@@ -89,6 +89,7 @@ export default function Chat() {
   );
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [menu, setMenu] = useState(false);
   const [title, setTitle] = useState(conversation?.title || "");
   const [copied, setCopied] = useState<string | null>(null);
@@ -143,16 +144,25 @@ export default function Chat() {
       </Page>
     );
   const submit = async () => {
-    if (!text.trim() || runningId) return;
+    if (!text.trim() || runningId || submitting) return;
     const value = text;
-    setText("");
+    setSubmitting(true);
     setError("");
     nearBottom.current = true;
     try {
-      await send(id, value);
+      await update((d) => ({
+        ...d,
+        conversations: d.conversations.map((c) =>
+          c.id === id ? { ...c, draft: value } : c,
+        ),
+      }));
+      await send(id, value, false, () =>
+        setText((current) => (current === value ? "" : current)),
+      );
     } catch (e) {
-      setText(value);
       setError((e as Error).message);
+    } finally {
+      setSubmitting(false);
     }
   };
   const action = async (fn: () => Promise<unknown>) => {
@@ -378,7 +388,7 @@ export default function Chat() {
                               }
                               style={{
                                 alignSelf: "flex-start",
-                                minHeight: 38,
+                                minHeight: 44,
                                 paddingVertical: 8,
                               }}
                             />
@@ -510,7 +520,7 @@ export default function Chat() {
               <Pressable
                 accessibilityRole="button"
                 accessibilityLabel="Send message"
-                disabled={!text.trim() || !!runningId}
+                disabled={!text.trim() || !!runningId || submitting}
                 onPress={() => void submit()}
                 style={{
                   width: 44,

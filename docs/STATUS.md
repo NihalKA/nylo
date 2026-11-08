@@ -9,17 +9,17 @@ Updated: 8 November 2026. Active target: iOS App Store. Android publication defe
 - GitHub authenticated as NihalKA; planned repository NihalKA/nylo.
 - Original prototype imported without touching its original folder; dependency install complete.
 - Expo Doctor: 20/20 checks passed.
-- Initial independent source review: 56/100 (provisional, see QUALITY.md).
+- Initial independent source review: 56/100 provisional. Second stricter evidence review: 46/100 with visual/native points withheld; findings in docs/reviews/002-source-review.md. Fixes underway.
 
 ## In progress
 
 - iOS-oriented tab navigation, universal inbox, simpler Settings and progressive provider setup.
 - Provider model discovery, explicit data-sharing consent, memory change approval.
-- Native iOS CI, signed release lane, public privacy/support site.
+- Native iOS CI and signed release lane. Public privacy/support site is live at https://nihalka.github.io/nylo/; source checks pass.
 
 ## External dependencies
 
-- App Store Connect sign-in requested in shared browser. Seller/team identity, app record, signing credentials and API key are not yet verified.
+- Apple sign-in verified: active individual membership; seller Nihal K A. Agreement warning cleared after owner acceptance. Dedicated App Manager API key, bundle ID, distribution certificate and App Store provisioning profile created; credentials are outside the repository and in encrypted GitHub environment secrets. App Store record created: https://appstoreconnect.apple.com/apps/6832224555. First signed build is next.
 - Physical iPhone testing and review/test provider credential with explicit spend budget still needed before production.
 - Final privacy data inventory, age rating and legal publisher details require actual account/app information.
 - The reporting service is not deployed. Android reporting requirements are documented but Android publication is deferred.

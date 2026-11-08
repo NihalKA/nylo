@@ -22,7 +22,7 @@ const connection: Connection = {
   id: "provider-1",
   name: "Test",
   protocol: "openai",
-  baseUrl: "https://example.invalid/v1",
+  baseUrl: "https://api.openai.com/v1",
   model: "test-model",
 };
 const message = (
@@ -202,7 +202,7 @@ test("output length limits do not silently truncate answers", async () => {
 test("requests use correct provider protocols; OpenAI storage is disabled", () => {
   const turns = [{ role: "user" as const, text: "Hello" }];
   const openai = buildRequest(connection, turns, "Instructions", false);
-  assert.equal(openai.url, "https://example.invalid/v1/responses");
+  assert.equal(openai.url, "https://api.openai.com/v1/responses");
   assert.equal((openai.body as any).store, false);
   assert.ok(!("tools" in openai.body));
   const claude = buildRequest(
@@ -211,7 +211,7 @@ test("requests use correct provider protocols; OpenAI storage is disabled", () =
     "Instructions",
     true,
   );
-  assert.equal(claude.url, "https://example.invalid/v1/messages");
+  assert.equal(claude.url, "https://api.openai.com/v1/messages");
   assert.equal((claude.body as any).system, "Instructions");
   const compatible = buildRequest(
     { ...connection, protocol: "compatible" },
@@ -219,7 +219,7 @@ test("requests use correct provider protocols; OpenAI storage is disabled", () =
     "Instructions",
     false,
   );
-  assert.equal(compatible.url, "https://example.invalid/v1/chat/completions");
+  assert.equal(compatible.url, "https://api.openai.com/v1/chat/completions");
 });
 test("memory tool output is returned to the model and the final answer is streamed", async () => {
   let requests = 0;
@@ -421,7 +421,7 @@ test("connection validation rejects unencrypted or credential-bearing URLs", () 
   assert.equal(
     validateConnection({
       ...connection,
-      baseUrl: "https://example.invalid/v1/",
+      baseUrl: "https://api.openai.com/v1/",
     }).baseUrl,
     connection.baseUrl,
   );

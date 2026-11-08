@@ -71,6 +71,7 @@ export function buildRequest(
         instructions,
         input,
         store: false,
+        max_output_tokens: 4096,
         stream: true,
         ...(useTools
           ? {
@@ -151,6 +152,7 @@ export function buildRequest(
     body: {
       model: connection.model,
       messages,
+      max_tokens: 4096,
       stream: true,
       ...(useTools
         ? { tools: memoryTools.map((t) => ({ type: "function", function: t })) }
@@ -318,6 +320,14 @@ export async function runAgent(options: {
     role: m.role,
     text: m.text,
   }));
+  if (
+    instructions.length +
+      turns.reduce((size, turn) => size + turn.text.length, 0) >
+    80000
+  )
+    throw new Error(
+      "This conversation is too long to send safely. Start a new chat; agent chats keep their saved memories.",
+    );
   // Bound the local tool loop so a malformed model cannot run indefinitely.
   for (let step = 0; step < 5; step++) {
     if (signal.aborted) throw new Error("Response stopped.");
@@ -367,7 +377,8 @@ export async function runAgent(options: {
       let output: string;
       try {
         output = await executeTool(call);
-        const changed = !output.includes('"changed":false');
+        const outcome = JSON.parse(output) as { changed?: boolean };
+        const changed = outcome.changed !== false;
         onAction(
           changed
             ? call.name === "remember_fact"

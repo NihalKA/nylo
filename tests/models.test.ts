@@ -72,3 +72,46 @@ test("model discovery rejects malformed responses without inventing a model", as
     /model list/,
   );
 });
+test("built-in provider branding cannot use a custom credential destination", async () => {
+  await assert.rejects(
+    listModels(
+      { ...connection, protocol: "openai" },
+      "fixture-key",
+      async () => {
+        assert.fail("must not send");
+      },
+    ),
+    /Custom provider/,
+  );
+  await assert.rejects(
+    listModels(
+      { ...connection, protocol: "anthropic" },
+      "fixture-key",
+      async () => {
+        assert.fail("must not send");
+      },
+    ),
+    /Custom provider/,
+  );
+});
+test("credential destination comparison tolerates trailing slash only", async () => {
+  const { sameDestination } = await import("../src/domain");
+  assert.equal(
+    sameDestination(connection, {
+      ...connection,
+      baseUrl: connection.baseUrl + "/",
+    }),
+    true,
+  );
+  assert.equal(
+    sameDestination(connection, {
+      ...connection,
+      baseUrl: "https://other.invalid/v1",
+    }),
+    false,
+  );
+  assert.equal(
+    sameDestination(connection, { ...connection, protocol: "openai" }),
+    false,
+  );
+});

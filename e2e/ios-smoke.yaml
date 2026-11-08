@@ -1,0 +1,31 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- assertVisible: "Your next idea starts here"
+- takeScreenshot: ${OUTPUT_DIR}/01-chats-empty
+- tapOn: "Agents"
+- assertVisible: "A little more familiar"
+- takeScreenshot: ${OUTPUT_DIR}/02-agents-empty
+- tapOn: "Settings"
+- assertVisible: "Connect your AI"
+- takeScreenshot: ${OUTPUT_DIR}/03-settings
+- tapOn: "Connect your AI"
+- assertVisible: "Choose your AI"
+- takeScreenshot: ${OUTPUT_DIR}/04-provider-setup
+- tapOn: "Go back"
+- tapOn: "Chats"
+- tapOn: "New chat"
+- assertVisible: "Message"
+- tapOn: "Message"
+- inputText: "A draft that should survive reopening"
+- hideKeyboard
+- takeScreenshot: ${OUTPUT_DIR}/05-chat-draft
+- tapOn: "Go back"
+- tapOn: "Open New conversation"
+- assertVisible: "A draft that should survive reopening"
+- stopApp
+- launchApp
+- tapOn: "Open New conversation"
+- assertVisible: "A draft that should survive reopening"
+- takeScreenshot: ${OUTPUT_DIR}/06-restored-draft

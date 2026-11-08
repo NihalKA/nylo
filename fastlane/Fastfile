@@ -39,6 +39,15 @@ platform :ios do
       parsed = Plist.parse_xml(profile_data)
       UI.user_error!("Profile team mismatch") unless parsed["TeamIdentifier"].include?(team)
       UI.user_error!("Profile app mismatch") unless parsed.dig("Entitlements", "application-identifier") == "#{team}.com.nylohq.nylo"
+      UI.user_error!("Profile has expired") unless parsed["ExpirationDate"] && parsed["ExpirationDate"] > Time.now
+      UI.user_error!("Development/ad-hoc profile cannot be used for App Store") if parsed.dig("Entitlements", "get-task-allow") || parsed["ProvisionedDevices"] || parsed["ProvisionsAllDevices"]
+      require "openssl"
+      require "digest"
+      p12 = OpenSSL::PKCS12.new(File.binread(certificate), required("IOS_CERT_PASSWORD"))
+      UI.user_error!("Distribution certificate is expired") unless p12.certificate && p12.key && p12.certificate.not_after > Time.now
+      fingerprint = Digest::SHA256.hexdigest(p12.certificate.to_der)
+      certs = parsed.fetch("DeveloperCertificates").map { |item| item.respond_to?(:string) ? item.string : item }
+      UI.user_error!("Certificate is not included in this profile") unless certs.any? { |blob| Digest::SHA256.hexdigest(blob) == fingerprint }
       installed = File.join(profile_dir, "#{parsed.fetch('UUID')}.mobileprovision")
       keychain_name = "nylo-ci-#{build_number}.keychain-db"
       keychain_password = required("CI_KEYCHAIN_PASSWORD")
@@ -50,7 +59,19 @@ platform :ios do
         sh("cd .. && node scripts/set-ios-build.mjs #{build_number}")
         sh("cd .. && npx expo prebuild --platform ios --no-install")
         sh("cd ../ios && pod install")
-        build_app(workspace: "ios/Nylo.xcworkspace", scheme: "Nylo", clean: true, export_method: "app-store-connect", output_directory: "artifacts/release", output_name: "Nylo.ipa", export_options: { signingStyle: "manual", teamID: team, provisioningProfiles: { "com.nylohq.nylo" => parsed.fetch("Name") } }, xcargs: "CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM=#{team} PROVISIONING_PROFILE_SPECIFIER='#{parsed.fetch('Name')}'")
+        require "xcodeproj"
+        project_path = File.expand_path("../ios/Nylo.xcodeproj", __dir__)
+        project = Xcodeproj::Project.open(project_path)
+        app_target = project.targets.find { |target| target.name == "Nylo" }
+        UI.user_error!("Nylo application target is missing") unless app_target
+        app_target.build_configurations.each do |configuration|
+          configuration.build_settings["CODE_SIGN_STYLE"] = "Manual"
+          configuration.build_settings["DEVELOPMENT_TEAM"] = team
+          configuration.build_settings["CODE_SIGN_IDENTITY"] = "Apple Distribution"
+          configuration.build_settings["PROVISIONING_PROFILE_SPECIFIER"] = parsed.fetch("Name")
+        end
+        project.save
+        build_app(workspace: "ios/Nylo.xcworkspace", scheme: "Nylo", clean: true, export_method: "app-store-connect", output_directory: "artifacts/release", output_name: "Nylo.ipa", export_options: { signingStyle: "manual", teamID: team, provisioningProfiles: { "com.nylohq.nylo" => parsed.fetch("Name") } })
         upload_to_testflight(api_key: key, ipa: "artifacts/release/Nylo.ipa", skip_waiting_for_build_processing: true, distribute_external: false)
       ensure
         FileUtils.rm_f(installed)

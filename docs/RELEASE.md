@@ -1,6 +1,6 @@
 # iOS release runbook
 
-Target: iPhone, bundle ID `com.nylohq.nylo` (must be registered/confirmed in the actual Apple team). The user has an Apple Developer account; team access/signing are pending verification. Android publication is deferred.
+Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. The user has an Apple Developer account; team, bundle identifier, app record and signing credentials have been configured; actual archive/upload verification is pending. Android publication is deferred.
 
 ## Native evidence without local compilation
 

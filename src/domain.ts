@@ -35,12 +35,25 @@ export function validateConnection(connection: Connection) {
     throw new Error(
       "The base URL must not contain credentials, query parameters, or a fragment.",
     );
+  if (
+    connection.protocol !== "compatible" &&
+    url.toString().replace(/\/+$/, "") !==
+      protocolDefaults[connection.protocol].baseUrl
+  )
+    throw new Error("Use Custom provider for a different API destination.");
   return {
     ...connection,
     name: connection.name.trim(),
     model: connection.model.trim(),
     baseUrl: url.toString().replace(/\/+$/, ""),
   };
+}
+
+export function sameDestination(a: Connection, b: Connection) {
+  return (
+    a.protocol === b.protocol &&
+    a.baseUrl.replace(/\/+$/, "") === b.baseUrl.replace(/\/+$/, "")
+  );
 }
 
 export function createConversation(

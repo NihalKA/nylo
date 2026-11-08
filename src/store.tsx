@@ -1,3 +1,4 @@
+import { createDurableUpdater } from "./persistence";
 import { askPermission } from "./consent";
 import React, {
   createContext,
@@ -7,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import { AppState } from "react-native";
-import { Agent, AppData, Connection, emptyData } from "./types";
+import { Agent, AppData, Connection, Message, emptyData } from "./types";
 import {
   contextMessages,
   conversationTitle,
@@ -42,6 +43,7 @@ type Store = {
     conversationId: string,
     text: string,
     retry?: boolean,
+    onAccepted?: () => void,
   ) => Promise<void>;
   stop: () => void;
   importBackup: (value: unknown) => Promise<void>;
@@ -62,16 +64,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const active = useRef<{ controller: AbortController; id: string } | null>(
     null,
   );
-  const writes = useRef<Promise<void>>(Promise.resolve());
+  const durableUpdate = useRef<ReturnType<
+    typeof createDurableUpdater<AppData>
+  > | null>(null);
+  if (!durableUpdate.current)
+    durableUpdate.current = createDurableUpdater<AppData>({
+      read: () => current.current,
+      write: writeData,
+      commit: (next) => {
+        current.current = next;
+        setData(next);
+      },
+    });
   const consentedDestinations = useRef(new Set<string>());
   const update = async (change: (d: AppData) => AppData) => {
-    const next = change(current.current);
-    current.current = next;
-    setData(next);
-    const operation = writes.current
-      .catch(() => {})
-      .then(() => writeData(next));
-    writes.current = operation;
+    const operation = durableUpdate.current!(change);
     try {
       await operation;
       setStorageError("");
@@ -190,7 +197,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           : d.defaultConnectionId,
     }));
   };
-  const send = async (conversationId: string, input: string, retry = false) => {
+  const send = async (
+    conversationId: string,
+    input: string,
+    retry = false,
+    onAccepted?: () => void,
+  ) => {
     if (active.current)
       throw new Error(
         "Another response is running. Stop it before sending a new message.",
@@ -249,7 +261,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     let pending = "";
     let lastFlush = Date.now();
     let stateError: unknown;
-    const patch = async (delta: Record<string, unknown>) =>
+    let accepted = false;
+    const patch = async (
+      delta:
+        Record<string, unknown> | ((m: Message) => Record<string, unknown>),
+    ) =>
       update((d) => ({
         ...d,
         conversations: d.conversations.map((c) =>
@@ -258,7 +274,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
                 ...c,
                 updatedAt: Date.now(),
                 messages: c.messages.map((m) =>
-                  m.id === assistantId ? { ...m, ...delta } : m,
+                  m.id === assistantId
+                    ? {
+                        ...m,
+                        ...(typeof delta === "function" ? delta(m) : delta),
+                      }
+                    : m,
                 ),
               }
             : c,
@@ -269,11 +290,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       const part = pending;
       pending = "";
       lastFlush = Date.now();
-      const saved =
-        current.current.conversations
-          .find((c) => c.id === conversationId)
-          ?.messages.find((m) => m.id === assistantId)?.text || "";
-      void patch({ text: saved + part }).catch((e) => {
+      void patch((m) => ({ text: m.text + part })).catch((e) => {
         stateError = e;
         controller.abort();
       });
@@ -288,6 +305,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             ? {
                 ...c,
                 connectionId: connection.id,
+                draft: !retry && c.draft === input ? "" : c.draft,
                 title: c.messages.length ? c.title : conversationTitle(input),
                 updatedAt: Date.now(),
                 messages: [
@@ -305,6 +323,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             : c,
         ),
       }));
+      accepted = true;
+      onAccepted?.();
       const agent = current.current.agents.find(
         (a) => a.id === conversation.agentId,
       );
@@ -335,10 +355,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           const args = JSON.parse(call.arguments);
           if (call.name !== "remember_fact" && call.name !== "forget_fact")
             throw new Error("Unsupported memory action.");
+          const currentAgent = current.current.agents.find(
+            (a) => a.id === agent.id,
+          );
           const change =
             call.name === "remember_fact"
               ? args.text
-              : agent.memories.find((m) => m.id === args.id)?.text;
+              : currentAgent?.memories.find((m) => m.id === args.id)?.text;
           if (
             typeof change !== "string" ||
             !change.trim() ||
@@ -385,6 +408,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
                 return { ...a, memories: [...a.memories, memory] };
               }
               if (call.name === "forget_fact" && typeof args.id === "string") {
+                if (a.memories.find((m) => m.id === args.id)?.text !== change)
+                  throw new Error(
+                    "This memory changed. Review it before trying again.",
+                  );
                 output = JSON.stringify({ forgotten: true });
                 return {
                   ...a,
@@ -401,6 +428,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       if (stateError) throw stateError;
       await patch({ status: "complete" });
     } catch (error) {
+      if (!accepted) throw error;
       flush();
       await patch({
         status: controller.signal.aborted ? "interrupted" : "error",

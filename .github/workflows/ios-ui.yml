@@ -1,0 +1,37 @@
+name: iPhone UI smoke
+on:
+  workflow_run:
+    workflows: ['iOS native validation']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      source_run_id:
+        description: Successful native validation run containing the simulator app
+        required: true
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}
+  cancel-in-progress: true
+jobs:
+  smoke:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_repository.full_name == github.repository)
+    runs-on: macos-26
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+      - name: Install app, exercise first-use flows, capture evidence
+        run: bash scripts/ios-smoke.sh
+        env:
+          SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
+          GH_TOKEN: ${{ github.token }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: iphone-ui-${{ github.run_id }}
+          path: artifacts/e2e
+          retention-days: 7

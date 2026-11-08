@@ -29,6 +29,10 @@ Independent source-only score: **56/100**, provisional. Task clarity 14/25; navi
 
 Findings: hero before chats; agent conversations absent from inbox; provider setup exposes technical details and cannot distinguish working access; sub-44-point targets; memory consent relies on model instructions. Fixes are underway. Source import was reviewed before its first implementation changes; baseline is not a score for the current revised UI.
 
+## Evidence accounting correction
+
+The second source review at commit 337d99e withholds all 30 visual/native points until rendered/runtime evidence exists. Its 46/100 is not directly comparable with the looser baseline. See reviews/002-source-review.md. Use this stricter convention from now on.
+
 ## Design references and decisions
 
 Research checked 8 November 2026:

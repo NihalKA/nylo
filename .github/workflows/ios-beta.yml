@@ -42,3 +42,12 @@ jobs:
           IOS_CERT_PASSWORD: ${{ secrets.IOS_CERT_PASSWORD }}
           IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
           CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: ios-beta-diagnostics-${{ github.run_id }}
+          path: |
+            ~/Library/Logs/gym/*.log
+            Gemfile.lock
+          if-no-files-found: ignore
+          retention-days: 7
