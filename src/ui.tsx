@@ -25,7 +25,7 @@ export const theme = {
   ink: "#172421",
   sub: "#626C68",
   line: "#E8ECEA",
-  green: "#087F68",
+  green: "#087B65",
   pale: "#EAF5F0",
   error: "#9C3E38",
 };
