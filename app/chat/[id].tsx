@@ -867,12 +867,7 @@ function Chat() {
               keyboardShouldPersistTaps="handled"
             >
               <Text accessibilityRole="header" style={s.h2}>
-                Add to your message
-              </Text>
-              <Text style={s.sub}>
-                PDF, text or photos · 2 MB each, 4 MB total. Files stay on this
-                device until you send. Choose a model that supports your
-                attachment.
+                Attachments
               </Text>
               <Button
                 title="Photo library"
@@ -892,12 +887,16 @@ function Chat() {
                 icon="document-outline"
                 onPress={() => queueAttachment("files")}
               />
-              <Button
-                title="Cancel attachments"
-                secondary
-                onPress={() => dispatchAttachment({ type: "cancel" })}
-              />
+              <Text style={s.sub}>
+                Up to 4 files · 2 MB each, 4 MB total. Stored here until sent to
+                your provider.
+              </Text>
             </ScrollView>
+            <Button
+              title="Cancel attachments"
+              secondary
+              onPress={() => dispatchAttachment({ type: "cancel" })}
+            />
           </View>
         </View>
       </Modal>
