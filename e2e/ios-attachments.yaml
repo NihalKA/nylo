@@ -4,8 +4,13 @@ appId: com.nylohq.nylo
 - tapOn: "(?s)Open Example: A focused morning.*"
 - tapOn: "Add attachment"
 - tapOn: "Photo library"
-# Native presenters arrive after the React source sheet dismisses. Wait for them
-# before evidence or input; the earlier captures showed the underlying chat.
+# Cancel exists on the loading screen and moves when Photos finishes loading.
+# Wait for the actual grid before taking evidence or making a single tap.
+- extendedWaitUntil:
+    visible:
+      id: "PXGGridLayout-Info"
+      index: 0
+    timeout: 60000
 - assertVisible: "Cancel"
 - waitForAnimationToEnd:
     timeout: 10000
@@ -14,6 +19,41 @@ appId: com.nylohq.nylo
     text: "Cancel"
     waitToSettleTimeoutMs: 1000
     retryTapIfNoChange: false
+- assertVisible:
+    id: "chat-message"
+# Disposable CI Photos is seeded with our green PNG after the stock photos.
+# The inspected failure PNG/AX identifies it as the first/newest grid item.
+- tapOn: "Add attachment"
+- tapOn: "Photo library"
+- extendedWaitUntil:
+    visible:
+      id: "PXGGridLayout-Info"
+      index: 0
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 10000
+- tapOn:
+    id: "PXGGridLayout-Info"
+    index: 0
+    retryTapIfNoChange: false
+- assertVisible:
+    text: "Done"
+    enabled: true
+- tapOn:
+    text: "Done"
+    retryTapIfNoChange: false
+- assertVisible: "Preview Photo.jpg"
+- assertVisible: "Remove Photo.jpg"
+- takeScreenshot: attachments-01b-selected-owned-photo
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: A focused morning.*"
+- assertVisible: "Preview Photo.jpg"
+- assertVisible: "Remove Photo.jpg"
+- takeScreenshot: attachments-01c-restored-owned-photo
+- tapOn: "Remove Photo.jpg"
+- assertNotVisible: "Preview Photo.jpg"
+- assertNotVisible: "Remove Photo.jpg"
 - assertVisible:
     id: "chat-message"
 - tapOn: "Add attachment"

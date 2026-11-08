@@ -28,7 +28,10 @@ Manual JS refresh retains its strict package/config/asset guard and also compare
 - Gallery42505184582: the report PNG showed a first-run Apple Intelligence banner over the header back control; the recorded tap at42,90 was followed by Settings’ Siri screen. The fixture now uses a native edge-back below the banner and asserts the expected chat route before final Copy. Exact complete clipboard equality remains required.
 - Picker42506116267: source-action screenshots preceded presentation. The first Cancel returned from Photos, but Files’ Cancel was tapped while its AX frame was only1point wide atx340; the settled failure AX placed it atx380–416 and the Files picker remained open. The fixture waits for presenter anchors and animation settling before capture and one cancellation tap. Returning to the chat remains an explicit assertion.
 
-The original picker captures showed the underlying chat, so they do not ground a photo-grid selection target. Obtain a settled picker capture/AX before adding selection; do not guess coordinates. Actual camera capture and physical-device permission behavior remain separate gates.
+- Matrix42510539374: large passed. Maximum text passed the strict one-tap keyboard disappearance check, then failed because Photo library was below the attachment sheet’s lengthy introduction. The fixture now scrolls to the action at unchanged full visibility; the implementation owner separately shortened/reordered the sheet. Compact reached the agent editor but searched downwards for an initially near-top role template during route settling. The fixture now confirms the editor route, waits for settling, and searches upwards.
+- Picker42510712682: Cancel and animation settling still captured Photos’ Loading screen. Cancel was tapped at42,104; the settled AX placed it at42,148, so the same visible label was insufficient readiness evidence. The failure PNG shows the owned green image as the first/newest grid item and AX identifies `PXGGridLayout-Info` index0. The fixture now waits for that real grid, retains one cancellation tap, then reopens to select the owned image, checks its preview/removal controls, cold-restarts to verify restoration, and removes it. This extension awaits execution; it is not yet a picker pass.
+
+Actual camera capture and physical-device permission behavior remain separate gates. The system picker test uses only disposable CI simulator photos; no provider send is performed.
 
 ## Evidence rules
 
@@ -47,4 +50,6 @@ Bash syntax and YAML parsing pass. Read-only comparisons of existing repository 
 - 6830557→e7ec9e0 (10 relevant app/native inputs changed): stale automatic UI skipped.
 - 6470912→c16471e (22 relevant app inputs changed): stale automatic UI skipped.
 
-These checks validate the source relevance predicate, not the full GitHub workflow or native UI. The committed gate and new native candidate still need real CI execution before distribution claims.
+These checks validate the source relevance predicate, not the full GitHub workflow or native UI. Actual automatic42510539374 gate execution recorded `automatic_compatible` for nativee7ec9e0 and fixtureb12388d (`await_separate_ui_results`). Its large UI job passed; compact and maximum text failed as diagnosed above. This validates gate execution without turning its success into a matrix pass.
+
+Gallery42510709936 completed successfully against native/JS e7ec9e0, fixtures b12388d, refresh false. Its screenshots and command/clipboard/storage evidence are retained separately from matrix and picker results. The subsequent app source32c94fb still requires source-current validation; historical success must not be relabeled as its rendering proof.

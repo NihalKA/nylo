@@ -46,6 +46,10 @@ appId: com.nylohq.nylo
 - assertNotVisible: "Dismiss keyboard"
 - takeScreenshot: 05-chat-draft
 - tapOn: "Add attachment"
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: "Photo library"
+    direction: DOWN
 - assertVisible: "Photo library"
 - scrollUntilVisible:
     element: "Cancel attachments"
@@ -67,9 +71,11 @@ appId: com.nylohq.nylo
     text: "Agents, tab, 2 of 3"
     retryTapIfNoChange: true
 - tapOn: "Create agent"
+- assertVisible: "Create an agent"
+- waitForAnimationToEnd
 - scrollUntilVisible:
     element: "Writing partner"
-    direction: DOWN
+    direction: UP
 - tapOn: "Writing partner"
 - runFlow:
     when:
