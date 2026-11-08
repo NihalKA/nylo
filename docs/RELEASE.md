@@ -1,9 +1,8 @@
-# iOS release runbook
+# iOS release
 
-Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Signing is configured. Signed **0.1.0 (10)** (app source 6470912) uploaded through run 42497581610 and Apple processing is VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Gallery 42499737557 passed. Build 10 is assigned to internal Nylo Device QA; assignment and test notes verified. Build 8 remains available as the older design. Independent review 016 recommends the feedback beta at 85/100, with accessibility/owner/physical/live gates open. No production approval. Android publication is deferred.
+Current expanded candidate: **1.0.0(13)**, app source4d3687d, signed run42532356732, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Exact exported-IPA privacy audit and fresh native/matrix/photo/gallery tests pass; see STATUS.md for provenance and gaps. Internal QA assignment is pending a fresh independent review; build10 is the older assigned design. No store build association, submission or production approval.
 
-Full native run 42497575404 and all three profiles of fresh-native smoke 42498930753 passed at 6470912 with no JS refresh. Earlier refreshed smoke 42497578413 also passed all profiles. Exact source/native provenance and synthetic versus live evidence remain separate.
-App Store Connect was rechecked on 8 November 2026: the draft version was aligned to1.0.0 (PATCH200) and remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is1.0.0; expanded signed/native validation is pending. This version alignment is not release approval. The age rating is unset. No submission or production release has occurred.
+App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Final screenshots, age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the latest completed83point review of earlierf72. Physical/live/VoiceOver/owner design remain separate gates.
 
 ## Native evidence without local compilation
 

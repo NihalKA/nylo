@@ -1,4 +1,20 @@
-# iPhone device check
+# Expanded iPhone beta check
+
+Prepared candidate **1.0.0(13)**, source4d3687d, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Assignment is pending; do not claim it is available until the QA-group relationship is verified. The historical build10 guide below is superseded only after13is assigned.
+
+For the expanded feedback beta, check these on your iPhone:
+
+1. **Models:** Settings → Connect your AI. Select multiple returned models or all shown models; save. Switch the active model in a chat without losing its draft. One model runs per send. Catalog presence does not guarantee image/PDF/tool support.
+2. **Agent continuity:** create an agent and add an approved harmless memory. Start another conversation with that same agent and ask for it. Optionally enable/review recent-chat context, discuss a harmless fact, then ask in another same-agent chat. Confirm other agents do not share it. Deleting a memory does not erase old chat mentions.
+3. **Attachments:** use an owned photo, small PDF/text file and camera capture; cancel a picker and deny camera access once. Confirm you can keep writing, remove an attachment, close/reopen with the draft preserved, and choose whether to send to the named provider. Picking alone uploads nothing. Actual sending can incur provider charges.
+4. **Live check:** Settings → Live device check. Prepare, run live reply, approve the synthetic fact, run recall, then fully close/reopen and check restoration. Each live action explicitly confirms one request capped128output tokens. Ordinary chat calls use the normal output limit. Clean up test data and confirm personal drafts remain.
+5. **Usability:** judge design against the requested ChatGPT/Grok direction. Try larger text and VoiceOver for Message, Send, model picker, Memory, attachments and back navigation. Stop/background one ordinary response only if you choose to incur that provider request, then verify an honest interrupted state and explicit retry.
+
+Report phone/iOS/build and actual outcomes. Never include keys, private documents/photos or full personal conversations. Results remain on device until you share them. Simulator passes do not replace these checks; App Store production remains held.
+
+---
+
+## Historical build10 device guide
 
 Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. New design candidate: **0.1.0 (10)**, app source `6470912`, uploaded by [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610). Apple processing VALID; build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assigned to internal Nylo Device QA; assignment and English test notes verified. Build 8 remains available as the older design.
 

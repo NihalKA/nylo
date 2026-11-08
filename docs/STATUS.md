@@ -1,54 +1,34 @@
 # Delivery status
 
-Updated: 8 November 2026. Active target: iOS App Store. Android publication deferred until iOS is published and validated; do not purchase a Google developer account yet.
+Updated9November2026IST. Target: iOS first; Android publication deferred. Owner requests agent continuity, model libraries, file/photo/camera attachments, a tested beta and95/100 independent quality. The score must follow evidence; it is not achieved yet.
 
-## Latest smoke and review follow-up
+## Current expanded candidate
 
-A user-requested smoke subagent investigated actual PNG/AX/log failures: compact/large passed; maximumtext Memory layout requires a product fix, gallery back tap hit an OS notification, and Filescancel hit transitional1point geometry. Root moves Memory editing first and clarifies quoted-file context privacy; worker fixes readiness/postconditions, model-query/report-optin/capture checks and early provenance. Strict keyboard/fullvisibility/finalcopy assertions remain. Native reruns are required; see reviews/018-expanded-native-evidence.md (80/100 provisional forcb5, not a new approval).
+App source `4d3687d3275d8b74bbe9d13be8e17ffb2c8b27f3`. Later commits change fixtures/reports only. Typecheck,75behavioral tests, formatting and credential audit122tracked files pass.
 
-Compiled image-SDK inspection also found SDWebImage's required privacy resource missing in the precompiled runtime. A source-build/pinned-vendor packaging path and pre-upload compiled-IPA audit are being added; fresh native verification is mandatory. Existing old seeds cannot validate the changed native configuration. See testing/native-privacy-manifests.md.
+- Native [42532333345](https://github.com/NihalKA/nylo/actions/runs/42532333345): passed. Compiled privacy audit verifies SDWebImage resource, camera purpose, no microphone/tracking, version1.0.0, iPhone family1. Temporary image tracing removed. Source-built SDK guards retain foreground image tasks and reject unavailable camera hardware before UIKit assignment.
+- Matrix [42533495588](https://github.com/NihalKA/nylo/actions/runs/42533495588): compact, large and maximum text pass, including draft/memory cold restoration and multiline composition.
+- Attachments [42533835643](https://github.com/NihalKA/nylo/actions/runs/42533835643):55completed/1optional skip. Actual owned-photo preview, nonempty draft/image cold restoration, removal, Photos/Files cancellation and handled simulator-camera unavailability pass. No earlier camera SIGABRT remains in retained logs. Additional direct post-camera interaction assertions are running in42536332660; this is a stronger recovery check, not a source change.
+- Gallery [42535017786](https://github.com/NihalKA/nylo/actions/runs/42535017786):181/181, exact293-byte clipboard equality and native SQLite/blob checks pass. Responses/recovery examples are explicitly synthetic, not live generation/recovery evidence.
+- These UI runs use native/JS/flows4d3687d with refresh false, iOS26.2. Actual65flow PNGs, AX, commands, hashes and provenance were inspected. Evidence: ignored `artifacts/smoke-reliability/clean-camera`.
+- Signed [42532356732](https://github.com/NihalKA/nylo/actions/runs/42532356732):1.0.0(13), source4d3687d. Actual exported-IPA privacy audit passes11manifests/requiredSDK/camera/noMic/nonexemptfalse/family1. Apple VALID, ID `e6568582-6b46-4061-ab81-df09b8a6fca4`. **Not yet assigned**; fresh independent review pending. Build10 remains the previous-design internal QA build.
 
-The app and draft AppStore version are now aligned to1.0.0; Apple PATCH200 verified PREPARE_FOR_SUBMISSION. No build association, submission or production release was performed. Signed11 was cancelled; new beta remains unassigned pending current validation. Build10 is still the older available QA version.
+## Scope and acceptance
 
-## Active expanded beta work
+See EXPANDED_BETA.md and STATE_MACHINES.md for model libraries (one active model per send), same-agent optional recent context plus approved memories, bounded attachments, transactional attachment blobs, prospective send validation, typed picker/catalog transitions and27inventoried state machines.
 
-Owner now requests95/100 quality, multi/all-returned model selection, file/photo/camera attachments, same-agent cross-chat context like GrokBot/dots, a new beta and parallel App Store preparation. The state-machine audit inventories27 app-owned machines; see STATE_MACHINES.md and EXPANDED_BETA.md. Build10 below is the previous feature set and remains available while expanded validation runs.
+Latest completed independent review:83/100 provisional for f72b3b1, reviews/019-expanded-f72-native-gate.md. Its high photo blocker has new positive native evidence above, but that review does not approve the new candidate. Fresh review must assess it. Owner design acceptance, physical iPhone, VoiceOver, live provider/image/PDF/recall/interruption and real camera/denial/EXIF checks remain unconfirmed. A feedback beta does not establish production acceptance.
 
-Initial expanded source c16471e passed source CI42503476243, ExpoDoctor20/20 and fresh native build42503476277; updated privacy/support site42503476218 deployed. Source audit017 found five medium issues (no confirmed high/critical source defect), addressed in the following candidate alongside explicit picker/catalog/send contracts and transactional attachment storage. Typecheck and67 tests now pass. Fresh-current smoke/gallery, independent rendered review, signed expanded candidate and assignment remain pending. No95score or new native-feature pass is claimed.
+## Physical and live evidence
 
-A private card requested a new maximum8requests/128tokens synthetic test allowance; it expired without a key. No expanded live requests used. The older smoke-key authorization is not extended. Separate App Review credentials and truthful final console declarations remain required; see app-store-readiness.md.
+T3 Beta0.1.7 exposes simulators only. Wired iPad trust/pairing/developer mode are complete; do not request Trust again. Local simulator screenshot capture failed twice after refresh; interaction stopped. CI uses actual Apple Simulator runtimes, not a browser mockup. No physical/VoiceOver pass is inferred.
 
-## Current evidence
+Settings → Live device check provides explicit per-action consent, one request capped128output tokens, approved test-memory recall, restart verification and scoped cleanup. Results remain on device; no owner outcomes received. Ordinary chats retain their normal output limit and can incur provider charges.
 
-- App source: `64709129f17968031bd000b9898162d87f4a6d92`. Subsequent commits through `0e55469` change only gallery fixtures; app/native configuration/assets are identical.
-- Source checks: 43 behavioral tests, typecheck, formatting and credential audit passed. No new live provider requests were used.
-- Full native build [42497575404](https://github.com/NihalKA/nylo/actions/runs/42497575404) passed for app 6470912.
-- Smoke [42497578413](https://github.com/NihalKA/nylo/actions/runs/42497578413) passed compact, large and maximum text with refreshed current JS. Strict single-tap keyboard dismissal, draft relaunch, saved memory/relaunch and agent composition completed.
-- Fresh-native smoke [42498930753](https://github.com/NihalKA/nylo/actions/runs/42498930753) also passed all three profiles. Maximum-text provenance identifies native/JS/flows 6470912, refresh false, iOS 26.2; keyboard and restored-memory PNGs inspected. This resolves the earlier stale-source and maximum-text fixture blockers.
-- Current populated gallery [42499737557](https://github.com/NihalKA/nylo/actions/runs/42499737557) passed. It verifies focused picker selection/provider navigation, starter and role draft safety, full long-history answer visibility, exact clipboard and scoped device-check restart/cleanup. All answers are explicitly synthetic.
-- Signed [42497581610](https://github.com/NihalKA/nylo/actions/runs/42497581610) uploaded **0.1.0 (10)** from 6470912. Apple VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Assigned to internal Nylo Device QA with disclosed gaps; POST 204 and subsequent group GET verified. Build 8 is the older design.
+Four earlier restricted text/tool/recall provider requests were used under their own authorization. **Zero expanded live requests**: later private cards expired/cancelled without a key. Do not reuse or extend the old key scope. App Review requires separate restricted, expiring access and budget.
 
-## Product acceptance
+## App Store preparation
 
-Owner rejected the earlier interface and named ChatGPT/Grok as quality references. Current source implements conversation-first hierarchy, focused model selection, quieter controls, grouped Settings, simpler provider setup and protected drafts. Actual native screenshots are retained in ignored artifacts/native-product-captures. See PRODUCT_DESIGN.md.
+App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Final screenshot upload, truthful age/privacy declarations, monitored support practice and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
 
-Latest independent assessment is **85/100 provisional** for app6470912, documented in reviews/016-current-native-beta.md. Current gallery and fresh-native smoke resolve earlier blocked paths. Maximum-text empty-chat clipping and inefficient memory layout remain; owner acceptance, physical/live and VoiceOver evidence are still missing. Internal feedback beta is recommended and build10 assigned; design/production acceptance remain held.
-
-## Physical and live checks
-
-Settings → Live device check implements explicit per-action consent, one request capped at 128 output tokens, approved test-memory recall, restart verification and scoped cleanup. Results remain on device; no owner results have been received.
-
-The wired iPad A16/iOS 26.6.1 is paired, connected and Developer Mode enabled. Finder trust is complete. T3 Beta 0.1.7 exposes only simulators; physical device_open rejected the iPad. Local simulator navigation succeeded, but screenshot capture failed twice after refresh, so local interaction stopped. No physical-device or VoiceOver pass is inferred. CI uses real Apple iPhone Simulator runtimes, not a browser mockup; it does not establish physical iPhone behavior.
-
-## External dependencies
-
-- Apple sign-in verified: active individual membership; seller Nihal K A. Agreement warning cleared after owner acceptance. Dedicated App Manager API key, bundle ID, distribution certificate and App Store provisioning profile created; credentials are outside the repository and in encrypted GitHub environment secrets. App Store record created: https://appstoreconnect.apple.com/apps/6832224555. Signing issues corrected. Runs 42475045265 (build 3) and 42476376051 (build 4) uploaded successfully; Apple processing VALID. Build 4 (ce00b58) is assigned to internal QA; see testing/iphone-beta.md.
-- Run 42481219738 uploaded build 5 (eb1cf3a); Apple build ID 5b61a61c-e6ac-4b38-a722-140079e9250d, processing VALID. It predates the keyboard correction and remains unassigned to testers. A later tested candidate must replace it for release.
-- Run 42484609771 uploaded build 6 (24aaba2), processing VALID, ID d2198fb8-45f8-463b-88f7-795c2fa2bd3a. Assigned to internal QA with an exact saved-fact recall/keyboard/VoiceOver check requested. New source 2f7b4f0 additionally polishes empty-chat typing and maximum-text form scrolling; matrix 42485786534 is running. Build 6 is a device-validation beta, not release approval.
-- Owner tested build 4 on iPhone 17/iOS 26.6.2 and confirms the approved fact is listed in the agent’s Memory screen. Other behavior appears to work, but agents feel indistinguishable from normal chats and requests about prior discussions receive a transcript-unavailable response. Exact saved-fact recall in a new phone conversation remains unconfirmed. Current source adds a visible memory shortcut and clearer context explanation. A fourth capped NyloHQ request verified synthetic saved-fact recall through the actual adapter/system prompt. A separately authorized App Review credential is still needed before submission.
-- Final privacy data inventory, age rating and legal publisher details require actual account/app information.
-- The reporting service is not deployed. Android reporting requirements are documented but Android publication is deferred.
-
-## Release claims
-
-Signed builds and internal TestFlight delivery are verified. Store submission, production launch, physical-device pass and a passing final UI score remain incomplete. App Store listing, category, support and privacy URLs are saved as drafts; reviewer live access and final disclosures remain incomplete. Independent reviewers must label missing evidence explicitly.
+No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
