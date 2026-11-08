@@ -40,6 +40,7 @@
         }
       ],
       "./plugins/with-image-pods.cjs",
+      "./plugins/with-image-render-priority.cjs",
       "./plugins/with-image-render-trace.cjs"
     ],
     "scheme": "nylo"

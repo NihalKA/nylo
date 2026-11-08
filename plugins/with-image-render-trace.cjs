@@ -44,6 +44,31 @@ const EDITS = {
   ],
   "ImageManipulatorUtils.swift": [
     [
+      "  let maxHeight = loadOptions?.maxHeight.map(Double.init)",
+      '  NSLog("[NyloImage] width option read")\n  let maxHeight = loadOptions?.maxHeight.map(Double.init)\n  NSLog("[NyloImage] height option read")',
+      1,
+    ],
+    [
+      '  if url.scheme == "ph" || url.scheme == "assets-library" {',
+      '  NSLog("[NyloImage] URI branch selection")\n  if url.scheme == "ph" || url.scheme == "assets-library" {\n    NSLog("[NyloImage] Photos loader selected")',
+      1,
+    ],
+    [
+      "  guard FileSystemUtilities.isReadableFile(appContext, url) else {",
+      '  NSLog("[NyloImage] readability check entered")\n  let readable = FileSystemUtilities.isReadableFile(appContext, url)\n  NSLog("[NyloImage] readability check returned")\n  guard readable else {',
+      1,
+    ],
+    [
+      "  guard let asset = retrieveAsset(from: url) else {",
+      '  NSLog("[NyloImage] Photos asset lookup entered")\n  guard let asset = retrieveAsset(from: url) else {',
+      1,
+    ],
+    [
+      "  let assetWidth = Double(asset.pixelWidth)",
+      '  NSLog("[NyloImage] Photos asset lookup returned")\n  let assetWidth = Double(asset.pixelWidth)',
+      1,
+    ],
+    [
       "  let maxWidth = loadOptions?.maxWidth.map(Double.init)",
       '  NSLog("[NyloImage] URI loader entered")\n  let maxWidth = loadOptions?.maxWidth.map(Double.init)',
       1,
