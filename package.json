@@ -55,7 +55,8 @@
         "buildFromSource": [
           "expo-image-manipulator",
           "SDWebImage",
-          "SDWebImageWebPCoder"
+          "SDWebImageWebPCoder",
+          "expo-image-picker"
         ]
       }
     }

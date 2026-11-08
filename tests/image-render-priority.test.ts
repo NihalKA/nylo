@@ -7,7 +7,6 @@ const require = createRequire(import.meta.url);
 const {
   patchImagePriority,
 } = require("../plugins/with-image-render-priority.cjs");
-const { patchImageTrace } = require("../plugins/with-image-render-trace.cjs");
 const file = "ImageManipulatorContext.swift";
 const source = readFileSync(
   join(
@@ -17,15 +16,11 @@ const source = readFileSync(
   ),
   "utf8",
 );
-test("image priority covers loader, transformer and reset; composes with tracing", () => {
+test("image priority covers loader, transformer and reset without changing other SDK code", () => {
   const patched = patchImagePriority(source, "58.0.16");
   assert.equal(patched.split("Task(priority: .userInitiated)").length - 1, 3);
   assert.equal(patched.replaceAll(".userInitiated", ".background"), source);
   assert.equal(patchImagePriority(patched, "58.0.16"), patched);
-  assert.equal(
-    patchImageTrace(patched, "58.0.16", file),
-    patchImagePriority(patchImageTrace(source, "58.0.16", file), "58.0.16"),
-  );
 });
 test("priority patch fails closed on SDK changes or partial/unknown tasks", () => {
   assert.throws(() => patchImagePriority(source, "58.0.17"), /SDK version/);
