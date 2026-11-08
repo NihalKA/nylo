@@ -8,6 +8,16 @@ source_branch="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID" -
 test "$source_branch" = main
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
 unzip -q artifacts/native/Nylo-simulator.zip -d "$RUNNER_TEMP/nylo-app"
+if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
+  git fetch --no-tags origin "$source_sha" --depth=1
+  # Native modules, Expo config and native icon assets must match the seed app.
+  # This path supplies UI iteration evidence, never a signed release candidate.
+  git diff --exit-code "$source_sha" HEAD -- package.json package-lock.json app.json assets
+  npx expo export:embed --platform ios --dev false --bytecode \
+    --entry-file node_modules/expo-router/entry.js \
+    --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
+    --assets-dest "$RUNNER_TEMP/nylo-app/Nylo.app" --max-workers 2
+fi
 profile="${UI_PROFILE:-large}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
 xcrun simctl list -j > artifacts/e2e/simulator-inventory.json
@@ -46,4 +56,5 @@ unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
 export MAESTRO_CLI_NO_ANALYTICS=1
 printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$(git rev-parse HEAD)" > artifacts/e2e/source.txt
 printf 'Profile: %s\nDevice type: %s\nRuntime: %s\n' "$profile" "$device_type" "$runtime_id" >> artifacts/e2e/source.txt
+printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$(git rev-parse HEAD)" >> artifacts/e2e/source.txt
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml e2e/ios-smoke.yaml

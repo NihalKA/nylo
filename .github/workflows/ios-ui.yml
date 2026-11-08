@@ -9,6 +9,10 @@ on:
       source_run_id:
         description: Successful native validation run containing the simulator app
         required: true
+      refresh_js_bundle:
+        description: Embed current JS into a compatible simulator runtime (UI evidence only)
+        type: boolean
+        default: false
 permissions:
   contents: read
   actions: read
@@ -28,11 +32,19 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: main
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        if: inputs.refresh_js_bundle
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+        if: inputs.refresh_js_bundle
       - name: Install app, exercise first-use flows, capture evidence
         run: bash scripts/ios-smoke.sh
         env:
           SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
           UI_PROFILE: ${{ matrix.profile }}
+          REFRESH_JS_BUNDLE: ${{ inputs.refresh_js_bundle && 'true' || 'false' }}
           GH_TOKEN: ${{ github.token }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
