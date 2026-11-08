@@ -125,7 +125,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     readData()
       .then(async (value) => {
         const recovered = recoverInterrupted(value);
-        await writeData(recovered);
+        try {
+          await writeData(recovered);
+        } catch {
+          if (mounted)
+            setStorageError(
+              "Your saved chats are available, but changes cannot be saved. Free some device storage, then reopen Nylo.",
+            );
+        }
         if (mounted) {
           current.current = recovered;
           setData(recovered);
