@@ -2,7 +2,7 @@
   "expo": {
     "name": "Nylo",
     "slug": "nylo-mobile",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -38,7 +38,8 @@
           "cameraPermission": "Nylo uses the camera only when you choose to attach a photo to a conversation.",
           "microphonePermission": false
         }
-      ]
+      ],
+      "./plugins/with-image-pods.cjs"
     ],
     "scheme": "nylo"
   }

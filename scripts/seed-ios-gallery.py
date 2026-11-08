@@ -92,4 +92,4 @@ with sqlite3.connect(db_path) as db:
         raise SystemExit("Refusing to replace a nonempty app database.")
     db.execute("INSERT INTO app_state(id,json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET json=excluded.json", (json.dumps(data),))
 Path(args.expected_copy).write_text(focused_response)
-print("Seeded four explicitly synthetic offline QA conversations; no keys or live provider calls.")
+print(f"Seeded {len(data['conversations'])} explicitly synthetic offline QA conversations; no keys or live provider calls.")

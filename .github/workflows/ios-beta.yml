@@ -49,5 +49,6 @@ jobs:
           path: |
             ~/Library/Logs/gym/*.log
             Gemfile.lock
+            artifacts/native-privacy-audit.log
           if-no-files-found: ignore
           retention-days: 7

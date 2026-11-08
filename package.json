@@ -1,6 +1,6 @@
 {
   "name": "nylo-mobile",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
     "@expo/metro-runtime": "~58.0.17",
@@ -42,11 +42,22 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "check": "npm run typecheck && npm test",
     "export": "expo export --platform all",
-    "format:check": "prettier --check app src tests scripts README.md app.json package.json tsconfig.json",
-    "format": "prettier --write app src tests scripts README.md app.json package.json tsconfig.json"
+    "format:check": "prettier --check app src tests scripts plugins README.md app.json package.json tsconfig.json",
+    "format": "prettier --write app src tests scripts plugins README.md app.json package.json tsconfig.json"
   },
   "private": true,
   "engines": {
     "node": ">=22.13.0"
+  },
+  "expo": {
+    "autolinking": {
+      "ios": {
+        "buildFromSource": [
+          "expo-image-manipulator",
+          "SDWebImage",
+          "SDWebImageWebPCoder"
+        ]
+      }
+    }
   }
 }

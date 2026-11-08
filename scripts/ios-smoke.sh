@@ -3,12 +3,53 @@ set -euo pipefail
 : "${SOURCE_RUN_ID:?Pass the native validation run ID}"
 : "${GH_TOKEN:?Artifact read token required}"
 mkdir -p artifacts/e2e
-source_sha="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID" --jq .head_sha)"
-source_branch="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID" --jq .head_branch)"
-test "$source_branch" = main
+profile="${UI_PROFILE:-large}"
+scenario="${UI_SCENARIO:-smoke}"
+case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+simulator_id=""
+phase="resolve-native-source"
+mark_phase() {
+  phase="$1"
+  printf '%s\n' "$phase" > artifacts/e2e/phase.txt
+}
+collect_diagnostics() {
+  result=$?
+  printf 'Exit status: %s\nPhase: %s\nScenario: %s\nProfile: %s\n' "$result" "$phase" "$scenario" "$profile" > artifacts/e2e/execution.txt
+  if [ -d "$HOME/.maestro/tests" ]; then
+    mkdir -p artifacts/e2e/driver-diagnostics
+    cp -R "$HOME/.maestro/tests/." artifacts/e2e/driver-diagnostics/ || true
+  fi
+  if [ -n "$simulator_id" ]; then
+    xcrun simctl shutdown "$simulator_id" || true
+    xcrun simctl delete "$simulator_id" || true
+  fi
+}
+trap collect_diagnostics EXIT
+mark_phase resolve-native-source
+gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN_ID" > artifacts/e2e/native-source-run.json
+source_sha="$(python3 - artifacts/e2e/native-source-run.json "$GITHUB_REPOSITORY" <<'PYRUN'
+import json, re, sys
+run=json.load(open(sys.argv[1]))
+if (run.get("name") != "iOS native validation" or run.get("conclusion") != "success" or
+    run.get("head_branch") != "main" or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
+    not re.fullmatch(r"[0-9a-f]{40}", run.get("head_sha", ""))):
+    raise SystemExit("Use a successful native validation run from this repository's main branch.")
+print(run["head_sha"])
+PYRUN
+)"
+flow_sha="$(git rev-parse HEAD)"
+js_source_sha="$source_sha"
+if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then js_source_sha="$flow_sha"; fi
+printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$flow_sha" > artifacts/e2e/source.txt
+printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$js_source_sha" >> artifacts/e2e/source.txt
+printf 'Scenario: %s\nProfile: %s\nNative run: %s\nUI run: %s\n' "$scenario" "$profile" "$SOURCE_RUN_ID" "${GITHUB_RUN_ID:-manual}" >> artifacts/e2e/source.txt
+shasum -a 256 "e2e/ios-$scenario.yaml" scripts/ios-smoke.sh scripts/seed-ios-gallery.py > artifacts/e2e/fixture-sha256.txt
+mark_phase download-native-artifact
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
 unzip -q artifacts/native/Nylo-simulator.zip -d "$RUNNER_TEMP/nylo-app"
 if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
+  mark_phase refresh-js-bundle
   git fetch --no-tags origin "$source_sha" --depth=1
   # Native modules, Expo config and native icon assets must match the seed app.
   # This path supplies UI iteration evidence, never a signed release candidate.
@@ -18,8 +59,7 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
     --assets-dest "$RUNNER_TEMP/nylo-app/Nylo.app" --max-workers 2
 fi
-profile="${UI_PROFILE:-large}"
-case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
+mark_phase discover-simulator
 xcrun simctl list -j > artifacts/e2e/simulator-inventory.json
 device_type="$(python3 - "$profile" <<'PY'
 import json, sys
@@ -42,47 +82,40 @@ PY
 )"
 test -n "$device_type"
 test -n "$runtime_id"
+printf 'Device type: %s\nRuntime: %s\n' "$device_type" "$runtime_id" >> artifacts/e2e/source.txt
 simulator_id="$(xcrun simctl create "Nylo $profile QA" "$device_type" "$runtime_id")"
 test -n "$simulator_id"
+mark_phase boot-simulator
 xcrun simctl boot "$simulator_id" || true
 xcrun simctl bootstatus "$simulator_id" -b
-collect_diagnostics() {
-  if [ -d "$HOME/.maestro/tests" ]; then
-    mkdir -p artifacts/e2e/driver-diagnostics
-    cp -R "$HOME/.maestro/tests/." artifacts/e2e/driver-diagnostics/ || true
-  fi
-  xcrun simctl shutdown "$simulator_id" || true
-  xcrun simctl delete "$simulator_id" || true
-}
-trap collect_diagnostics EXIT
 if [ "$profile" = large-text ]; then
   xcrun simctl ui "$simulator_id" content_size accessibility-extra-extra-extra-large
 fi
 xcrun simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi --wifiMode active --wifiBars 3 --batteryState charged --batteryLevel 100
+mark_phase install-and-launch
 xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8
 xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
-scenario="${UI_SCENARIO:-smoke}"
-case "$scenario" in smoke|gallery|attachments) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = gallery ] || [ "$scenario" = attachments ]; then
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  mark_phase seed-synthetic-data
   python3 scripts/seed-ios-gallery.py --container "$app_container" --expected-copy artifacts/e2e/expected-copy.txt
   echo 'Synthetic offline QA data, not live model output or customer history.' > artifacts/e2e/gallery-disclosure.txt
   if [ "$scenario" = attachments ]; then xcrun simctl addmedia "$simulator_id" artifacts/e2e/owned-picker-photo.png; fi
 fi
+mark_phase install-driver
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
 export MAESTRO_CLI_NO_ANALYTICS=1
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
-printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$(git rev-parse HEAD)" > artifacts/e2e/source.txt
-printf 'Profile: %s\nDevice type: %s\nRuntime: %s\n' "$profile" "$device_type" "$runtime_id" >> artifacts/e2e/source.txt
-printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$(git rev-parse HEAD)" >> artifacts/e2e/source.txt
-printf 'Scenario: %s\n' "$scenario" >> artifacts/e2e/source.txt
+shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
+mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
 if [ "$scenario" = gallery ]; then
+  mark_phase clipboard-and-storage-verification
   xcrun simctl pbpaste "$simulator_id" > artifacts/e2e/copied-example.txt
   python3 - <<'PY'
 from pathlib import Path
@@ -107,3 +140,5 @@ with sqlite3.connect(Path(sys.argv[1]) / "Documents/SQLite/nylo.db") as db:
 Path("artifacts/e2e/attachment-storage-check.txt").write_text("PASS: native metadata and file blobs match; restored image retained, removed text blob deleted. Synthetic data only.\n")
 PYBLOBS
 fi
+
+mark_phase complete

@@ -952,6 +952,7 @@ function Chat() {
               />
             </View>
             <Field
+              testID="chat-model-search"
               label="Search models"
               value={modelSearch}
               onChangeText={setModelSearch}

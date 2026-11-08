@@ -2,6 +2,8 @@
 
 Prepared 8 November 2026. This is a release worksheet, not an App Store submission or an assertion that the expanded features are implemented. The user authorized model libraries, file/photo/camera attachments, stronger agent behavior, a new tested beta and parallel store preparation. The requested quality goal is 95/100; an independent reviewer must determine the result from evidence.
 
+Parent follow-up: source and draft AppStore version are now1.0.0, confirmed by PATCH200 with PREPARE_FOR_SUBMISSION retained. No build was associated or submitted. The table below records the earlier read-only preparation snapshot. Actual image-SDK audit found an omitted SDWebImage privacy resource in the precompiled simulator; source-built packaging and exact-IPA pre-upload audit are pending verification.
+
 ## Account state verified read-only
 
 The current App Store Connect record is [Nylo](https://appstoreconnect.apple.com/apps/6832224555), bundle `com.nylohq.nylo`, seller Nihal K A. API results are retained in ignored `artifacts/app-store-preparation/`.

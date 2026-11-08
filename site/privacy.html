@@ -46,10 +46,11 @@
         text excerpts from up to eight recent chats with that same agent can
         also be included (up to 12,000 characters). Other agents and ordinary
         chats are excluded. Review or turn off this context in the agent’s
-        Memory section; attached file contents do not carry into a different
-        chat. The API key authenticates those requests. Model discovery sends
-        the key to the selected provider to retrieve model IDs, without chat
-        history.
+        Memory section. Files themselves are excluded from cross-chat excerpts;
+        conversation text quoting, describing or discussing those files may be
+        included. The API key authenticates those requests. Model discovery
+        sends the key to the selected provider to retrieve model IDs, without
+        chat history.
       </p>
       <p>
         Sharing approval is remembered for conversations using the same saved

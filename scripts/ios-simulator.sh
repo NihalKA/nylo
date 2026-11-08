@@ -6,6 +6,7 @@ CI=1 npx expo prebuild --platform ios --no-install
 xcodebuild -workspace ios/Nylo.xcworkspace -scheme Nylo -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' -derivedDataPath artifacts/DerivedData CODE_SIGNING_ALLOWED=NO ARCHS="$(uname -m)" ONLY_ACTIVE_ARCH=YES build > artifacts/ios-build.log 2>&1 || { tail -100 artifacts/ios-build.log; exit 1; }
 app_path="$PWD/artifacts/DerivedData/Build/Products/Release-iphonesimulator/Nylo.app"
 test -d "$app_path"
+python3 scripts/native-privacy-audit.py "$app_path" --output artifacts/native-privacy-audit.log
 ditto -c -k --sequesterRsrc --keepParent "$app_path" artifacts/Nylo-simulator.zip
 simulator_id="$(xcrun simctl list devices available -j | python3 -c 'import sys,json; d=json.load(sys.stdin); phones=[x for k,v in d["devices"].items() if "iOS" in k for x in v if x.get("isAvailable") and x["name"].startswith("iPhone")]; phones.sort(key=lambda x: ("17 Pro" not in x["name"],x["name"])); print(phones[0]["udid"] if phones else "")')"
 test -n "$simulator_id"

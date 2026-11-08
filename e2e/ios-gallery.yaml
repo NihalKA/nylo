@@ -10,9 +10,21 @@ appId: com.nylohq.nylo
 - assertVisible: "Choose a model"
 - assertNotVisible: "Conversation title"
 - takeScreenshot: gallery-02b-model-picker
+- tapOn:
+    id: "chat-model-search"
+- inputText: "synthetic-secondary"
+- pressKey: enter
+- assertVisible: "Offline QA provider[.] synthetic-secondary"
+- assertNotVisible: "Offline QA alternate[.] synthetic-alternate"
+- waitForAnimationToEnd
+- takeScreenshot: gallery-02c-model-search
 - tapOn: "Offline QA provider[.] synthetic-secondary"
 - assertVisible: "Choose model connection[.] Offline QA provider, synthetic-secondary"
 - tapOn: "Choose model connection.*"
+- tapOn:
+    id: "chat-model-search"
+- eraseText: 100
+- pressKey: enter
 - tapOn: "Offline QA alternate.*"
 - assertNotVisible: "Close model picker"
 - assertVisible: "Choose model connection[.] Offline QA alternate, synthetic-alternate"
@@ -29,6 +41,18 @@ appId: com.nylohq.nylo
 - assertVisible: "2 selected.*"
 - tapOn: "Clear selection"
 - assertVisible: "0 selected.*"
+- tapOn:
+    id: "provider-model-search"
+- inputText: "secondary"
+- pressKey: enter
+- assertVisible: "Select all 1 shown model"
+- tapOn: "Select all 1 shown model"
+- assertVisible: "1 selected.*"
+- tapOn:
+    id: "provider-model-search"
+- eraseText: 100
+- pressKey: enter
+- assertVisible: "Select all 2 shown models"
 - tapOn: "Select all 2 shown models"
 - assertVisible: "2 selected.*"
 - takeScreenshot: gallery-10-provider-model-library
@@ -144,7 +168,11 @@ appId: com.nylohq.nylo
     element: "Review recent context"
     direction: DOWN
 - tapOn: "Review recent context"
+- scrollUntilVisible:
+    element: "(?s).*Our launch date is Friday.*"
+    direction: DOWN
 - assertVisible: "(?s).*Our launch date is Friday.*"
+- waitForAnimationToEnd
 - takeScreenshot: gallery-11-agent-shared-context
 - tapOn: "Go back"
 - tapOn: "Chats, tab, 1 of 3"
@@ -153,7 +181,11 @@ appId: com.nylohq.nylo
     direction: DOWN
 - tapOn: "(?s)Open Example: Attachments ready.*"
 - assertVisible: "QA note.txt.*"
-- assertVisible: "Review these files"
+- assertVisible:
+    id: "chat-message"
+    text: "Review these files"
+- assertVisible: "Remove QA image[.]png"
+- waitForAnimationToEnd
 - takeScreenshot: gallery-12-attachment-draft
 - tapOn: "Add attachment"
 - assertVisible: "Photo library"
@@ -171,6 +203,11 @@ appId: com.nylohq.nylo
 - assertVisible: "Review these files"
 - tapOn: "Remove QA note.txt"
 - assertNotVisible: "QA note.txt.*"
+- assertVisible:
+    id: "chat-message"
+    text: "Review these files"
+- assertVisible: "Remove QA image[.]png"
+- waitForAnimationToEnd
 - takeScreenshot: gallery-14-attachment-restored
 - tapOn: "Go back"
 - scrollUntilVisible:
@@ -180,6 +217,28 @@ appId: com.nylohq.nylo
 - tapOn: "Report response"
 - assertVisible: "Report preview"
 - assertNotVisible: "(?s).*Start with one meaningful task.*"
+- tapOn: "Include selected response text"
+- scrollUntilVisible:
+    element: "(?s).*Selected response excerpt.*Start with one meaningful task.*"
+    direction: DOWN
+- assertVisible: "(?s).*Selected response excerpt.*Start with one meaningful task.*"
+- scrollUntilVisible:
+    element: "Include selected response text"
+    direction: UP
+- tapOn: "Include selected response text"
+- assertNotVisible: "(?s).*Start with one meaningful task.*"
+- assertVisible: "Report preview"
+- waitForAnimationToEnd
 - takeScreenshot: gallery-15-report-preview
-- tapOn: "Go back"
+# The observed first-run Apple Intelligence banner covered the header back tap.
+# Exercise native edge-back below that OS banner, then prove the expected route.
+- swipe:
+    start: "1%,50%"
+    end: "85%,50%"
+    duration: 400
+- assertNotVisible: "Report preview"
+- assertVisible: "Choose model connection.*"
+- scrollUntilVisible:
+    element: "Copy response"
+    direction: DOWN
 - tapOn: "Copy response"

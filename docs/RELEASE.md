@@ -3,7 +3,7 @@
 Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Signing is configured. Signed **0.1.0 (10)** (app source 6470912) uploaded through run 42497581610 and Apple processing is VALID, build ID `8099fcdf-ad35-4d66-a200-9e270507c3f0`. Gallery 42499737557 passed. Build 10 is assigned to internal Nylo Device QA; assignment and test notes verified. Build 8 remains available as the older design. Independent review 016 recommends the feedback beta at 85/100, with accessibility/owner/physical/live gates open. No production approval. Android publication is deferred.
 
 Full native run 42497575404 and all three profiles of fresh-native smoke 42498930753 passed at 6470912 with no JS refresh. Earlier refreshed smoke 42497578413 also passed all profiles. Exact source/native provenance and synthetic versus live evidence remain separate.
-App Store Connect was rechecked on 8 November 2026: version 1.0 remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is still 0.1.0; align it before building the final 1.0 candidate. The age rating is unset. No submission or production release has occurred.
+App Store Connect was rechecked on 8 November 2026: the draft version was aligned to1.0.0 (PATCH200) and remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is1.0.0; expanded signed/native validation is pending. This version alignment is not release approval. The age rating is unset. No submission or production release has occurred.
 
 ## Native evidence without local compilation
 

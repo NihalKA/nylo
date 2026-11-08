@@ -2,6 +2,14 @@
 
 Updated: 8 November 2026. Active target: iOS App Store. Android publication deferred until iOS is published and validated; do not purchase a Google developer account yet.
 
+## Latest smoke and review follow-up
+
+A user-requested smoke subagent investigated actual PNG/AX/log failures: compact/large passed; maximumtext Memory layout requires a product fix, gallery back tap hit an OS notification, and Filescancel hit transitional1point geometry. Root moves Memory editing first and clarifies quoted-file context privacy; worker fixes readiness/postconditions, model-query/report-optin/capture checks and early provenance. Strict keyboard/fullvisibility/finalcopy assertions remain. Native reruns are required; see reviews/018-expanded-native-evidence.md (80/100 provisional forcb5, not a new approval).
+
+Compiled image-SDK inspection also found SDWebImage's required privacy resource missing in the precompiled runtime. A source-build/pinned-vendor packaging path and pre-upload compiled-IPA audit are being added; fresh native verification is mandatory. Existing old seeds cannot validate the changed native configuration. See testing/native-privacy-manifests.md.
+
+The app and draft AppStore version are now aligned to1.0.0; Apple PATCH200 verified PREPARE_FOR_SUBMISSION. No build association, submission or production release was performed. Signed11 was cancelled; new beta remains unassigned pending current validation. Build10 is still the older available QA version.
+
 ## Active expanded beta work
 
 Owner now requests95/100 quality, multi/all-returned model selection, file/photo/camera attachments, same-agent cross-chat context like GrokBot/dots, a new beta and parallel App Store preparation. The state-machine audit inventories27 app-owned machines; see STATE_MACHINES.md and EXPANDED_BETA.md. Build10 below is the previous feature set and remains available while expanded validation runs.

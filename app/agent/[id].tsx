@@ -43,6 +43,8 @@ function AgentDetail() {
   const [tab, setTab] = useState<"conversations" | "memory">(
     section === "memory" ? "memory" : "conversations",
   );
+  const content = useRef<React.ComponentRef<typeof ScrollView>>(null);
+  const memoryTop = useRef(0);
   const [memory, setMemory] = useState(draftMemory?.slice(0, 1000) || "");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showContext, setShowContext] = useState(false);
@@ -109,6 +111,7 @@ function AgentDetail() {
         }
       />
       <ScrollView
+        ref={content}
         automaticallyAdjustKeyboardInsets
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
@@ -203,144 +206,20 @@ function AgentDetail() {
             />
           )
         ) : (
-          <View style={{ gap: 16, marginTop: 22 }}>
-            {agent.goal ? (
-              <View style={{ gap: 6 }}>
-                <Text style={s.h2}>Current goal</Text>
-                <Text style={s.text}>{agent.goal}</Text>
-              </View>
-            ) : null}
-            <Text style={s.h2}>Context between chats</Text>
-            <View style={[s.between, { gap: 12 }]}>
-              <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
-              <Switch
-                accessibilityLabel="Use recent chats from this agent"
-                value={!!agent.shareRecentChats}
-                disabled={!!runningId}
-                onValueChange={(value) =>
-                  void action(async () => {
-                    if (
-                      value &&
-                      !(await confirm(
-                        "Share recent agent chats?",
-                        "Future messages include bounded text excerpts from up to eight recent chats with this agent. They go to the selected provider. Other agents and file contents stay separate. Removing a saved memory does not remove its mentions in chat history; turn this off or delete the source chat too.",
-                        "Enable context",
-                        false,
-                      ))
-                    )
-                      return;
-                    await update((d) => ({
-                      ...d,
-                      agents: d.agents.map((a) =>
-                        a.id === id ? { ...a, shareRecentChats: value } : a,
-                      ),
-                    }));
-                  })
-                }
-              />
-            </View>
-            <Text style={s.sub}>
-              Saved memories are durable facts. Recent context helps continue
-              earlier work; it is a limited excerpt, not perfect recall of every
-              conversation. Deleting a memory does not erase the original chats.
-            </Text>
-            {agent.shareRecentChats ? (
-              <>
-                <Button
-                  title={
-                    showContext
-                      ? "Hide recent context"
-                      : "Review recent context"
-                  }
-                  secondary
-                  onPress={() => setShowContext(!showContext)}
-                />
-                {showContext ? (
-                  <Text selectable style={s.sub}>
-                    {recentAgentContext(data, agent, "") ||
-                      "No earlier conversation text yet."}
-                  </Text>
-                ) : null}
-              </>
-            ) : null}
-            <Text style={s.h2}>Saved memories</Text>
-            <Text style={s.sub}>
-              These facts are included when you message this agent. You can
-              review, edit, or remove them at any time.
-            </Text>
-            {agent.memories.map((m) => (
-              <View
-                key={m.id}
-                style={[
-                  s.row,
-                  {
-                    gap: 8,
-                    flexDirection: fontScale > 1.5 ? "column" : "row",
-                    alignItems: fontScale > 1.5 ? "stretch" : "center",
-                    paddingVertical: 18,
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.line,
-                  },
-                ]}
-              >
-                <View style={{ flex: 1 }}>
-                  <Text style={s.text}>{m.text}</Text>
-                  <Text style={[s.sub, { fontSize: 12, marginTop: 6 }]}>
-                    {new Date(m.createdAt).toLocaleDateString()}
-                  </Text>
-                </View>
-                <IconButton
-                  name="create-outline"
-                  label="Edit memory"
-                  onPress={() => {
-                    setMemory(m.text);
-                    setEditingId(m.id);
-                  }}
-                />
-                <IconButton
-                  name="trash-outline"
-                  label="Forget memory"
-                  onPress={() =>
-                    void action(async () => {
-                      if (
-                        await confirm(
-                          "Forget this memory?",
-                          "It will no longer be included in this agent’s conversations.",
-                        )
-                      )
-                        await update((d) => ({
-                          ...d,
-                          agents: d.agents.map((a) =>
-                            a.id === id
-                              ? {
-                                  ...a,
-                                  memories: a.memories.filter(
-                                    (x) => x.id !== m.id,
-                                  ),
-                                }
-                              : a,
-                          ),
-                        }));
-                    })
-                  }
-                />
-              </View>
-            ))}
-            {!agent.memories.length ? (
-              <Empty
-                icon="leaf-outline"
-                title="A little context goes a long way"
-                body="Save a writing preference, project decision, or something you would otherwise repeat."
-              />
-            ) : null}
+          <View
+            onLayout={(event) => {
+              memoryTop.current = event.nativeEvent.layout.y;
+            }}
+            style={{ gap: 16, marginTop: 22 }}
+          >
             <Field
               testID="agent-memory-input"
-              label={editingId ? "Edit this memory" : "A fact to remember"}
+              label={editingId ? "Edit memory" : "New memory"}
               value={memory}
               onChangeText={setMemory}
               multiline
               maxLength={1000}
-              placeholder="I prefer concise answers and practical examples."
+              placeholder="Add a useful fact…"
             />
             <Button
               title={editingId ? "Update memory" : "Save memory"}
@@ -389,6 +268,143 @@ function AgentDetail() {
                   setMemory("");
                 }}
               />
+            ) : null}
+            <Text style={s.h2}>Saved memories</Text>
+            <Text style={s.sub}>
+              These facts are included when you message this agent. You can
+              review, edit, or remove them at any time.
+            </Text>
+            {agent.memories.map((m) => (
+              <View
+                key={m.id}
+                style={[
+                  s.row,
+                  {
+                    gap: 8,
+                    flexDirection: fontScale > 1.5 ? "column" : "row",
+                    alignItems: fontScale > 1.5 ? "stretch" : "center",
+                    paddingVertical: 18,
+                    borderBottomWidth: 1,
+                    borderBottomColor: theme.line,
+                  },
+                ]}
+              >
+                <View
+                  style={{
+                    flex: fontScale > 1.5 ? undefined : 1,
+                    maxWidth: "100%",
+                  }}
+                >
+                  <Text style={s.text}>{m.text}</Text>
+                  <Text style={[s.sub, { fontSize: 12, marginTop: 6 }]}>
+                    {new Date(m.createdAt).toLocaleDateString()}
+                  </Text>
+                </View>
+                <View style={[s.row, { gap: 4, alignSelf: "flex-end" }]}>
+                  <IconButton
+                    name="create-outline"
+                    label="Edit memory"
+                    onPress={() => {
+                      setMemory(m.text);
+                      setEditingId(m.id);
+                      content.current?.scrollTo({
+                        y: memoryTop.current,
+                        animated: true,
+                      });
+                    }}
+                  />
+                  <IconButton
+                    name="trash-outline"
+                    label="Forget memory"
+                    onPress={() =>
+                      void action(async () => {
+                        if (
+                          await confirm(
+                            "Forget this memory?",
+                            "This removes the saved fact. Text mentioning it can still be included from recent chats while that setting is enabled. Turn off recent context or delete source chats to stop those excerpts.",
+                          )
+                        )
+                          await update((d) => ({
+                            ...d,
+                            agents: d.agents.map((a) =>
+                              a.id === id
+                                ? {
+                                    ...a,
+                                    memories: a.memories.filter(
+                                      (x) => x.id !== m.id,
+                                    ),
+                                  }
+                                : a,
+                            ),
+                          }));
+                      })
+                    }
+                  />
+                </View>
+              </View>
+            ))}
+            {!agent.memories.length ? (
+              <Text style={s.sub}>No saved facts yet.</Text>
+            ) : null}
+
+            {agent.goal ? (
+              <View style={{ gap: 6 }}>
+                <Text style={s.h2}>Current goal</Text>
+                <Text style={s.text}>{agent.goal}</Text>
+              </View>
+            ) : null}
+            <Text style={s.h2}>Context between chats</Text>
+            <View style={[s.between, { gap: 12 }]}>
+              <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
+              <Switch
+                accessibilityLabel="Use recent chats from this agent"
+                value={!!agent.shareRecentChats}
+                disabled={!!runningId}
+                onValueChange={(value) =>
+                  void action(async () => {
+                    if (
+                      value &&
+                      !(await confirm(
+                        "Share recent agent chats?",
+                        "Future messages include bounded text excerpts from up to eight recent chats with this agent. They go to the selected provider. Other agents stay separate. Files themselves are excluded; conversation text quoting or discussing them may be included. Removing a saved memory does not remove its mentions in chat history; turn this off or delete the source chat too.",
+                        "Enable context",
+                        false,
+                      ))
+                    )
+                      return;
+                    await update((d) => ({
+                      ...d,
+                      agents: d.agents.map((a) =>
+                        a.id === id ? { ...a, shareRecentChats: value } : a,
+                      ),
+                    }));
+                  })
+                }
+              />
+            </View>
+            <Text style={s.sub}>
+              Saved memories are durable facts. Recent context helps continue
+              earlier work; it is a limited excerpt, not perfect recall of every
+              conversation. Deleting a memory does not erase the original chats.
+            </Text>
+            {agent.shareRecentChats ? (
+              <>
+                <Button
+                  title={
+                    showContext
+                      ? "Hide recent context"
+                      : "Review recent context"
+                  }
+                  secondary
+                  onPress={() => setShowContext(!showContext)}
+                />
+                {showContext ? (
+                  <Text selectable style={s.sub}>
+                    {recentAgentContext(data, agent, "") ||
+                      "No earlier conversation text yet."}
+                  </Text>
+                ) : null}
+              </>
             ) : null}
           </View>
         )}

@@ -109,6 +109,9 @@ export default function Settings() {
   ];
   const [modelsOpen, setModelsOpen] = useState(false);
   const [modelSearch, setModelSearch] = useState("");
+  const filteredModels = shownModels.filter((model) =>
+    model.toLowerCase().includes(modelSearch.toLowerCase()),
+  );
   const [key, setKey] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -170,6 +173,7 @@ export default function Settings() {
             />
           </View>
           <Field
+            testID="provider-model-search"
             label="Search available models"
             value={modelSearch}
             onChangeText={setModelSearch}
@@ -178,15 +182,21 @@ export default function Settings() {
           />
           <View style={[s.row, { gap: 10, flexWrap: "wrap" }]}>
             <Button
-              title={`Select all ${shownModels.length} shown models`}
+              title={`Select all ${filteredModels.length} shown ${filteredModels.length === 1 ? "model" : "models"}`}
+              disabled={!filteredModels.length}
               secondary
               onPress={() =>
                 setDraft((c) =>
                   c
                     ? {
                         ...c,
-                        models: shownModels,
-                        model: c.model || shownModels[0] || "",
+                        models: [
+                          ...new Set([
+                            ...connectionModels(c),
+                            ...filteredModels,
+                          ]),
+                        ],
+                        model: c.model || filteredModels[0] || "",
                       }
                     : c,
                 )
@@ -205,9 +215,7 @@ export default function Settings() {
             one in each chat
           </Text>
           <FlatList
-            data={shownModels.filter((model) =>
-              model.toLowerCase().includes(modelSearch.toLowerCase()),
-            )}
+            data={filteredModels}
             keyExtractor={(model) => model}
             keyboardShouldPersistTaps="handled"
             automaticallyAdjustKeyboardInsets

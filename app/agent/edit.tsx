@@ -297,7 +297,8 @@ function AgentEdit() {
           <Text style={s.sub}>
             Carry relevant text context between this agent’s conversations. You
             approve enabling this before it is shared. Other agents stay
-            separate; attached files are not carried into a different chat.
+            separate. Files themselves are excluded; conversation text quoting
+            or discussing them may be included.
           </Text>
         </View>
         {source ? (
