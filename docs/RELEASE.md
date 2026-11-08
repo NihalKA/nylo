@@ -1,6 +1,6 @@
 # iOS release runbook
 
-Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed build 6 (source 24aaba2) uploaded, Apple processing is VALID, and it is assigned to internal device QA. Later source 9fc4d9a still requires a fresh signed candidate. Android publication is deferred.
+Target: iPhone, registered bundle ID `com.nylohq.nylo`. App Store record: https://appstoreconnect.apple.com/apps/6832224555. Team, bundle identifier, app record and signing credentials are configured. Signed build 8 (source eae0718) uploaded through run 42490400098, Apple processing is VALID, and it is assigned to internal device QA. It includes the live device-check screen and earlier keyboard/maximum-text fixes. It is a validation beta, not final release approval. Android publication is deferred.
 
 App Store Connect was rechecked on 8 November 2026: version 1.0 remains PREPARE_FOR_SUBMISSION with saved English metadata and privacy/support URLs. Current source marketing version is still 0.1.0; align it before building the final 1.0 candidate. The age rating is unset. No submission or production release has occurred.
 

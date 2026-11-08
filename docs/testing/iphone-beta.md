@@ -1,8 +1,14 @@
 # iPhone device check
 
-Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. Current device beta: **0.1.0 (6)**, source 24aaba2, uploaded by run 42484609771. Apple processing VALID; build ID d2198fb8-45f8-463b-88f7-795c2fa2bd3a. Internal group Nylo Device QA has one tester (the account holder), with builds 6 and 4. Build 5 predates the keyboard correction and remains unassigned.
+Validated distribution path: GitHub macOS → signed IPA → App Store Connect processing → internal TestFlight group. Current device beta: **0.1.0 (8)**, source eae0718, uploaded by run 42490400098. Apple processing VALID; build ID 0e4c605f-3fac-4bc0-ac5e-b49b2df4a66a. Assigned to internal Nylo Device QA alongside builds 6 and 4. Build 7's workflow was cancelled before upload after independent findings; source fixes were independently rechecked before build 8 distribution.
 
 This is a device-validation beta, not App Store publication or final UI approval. Later source improvements will reach a newer candidate.
+
+## Live check on iPad or iPhone in build 8
+
+Update Nylo through TestFlight, then open Settings → Live device check. Choose your saved provider, prepare the local test, run a live reply, approve the generated test fact and run memory recall. Each live action confirms one request capped at 128 output tokens with tools disabled. Fully close/reopen Nylo and return to Check after reopening. Results remain on device; they are not automatically sent to the agent. See live-device-check.md for scope and limitations. Existing build 6 does not have this screen.
+
+Current-source simulator smoke passed large and maximum-text profiles; compact remains running at this update. Gallery 42490247848 rendered synthetic responses, recovery, long history, approved test memory and restored memory after relaunch, then failed because its scroll driver required an already-visible bottom button to be centered. fabe458 removes that centering requirement while preserving full visibility; rerun 42491568232 is pending. No completed recall/live request, VoiceOver or physical-device pass is inferred from this evidence.
 
 ## Connect NyloHQ in build 6
 
