@@ -1,0 +1,177 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- assertVisible: "No chats yet"
+- takeScreenshot: 01-chats-empty
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: true
+- assertVisible: "No agents yet"
+- takeScreenshot: 02-agents-empty
+- tapOn:
+    text: "Settings, tab, 3 of 3"
+    retryTapIfNoChange: true
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: ".*Connect your AI.*"
+    direction: UP
+- takeScreenshot: 03-settings
+- tapOn: ".*Connect your AI.*"
+- assertVisible: "AI providers"
+- scrollUntilVisible:
+    element: "NyloHQ"
+    direction: DOWN
+- tapOn: "NyloHQ"
+- takeScreenshot: 04-provider-setup
+- tapOn: "Go back"
+- tapOn:
+    text: "Chats, tab, 1 of 3"
+    retryTapIfNoChange: true
+- tapOn: "New chat"
+- assertVisible:
+    id: "chat-message"
+- tapOn:
+    id: "chat-message"
+- inputText: "A draft that should survive reopening"
+- waitForAnimationToEnd
+- takeScreenshot: 05-chat-keyboard
+- inputText: "\nA second line."
+- assertVisible:
+    id: "chat-message"
+    text: "(?s).*A second line.*"
+- waitForAnimationToEnd
+- takeScreenshot: 05-chat-keyboard-multiline
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
+- takeScreenshot: 05-chat-draft
+- tapOn: "Add attachment"
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: "Photo library"
+    direction: DOWN
+- assertVisible: "Photo library"
+- scrollUntilVisible:
+    element: "Cancel attachments"
+    direction: DOWN
+- takeScreenshot: 05-attachment-menu
+- tapOn: "Cancel attachments"
+- assertVisible:
+    id: "chat-message"
+- tapOn: "Go back"
+- tapOn: "(?s)Open New conversation.*"
+- assertVisible: "(?s).*A draft that should survive reopening.*"
+- stopApp
+- launchApp
+- tapOn: "(?s)Open New conversation.*"
+- assertVisible: "(?s).*A draft that should survive reopening.*"
+- takeScreenshot: 06-restored-draft
+- tapOn: "Go back"
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: true
+- tapOn: "Create agent"
+- assertVisible: "Create an agent"
+- waitForAnimationToEnd
+- scrollUntilVisible:
+    element: "Writing partner"
+    direction: UP
+- tapOn: "Writing partner"
+- runFlow:
+    when:
+      visible: "Dismiss keyboard"
+    commands:
+      - tapOn: "Dismiss keyboard"
+      - assertNotVisible: "Dismiss keyboard"
+- takeScreenshot: 07-agent-template
+- repeat:
+    times: 10
+    commands:
+      - runFlow:
+          when:
+            notVisible: "Create agent"
+          commands:
+            - swipe:
+                direction: UP
+            - runFlow:
+                when:
+                  visible: "Dismiss keyboard"
+                commands:
+                  - tapOn: "Dismiss keyboard"
+                  - assertNotVisible: "Dismiss keyboard"
+- assertVisible: "Create agent"
+- tapOn: "Create agent"
+- assertVisible: "Agent"
+- scrollUntilVisible:
+    element: "Memory"
+    direction: DOWN
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element:
+      id: "agent-memory-input"
+    direction: DOWN
+    centerElement: true
+# Maximum text can overscroll the editor to y0–118 behind the fixed header.
+# Screen visibility alone counted that occluded frame as 100%; bring the whole
+# editor below the header before the existing single focus tap.
+- scrollUntilVisible:
+    element:
+      id: "agent-memory-input"
+      below: "Agent"
+    direction: UP
+    centerElement: true
+- tapOn:
+    id: "agent-memory-input"
+- inputText: "QA sample: I prefer concise answers."
+- assertVisible:
+    id: "agent-memory-input"
+    text: "QA sample: I prefer concise answers."
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
+- scrollUntilVisible:
+    element: "Save memory"
+    direction: DOWN
+- assertVisible:
+    text: "Save memory"
+    enabled: true
+- tapOn: "Save memory"
+# Saved memories follow the editor and Save action; compact/maximum text place
+# the new row below the viewport. Search toward it without reducing visibility.
+- scrollUntilVisible:
+    element: "QA sample: I prefer concise answers."
+    direction: DOWN
+- takeScreenshot: 08-agent-memory
+- stopApp
+- launchApp
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: true
+- tapOn: "Open Writing partner"
+- scrollUntilVisible:
+    element: "Memory"
+    direction: DOWN
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "QA sample: I prefer concise answers."
+    direction: DOWN
+- takeScreenshot: 09-restored-memory
+# Actual maximum-text AX placed this button at y26–187 behind the fixed Agent
+# header. Require the whole target below that header before the same single tap.
+- scrollUntilVisible:
+    element:
+      text: "New conversation"
+      below: "Agent"
+    direction: UP
+    centerElement: true
+- tapOn: "New conversation"
+- tapOn:
+    id: "chat-message"
+- inputText: "An agent draft\nwith a second line."
+- assertVisible:
+    id: "chat-message"
+    text: "(?s).*with a second line.*"
+- waitForAnimationToEnd
+- takeScreenshot: 10-agent-chat-keyboard
+- tapOn: "Dismiss keyboard"
+- assertNotVisible: "Dismiss keyboard"
+- takeScreenshot: 11-agent-chat-context
