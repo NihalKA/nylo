@@ -32,11 +32,11 @@ Android 1.0.0, version code 5 test APK is now [directly downloadable and shareab
 
 The 30-minute delivery continuation is disabled after both deliveries. The separate four-hour App Review/external-invitation monitor remains enabled. Fresh Apple reads at12:17 UTC verify store1.0.0 still WAITING_FOR_REVIEW, AFTER_APPROVAL, with exact build 15 preserved; build 17 was delivered internally; its newly requested external access is pending the separate beta-review queue. Personaloutput/ files remain untracked and excluded from app commits.
 
-## Additional TestFlight tester — current build17 requested
+## Additional TestFlight tester — build17 externally approved
 
-The owner requested the external tester be given the newly delivered build17. The existing private external group and tester are preserved; exact17 was added with automatic notification enabled. Apple rejected its beta-review submission with `ANOTHER_BUILD_IN_REVIEW`: earlier build15 in the same version is still in beta review. Build17 remains READY_FOR_BETA_SUBMISSION, so its external review must be submitted after that queue clears. No invitation email is claimed sent. This TestFlight review is separate from the initial store review.
+Verified 10 November 2026, 04:12 IST: Apple approved build17 for external testing; the exact VALID build is in the existing external group and its external state is IN_BETA_TESTING. The requested tester is INVITED. Apple had already issued the invitation, so no duplicate invitation was sent; acceptance and installation are not yet confirmed.
 
-The existing review monitor will finish17's external approval/access, check the tester state and send/verify the invitation only if still needed; already invited/accepted testers will not be emailed again. No App Store Connect staff role or reviewer key is shared. Owner/internal17 access remains verified. Store build15 is unchanged.
+Build15's earlier beta review cleared, allowing a single build17 review submission (HTTP201), followed by independent APPROVED and group/state readbacks. The initial App Store submission remains WAITING_FOR_REVIEW, AFTER_APPROVAL, with exact build15 preserved. The four-hour store monitor remains enabled. No account roles or reviewer credentials were shared.
 
 ## PDF follow-up delivered — TestFlight 1.0.0 (16)
 
