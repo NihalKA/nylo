@@ -29,7 +29,7 @@ Four earlier restricted text/tool/recall provider requests were used under their
 
 ## App Store preparation
 
-App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Final screenshot upload, truthful age/privacy declarations, monitored support practice and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
+App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Five reviewed native screenshots are uploaded and COMPLETE in the English draft. Updated feature copy is saved and read-back verified. Truthful age/privacy declarations, monitored support practice and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
 
 No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
 
@@ -42,3 +42,11 @@ Attachment cards use concise visible Remove text while retaining the full filena
 - Fresh attachments42547836294 passes87completed/1optional skip, all lifecycle/recovery checks and old camera error absent after the second successful import before restart. SQL references match with no removed-import orphan. Owned source Artist/GPS are absent in the stored799-byte JPEG; only explicitly allowed encoder fields remain. Native/JS2517, fixtures51527dd, refresh false. This is owned JPEG pipeline evidence, not physical camera/HEIC/universal metadata proof.
 
 Evidence: ignored artifacts/smoke-reliability/fresh-polish-final. Build14is delivered alongside the previous13: signed42550246288/HEADc9002c2, version1.0.0(14), Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Exact exported-IPA audit passes11manifests/requiredSDK/camera/noMic/family1/nonexemptfalse. English notes saved; POST204, exact-build group GET and IN_BETA_TESTING verified. The86point independent review applies to13; no new score or production approval is claimed for14.
+
+## Store assets and listing — 9 November 2026
+
+Store capture [42551583436](https://github.com/NihalKA/nylo/actions/runs/42551583436) passes 54/54 records using native/JS 2517a7d, fixtures 1a741e2, refresh false. Root and independent capture review inspected all five original-resolution PNGs. Their 1320 × 2868 opaque RGB exports were uploaded to the English draft in response → memory → model picker → inbox → attachment order. Apple set `586a3e17-ab4c-442d-ab05-055c4e558d46` (`APP_IPHONE_67`) reports all five COMPLETE, with matching source checksums and no errors/warnings. See testing/app-store-screenshots.md for IDs and provenance.
+
+The expanded description (2361 characters), keywords (87), promotional text (147), support and marketing URLs were saved to the English version localization and independently read back exactly. This copy explains BYOK charges, one active model per send, optional bounded same-agent context, compatible attachments and foreground limits. The screenshots contain explicitly illustrative examples, not live model outputs. No new quality score is inferred.
+
+A subsequent Apple GET confirms version 1.0.0 remains PREPARE_FOR_SUBMISSION with no associated build. No App Review or public release occurred. Support monitoring, owner design judgment, physical iPhone/VoiceOver/live outcomes, final declarations and separate restricted review access remain open; NYLO_RELEASE_READY stays off.

@@ -2,7 +2,7 @@
 
 Current feedback beta: **1.0.0(14)**, app source2517a7d, signed42550246288/HEADc9002c2, Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Actual exported-IPA privacy audit passes11manifests/requiredSDK/camera/noMic/family1/nonexemptfalse. Fresh native2517, all3profile smoke, complete293-byte gallery copy/storage and owned-photo metadata/lifecycle/error-clearing checks pass. Assigned to internal Nylo Device QA with English notes; POST204, exact-build group GET and IN_BETA_TESTING verified. Build13is the previous expanded candidate and retains its86point independent review; no new score is inferred for14. No store build association, submission or production approval.
 
-App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Final screenshots, age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the current86point review of4d3687d. Physical/live/VoiceOver/owner design remain separate gates.
+App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Five reviewed native screenshots are COMPLETE in the English draft, and expanded listing copy is saved/read-back verified. Age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the current86point review of4d3687d. Physical/live/VoiceOver/owner design remain separate gates.
 
 ## Native evidence without local compilation
 
