@@ -1,9 +1,8 @@
 # Delivery status
 
-## Parallel follow-up in progress
+## Parallel PDF beta follow-up
 
-After the initial submission, the owner authorized continued improvements while Apple reviews build15. App source `a02f88e` adds a compact attachment row, shorter PDF warning and a direct focused API-format editor for the selected incompatible provider. No silent protocol/endpoint/key change occurs. Local typecheck76tests/security132 and Source CI42576088729 pass. PDF42576100714, gallery42576104831 and fresh native42576088809 are running; current rendered evidence and next beta assignment remain pending. An enabled30-minute continuation checks the existing runs and completes the tested internal beta; next run9November2026at12:57IST. The separate Apple review monitor remains enabled. The submitted build15 is preserved; these source changes do not change the binary in Apple's review queue.
-
+Appa02f88e passed source checks, PDF42576100714(58commands), gallery42576104831(181commands/exact293byteclipboard/SQL), freshnative42576088809 and auto3profilematrix42577980036(compact96/large94/maxtext102commands, each11conditional skips). Current PNGs/provenance/fixturehashes inspected; gallery14restorationcapture is blank and is explicitly withheld as rendered evidence. Test-only6a3964e adds positiveimage/draftchecks aftersettling; one fresh-nativegallery42580144030 is running. Signedbeta16 workflow42579991019 HEADa1a12d6/appa02 is building, unassigned; IPAaudit/AppleVALID/currentrecapture/QAverification still pending. No build16 delivery is claimed. The scheduled30min continuation handles the existing runs. Storebuild15 remains submitted and unchanged. See testing/pdf-attachments.md for exact evidence and limits.
 
 ## App Store submission verified — 9 November 2026
 

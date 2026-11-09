@@ -1,5 +1,21 @@
 # PDF attachment removal and connection recovery
 
+## Parallel follow-up evidence — 9 November 2026
+
+App `a02f88e` has current passing evidence:
+
+- PDF [42576100714](https://github.com/NihalKA/nylo/actions/runs/42576100714):58/58 commands. Keyboard-open single-tap removal, exact restored draft, focused API-format editor, unsaved Responses edit/back preserving the original disabled Chat Completions choice, explicit compatible-connection selection, retained PDF and cold restoration. All8 checkpoint PNGs plus launch inspected; compiled runtime289 with refresheda02JS/fixtures.
+- Gallery [42576104831](https://github.com/NihalKA/nylo/actions/runs/42576104831):181/181, exact293-byte clipboard equality and nativeSQL/blob checks. All17checkpoint PNGs inspected. **Restoration screenshot14 is blank despite successful preceding visibility assertions; no rendered restoration credit is given.** Other attachment, response, picker and recovery captures render. Runtime289 with refresheda02JS.
+- Fresh native [42576088809](https://github.com/NihalKA/nylo/actions/runs/42576088809):PASS/a02. Actual compiled audit verifies11manifests, requiredSDK manifests present, camera purpose/no microphone/no tracking/exempt encryption/iPhonefamily1. Its simulator build number1 is not a signed candidate identity.
+- Automatic matrix [42577980036](https://github.com/NihalKA/nylo/actions/runs/42577980036):compact96complete/11conditional skips; large94/11; maximum text102/11, zero failures. Actual native/JSa02, refreshfalse, flowsa1a12d6 (docs-only aftera02). All42flow checkpoints plus3launch captures inspected. Existing maximum-text density limitations remain; no VoiceOver/physical claim.
+
+Root verified current fixture hashes, command/JUnit outcomes, recorded native/JS provenance, storage reports and exact clipboard bytes in ignored `artifacts/pdf-polish-a02/verification.json`.
+
+Test-only `6a3964e` adds explicit image-preview and exact-draft visibility after animation settling before screenshot14. A single fresh-native gallery recapture [42580144030](https://github.com/NihalKA/nylo/actions/runs/42580144030) is in progress, nativea02/run42576088809, refreshfalse. No assertion was removed; cause of the blank capture is not established.
+
+Signed beta workflow [42579991019](https://github.com/NihalKA/nylo/actions/runs/42579991019), run16, HEADa1a12d6/appa02, is building. Exact exportedIPA audit, AppleVALID identity, recapture disposition and internalQA assignment remain pending. **Build16 is not yet delivered.** Submitted storebuild15 stays unchanged; no new provider requests or App Store version replacement occurred. Next scheduled continuation must inspect these existing runs without duplicating them, complete verified internal beta delivery, then disable the PDF follow-up task.
+
+
 ## Post-submission PDF refinement — native verification pending
 
 The owner authorized parallel improvements while submitted build15 waits for review. Source now uses a compact document row with an accessible44-point Remove icon, shorter API-format warning and inline Choose PDF connection action. In the grouped picker, each incompatible connection offers Edit API format. That route opens only the selected provider, places format controls first, preserves the chat draft and never automatically changes the protocol, endpoint or credential. A changed destination still requires explicit key re-entry and save through existing credential checks; listing a model still does not verify its PDF capability.
