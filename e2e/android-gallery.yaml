@@ -35,6 +35,9 @@ appId: com.nylohq.nylo
 - tapOn: "Nylo-QA-gallery.json"
 - assertVisible: "Replace local data?"
 - tapOn: "Restore"
+- scrollUntilVisible:
+    element: "Backup restored. Add your API keys to continue."
+    direction: DOWN
 - assertVisible: "Backup restored. Add your API keys to continue."
 - tapOn: "Chats"
 - tapOn: "(?s)Open Example: A focused morning.*"

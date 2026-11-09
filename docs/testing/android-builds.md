@@ -1,3 +1,11 @@
+## Current Figma candidate9 — not released
+
+Product43dc70d / signed42702271410, version1.0.0/code9. Automatic UI42704383840 passes both real navigation modes:108 completed commands and12 conditional skips each, all30 PNGs inspected. Full ZIP SHA256 matches GitHub digests, CRC and Git6039539 fixture hashes pass; independent WindowManager checks give33px composer clearance in each mode. Actual compiled audit retains the existing certificate `1c275e7b601979d4900ec482b1f41bdbcd8b3c63e6419d339beb465b9adae21b`, correct package, no debugging/microphone/broad media permission and pinned bundletool validation. All11 runtime font binaries in the actual APK exactly match corrected source hashes (Android resource names are obfuscated). Full downloaded APK+AAB archive digest/CRC passes.
+
+APK57,974,134 bytes, SHA256 `5863559f33faa38cf7982125f4397901596297281c1b604b351093de2ea3f728`; AAB40,357,012 bytes, SHA256 `ba3a6a4db0161c10870dd34ab927d7bd12d65067fc978a18f2dc11ab84f8db2c`. Both smoke provenance hashes match that exact APK. Evidence: ignored `artifacts/android-delivery-9` and `artifacts/figma-current/android9-{gestural,threebutton}/verification.json`.
+
+Populated gallery42705388014 uses the same signed9 binary through normal backup import to cover the remaining design states. First three-button attempt fails at launch with actual adb device-offline/driverUNAVAILABLE, before app content executes; only that failed job was retried. First gesture attempt executes the narrowly scoped Pixel Launcher close branch, picks the owned backup and confirms Restore, then fails checking the below-viewport success notice without scrolling; actual screenshot shows two restored connections. The fixture now scrolls to the same exact notice before its unchanged assertion. Original accounting remains failure. Full current parity acceptance and publication are still pending.
+
 # Android build and testing path
 
 ## Current download — Figma Warm Edition, build6
