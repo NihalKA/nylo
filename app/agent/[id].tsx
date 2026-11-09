@@ -1,10 +1,11 @@
+import { Text } from "../../src/typography";
+import { fonts } from "../../src/typography";
 import { recentAgentContext } from "../../src/agent-context";
 import React, { useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
   Switch,
-  Text,
   View,
   useWindowDimensions,
 } from "react-native";
@@ -25,6 +26,62 @@ import {
   s,
   theme,
 } from "../../src/ui";
+
+function ContextPreview({ text }: { text: string }) {
+  const sections = text.split(/\n\n(?=Conversation: )/);
+  return (
+    <View style={[s.card, { gap: 16 }]}>
+      {sections.map((section, index) => {
+        const split = section.indexOf("\n");
+        const title =
+          split < 0
+            ? "Recent context"
+            : section.slice(0, split).replace(/^Conversation: /, "");
+        const body = split < 0 ? section : section.slice(split + 1);
+        return (
+          <View
+            key={index}
+            style={{
+              gap: 8,
+              paddingTop: index ? 16 : 0,
+              borderTopWidth: index ? 1 : 0,
+              borderTopColor: theme.line,
+            }}
+          >
+            <Text
+              style={{
+                color: theme.quiet,
+                fontSize: 11,
+                fontWeight: "600",
+                letterSpacing: 0.55,
+                textTransform: "uppercase",
+              }}
+            >
+              Conversation · {title}
+            </Text>
+            <Text
+              selectable
+              style={{ color: theme.text, fontSize: 14, lineHeight: 21 }}
+            >
+              {body.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
+                <Text
+                  key={i}
+                  style={
+                    part.startsWith("**")
+                      ? { color: theme.ink, fontWeight: "600" }
+                      : undefined
+                  }
+                >
+                  {part.startsWith("**") ? part.slice(2, -2) : part}
+                </Text>
+              ))}
+            </Text>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
 
 export default function AgentRoute() {
   const params = useLocalSearchParams<{ id: string }>();
@@ -99,6 +156,7 @@ function AgentDetail() {
     <Page>
       <Header
         title="Agent"
+        titleStyle={{ fontSize: 22, letterSpacing: -0.55 }}
         dismissKeyboard
         right={
           <IconButton
@@ -122,7 +180,12 @@ function AgentDetail() {
           <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
             <AgentAvatar agent={agent} />
             <View style={{ flex: 1, gap: 7 }}>
-              <Text style={[s.h2, { fontSize: 26, letterSpacing: -0.7 }]}>
+              <Text
+                style={[
+                  s.h2,
+                  { fontSize: 18, fontWeight: "700", letterSpacing: -0.45 },
+                ]}
+              >
                 {agent.name}
               </Text>
               <Text style={s.sub}>
@@ -145,10 +208,10 @@ function AgentDetail() {
           style={[
             s.row,
             {
-              backgroundColor: theme.surface,
-              borderRadius: 14,
-              padding: 4,
-              gap: 4,
+              backgroundColor: theme.muted,
+              borderRadius: 24,
+              padding: 2,
+              gap: 0,
               flexWrap: "wrap",
             },
           ]}
@@ -169,7 +232,7 @@ function AgentDetail() {
                 justifyContent: "center",
                 paddingVertical: 10,
                 paddingHorizontal: 12,
-                borderRadius: 10,
+                borderRadius: 22,
                 backgroundColor: tab === t ? theme.card : "transparent",
               }}
             >
@@ -177,7 +240,7 @@ function AgentDetail() {
                 style={{
                   color: tab === t ? theme.ink : theme.sub,
                   fontWeight: "600",
-                  fontSize: 15,
+                  fontSize: 14,
                   maxWidth: "100%",
                   textAlign: "center",
                 }}
@@ -215,10 +278,22 @@ function AgentDetail() {
             <Field
               testID="agent-memory-input"
               label={editingId ? "Edit memory" : "New memory"}
+              labelStyle={{
+                fontFamily: fonts.heading,
+                fontSize: 16,
+                fontWeight: "700",
+                letterSpacing: -0.4,
+              }}
               value={memory}
               onChangeText={setMemory}
               multiline
-              style={{ backgroundColor: theme.card }}
+              style={{
+                backgroundColor: theme.card,
+                minHeight: 110,
+                borderRadius: 16,
+                fontSize: 14,
+                lineHeight: 21,
+              }}
               maxLength={1000}
               placeholder="Add a useful fact…"
             />
@@ -270,8 +345,10 @@ function AgentDetail() {
                 }}
               />
             ) : null}
-            <Text style={s.h2}>Saved memories</Text>
-            <Text style={s.sub}>
+            <Text style={[s.h2, { fontSize: 16, fontWeight: "700" }]}>
+              Saved memories
+            </Text>
+            <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
               These facts are included when you message this agent. You can
               review, edit, or remove them at any time.
             </Text>
@@ -286,7 +363,8 @@ function AgentDetail() {
                     alignItems: fontScale > 1.5 ? "stretch" : "center",
                     padding: 16,
                     backgroundColor: theme.card,
-                    borderRadius: 18,
+                    borderRadius: 16,
+                    minHeight: 92,
                     borderWidth: 1,
                     borderColor: theme.line,
                   },
@@ -298,8 +376,20 @@ function AgentDetail() {
                     maxWidth: "100%",
                   }}
                 >
-                  <Text style={s.text}>{m.text}</Text>
-                  <Text style={[s.sub, { fontSize: 12, marginTop: 6 }]}>
+                  <Text
+                    style={[
+                      s.text,
+                      { fontSize: 14, lineHeight: 20, fontWeight: "600" },
+                    ]}
+                  >
+                    {m.text}
+                  </Text>
+                  <Text
+                    style={[
+                      s.sub,
+                      { fontSize: 11, color: theme.quiet, marginTop: 6 },
+                    ]}
+                  >
                     {new Date(m.createdAt).toLocaleDateString()}
                   </Text>
                 </View>
@@ -353,7 +443,24 @@ function AgentDetail() {
             {agent.goal ? (
               <View style={{ gap: 6 }}>
                 <Text style={s.h2}>Current goal</Text>
-                <Text style={s.text}>{agent.goal}</Text>
+                <Text
+                  style={[
+                    s.text,
+                    {
+                      fontSize: 14,
+                      fontWeight: "500",
+                      color: theme.text,
+                      backgroundColor: theme.surface,
+                      borderColor: "#E2E2E2",
+                      borderWidth: 1,
+                      borderRadius: 12,
+                      minHeight: 54,
+                      padding: 16,
+                    },
+                  ]}
+                >
+                  {agent.goal}
+                </Text>
               </View>
             ) : null}
             <Text style={s.h2}>Context between chats</Text>
@@ -385,7 +492,7 @@ function AgentDetail() {
                 }
               />
             </View>
-            <Text style={s.sub}>
+            <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
               Saved memories are durable facts. Recent context helps continue
               earlier work; it is a limited excerpt, not perfect recall of every
               conversation. Deleting a memory does not erase the original chats.
@@ -402,10 +509,12 @@ function AgentDetail() {
                   onPress={() => setShowContext(!showContext)}
                 />
                 {showContext ? (
-                  <Text selectable style={[s.sub, s.card]}>
-                    {recentAgentContext(data, agent, "") ||
-                      "No earlier conversation text yet."}
-                  </Text>
+                  <ContextPreview
+                    text={
+                      recentAgentContext(data, agent, "") ||
+                      "No earlier conversation text yet."
+                    }
+                  />
                 ) : null}
               </>
             ) : null}

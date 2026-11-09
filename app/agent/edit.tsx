@@ -1,5 +1,6 @@
+import { Text } from "../../src/typography";
 import React, { useRef, useState } from "react";
-import { Pressable, Switch, Text, View } from "react-native";
+import { Pressable, Switch, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { colors, isDeviceCheckConversation } from "../../src/domain";
@@ -88,6 +89,7 @@ function AgentEdit() {
   const [busy, setBusy] = useState(false);
   const saveLocked = useRef(false);
   const [roleEdited, setRoleEdited] = useState(false);
+  const [showOptions, setShowOptions] = useState(!!original || !!source);
   if (
     (id && id === data.deviceCheck?.agentId) ||
     (fromChat && isDeviceCheckConversation(data, fromChat))
@@ -146,6 +148,7 @@ function AgentEdit() {
     <Page>
       <Header
         dismissKeyboard
+        titleStyle={{ fontSize: 22, letterSpacing: -0.55 }}
         title={
           original
             ? "Edit agent"
@@ -155,11 +158,22 @@ function AgentEdit() {
         }
       />
       <FormScroll>
-        <View style={[s.card, s.row, { gap: 14, padding: 16 }]}>
-          <AgentAvatar agent={{ name, color }} />
+        <View
+          style={[
+            s.card,
+            s.row,
+            {
+              gap: 16,
+              padding: 16,
+              minHeight: 91,
+              backgroundColor: theme.surface,
+            },
+          ]}
+        >
+          <AgentAvatar agent={{ name, color }} size={48} />
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={s.h2}>{name || "Your agent"}</Text>
-            <Text style={s.sub}>
+            <Text style={[s.sub, { fontSize: 12, lineHeight: 16 }]}>
               Instructions and memory for the work you return to.
             </Text>
           </View>
@@ -198,7 +212,7 @@ function AgentEdit() {
                   style={{
                     backgroundColor:
                       name === t.name && instructions === t.instructions
-                        ? theme.ink
+                        ? theme.primary
                         : theme.surface,
                     borderWidth: 1,
                     borderColor: theme.line,
@@ -215,8 +229,9 @@ function AgentEdit() {
                         name === t.name && instructions === t.instructions
                           ? theme.onPrimary
                           : theme.ink,
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: "600",
+                      letterSpacing: 0.24,
                     }}
                   >
                     {t.name}
@@ -229,6 +244,7 @@ function AgentEdit() {
         <Field
           testID="agent-name"
           label="Name"
+          labelStyle={s.eyebrow}
           value={name}
           onChangeText={(value) => {
             setName(value);
@@ -258,6 +274,7 @@ function AgentEdit() {
         </View>
         <Field
           label="Its purpose"
+          labelStyle={s.eyebrow}
           value={description}
           onChangeText={(value) => {
             setDescription(value);
@@ -268,6 +285,7 @@ function AgentEdit() {
         />
         <Field
           label="How it should work"
+          labelStyle={s.eyebrow}
           value={instructions}
           onChangeText={(value) => {
             setInstructions(value);
@@ -276,11 +294,13 @@ function AgentEdit() {
           multiline
           placeholder="Be thoughtful and direct. Help me explore options and choose the next step…"
           maxLength={8000}
-          style={{ minHeight: 150 }}
+          style={{ minHeight: 131, fontSize: 14, lineHeight: 20 }}
           help="These instructions guide every conversation with this agent."
         />
         <Field
           label="Current goal"
+          labelStyle={s.eyebrow}
+          style={{ minHeight: 108, fontSize: 14, lineHeight: 20 }}
           value={goal}
           onChangeText={setGoal}
           multiline
@@ -288,94 +308,115 @@ function AgentEdit() {
           placeholder="What outcome are you working toward?"
           help="Shared across this agent’s chats until you change it."
         />
-        <Text style={s.text}>Working approach</Text>
-        <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
-          {(["direct", "plan", "coach"] as const).map((value) => (
-            <Button
-              key={value}
-              title={
-                value === "direct"
-                  ? "Work directly"
-                  : value === "plan"
-                    ? "Plan & deliver"
-                    : "Coach me"
-              }
-              secondary={workflow !== value}
-              onPress={() => setWorkflow(value)}
-            />
-          ))}
-        </View>
-        <View style={{ gap: 8 }}>
-          <Text style={s.text}>Use recent chats</Text>
-          <Switch
-            accessibilityLabel="Use recent chats from this agent"
-            value={shareRecentChats}
-            onValueChange={setShareRecentChats}
-          />
-          <Text style={s.sub}>
-            Carry relevant text context between this agent’s conversations. You
-            approve enabling this before it is shared. Other agents stay
-            separate. Files themselves are excluded; conversation text quoting
-            or discussing them may be included.
+        <Pressable
+          accessibilityRole="button"
+          accessibilityState={{ expanded: showOptions }}
+          onPress={() => setShowOptions(!showOptions)}
+          style={{ minHeight: 44, justifyContent: "center" }}
+        >
+          <Text style={[s.sub, { fontWeight: "600" }]}>
+            {showOptions
+              ? "Hide additional options"
+              : "Additional agent options"}
           </Text>
-        </View>
-        {source ? (
-          <Field
-            label="Context to carry forward"
-            value={context}
-            onChangeText={setContext}
-            multiline
-            maxLength={1000}
-            style={{ minHeight: 150 }}
-            help="Review this excerpt before saving. It becomes an editable memory; the original conversation moves into this agent."
-          />
-        ) : null}
-        <View style={{ gap: 10 }}>
-          <Text style={{ fontSize: 12, fontWeight: "600", color: theme.ink }}>
-            Default connection
-          </Text>
-          {data.connections.length ? (
-            data.connections.map((c) => (
-              <Pressable
-                accessibilityRole="radio"
-                accessibilityState={{ checked: connectionId === c.id }}
-                key={c.id}
-                onPress={() => setConnectionId(c.id)}
-                style={[
-                  s.card,
-                  {
-                    padding: 14,
-                    borderColor:
-                      connectionId === c.id ? theme.green : theme.line,
-                    backgroundColor:
-                      connectionId === c.id ? theme.pale : "#FFF",
-                  },
-                ]}
+        </Pressable>
+        {showOptions ? (
+          <View style={{ gap: 20 }}>
+            <Text style={s.text}>Working approach</Text>
+            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
+              {(["direct", "plan", "coach"] as const).map((value) => (
+                <Button
+                  key={value}
+                  title={
+                    value === "direct"
+                      ? "Work directly"
+                      : value === "plan"
+                        ? "Plan & deliver"
+                        : "Coach me"
+                  }
+                  secondary={workflow !== value}
+                  onPress={() => setWorkflow(value)}
+                />
+              ))}
+            </View>
+            <View style={{ gap: 8 }}>
+              <Text style={s.text}>Use recent chats</Text>
+              <Switch
+                accessibilityLabel="Use recent chats from this agent"
+                value={shareRecentChats}
+                onValueChange={setShareRecentChats}
+              />
+              <Text style={s.sub}>
+                Carry relevant text context between this agent’s conversations.
+                You approve enabling this before it is shared. Other agents stay
+                separate. Files themselves are excluded; conversation text
+                quoting or discussing them may be included.
+              </Text>
+            </View>
+            {source ? (
+              <Field
+                label="Context to carry forward"
+                value={context}
+                onChangeText={setContext}
+                multiline
+                maxLength={1000}
+                style={{ minHeight: 150 }}
+                help="Review this excerpt before saving. It becomes an editable memory; the original conversation moves into this agent."
+              />
+            ) : null}
+            <View style={{ gap: 10 }}>
+              <Text
+                style={{ fontSize: 12, fontWeight: "600", color: theme.ink }}
               >
-                <Text style={s.text}>
-                  {c.name} · {c.model}
+                Default connection
+              </Text>
+              {data.connections.length ? (
+                data.connections.map((c) => (
+                  <Pressable
+                    accessibilityRole="radio"
+                    accessibilityState={{ checked: connectionId === c.id }}
+                    key={c.id}
+                    onPress={() => setConnectionId(c.id)}
+                    style={[
+                      s.card,
+                      {
+                        padding: 14,
+                        borderColor:
+                          connectionId === c.id ? theme.green : theme.line,
+                        backgroundColor:
+                          connectionId === c.id ? theme.pale : "#FFF",
+                      },
+                    ]}
+                  >
+                    <Text style={s.text}>
+                      {c.name} · {c.model}
+                    </Text>
+                  </Pressable>
+                ))
+              ) : (
+                <Text style={s.sub}>
+                  You can create the agent now and add a connection in Settings
+                  before chatting.
                 </Text>
-              </Pressable>
-            ))
-          ) : (
-            <Text style={s.sub}>
-              You can create the agent now and add a connection in Settings
-              before chatting.
-            </Text>
-          )}
-        </View>
-        <View style={[s.card, { gap: 9 }]}>
-          <Badge text="LOCAL MEMORY" icon="sparkles-outline" />
-          <Text style={s.sub}>
-            Useful preferences and decisions can be proposed as memories. You
-            approve each save, or add facts yourself. This version has local
-            memory tools; browsing and external actions are not connected.
-          </Text>
-        </View>
+              )}
+            </View>
+            <View style={[s.card, { gap: 9 }]}>
+              <Badge text="LOCAL MEMORY" icon="sparkles-outline" />
+              <Text style={s.sub}>
+                Useful preferences and decisions can be proposed as memories.
+                You approve each save, or add facts yourself. This version has
+                local memory tools; browsing and external actions are not
+                connected.
+              </Text>
+            </View>
+          </View>
+        ) : null}
         {error ? <Text style={s.error}>{error}</Text> : null}
         <Button
-          title={original ? "Save changes" : "Create agent"}
-          icon="sparkles-outline"
+          title={original ? "Save changes" : "Save & start agent"}
+          accessibilityLabel={original ? "Save changes" : "Create agent"}
+          icon="arrow-forward"
+          iconPosition="end"
           loading={busy}
           onPress={() => void save()}
         />

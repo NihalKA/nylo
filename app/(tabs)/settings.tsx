@@ -1,6 +1,8 @@
+import { Text } from "../../src/typography";
+import { fonts } from "../../src/typography";
 import Constants from "expo-constants";
 import React, { useRef, useState } from "react";
-import { Linking, Pressable, Text, View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 import { router } from "expo-router";
 import { emptyData } from "../../src/types";
 import { useStore } from "../../src/store";
@@ -13,7 +15,6 @@ import {
   confirm,
   s,
   theme,
-  softShadow,
 } from "../../src/ui";
 
 function SettingsRow({
@@ -43,8 +44,9 @@ function SettingsRow({
         s.row,
         {
           minHeight: 58,
-          gap: 14,
-          paddingVertical: 14,
+          gap: 16,
+          paddingVertical: 16,
+          paddingHorizontal: 16,
           borderBottomWidth: last ? 0 : 1,
           borderBottomColor: theme.line,
           opacity: disabled ? 0.4 : pressed ? 0.55 : 1,
@@ -53,10 +55,10 @@ function SettingsRow({
     >
       <View
         style={{
-          width: 38,
-          height: 38,
-          borderRadius: 19,
-          backgroundColor: destructive ? theme.errorSurface : theme.surface,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: destructive ? "#FFDAD2" : theme.muted,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -69,13 +71,24 @@ function SettingsRow({
       </View>
       <View style={{ flex: 1, gap: 3 }}>
         <Text
-          style={[s.text, { color: destructive ? theme.error : theme.ink }]}
+          style={[
+            s.text,
+            {
+              fontFamily: detail ? fonts.heading : fonts.body,
+              fontSize: detail ? 18 : 16,
+              fontWeight: detail ? "600" : "500",
+              letterSpacing: detail ? -0.45 : -0.4,
+              color: destructive ? theme.error : theme.ink,
+            },
+          ]}
         >
           {title}
         </Text>
-        {detail ? <Text style={s.sub}>{detail}</Text> : null}
+        {detail ? (
+          <Text style={[s.sub, { color: theme.quiet }]}>{detail}</Text>
+        ) : null}
       </View>
-      <Icon name="chevron-forward" size={13} color={theme.sub} />
+      <Icon name="chevron-forward" size={20} color="#C6C5D0" />
     </Pressable>
   );
 }
@@ -83,12 +96,11 @@ function Group({ children }: { children: React.ReactNode }) {
   return (
     <View
       style={{
-        ...softShadow,
         backgroundColor: theme.card,
         borderWidth: 1,
-        borderColor: theme.line,
-        borderRadius: 18,
-        paddingHorizontal: 16,
+        borderColor: "#E7E7E5",
+        borderRadius: 12,
+        overflow: "hidden",
       }}
     >
       {children}
@@ -124,12 +136,25 @@ export default function Settings() {
         <Text
           accessibilityRole="header"
           maxFontSizeMultiplier={1.6}
-          style={[s.title, { paddingTop: 12, paddingBottom: 8 }]}
+          style={[
+            s.title,
+            {
+              fontFamily: fonts.nimbus,
+              fontSize: 16,
+              letterSpacing: -0.4,
+              paddingTop: 12,
+              paddingBottom: 8,
+            },
+          ]}
         >
           Settings
         </Text>
         <View style={{ gap: 9 }}>
-          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Your AI</Text>
+          <Text
+            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+          >
+            Your AI
+          </Text>
           <Group>
             <SettingsRow
               title={
@@ -147,13 +172,25 @@ export default function Settings() {
               last
             />
           </Group>
-          <Text style={[s.sub, { fontSize: 12, paddingHorizontal: 4 }]}>
+          <Text
+            style={[
+              s.sub,
+              {
+                fontSize: 13,
+                lineHeight: 21,
+                fontFamily: fonts.nimbus,
+                paddingHorizontal: 4,
+              },
+            ]}
+          >
             Messages go to the provider you choose. Its API charges and data
             policies apply.
           </Text>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>
+          <Text
+            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+          >
             Data on this device
           </Text>
           <Group>
@@ -200,13 +237,27 @@ export default function Settings() {
               last
             />
           </Group>
-          <Text style={[s.sub, { fontSize: 12, paddingHorizontal: 4 }]}>
+          <Text
+            style={[
+              s.sub,
+              {
+                fontSize: 13,
+                lineHeight: 21,
+                fontFamily: fonts.nimbus,
+                paddingHorizontal: 4,
+              },
+            ]}
+          >
             No automatic cloud sync. Export before uninstalling or changing
             devices.
           </Text>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Help & privacy</Text>
+          <Text
+            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+          >
+            Help & privacy
+          </Text>
           <Group>
             <SettingsRow
               title="Privacy policy"
@@ -232,7 +283,11 @@ export default function Settings() {
           </Group>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Advanced</Text>
+          <Text
+            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+          >
+            Advanced
+          </Text>
           <Group>
             <SettingsRow
               title="Live device check"
@@ -284,6 +339,17 @@ export default function Settings() {
             ? ` (${Constants.nativeBuildVersion})`
             : ""}
         </Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push("/licenses")}
+          style={{
+            minHeight: 44,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text style={[s.sub, { fontSize: 12 }]}>Font licenses</Text>
+        </Pressable>
       </FormScroll>
     </Page>
   );

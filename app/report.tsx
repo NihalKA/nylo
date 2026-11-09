@@ -1,5 +1,7 @@
+import { Text } from "../src/typography";
+import { fonts } from "../src/typography";
 import React, { useState } from "react";
-import { Linking, Switch, Text, View } from "react-native";
+import { Linking, Switch, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../src/store";
 import {
@@ -7,6 +9,7 @@ import {
   Field,
   FormScroll,
   Header,
+  Icon,
   Page,
   confirm,
   s,
@@ -37,33 +40,122 @@ export default function Report() {
         </Text>
         <Field
           label="What should we review?"
+          labelStyle={s.h2}
           value={details}
           onChangeText={setDetails}
           maxLength={1500}
           multiline
+          style={{ minHeight: 140, fontSize: 14, lineHeight: 20 }}
           placeholder="Unsafe content, a privacy concern, or another issue…"
         />
+        <Text
+          style={{
+            color: theme.quiet,
+            fontSize: 11,
+            fontWeight: "600",
+            alignSelf: "flex-end",
+            marginTop: -14,
+          }}
+        >
+          Optional details
+        </Text>
         <View style={[s.card, s.between, { gap: 12, flexWrap: "wrap" }]}>
           <View style={{ flex: 1, minWidth: 160, gap: 6 }}>
-            <Text style={s.text}>Include this response excerpt</Text>
-            <Text style={s.sub}>
+            <Text style={[s.text, { color: theme.text, fontWeight: "500" }]}>
+              Include this response excerpt
+            </Text>
+            <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
               Only this selected answer is added to the report.
             </Text>
           </View>
           <Switch
-            trackColor={{ false: theme.muted, true: theme.ink }}
+            trackColor={{ false: theme.muted, true: theme.primary }}
             accessibilityLabel="Include selected response text"
             value={include}
             onValueChange={setInclude}
             disabled={!message}
           />
         </View>
-        <Text accessibilityRole="header" style={s.h2}>
-          Report preview
-        </Text>
-        <Text selectable style={[s.sub, s.card]}>
-          {preview}
-        </Text>
+        <View style={[s.between, { flexWrap: "wrap", gap: 8 }]}>
+          <Text accessibilityRole="header" style={s.h2}>
+            Report preview
+          </Text>
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: "600",
+              color: "#8793C7",
+              backgroundColor: theme.line,
+              borderRadius: 9,
+              paddingHorizontal: 8,
+              paddingVertical: 3,
+            }}
+          >
+            Automated Draft
+          </Text>
+        </View>
+        <View style={[s.card, { backgroundColor: "#F5F6F5", gap: 12 }]}>
+          <View style={s.between}>
+            <Text
+              style={{
+                color: theme.ink,
+                fontSize: 14,
+                fontWeight: "600",
+                letterSpacing: 0.14,
+              }}
+            >
+              Nylo response report
+            </Text>
+            <Icon
+              name="shield-checkmark-outline"
+              size={16}
+              color={theme.quiet}
+            />
+          </View>
+          <Text
+            selectable
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 12,
+              lineHeight: 18,
+              color: theme.sub,
+            }}
+          >
+            Model: {message?.model || "Not recorded"}
+          </Text>
+          <Text
+            selectable
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 13,
+              lineHeight: 20,
+              color: theme.text,
+            }}
+          >
+            {details.trim() || "Please investigate this response."}
+          </Text>
+          {include && message ? (
+            <View
+              style={{
+                backgroundColor: theme.card,
+                borderRadius: 8,
+                borderWidth: 1,
+                borderColor: "#C6C5D033",
+                padding: 12,
+              }}
+            >
+              <Text
+                selectable
+                style={[
+                  s.sub,
+                  { fontSize: 12, lineHeight: 18, color: theme.quiet },
+                ]}
+              >
+                {message.text.slice(0, 2000)}
+              </Text>
+            </View>
+          ) : null}
+        </View>
         <Button
           title="Open email to send report"
           icon="mail-outline"
@@ -81,7 +173,7 @@ export default function Report() {
             })()
           }
         />
-        <Text style={s.sub}>
+        <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
           Review and send in your email app. Opening the draft does not deliver
           a report. For urgent personal safety concerns, contact local emergency
           services.
@@ -91,6 +183,8 @@ export default function Report() {
             title="Remove this response from my device"
             secondary
             destructive
+            icon="trash-outline"
+            style={{ minHeight: 54, borderRadius: 27 }}
             disabled={!!runningId}
             onPress={() =>
               void (async () => {

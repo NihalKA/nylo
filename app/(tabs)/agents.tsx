@@ -1,11 +1,6 @@
+import { Text } from "../../src/typography";
 import React from "react";
-import {
-  FlatList,
-  Pressable,
-  Text,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { FlatList, Pressable, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
 import {
@@ -32,7 +27,7 @@ export default function Agents() {
         >
           Agents
         </Text>
-        <View style={{ borderRadius: 22, backgroundColor: theme.ink }}>
+        <View style={{ borderRadius: 22, backgroundColor: theme.primary }}>
           <IconButton
             name="add"
             label="Create agent"

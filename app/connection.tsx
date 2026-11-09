@@ -1,3 +1,4 @@
+import { Text } from "../src/typography";
 import { modelCatalogReducer } from "../src/model-catalog";
 import { connectionModels } from "../src/model-library";
 import { credentialDestination } from "../src/credentials";
@@ -6,14 +7,7 @@ import { streamingFetch } from "../src/transport";
 import { readKey } from "../src/storage";
 import { askPermission } from "../src/consent";
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import {
-  BackHandler,
-  FlatList,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from "react-native";
+import { BackHandler, FlatList, Platform, Pressable, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Connection, Protocol } from "../src/types";
 import {
@@ -535,11 +529,11 @@ function ProviderSettings({
                       borderWidth: 1,
                       borderColor:
                         selectedPreset(draft) === preset.id
-                          ? theme.ink
+                          ? theme.primary
                           : theme.line,
                       backgroundColor:
                         selectedPreset(draft) === preset.id
-                          ? theme.ink
+                          ? theme.primary
                           : theme.surface,
                       borderRadius: 14,
                       paddingHorizontal: 16,

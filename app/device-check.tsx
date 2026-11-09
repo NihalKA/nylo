@@ -1,5 +1,6 @@
+import { Text } from "../src/typography";
 import React, { useRef, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { router } from "expo-router";
 import Constants from "expo-constants";
 import { createConversation, uid, removeDeviceCheckData } from "../src/domain";

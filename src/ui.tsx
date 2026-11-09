@@ -1,3 +1,4 @@
+import { Text, TextInput, fonts } from "./typography";
 import React, { useEffect, useState } from "react";
 import {
   ColorValue,
@@ -9,8 +10,6 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
-  TextInput,
   TextInputProps,
   View,
   ViewStyle,
@@ -27,17 +26,23 @@ export const theme = {
   bg: "#F9F9F8",
   card: "#FFFFFF",
   surface: "#F3F4F3",
-  ink: "#1E2B58",
-  sub: "#676B76",
+  ink: "#061542",
+  primary: "#1E2B58",
+  text: "#1A1C1C",
+  sub: "#45464F",
+  quiet: "#767680",
   line: "#E8E8E7",
   green: "#087B65",
   pale: "#EEF0F7",
-  error: "#A33C2D",
-  errorSurface: "#FCE9E5",
-  selected: "#E5E9F7",
-  muted: "#ECEDEB",
+  error: "#B42907",
+  errorSurface: "#FFECE7",
+  selected: "#DCE1FF",
+  muted: "#EEEEED",
+  file: "#F4F3EF",
+  fileLine: "#E7E5E0",
   onPrimary: "#FFFFFF",
-  overlay: "#1E2B5866",
+  overlay: "#06154266",
+  attachmentOverlay: "#06154233",
 };
 export const softShadow = {
   shadowColor: theme.ink,
@@ -62,13 +67,15 @@ export const s = StyleSheet.create({
     justifyContent: "space-between",
   },
   title: {
+    fontFamily: fonts.heading,
     fontSize: 32,
     fontWeight: "700",
     color: theme.ink,
     letterSpacing: -0.7,
   },
   h2: {
-    fontSize: 19,
+    fontFamily: fonts.heading,
+    fontSize: 18,
     fontWeight: "600",
     color: theme.ink,
     letterSpacing: -0.4,
@@ -84,8 +91,8 @@ export const s = StyleSheet.create({
   },
   card: {
     ...softShadow,
-    padding: 18,
-    borderRadius: 18,
+    padding: 16,
+    borderRadius: 12,
     backgroundColor: theme.card,
     borderWidth: 1,
     borderColor: theme.line,
@@ -95,13 +102,13 @@ export const s = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: theme.line,
-    borderRadius: 14,
-    paddingHorizontal: 14,
+    borderRadius: 12,
+    paddingHorizontal: 16,
     paddingVertical: 13,
     backgroundColor: theme.surface,
     fontSize: 16,
     color: theme.ink,
-    minHeight: 50,
+    minHeight: 48,
   },
   error: { color: theme.error, fontSize: 13, lineHeight: 20 },
 });
@@ -152,11 +159,13 @@ export function Page({ children }: { children: React.ReactNode }) {
 export function Header({
   title,
   right,
+  titleStyle,
   dismissKeyboard,
   onDismissKeyboard,
 }: {
   title: string;
   right?: React.ReactNode;
+  titleStyle?: import("react-native").TextStyle;
   dismissKeyboard?: boolean;
   onDismissKeyboard?: () => void;
 }) {
@@ -174,7 +183,7 @@ export function Header({
           accessibilityRole="header"
           numberOfLines={1}
           maxFontSizeMultiplier={1.6}
-          style={[s.h2, { flex: 1 }]}
+          style={[s.h2, { flex: 1 }, titleStyle]}
         >
           {title}
         </Text>
@@ -218,12 +227,14 @@ export function IconButton({
   onPress,
   color,
   disabled,
+  size = 20,
 }: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   label: string;
   onPress: () => void;
   color?: ColorValue;
   disabled?: boolean;
+  size?: number;
 }) {
   return (
     <Pressable
@@ -243,6 +254,7 @@ export function IconButton({
     >
       <Icon
         name={name}
+        size={size}
         color={typeof color === "number" ? theme.ink : (color ?? undefined)}
       />
     </Pressable>
@@ -258,6 +270,8 @@ export function Button({
   icon,
   loading,
   style,
+  textStyle,
+  iconPosition = "start",
 }: {
   title: string;
   accessibilityLabel?: string;
@@ -268,6 +282,8 @@ export function Button({
   icon?: React.ComponentProps<typeof Ionicons>["name"];
   loading?: boolean;
   style?: ViewStyle;
+  textStyle?: import("react-native").TextStyle;
+  iconPosition?: "start" | "end";
 }) {
   return (
     <Pressable
@@ -292,10 +308,11 @@ export function Button({
               : theme.surface
             : destructive
               ? theme.error
-              : theme.ink,
+              : theme.primary,
           borderWidth: secondary ? 1 : 0,
-          borderColor: destructive ? "#F1C9C1" : theme.line,
-          opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
+          borderColor: destructive ? "#FFB4A399" : theme.line,
+          ...(disabled ? { backgroundColor: theme.muted } : {}),
+          opacity: pressed ? 0.7 : 1,
         },
         style,
       ]}
@@ -304,7 +321,7 @@ export function Button({
         <ActivityIndicator
           color={secondary ? (destructive ? theme.error : theme.ink) : "#FFF"}
         />
-      ) : icon ? (
+      ) : icon && iconPosition === "start" ? (
         <Icon
           name={icon}
           color={secondary ? (destructive ? theme.error : theme.ink) : "#FFF"}
@@ -313,24 +330,55 @@ export function Button({
       ) : null}
       <Text
         style={{
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: "600",
-          color: secondary ? (destructive ? theme.error : theme.ink) : "#FFF",
+          letterSpacing: 0.14,
+          color: disabled
+            ? theme.quiet
+            : secondary
+              ? destructive
+                ? theme.error
+                : theme.ink
+              : "#FFF",
+          ...textStyle,
         }}
       >
         {title}
       </Text>
+      {!loading && icon && iconPosition === "end" ? (
+        <Icon
+          name={icon}
+          color={
+            secondary
+              ? destructive
+                ? theme.error
+                : theme.ink
+              : theme.onPrimary
+          }
+          size={17}
+        />
+      ) : null}
     </Pressable>
   );
 }
 export function Field({
   label,
   help,
+  labelStyle,
   ...props
-}: TextInputProps & { label: string; help?: string }) {
+}: TextInputProps & {
+  label: string;
+  help?: string;
+  labelStyle?: import("react-native").TextStyle;
+}) {
   return (
     <View style={{ gap: 7 }}>
-      <Text style={{ fontSize: 14, fontWeight: "600", color: theme.ink }}>
+      <Text
+        style={[
+          { fontSize: 14, fontWeight: "600", color: theme.ink },
+          labelStyle,
+        ]}
+      >
         {label}
       </Text>
       <TextInput
@@ -343,7 +391,13 @@ export function Field({
           props.style,
         ]}
       />
-      {help ? <Text style={s.sub}>{help}</Text> : null}
+      {help ? (
+        <Text
+          style={[s.sub, { fontSize: 12, lineHeight: 18, color: theme.quiet }]}
+        >
+          {help}
+        </Text>
+      ) : null}
     </View>
   );
 }
@@ -378,16 +432,18 @@ export function Badge({
 export function AgentAvatar({
   agent,
   large,
+  size,
 }: {
   agent: Pick<Agent, "name" | "color">;
   large?: boolean;
+  size?: number;
 }) {
   return (
     <View
       style={{
-        width: large ? 64 : 44,
-        height: large ? 64 : 44,
-        borderRadius: large ? 22 : 16,
+        width: size || (large ? 64 : 44),
+        height: size || (large ? 64 : 44),
+        borderRadius: (size || (large ? 64 : 44)) / 2,
         backgroundColor: agent.color,
         alignItems: "center",
         justifyContent: "center",
@@ -398,7 +454,8 @@ export function AgentAvatar({
           color: "#FFFFFF",
           maxWidth: "100%",
           fontWeight: "600",
-          fontSize: large ? 28 : 20,
+          fontFamily: fonts.heading,
+          fontSize: size === 48 ? 22 : large ? 28 : 18,
         }}
         maxFontSizeMultiplier={1.4}
       >

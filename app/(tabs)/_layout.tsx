@@ -8,11 +8,15 @@ export default function MainTabs() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.ink,
-        tabBarInactiveTintColor: theme.sub,
-        tabBarLabelStyle: { fontSize: 11, fontWeight: "500" },
+        tabBarInactiveTintColor: theme.quiet,
+        tabBarLabelStyle: {
+          fontSize: 11,
+          fontFamily: "NyloBody600",
+          letterSpacing: 0.33,
+        },
         tabBarStyle: {
-          backgroundColor: theme.card,
-          borderTopColor: theme.line,
+          backgroundColor: theme.bg,
+          borderTopWidth: 0,
         },
         tabBarItemStyle: { minHeight: 48, paddingTop: 4 },
         sceneStyle: { backgroundColor: theme.bg },
@@ -73,9 +77,9 @@ function TabIcon({
   return (
     <View
       style={{
-        width: 48,
-        height: 30,
-        borderRadius: 15,
+        width: 50,
+        height: 24,
+        borderRadius: 12,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: focused ? theme.selected : "transparent",

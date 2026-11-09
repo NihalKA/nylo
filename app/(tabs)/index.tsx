@@ -1,12 +1,6 @@
+import { Text, TextInput } from "../../src/typography";
 import React, { useMemo, useState } from "react";
-import {
-  FlatList,
-  Pressable,
-  Text,
-  TextInput,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { FlatList, Pressable, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
 import { isDeviceCheckConversation } from "../../src/domain";
@@ -66,7 +60,7 @@ export default function Chats() {
         >
           Chats
         </Text>
-        <View style={{ borderRadius: 22, backgroundColor: theme.ink }}>
+        <View style={{ borderRadius: 22, backgroundColor: theme.primary }}>
           <IconButton
             name="create-outline"
             label="New chat"

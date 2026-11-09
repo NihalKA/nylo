@@ -1,5 +1,8 @@
+import { Text } from "../src/typography";
 import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { useFonts } from "expo-font";
+import { fontAssets } from "../src/typography";
+import { ActivityIndicator, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -8,7 +11,8 @@ import { s, theme } from "../src/ui";
 
 function Root() {
   const { ready, storageError } = useStore();
-  if (!ready)
+  const [fontsLoaded, fontError] = useFonts(fontAssets);
+  if (!ready || !fontsLoaded)
     return (
       <View
         style={[
@@ -21,8 +25,11 @@ function Root() {
           },
         ]}
       >
-        {storageError ? (
-          <Text style={s.error}>{storageError}</Text>
+        {storageError || fontError ? (
+          <Text style={s.error}>
+            {storageError ||
+              "Unable to load the app fonts. Please restart Nylo."}
+          </Text>
         ) : (
           <>
             <ActivityIndicator color={theme.green} />

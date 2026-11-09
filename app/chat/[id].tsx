@@ -1,3 +1,4 @@
+import { Text, TextInput, fonts } from "../../src/typography";
 import { attachmentFlowReducer } from "../../src/attachment-flow";
 import { modelSections } from "../../src/model-library";
 import { Attachment } from "../../src/types";
@@ -26,8 +27,6 @@ import {
   Pressable,
   ScrollView,
   SectionList,
-  Text,
-  TextInput,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -81,22 +80,37 @@ function MessageText({ text }: { text: string }) {
             </Text>
           </View>
         ) : (
-          <Text
-            key={index}
-            selectable
-            style={[s.text, { fontSize: 16, lineHeight: 26 }]}
-          >
-            {block.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
-              <Text
-                key={i}
-                style={
-                  part.startsWith("**") ? { fontWeight: "600" } : undefined
-                }
-              >
-                {part.startsWith("**") ? part.slice(2, -2) : part}
-              </Text>
-            ))}
-          </Text>
+          <View key={index} style={{ gap: 16 }}>
+            {block.split(/\n{2,}/g).map((paragraph, paragraphIndex) => {
+              const heading = /^\*\*[^*\n]+\*\*$/.test(paragraph);
+              return (
+                <Text
+                  key={paragraphIndex}
+                  selectable
+                  style={
+                    heading
+                      ? [s.h2, { fontWeight: "700" }]
+                      : { fontSize: 14, lineHeight: 22, color: theme.sub }
+                  }
+                >
+                  {heading
+                    ? paragraph.slice(2, -2)
+                    : paragraph.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
+                        <Text
+                          key={i}
+                          style={
+                            part.startsWith("**")
+                              ? { fontWeight: "600", color: theme.ink }
+                              : undefined
+                          }
+                        >
+                          {part.startsWith("**") ? part.slice(2, -2) : part}
+                        </Text>
+                      ))}
+                </Text>
+              );
+            })}
+          </View>
         ),
       )}
     </View>
@@ -328,6 +342,10 @@ function Chat() {
           composer.current?.blur();
           Keyboard.dismiss();
         }}
+        titleStyle={{
+          fontSize: conversation.messages.length ? 18 : 22,
+          letterSpacing: conversation.messages.length ? -0.45 : -0.55,
+        }}
         title={
           agent?.name ||
           (conversation.messages.length ? conversation.title : "New chat")
@@ -433,7 +451,12 @@ function Chat() {
               <Text
                 style={[
                   s.h2,
-                  { textAlign: "center", fontSize: 26, letterSpacing: -0.7 },
+                  {
+                    textAlign: "center",
+                    fontSize: 28,
+                    fontWeight: "700",
+                    letterSpacing: -0.7,
+                  },
                 ]}
               >
                 {agent ? `Work with ${agent.name}` : "Let’s begin"}
@@ -533,7 +556,7 @@ function Chat() {
                       ))}
                       <Text
                         selectable
-                        style={[s.text, { fontSize: 16, lineHeight: 25 }]}
+                        style={[s.text, { fontSize: 14, lineHeight: 20 }]}
                       >
                         {message.text}
                       </Text>
@@ -717,55 +740,113 @@ function Chat() {
               horizontal
               keyboardShouldPersistTaps="always"
               style={{ flexGrow: 0 }}
-              contentContainerStyle={{ gap: 10, alignItems: "flex-start" }}
+              contentContainerStyle={{
+                gap: 12,
+                alignItems: "center",
+                paddingVertical: 4,
+              }}
             >
-              {attachments.map((file) => (
-                <View
-                  key={file.id}
-                  style={[
-                    s.card,
-                    {
-                      padding: 8,
+              {attachments.map((file) => {
+                const image = file.mimeType.startsWith("image/");
+                return (
+                  <View
+                    key={file.id}
+                    style={{
+                      padding: 10,
                       gap: 6,
-                      width: file.mimeType.startsWith("image/") ? 158 : 260,
-                    },
-                  ]}
-                >
-                  {file.mimeType.startsWith("image/") ? (
-                    <Image
-                      source={{ uri: attachmentUri(file) }}
-                      accessibilityLabel={`Preview ${file.name}`}
-                      style={{ width: 140, height: 90, borderRadius: 8 }}
-                      resizeMode="contain"
-                    />
-                  ) : null}
-                  <View style={[s.row, { gap: 8 }]}>
-                    {!file.mimeType.startsWith("image/") ? (
-                      <Icon
-                        name="document-text-outline"
-                        size={24}
-                        color={theme.sub}
-                      />
-                    ) : null}
-                    <View style={{ flex: 1, minWidth: 0 }}>
+                      width: image ? 144 : 176,
+                      minHeight: image ? 165 : 134,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderColor: theme.fileLine,
+                      backgroundColor: theme.file,
+                    }}
+                  >
+                    {image ? (
+                      <View>
+                        <Image
+                          source={{ uri: attachmentUri(file) }}
+                          accessibilityLabel={`Preview ${file.name}`}
+                          style={{ width: 122, height: 96, borderRadius: 8 }}
+                          resizeMode="contain"
+                        />
+                        <Text
+                          style={{
+                            position: "absolute",
+                            bottom: 6,
+                            left: 6,
+                            backgroundColor: "#00000066",
+                            color: "#FFF",
+                            borderRadius: 4,
+                            paddingHorizontal: 5,
+                            paddingVertical: 3,
+                            fontSize: 10,
+                          }}
+                        >
+                          {file.mimeType.split("/")[1]?.toUpperCase()}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View
+                        style={{
+                          width: 36,
+                          height: 36,
+                          borderRadius: 8,
+                          backgroundColor: "#E8E8E799",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          marginBottom: 18,
+                        }}
+                      >
+                        <Icon
+                          name="document-text-outline"
+                          size={18}
+                          color={theme.ink}
+                        />
+                      </View>
+                    )}
+                    <View style={{ paddingRight: image ? 30 : 0 }}>
                       <Text
                         numberOfLines={2}
-                        style={[s.sub, { color: theme.ink }]}
+                        style={{
+                          color: theme.ink,
+                          fontSize: 12,
+                          lineHeight: 16,
+                          fontWeight: image ? "400" : "500",
+                        }}
                       >
                         {file.name}
                       </Text>
-                      <Text style={[s.sub, { fontSize: 12 }]}>
+                      <Text
+                        style={{
+                          color: theme.quiet,
+                          fontSize: 11,
+                          lineHeight: 16,
+                        }}
+                      >
                         {Math.ceil(file.size / 1024)} KB
+                        {!image && file.mimeType.startsWith("text/")
+                          ? " · Plain text"
+                          : ""}
                       </Text>
                     </View>
-                    <IconButton
-                      name="close"
-                      label={`Remove ${file.name}`}
-                      onPress={() => removeAttachment(file.id)}
-                    />
+                    <View
+                      style={{
+                        position: "absolute",
+                        right: 0,
+                        ...(image ? { bottom: 4 } : { top: 0 }),
+                      }}
+                    >
+                      <IconButton
+                        name="close"
+                        size={14}
+                        label={`Remove ${file.name}`}
+                        onPress={() => removeAttachment(file.id)}
+                      />
+                    </View>
                   </View>
-                </View>
-              ))}
+                );
+              })}
             </ScrollView>
           ) : null}
           {picking ? (
@@ -803,7 +884,7 @@ function Chat() {
               <Text
                 numberOfLines={1}
                 maxFontSizeMultiplier={1.6}
-                style={{ fontSize: 13, color: theme.sub, flexShrink: 1 }}
+                style={{ fontSize: 12, color: theme.quiet, flexShrink: 1 }}
               >
                 {connection ? `${connection.model}` : "Choose a model"}
               </Text>
@@ -816,11 +897,11 @@ function Chat() {
               {
                 alignItems: "flex-end",
                 gap: 10,
-                padding: 8,
-                borderRadius: 28,
+                padding: 4,
+                borderRadius: 27,
                 borderWidth: 1,
-                borderColor: theme.line,
-                backgroundColor: theme.surface,
+                borderColor: theme.fileLine,
+                backgroundColor: theme.file,
               },
             ]}
           >
@@ -846,8 +927,8 @@ function Chat() {
               placeholderTextColor={theme.sub}
               style={{
                 flex: 1,
-                fontSize: 16,
-                lineHeight: 23,
+                fontSize: 14,
+                lineHeight: 20,
                 color: theme.ink,
                 minHeight: 36,
                 maxHeight: 150,
@@ -875,7 +956,7 @@ function Chat() {
                   width: 44,
                   height: 44,
                   borderRadius: 22,
-                  backgroundColor: theme.ink,
+                  backgroundColor: theme.primary,
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -899,7 +980,7 @@ function Chat() {
                   borderRadius: 22,
                   backgroundColor:
                     (text.trim() || attachments.length) && !runningId
-                      ? theme.ink
+                      ? theme.primary
                       : "#E1E1E4",
                   alignItems: "center",
                   justifyContent: "center",
@@ -945,7 +1026,7 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: theme.overlay,
+            backgroundColor: theme.attachmentOverlay,
           }}
         >
           <View
@@ -956,45 +1037,74 @@ function Chat() {
               paddingBottom: Math.max(insets.bottom, 20),
               gap: 12,
               backgroundColor: theme.card,
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
               borderWidth: 1,
               borderColor: theme.line,
             }}
           >
+            <View
+              accessible={false}
+              style={{
+                alignSelf: "center",
+                width: 40,
+                height: 4,
+                borderRadius: 2,
+                backgroundColor: "#E2E2E2",
+                marginTop: -8,
+                marginBottom: 4,
+              }}
+            />
             <ScrollView
               style={{ flexGrow: 0, flexShrink: 1 }}
-              contentContainerStyle={{ gap: 12 }}
+              contentContainerStyle={{ gap: 10 }}
               keyboardShouldPersistTaps="handled"
             >
-              <Text accessibilityRole="header" style={s.h2}>
+              <Text
+                accessibilityRole="header"
+                style={[s.h2, { fontWeight: "700" }]}
+              >
                 Attachments
               </Text>
               <Button
                 title="Photo library"
+                style={{ minHeight: 52, borderRadius: 26 }}
                 secondary
                 icon="images-outline"
                 onPress={() => queueAttachment("photos")}
               />
               <Button
                 title="Take a photo"
+                style={{ minHeight: 52, borderRadius: 26 }}
                 secondary
                 icon="camera-outline"
                 onPress={() => queueAttachment("camera")}
               />
               <Button
                 title="Choose files"
+                style={{ minHeight: 52, borderRadius: 26 }}
                 secondary
                 icon="document-outline"
                 onPress={() => queueAttachment("files")}
               />
-              <Text style={s.sub}>
+              <Text
+                style={[
+                  s.sub,
+                  {
+                    color: theme.quiet,
+                    fontSize: 12,
+                    lineHeight: 18,
+                    marginTop: 8,
+                  },
+                ]}
+              >
                 Up to 4 files · 2 MB each, 4 MB total. Stored here until sent to
                 your provider.
               </Text>
             </ScrollView>
             <Button
               title="Cancel attachments"
+              style={{ minHeight: 50, backgroundColor: theme.muted }}
               secondary
               onPress={() => dispatchAttachment({ type: "cancel" })}
             />
@@ -1029,21 +1139,40 @@ function Chat() {
             accessibilityViewIsModal
             style={{
               maxHeight: "80%",
-              padding: 20,
+              padding: hasPdf ? 20 : 24,
               paddingBottom: Math.max(insets.bottom, 16),
               gap: 12,
               backgroundColor: theme.card,
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
+              borderTopLeftRadius: 28,
+              borderTopRightRadius: 28,
               borderWidth: 1,
               borderColor: theme.line,
             }}
           >
+            <View
+              accessible={false}
+              style={{
+                alignSelf: "center",
+                width: 40,
+                height: 4,
+                borderRadius: 2,
+                backgroundColor: "#E2E2E2",
+                marginTop: -12,
+              }}
+            />
             <View style={s.between}>
               <Text
                 accessibilityRole="header"
                 maxFontSizeMultiplier={1.6}
-                style={s.h2}
+                style={[
+                  s.h2,
+                  {
+                    fontSize: 22,
+                    fontWeight: "700",
+                    color: hasPdf ? theme.ink : theme.text,
+                    letterSpacing: -0.55,
+                  },
+                ]}
               >
                 Choose a model
               </Text>
@@ -1054,7 +1183,7 @@ function Chat() {
               />
             </View>
             {hasPdf ? (
-              <Text style={s.sub}>
+              <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
                 PDFs need Responses or Claude Messages. The selected model must
                 also support PDF input. Choosing a connection sends nothing.
               </Text>
@@ -1065,7 +1194,9 @@ function Chat() {
                 {
                   gap: 8,
                   paddingHorizontal: 12,
-                  borderRadius: 12,
+                  borderRadius: hasPdf ? 22 : 12,
+                  borderWidth: 1,
+                  borderColor: theme.line,
                   backgroundColor: theme.surface,
                 },
               ]}
@@ -1083,10 +1214,10 @@ function Chat() {
                 clearButtonMode="while-editing"
                 style={{
                   flex: 1,
-                  minHeight: 44,
+                  minHeight: hasPdf ? 44 : 48,
                   paddingVertical: 10,
                   color: theme.ink,
-                  fontSize: 16,
+                  fontSize: 14,
                 }}
               />
             </View>
@@ -1100,7 +1231,16 @@ function Chat() {
                 <View style={{ paddingTop: 16, paddingBottom: 4, gap: 4 }}>
                   <Text
                     accessibilityRole="header"
-                    style={[s.sub, { fontSize: 13, fontWeight: "600" }]}
+                    style={[
+                      s.sub,
+                      {
+                        fontSize: 12,
+                        fontWeight: hasPdf ? "600" : "500",
+                        color: hasPdf ? theme.text : theme.quiet,
+                        textTransform: hasPdf ? "none" : "uppercase",
+                        letterSpacing: hasPdf ? 0.24 : 0.6,
+                      },
+                    ]}
                   >
                     {c.name}
                   </Text>
@@ -1170,12 +1310,12 @@ function Chat() {
                   style={({ pressed }) => [
                     s.row,
                     {
-                      minHeight: 50,
+                      minHeight: hasPdf ? 62 : 54,
                       gap: 12,
                       paddingVertical: 12,
                       paddingHorizontal: 14,
                       marginVertical: 3,
-                      borderRadius: 16,
+                      borderRadius: 12,
                       borderWidth: 1,
                       borderColor:
                         c.id === connection?.id && model === connection.model
@@ -1196,6 +1336,10 @@ function Chat() {
                       s.text,
                       {
                         flex: 1,
+                        fontFamily: hasPdf ? fonts.body : fonts.heading,
+                        fontSize: hasPdf ? 14 : 16,
+                        color: hasPdf ? theme.ink : theme.text,
+                        letterSpacing: hasPdf ? 0 : -0.08,
                         fontWeight:
                           c.id === connection?.id && model === connection.model
                             ? "600"
@@ -1206,7 +1350,11 @@ function Chat() {
                     {model}
                   </Text>
                   {c.id === connection?.id && model === connection.model ? (
-                    <Icon name="checkmark-circle" size={22} color={theme.ink} />
+                    <Icon
+                      name={hasPdf ? "checkmark-circle" : "checkmark"}
+                      size={hasPdf ? 24 : 20}
+                      color={theme.primary}
+                    />
                   ) : null}
                 </Pressable>
               )}
@@ -1223,6 +1371,12 @@ function Chat() {
                   </Text>
                   <Button
                     title="Manage providers"
+                    style={{
+                      minHeight: hasPdf ? 46 : 52,
+                      borderRadius: hasPdf ? 23 : 26,
+                      backgroundColor: hasPdf ? theme.surface : theme.line,
+                    }}
+                    textStyle={{ color: hasPdf ? theme.ink : theme.text }}
                     secondary
                     onPress={() => {
                       setModelPicker(false);

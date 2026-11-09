@@ -29,7 +29,7 @@ export function plainTextPreview(text: string) {
     .replace(/\s+/g, " ")
     .trim();
 }
-export const colors = ["#246B58", "#826348", "#7464A2", "#477897", "#A85C5C"];
+export const colors = ["#1B5E3F", "#8C6239", "#585289", "#406F8E", "#A65454"];
 export const protocolDefaults: Record<
   Protocol,
   { name: string; baseUrl: string }
