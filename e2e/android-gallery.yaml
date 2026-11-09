@@ -89,6 +89,12 @@ appId: com.nylohq.nylo
     direction: DOWN
 - assertVisible: "(?s).*Our launch date is Friday.*"
 - takeScreenshot: gallery-08-shared-context
+# Exercise the reference's emphasized context block on Android as well as iOS.
+- scrollUntilVisible:
+    element: "(?s).*Review the small-screen layout[.].*"
+    direction: DOWN
+- assertVisible: "(?s).*Review the small-screen layout[.].*"
+- takeScreenshot: gallery-08b-context-emphasis
 - tapOn: "Go back"
 - tapOn: "Chats"
 - tapOn: "(?s)Open Example: PDF connection.*"
