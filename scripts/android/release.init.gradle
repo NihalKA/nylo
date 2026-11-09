@@ -1,0 +1,18 @@
+// Register before project evaluation; configure signing before AGP creates variants.
+gradle.beforeProject { project ->
+    project.plugins.withId('com.android.application') {
+        project.extensions.getByName('androidComponents').finalizeDsl { android ->
+            def required = { name ->
+                def value = System.getenv(name)
+                if (!value) throw new GradleException("Missing Android signing input: " + name)
+                value
+            }
+            def signing = android.signingConfigs.findByName('nyloRelease') ?: android.signingConfigs.create('nyloRelease')
+            signing.storeFile = new File(required('ANDROID_KEYSTORE_PATH'))
+            signing.storePassword = required('ANDROID_KEYSTORE_PASSWORD')
+            signing.keyAlias = required('ANDROID_KEY_ALIAS')
+            signing.keyPassword = required('ANDROID_KEY_PASSWORD')
+            android.buildTypes.getByName('release').signingConfig = signing
+        }
+    }
+}

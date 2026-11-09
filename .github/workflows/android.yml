@@ -1,0 +1,73 @@
+name: Android signed builds
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['app/**', 'src/**', 'assets/**', 'modules/**', 'plugins/**', 'app.json', 'package*.json', 'scripts/android/**', '.github/workflows/android.yml']
+permissions:
+  contents: read
+concurrency:
+  group: android-release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: android-release
+    timeout-minutes: 60
+    env:
+      CI: '1'
+      EXPO_NO_TELEMETRY: '1'
+      ANDROID_VERSION_CODE: ${{ github.run_number }}
+      GRADLE_OPTS: '-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2 -Xmx4g'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: npm ci --no-audit --no-fund
+      - run: npm run check
+      - run: node scripts/security-check.mjs
+      - name: Generate native Android project
+        run: |
+          python3 scripts/android/configure-build.py
+          npx expo prebuild --platform android --no-install
+          python3 scripts/android/manifest-policy.py
+      - name: Build signed APK and AAB
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          export ANDROID_KEYSTORE_PATH="$RUNNER_TEMP/nylo-release.jks"
+          trap 'rm -f "$ANDROID_KEYSTORE_PATH"' EXIT
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_PATH"
+          chmod 600 "$ANDROID_KEYSTORE_PATH"
+          mkdir -p artifacts/android
+          cd android
+          ./gradlew --no-daemon --max-workers=2 --init-script ../scripts/android/release.init.gradle :app:assembleRelease :app:bundleRelease -PreactNativeArchitectures=arm64-v8a,x86_64 > ../artifacts/android/build.log 2>&1 || { tail -100 ../artifacts/android/build.log; exit 1; }
+          cd ..
+          cp android/app/build/outputs/apk/release/app-release.apk artifacts/android/Nylo-test.apk
+          cp android/app/build/outputs/bundle/release/app-release.aab artifacts/android/Nylo-release.aab
+          build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
+          "$build_tools/apksigner" verify --verbose --print-certs artifacts/android/Nylo-test.apk > artifacts/android/signature.txt
+          "$build_tools/aapt2" dump badging artifacts/android/Nylo-test.apk > artifacts/android/package.txt
+          "$build_tools/aapt2" dump permissions artifacts/android/Nylo-test.apk > artifacts/android/permissions.txt
+          jarsigner -verify -keystore "$ANDROID_KEYSTORE_PATH" -storepass:env ANDROID_KEYSTORE_PASSWORD artifacts/android/Nylo-release.aab > artifacts/android/aab-signature.txt
+          python3 scripts/android/audit.py
+          sha256sum artifacts/android/*.apk artifacts/android/*.aab > artifacts/android/sha256.txt
+          git rev-parse HEAD > artifacts/android/source.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: android-${{ github.run_number }}-${{ github.sha }}
+          path: artifacts/android/
+          if-no-files-found: ignore
+          retention-days: 14
