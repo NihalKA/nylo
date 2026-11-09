@@ -20,6 +20,25 @@ appId: com.nylohq.nylo
 - tapOn: "Save connection"
 - assertVisible: "Done"
 - tapOn: "Done"
+- waitForAnimationToEnd
+# The owned-key run showed the iOS Save Password sheet after Done. Never
+# save the fixture token to Passwords. Some iOS26 sheets expose no AX children;
+# that retained PNG grounds the large-profile Not Now point at (33%,61%).
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - tapOn: "Not Now"
+      - waitForAnimationToEnd
+- runFlow:
+    when:
+      notVisible: "Chats, tab, 1 of 3"
+    commands:
+      - takeScreenshot: background-00-system-password-prompt
+      - tapOn:
+          point: "33%,61%"
+      - waitForAnimationToEnd
+- assertVisible: "Chats, tab, 1 of 3"
 - tapOn: "Chats, tab, 1 of 3"
 - tapOn: "(?s)Open Example: background stream.*"
 - tapOn: "Send message"
