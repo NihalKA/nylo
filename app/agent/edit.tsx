@@ -324,6 +324,7 @@ function AgentEdit() {
             setRoleEdited(true);
           }}
           multiline
+          scrollEnabled={false}
           placeholder="Be thoughtful and direct. Help me explore options and choose the next step…"
           maxLength={8000}
           style={{ minHeight: 131, fontSize: 14, lineHeight: 20 }}
@@ -336,6 +337,7 @@ function AgentEdit() {
           value={goal}
           onChangeText={setGoal}
           multiline
+          scrollEnabled={false}
           maxLength={2000}
           placeholder="What outcome are you working toward?"
           help="Shared across this agent’s chats until you change it."
@@ -391,6 +393,7 @@ function AgentEdit() {
                 value={context}
                 onChangeText={setContext}
                 multiline
+                scrollEnabled={false}
                 maxLength={1000}
                 style={{ minHeight: 150 }}
                 help="Review this excerpt before saving. It becomes an editable memory; the original conversation moves into this agent."
