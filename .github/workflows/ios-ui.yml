@@ -19,11 +19,16 @@ on:
         type: choice
         options: [smoke, gallery, attachments, store, pdf]
         default: smoke
+      profile:
+        description: Smoke profile to validate (other scenarios use large)
+        type: choice
+        options: [all, compact, large, large-text]
+        default: all
 permissions:
   contents: read
   actions: read
 concurrency:
-  group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}
+  group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}-${{ inputs.profile || 'all' }}
   cancel-in-progress: true
 jobs:
   eligibility:
@@ -95,7 +100,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        profile: ${{ inputs.scenario != 'smoke' && inputs.scenario != '' && fromJSON('["large"]') || fromJSON('["compact","large","large-text"]') }}
+        profile: ${{ inputs.scenario != 'smoke' && inputs.scenario != '' && fromJSON('["large"]') || inputs.profile && inputs.profile != 'all' && fromJSON(format('["{0}"]', inputs.profile)) || fromJSON('["compact","large","large-text"]') }}
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
