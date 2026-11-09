@@ -231,6 +231,7 @@ export function IconButton({
 }
 export function Button({
   title,
+  accessibilityLabel,
   onPress,
   secondary,
   destructive,
@@ -240,6 +241,7 @@ export function Button({
   style,
 }: {
   title: string;
+  accessibilityLabel?: string;
   onPress: () => void;
   secondary?: boolean;
   destructive?: boolean;
@@ -251,7 +253,7 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
-      accessibilityLabel={title}
+      accessibilityLabel={accessibilityLabel || title}
       disabled={disabled || loading}
       onPress={onPress}
       style={({ pressed }) => [

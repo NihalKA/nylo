@@ -213,6 +213,7 @@ function Chat() {
     const { source, operation } = attachmentFlow;
     const chatId = id;
     startedAttachment.current = operation;
+    setError("");
     setAttachmentPreparation(null);
     void (async () => {
       try {
@@ -677,7 +678,8 @@ function Chat() {
                     {file.name} · {Math.ceil(file.size / 1024)} KB
                   </Text>
                   <Button
-                    title={`Remove ${file.name}`}
+                    title="Remove"
+                    accessibilityLabel={`Remove ${file.name}`}
                     secondary
                     onPress={() =>
                       setAttachments((current) =>

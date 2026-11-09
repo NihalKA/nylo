@@ -32,3 +32,7 @@ Four earlier restricted text/tool/recall provider requests were used under their
 App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Final screenshot upload, truthful age/privacy declarations, monitored support practice and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
 
 No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
+
+## Next source refinements (not a new TestFlight assignment)
+
+Attachment cards use concise visible Remove text while retaining the full filename in the accessibility label. Starting a new import clears the previous local error. Typecheck and75tests pass; rendered verification is pending. Build13above remains the delivered feedback candidate; its source/provenance and86point review are unchanged.
