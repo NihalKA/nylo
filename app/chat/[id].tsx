@@ -33,7 +33,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { isDeviceCheckConversation, starterDraft, uid } from "../../src/domain";
+import {
+  contextMessages,
+  isDeviceCheckConversation,
+  starterDraft,
+  uid,
+} from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -251,6 +256,28 @@ function Chat() {
         <Text style={s.sub}>This conversation could not be found.</Text>
       </Page>
     );
+  const historyHasPdf = contextMessages(conversation.messages).some((message) =>
+    message.attachments?.some((file) => file.mimeType === "application/pdf"),
+  );
+  const hasPdf =
+    historyHasPdf ||
+    attachments.some((file) => file.mimeType === "application/pdf");
+  const needsPdfConnection = hasPdf && connection?.protocol === "compatible";
+  const openModelPicker = () => {
+    composer.current?.blur();
+    Keyboard.dismiss();
+    setModelSearch("");
+    data.connections.length ? setModelPicker(true) : router.push("/connection");
+  };
+  const removeAttachment = (attachmentId: string) => {
+    const current = draftValue.current;
+    const next = current.attachments.filter((file) => file.id !== attachmentId);
+    // Persist this exact removal immediately, including a same-frame navigation.
+    draftValue.current = { ...current, attachments: next };
+    setAttachments(next);
+    setError("");
+    saveDraft();
+  };
   const submit = async () => {
     if ((!text.trim() && !attachments.length) || runningId || submitting)
       return;
@@ -654,13 +681,31 @@ function Chat() {
           )}
         </ScrollView>
         <View style={{ paddingBottom: 8, gap: 10 }}>
-          {error ? (
+          {needsPdfConnection ? (
+            <View style={{ gap: 6 }}>
+              <Text accessibilityRole="alert" style={s.error}>
+                {historyHasPdf
+                  ? "This chat includes a PDF. Choose a PDF connection to continue."
+                  : "This connection can’t send PDFs. Choose a PDF connection or remove the file. Your draft is kept."}
+              </Text>
+              <Button
+                title="Choose PDF connection"
+                secondary
+                onPress={openModelPicker}
+              />
+            </View>
+          ) : error ? (
             <Text accessibilityRole="alert" style={s.error}>
               {error}
             </Text>
           ) : null}
           {attachments.length ? (
-            <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
+            <ScrollView
+              horizontal
+              keyboardShouldPersistTaps="always"
+              style={{ flexGrow: 0 }}
+              contentContainerStyle={{ gap: 10, alignItems: "flex-start" }}
+            >
               {attachments.map((file) => (
                 <View
                   key={file.id}
@@ -681,11 +726,7 @@ function Chat() {
                     title="Remove"
                     accessibilityLabel={`Remove ${file.name}`}
                     secondary
-                    onPress={() =>
-                      setAttachments((current) =>
-                        current.filter((a) => a.id !== file.id),
-                      )
-                    }
+                    onPress={() => removeAttachment(file.id)}
                   />
                 </View>
               ))}
@@ -710,13 +751,7 @@ function Chat() {
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={`Choose model connection${connection ? `. ${connection.name}, ${connection.model}` : ""}`}
-              onPress={() => {
-                composer.current?.blur();
-                Keyboard.dismiss();
-                data.connections.length
-                  ? setModelPicker(true)
-                  : router.push("/connection");
-              }}
+              onPress={openModelPicker}
               style={[
                 s.row,
                 {
@@ -976,6 +1011,12 @@ function Chat() {
                 onPress={() => setModelPicker(false)}
               />
             </View>
+            {hasPdf ? (
+              <Text style={s.sub}>
+                PDFs need Responses or Claude Messages. The selected model must
+                also support PDF input. Choosing a connection sends nothing.
+              </Text>
+            ) : null}
             <Field
               testID="chat-model-search"
               label="Search models"
@@ -998,12 +1039,16 @@ function Chat() {
                   <Pressable
                     key={choiceId}
                     accessibilityRole="radio"
-                    accessibilityLabel={`${c.name}. ${model}`}
+                    accessibilityLabel={`${c.name}. ${model}${hasPdf && c.protocol === "compatible" ? ". PDFs unavailable with Chat Completions" : ""}`}
                     accessibilityState={{
                       checked:
                         c.id === connection?.id && model === connection.model,
+                      disabled:
+                        !!runningId || (hasPdf && c.protocol === "compatible"),
                     }}
-                    disabled={!!runningId}
+                    disabled={
+                      !!runningId || (hasPdf && c.protocol === "compatible")
+                    }
                     onPress={() =>
                       void action(async () => {
                         await update((d) => ({
@@ -1033,6 +1078,15 @@ function Chat() {
                         {c.name}
                       </Text>
                       <Text style={s.sub}>{model}</Text>
+                      {hasPdf ? (
+                        <Text style={s.sub}>
+                          {c.protocol === "compatible"
+                            ? "Chat Completions · PDFs unavailable"
+                            : c.protocol === "openai"
+                              ? "Responses"
+                              : "Claude Messages"}
+                        </Text>
+                      ) : null}
                     </View>
                     {c.id === connection?.id && model === connection.model ? (
                       <Icon name="checkmark" size={20} />
