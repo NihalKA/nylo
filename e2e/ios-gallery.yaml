@@ -208,6 +208,10 @@ appId: com.nylohq.nylo
     text: "Review these files"
 - assertVisible: "Remove QA image[.]png"
 - waitForAnimationToEnd
+- assertVisible: "Preview QA image[.]png"
+- assertVisible:
+    id: "chat-message"
+    text: "Review these files"
 - takeScreenshot: gallery-14-attachment-restored
 - tapOn: "Go back"
 - scrollUntilVisible:
