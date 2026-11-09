@@ -2,6 +2,21 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
+# API35's Pixel Launcher ANR was independently captured twice over Nylo.
+# Handle only that named OS component, then retain every Nylo assertion.
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: "android:id/alertTitle"
+        text: "Pixel Launcher isn't responding"
+    commands:
+      - takeScreenshot: 00-pixel-launcher-anr
+      - tapOn:
+          id: "android:id/aerr_close"
+          text: "Close app"
+          retryTapIfNoChange: false
+      - assertNotVisible: "Pixel Launcher isn't responding"
 - assertVisible: "No chats yet"
 - takeScreenshot: 01-chats-empty
 - tapOn:
