@@ -11,14 +11,16 @@ signature = (p / 'signature.txt').read_text()
 assert "name='com.nylohq.nylo'" in badging
 assert "versionCode='" + os.environ['ANDROID_VERSION_CODE'] + "'" in badging
 assert "versionName='1.0.0'" in badging
-for name in ['RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']:
+for name in ['SYSTEM_ALERT_WINDOW', 'RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']:
     assert 'android.permission.' + name + "'" not in permissions, name
 assert 'android.permission.INTERNET' in permissions
 assert 'android.permission.CAMERA' in permissions
 for feature in ['android.hardware.camera', 'android.hardware.camera.any', 'android.hardware.camera.autofocus']:
     assert "uses-feature-not-required: name='" + feature + "'" in badging
 expected = (p / 'expected-certificate-sha256.txt').read_text().split()[0].lower()
-assert re.search(r'Signer #1 certificate SHA-256 digest: ([a-fA-F0-9]+)', signature).group(1).lower() == expected
+digests = re.findall(r'(?m)^(?:Signer #\d+|V\d+(?:\.\d+)? Signer):? certificate SHA-256 digest: ([a-fA-F0-9]+)$', signature)
+assert 'Number of signers: 1' in signature
+assert len(digests) == 1 and digests[0].lower() == expected, 'APK signer does not match the protected release certificate' 
 assert re.search(r'SHA256: ([A-Fa-f0-9:]+)', (p / 'aab-certificate.txt').read_text()).group(1).replace(':', '').lower() == expected
 manifest = (p / 'manifest.txt').read_text()
 assert re.search(r'android:usesCleartextTraffic[^\n]*0x0\b', manifest)

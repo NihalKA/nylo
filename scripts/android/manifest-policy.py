@@ -11,7 +11,7 @@ t = '{http://schemas.android.com/tools}'
 ET.register_namespace('android', a[1:-1])
 ET.register_namespace('tools', t[1:-1])
 root = ET.parse(p)
-for name in ['RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']:
+for name in ['SYSTEM_ALERT_WINDOW', 'RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_EXTERNAL_STORAGE', 'WRITE_EXTERNAL_STORAGE']:
     full = 'android.permission.' + name
     for node in list(root.getroot().findall('uses-permission')):
         if node.get(a + 'name') == full:
