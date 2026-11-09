@@ -2,7 +2,7 @@
 
 Updated9November2026IST. Target: iOS first; Android publication deferred. Owner requests agent continuity, model libraries, file/photo/camera attachments, a tested beta and95/100 independent quality. The score must follow evidence; it is not achieved yet.
 
-## Delivered expanded feedback beta13
+## Previous expanded feedback beta13
 
 App source `4d3687d3275d8b74bbe9d13be8e17ffb2c8b27f3`. Newer source2517a7d contains the two tested refinements listed below. Typecheck,75behavioral tests, formatting and credential audit122tracked files pass.
 
@@ -33,7 +33,7 @@ App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 
 
 No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
 
-## Tested next source2517a7d (signing pending)
+## Current delivered feedback beta14 — app source2517a7d
 
 Attachment cards use concise visible Remove text while retaining the full filename in the accessibility label. Starting a new import clears the previous local error. Typecheck and75tests pass.
 
@@ -41,4 +41,4 @@ Attachment cards use concise visible Remove text while retaining the full filena
 - Fresh gallery42547833210 passes181/181, exact293-byte original/expected clipboard equality and native SQL/blob checks. Native/JS2517, fixtures51527dd, refresh false. Earlier refreshed-gallery empty clipboard read remains unexplained; no Copy handler change was made or credited.
 - Fresh attachments42547836294 passes87completed/1optional skip, all lifecycle/recovery checks and old camera error absent after the second successful import before restart. SQL references match with no removed-import orphan. Owned source Artist/GPS are absent in the stored799-byte JPEG; only explicitly allowed encoder fields remain. Native/JS2517, fixtures51527dd, refresh false. This is owned JPEG pipeline evidence, not physical camera/HEIC/universal metadata proof.
 
-Evidence: ignored artifacts/smoke-reliability/fresh-polish-final. Build13above remains delivered; no newer TestFlight assignment yet. The86point review applies to13, not automatically to this source.
+Evidence: ignored artifacts/smoke-reliability/fresh-polish-final. Build14is delivered alongside the previous13: signed42550246288/HEADc9002c2, version1.0.0(14), Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Exact exported-IPA audit passes11manifests/requiredSDK/camera/noMic/family1/nonexemptfalse. English notes saved; POST204, exact-build group GET and IN_BETA_TESTING verified. The86point independent review applies to13; no new score or production approval is claimed for14.

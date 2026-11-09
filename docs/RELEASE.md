@@ -1,6 +1,6 @@
 # iOS release
 
-Current expanded candidate: **1.0.0(13)**, app source4d3687d, signed run42532356732, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Exact exported-IPA privacy audit and fresh native/matrix/photo/gallery tests pass; see STATUS.md for provenance and gaps. Assigned to internal Nylo Device QA after fresh review020(86/100), English notes saved, POST204 and exact-build group GET verified; build10 is the older design. No store build association, submission or production approval.
+Current feedback beta: **1.0.0(14)**, app source2517a7d, signed42550246288/HEADc9002c2, Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Actual exported-IPA privacy audit passes11manifests/requiredSDK/camera/noMic/family1/nonexemptfalse. Fresh native2517, all3profile smoke, complete293-byte gallery copy/storage and owned-photo metadata/lifecycle/error-clearing checks pass. Assigned to internal Nylo Device QA with English notes; POST204, exact-build group GET and IN_BETA_TESTING verified. Build13is the previous expanded candidate and retains its86point independent review; no new score is inferred for14. No store build association, submission or production approval.
 
 App Store draft1.0.0 remains PREPARE_FOR_SUBMISSION. India/US only, free prices, automatic new territories/preorders disabled. Final screenshots, age/privacy declarations, monitored support and separate restricted review access remain open. Owner95target is not met by the current86point review of4d3687d. Physical/live/VoiceOver/owner design remain separate gates.
 

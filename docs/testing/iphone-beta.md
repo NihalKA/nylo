@@ -1,6 +1,6 @@
 # Expanded iPhone beta check
 
-Prepared candidate **1.0.0(13)**, source4d3687d, Apple VALID ID e6568582-6b46-4061-ab81-df09b8a6fca4. Assigned to internal Nylo Device QA with English notes; POST204 and subsequent group GET verify the exact VALID build. Update through TestFlight. Review020supports this narrow feedback/device-validation beta at86/100;95target and production gates remain open. The historical build10 guide below is superseded.
+Current internal feedback beta **1.0.0(14)**, app source2517a7d, signed run42550246288/HEADc9002c2, Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Assigned to Nylo Device QA with English notes; POST204, exact-build group GET and IN_BETA_TESTING verify availability. Update through TestFlight. Build13is the previous expanded candidate; its independent86point review supports the feedback direction, with no new score claimed for14. The95target and production gates remain open.
 
 For the expanded feedback beta, check these on your iPhone:
 
