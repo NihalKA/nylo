@@ -6,7 +6,7 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments|store) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store|pdf) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
   echo 'Store captures require the large profile and the original native JS bundle.'
   exit 1
@@ -49,6 +49,9 @@ printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$flow_sha" > artifacts
 printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$js_source_sha" >> artifacts/e2e/source.txt
 printf 'Scenario: %s\nProfile: %s\nNative run: %s\nUI run: %s\n' "$scenario" "$profile" "$SOURCE_RUN_ID" "${GITHUB_RUN_ID:-manual}" >> artifacts/e2e/source.txt
 shasum -a 256 "e2e/ios-$scenario.yaml" scripts/ios-smoke.sh scripts/seed-ios-gallery.py > artifacts/e2e/fixture-sha256.txt
+if [ "$scenario" = pdf ]; then
+  shasum -a 256 scripts/seed-ios-pdf.py >> artifacts/e2e/fixture-sha256.txt
+fi
 if [ "$scenario" = attachments ]; then
   shasum -a 256 scripts/owned-photo-metadata.py scripts/check-picked-photo-storage.py >> artifacts/e2e/fixture-sha256.txt
 fi
@@ -138,6 +141,12 @@ if [ "$scenario" = gallery ] || [ "$scenario" = attachments ]; then
     shasum -a 256 artifacts/e2e/owned-picker-photo.png artifacts/e2e/owned-picker-photo.jpg >> artifacts/e2e/fixture-sha256.txt
     xcrun simctl addmedia "$simulator_id" artifacts/e2e/owned-picker-photo.jpg
   fi
+fi
+if [ "$scenario" = pdf ]; then
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  mark_phase seed-owned-pdf
+  python3 scripts/seed-ios-pdf.py --container "$app_container"
 fi
 mark_phase install-driver
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"

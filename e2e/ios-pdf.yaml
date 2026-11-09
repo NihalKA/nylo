@@ -1,0 +1,31 @@
+appId: com.nylohq.nylo
+---
+- launchApp
+- tapOn: "(?s)Open Example: PDF removal.*"
+- assertVisible: "Remove QA policy.pdf"
+- tapOn:
+    id: "chat-message"
+    point: "95%,90%"
+- inputText: " please"
+- assertVisible: "Dismiss keyboard"
+- tapOn:
+    text: "Send message"
+    retryTapIfNoChange: false
+- assertVisible: "(?s)PDFs need.*"
+- takeScreenshot: pdf-01-blocked-with-keyboard
+- tapOn:
+    text: "Remove QA policy.pdf"
+    retryTapIfNoChange: false
+- assertNotVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy please"
+- takeScreenshot: pdf-02-removed
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: PDF removal.*"
+- assertNotVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy please"
+- takeScreenshot: pdf-03-removal-restored

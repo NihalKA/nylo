@@ -17,7 +17,7 @@ on:
       scenario:
         description: Smoke, QA gallery/attachments, or illustrative store asset capture
         type: choice
-        options: [smoke, gallery, attachments, store]
+        options: [smoke, gallery, attachments, store, pdf]
         default: smoke
 permissions:
   contents: read
