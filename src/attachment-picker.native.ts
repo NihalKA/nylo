@@ -87,7 +87,7 @@ export async function pickAttachments(
     const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted)
       throw new Error(
-        "Camera access is off. You can enable it in iPhone Settings or choose an existing photo.",
+        "Camera access is off. You can enable it in device settings or choose an existing photo.",
       );
   }
   const result =

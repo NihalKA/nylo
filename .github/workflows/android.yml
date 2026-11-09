@@ -58,6 +58,9 @@ jobs:
           cp android/app/build/outputs/bundle/release/app-release.aab artifacts/android/Nylo-release.aab
           build_tools="$(find "$ANDROID_HOME/build-tools" -mindepth 1 -maxdepth 1 -type d | sort -V | tail -1)"
           "$build_tools/apksigner" verify --verbose --print-certs artifacts/android/Nylo-test.apk > artifacts/android/signature.txt
+          keytool -exportcert -keystore "$ANDROID_KEYSTORE_PATH" -storepass:env ANDROID_KEYSTORE_PASSWORD -alias "$ANDROID_KEY_ALIAS" | sha256sum > artifacts/android/expected-certificate-sha256.txt
+          keytool -J-Duser.language=en -printcert -jarfile artifacts/android/Nylo-release.aab > artifacts/android/aab-certificate.txt
+          "$build_tools/aapt2" dump xmltree artifacts/android/Nylo-test.apk --file AndroidManifest.xml > artifacts/android/manifest.txt
           "$build_tools/aapt2" dump badging artifacts/android/Nylo-test.apk > artifacts/android/package.txt
           "$build_tools/aapt2" dump permissions artifacts/android/Nylo-test.apk > artifacts/android/permissions.txt
           jarsigner -verify -keystore "$ANDROID_KEYSTORE_PATH" -storepass:env ANDROID_KEYSTORE_PASSWORD artifacts/android/Nylo-release.aab > artifacts/android/aab-signature.txt
