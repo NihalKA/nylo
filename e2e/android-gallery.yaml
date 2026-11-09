@@ -1,0 +1,129 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: "android:id/alertTitle"
+        text: "Pixel Launcher isn't responding"
+    commands:
+      - takeScreenshot: 00-pixel-launcher-anr
+      - tapOn:
+          id: "android:id/aerr_close"
+          text: "Close app"
+          retryTapIfNoChange: false
+      - assertNotVisible: "Pixel Launcher isn't responding"
+- assertVisible: "No chats yet"
+- tapOn: "Settings"
+- waitForAnimationToEnd
+- takeScreenshot: gallery-01-settings
+- scrollUntilVisible:
+    element: ".*Restore backup.*"
+    direction: DOWN
+- tapOn: ".*Restore backup.*"
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      notVisible: "Nylo-QA-gallery.json"
+    commands:
+      - tapOn: "Show roots"
+      - tapOn: "Downloads"
+- assertVisible: "Nylo-QA-gallery.json"
+- takeScreenshot: gallery-02-owned-backup-picker
+- tapOn: "Nylo-QA-gallery.json"
+- assertVisible: "Replace local data?"
+- tapOn: "Restore"
+- assertVisible: "Backup restored. Add your API keys to continue."
+- tapOn: "Chats"
+- tapOn: "(?s)Open Example: A focused morning.*"
+- assertVisible: "(?s).*Start with one meaningful task.*"
+- tapOn: "Choose model connection.*"
+- assertVisible: "Choose a model"
+- assertVisible: "Offline QA provider[.] synthetic-secondary"
+- takeScreenshot: gallery-03-model-picker
+- tapOn: "Offline QA provider[.] synthetic-secondary"
+- assertVisible: "Choose model connection[.] Offline QA provider, synthetic-secondary"
+- tapOn: "Report response"
+- assertVisible: "Report preview"
+- assertNotVisible: "(?s).*Start with one meaningful task.*"
+- takeScreenshot: gallery-04-report-private
+- tapOn: "Include selected response text"
+- scrollUntilVisible:
+    element: "(?s).*Selected response excerpt.*Start with one meaningful task.*"
+    direction: DOWN
+- assertVisible: "(?s).*Selected response excerpt.*Start with one meaningful task.*"
+- takeScreenshot: gallery-05-report-opted-in
+- pressKey: Back
+- assertNotVisible: "Report preview"
+- assertVisible: "Choose model connection.*"
+- tapOn: "Go back"
+- tapOn: "Agents"
+- tapOn: "Create agent"
+- assertVisible: "Create an agent"
+- takeScreenshot: gallery-06-create-agent
+- tapOn: "Go back"
+- tapOn: "Open Writing partner"
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "Use friendly, direct language."
+    direction: DOWN
+- assertVisible: "Use friendly, direct language."
+- takeScreenshot: gallery-07-memory
+- scrollUntilVisible:
+    element: "Use recent chats from this agent"
+    direction: DOWN
+- tapOn: "Use recent chats from this agent"
+- assertVisible: "Share recent agent chats?"
+- tapOn: "Enable context"
+- scrollUntilVisible:
+    element: "Review recent context"
+    direction: DOWN
+- tapOn: "Review recent context"
+- scrollUntilVisible:
+    element: "(?s).*Our launch date is Friday.*"
+    direction: DOWN
+- assertVisible: "(?s).*Our launch date is Friday.*"
+- takeScreenshot: gallery-08-shared-context
+- tapOn: "Go back"
+- tapOn: "Chats"
+- tapOn: "(?s)Open Example: PDF connection.*"
+- assertVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy"
+- tapOn: "Choose PDF connection"
+- assertVisible:
+    text: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
+    enabled: false
+- takeScreenshot: gallery-09-pdf-picker
+- tapOn: "Offline QA provider[.] synthetic-no-network"
+- assertNotVisible: "Choose PDF connection"
+- assertVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy"
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: Attachments ready.*"
+- assertVisible: "Remove QA image[.]png"
+- assertVisible: "QA note.txt.*"
+- assertVisible:
+    id: "chat-message"
+    text: "Review these files"
+- takeScreenshot: gallery-10-attached-files
+- tapOn: "Add attachment"
+- assertVisible: "Photo library"
+- assertVisible: "Take a photo"
+- assertVisible: "Choose files"
+- takeScreenshot: gallery-11-attachment-menu
+- tapOn: "Cancel attachments"
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: Attachments ready.*"
+- assertVisible: "Remove QA image[.]png"
+- assertVisible: "QA note.txt.*"
+- assertVisible:
+    id: "chat-message"
+    text: "Review these files"
+- takeScreenshot: gallery-12-files-cold-restored

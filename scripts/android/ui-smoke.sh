@@ -32,7 +32,18 @@ echo "54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  $RUNNER_
 unzip -q "$RUNNER_TEMP/android-maestro.zip" -d "$RUNNER_TEMP/android-maestro"
 export MAESTRO_CLI_NO_ANALYTICS=1
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
-"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml e2e/android-smoke.yaml
+scenario="${ANDROID_UI_SCENARIO:-smoke}"
+case "$scenario" in
+  smoke) flow=e2e/android-smoke.yaml ;;
+  gallery)
+    flow=e2e/android-gallery.yaml
+    python3 scripts/seed-android-gallery.py artifacts/android-ui/Nylo-QA-gallery.json
+    adb push artifacts/android-ui/Nylo-QA-gallery.json /sdcard/Download/Nylo-QA-gallery.json
+    ;;
+  *) echo "Unknown Android UI scenario" >&2; exit 1 ;;
+esac
+printf 'Scenario: %s\n' "$scenario" >> artifacts/android-ui/provenance.txt
+"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml "$flow"
 
 # Retain real system-navigation and composer bounds after the keyboard is dismissed.
 adb shell uiautomator dump /sdcard/nylo-navigation.xml
