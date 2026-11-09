@@ -2,9 +2,9 @@
 
 Updated9November2026IST. Target: iOS first; Android publication deferred. Owner requests agent continuity, model libraries, file/photo/camera attachments, a tested beta and95/100 independent quality. The score must follow evidence; it is not achieved yet.
 
-## Current expanded candidate
+## Delivered expanded feedback beta13
 
-App source `4d3687d3275d8b74bbe9d13be8e17ffb2c8b27f3`. Later commits change fixtures/reports only. Typecheck,75behavioral tests, formatting and credential audit122tracked files pass.
+App source `4d3687d3275d8b74bbe9d13be8e17ffb2c8b27f3`. Newer source2517a7d contains the two tested refinements listed below. Typecheck,75behavioral tests, formatting and credential audit122tracked files pass.
 
 - Native [42532333345](https://github.com/NihalKA/nylo/actions/runs/42532333345): passed. Compiled privacy audit verifies SDWebImage resource, camera purpose, no microphone/tracking, version1.0.0, iPhone family1. Temporary image tracing removed. Source-built SDK guards retain foreground image tasks and reject unavailable camera hardware before UIKit assignment.
 - Matrix [42533495588](https://github.com/NihalKA/nylo/actions/runs/42533495588): compact, large and maximum text pass, including draft/memory cold restoration and multiline composition.
@@ -33,6 +33,12 @@ App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 
 
 No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
 
-## Next source refinements (not a new TestFlight assignment)
+## Tested next source2517a7d (signing pending)
 
-Attachment cards use concise visible Remove text while retaining the full filename in the accessibility label. Starting a new import clears the previous local error. Typecheck and75tests pass; rendered verification is pending. Build13above remains the delivered feedback candidate; its source/provenance and86point review are unchanged.
+Attachment cards use concise visible Remove text while retaining the full filename in the accessibility label. Starting a new import clears the previous local error. Typecheck and75tests pass.
+
+- Fresh native42543975993 and automatic matrix42545994892 pass all3profiles, native/JS/flows2517, refresh false.
+- Fresh gallery42547833210 passes181/181, exact293-byte original/expected clipboard equality and native SQL/blob checks. Native/JS2517, fixtures51527dd, refresh false. Earlier refreshed-gallery empty clipboard read remains unexplained; no Copy handler change was made or credited.
+- Fresh attachments42547836294 passes87completed/1optional skip, all lifecycle/recovery checks and old camera error absent after the second successful import before restart. SQL references match with no removed-import orphan. Owned source Artist/GPS are absent in the stored799-byte JPEG; only explicitly allowed encoder fields remain. Native/JS2517, fixtures51527dd, refresh false. This is owned JPEG pipeline evidence, not physical camera/HEIC/universal metadata proof.
+
+Evidence: ignored artifacts/smoke-reliability/fresh-polish-final. Build13above remains delivered; no newer TestFlight assignment yet. The86point review applies to13, not automatically to this source.
