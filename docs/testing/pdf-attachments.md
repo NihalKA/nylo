@@ -8,7 +8,7 @@ The model ID is independent of the connection's wire format. Nylo's Chat Complet
 
 ## Source fix — `48466d9`
 
-The attachment strip previously inherited React Native ScrollView's default `keyboardShouldPersistTaps=never`. Installed React Native source documents that this captures the first non-input tap when the keyboard is dismissible, instead of passing it to the child button. This explains a possible first-tap failure; do not claim it explains every physical-device occurrence without the owner's result and native regression evidence.
+The attachment strip previously inherited React Native ScrollView's default `keyboardShouldPersistTaps=never`. Installed React Native source documents that this captures the first non-input tap when the keyboard is dismissible, instead of passing it to the child button. The owner subsequently confirmed that dismissing the keyboard with the down-chevron first makes Remove work on build 14. This narrows the physical report to keyboard interaction; a current native regression is still required before claiming the fix passes.
 
 - Attachment-strip taps now reach Remove while the composer is focused. The strip sizes to its content instead of growing into unused space.
 - Remove updates the current draft reference, clears the obsolete send error and persists immediately. Text stays intact, and navigation/background saves use the updated attachment list.
