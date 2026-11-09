@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import re
 import sqlite3
+import struct
 
 spec = importlib.util.spec_from_file_location("owned_photo", Path(__file__).with_name("owned-photo-metadata.py"))
 owned = importlib.util.module_from_spec(spec)
@@ -22,6 +23,39 @@ CHAT_MESSAGES = {
     "gallery-agent-prior": ["prior-user", "prior-answer"],
     "gallery-attachments": [],
 }
+
+
+def exif_tag_inventory(payload):
+    """Bounded diagnostic tag IDs only; no acceptance decision or payload dump."""
+    data = payload[6:]
+    require(data[:2] in (b"II", b"MM"), "Unknown TIFF byte order")
+    endian = "<" if data[:2] == b"II" else ">"
+    def u16(offset):
+        require(0 <= offset <= len(data) - 2, "Truncated TIFF word")
+        return struct.unpack_from(endian + "H", data, offset)[0]
+    def u32(offset):
+        require(0 <= offset <= len(data) - 4, "Truncated TIFF offset")
+        return struct.unpack_from(endian + "I", data, offset)[0]
+    require(u16(2) == 42, "Unknown TIFF header")
+    pending = [("IFD0", u32(4))]
+    seen = set()
+    result = []
+    while pending and len(result) < 4:
+        name, offset = pending.pop(0)
+        require(offset not in seen, "Cyclic TIFF directory")
+        seen.add(offset)
+        count = u16(offset)
+        require(count <= 64 and offset + 2 + count * 12 + 4 <= len(data), "Invalid TIFF directory")
+        tags = []
+        for index in range(count):
+            entry = offset + 2 + index * 12
+            tag, kind, amount = u16(entry), u16(entry + 2), u32(entry + 4)
+            tags.append(dict(tag=f"0x{tag:04x}", type=kind, count=amount))
+            if tag in (0x8769, 0x8825) and kind == 4 and amount == 1:
+                pending.append(("GPS" if tag == 0x8825 else "Exif", u32(entry + 8)))
+        result.append(dict(directory=name, tags=tags))
+    require(not pending, "Too many TIFF directories")
+    return result
 
 
 def main():
@@ -87,12 +121,32 @@ def main():
         require(base64.b64encode(data).decode("ascii") == blobs[0][0], "Noncanonical photo base64")
     require(type(photo["size"]) is int and photo["size"] == len(data), "Actual photo byte size differs from metadata")
     segments = owned.inspect_jpeg(data)
-    require(not any(marker == 0xe1 and payload.startswith(b"Exif\0\0") for marker, payload, _, _ in segments),
-            "Stored picker JPEG still contains EXIF APP1")
-    require(owned.MARKER not in data, "Stored picker JPEG still contains synthetic Artist marker")
+    # All CI/synthetic identity, target-only payload, size and JPEG guards above
+    # must pass before retaining even this owned diagnostic image.
     output = Path(args.output_dir)
     output.mkdir(parents=True, exist_ok=True)
     (output / "owned-picked-output.jpg").write_bytes(data)
+    exif_reports = []
+    for marker, payload, _, _ in segments:
+        if marker == 0xe1 and payload.startswith(b"Exif\0\0"):
+            report = dict(bytes=len(payload))
+            try:
+                report["directories"] = exif_tag_inventory(payload)
+            except (ValueError, struct.error) as error:
+                report["parseError"] = str(error)
+            exif_reports.append(report)
+    (output / "picked-photo-metadata-diagnostic.json").write_text(json.dumps(dict(
+        diagnosticOnly=True,
+        sourceSHA256=hashlib.sha256(source).hexdigest(),
+        outputSHA256=hashlib.sha256(data).hexdigest(),
+        outputBytes=len(data),
+        syntheticMarkerPresent=owned.MARKER in data,
+        exifSegments=exif_reports,
+        strictNoExifRequirementPassed=not exif_reports,
+    ), indent=2) + "\n")
+    require(not any(marker == 0xe1 and payload.startswith(b"Exif\0\0") for marker, payload, _, _ in segments),
+            "Stored picker JPEG still contains EXIF APP1")
+    require(owned.MARKER not in data, "Stored picker JPEG still contains synthetic Artist marker")
     (output / "picked-photo-storage-check.txt").write_text(
         "PASS: exact draft and single Photo.jpg retained after cold restart; all stored blob IDs equal all-chat references; "
         "removed first-import orphan absent. Target base64, byte size, JPEG SOI/EOI and 32x32 dimensions valid; "
