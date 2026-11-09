@@ -1,6 +1,8 @@
 # Android build and testing path
 
-Nylo shares its Expo/React Native app code with iOS. The new Android workflow builds an installable signed APK and signed release AAB on standard GitHub Ubuntu runners. It does not purchase a Play account, upload to Google Play or establish store approval. Native/UI validation and actual artifact delivery remain pending until CI succeeds.
+**Mobile download:** [Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-5/Nylo-test.apk). Open or share this public HTTPS link from the phone; T3 desktop file access and GitHub sign-in are not required. The [GitHub test prerelease](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-5) includes SHA256SUMS.txt. Its release-asset digest exactly matches the already-tested APK; unauthenticated download headers return200 with56,579,174bytes. Source tag points to20efaf2. Evidence: `artifacts/android-delivery-5/public-download-verification.json`. No Google Play purchase/publication.
+
+Nylo shares its Expo/React Native app code with iOS. The new Android workflow builds an installable signed APK and signed release AAB on standard GitHub Ubuntu runners. It does not purchase a Play account, upload to Google Play or establish store approval. Native/UI acceptance and the test-artifact delivery are recorded below; this is not Play approval.
 
 Android signing is held only in the `android-release` GitHub environment. Its original JKS and password backup are outside the repository in the owner's private release configuration. Never print, commit or upload these files as build evidence. Preserve this key for subsequent APK updates. Each workflow run uses its increasing run number as versionCode. Before Play release reconcile any existing version codes, current Play target-API requirements and production signing/upload-key policy.
 
