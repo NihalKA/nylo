@@ -44,6 +44,11 @@ jobs:
           PY
           sha256sum artifacts/android-build/Nylo-test.apk > artifacts/android-ui/apk-sha256.txt
           sha256sum e2e/android-smoke.yaml scripts/android/ui-smoke.sh > artifacts/android-ui/fixture-sha256.txt
+      - name: Validate AAB with pinned Google bundletool
+        run: |
+          curl -fsSL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 120 https://github.com/google/bundletool/releases/download/1.18.3/bundletool-all-1.18.3.jar -o "$RUNNER_TEMP/bundletool.jar"
+          echo "a099cfa1543f55593bc2ed16a70a7c67fe54b1747bb7301f37fdfd6d91028e29  $RUNNER_TEMP/bundletool.jar" | sha256sum -c -
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=artifacts/android-build/Nylo-release.aab > artifacts/android-ui/bundle-validation.txt
       - name: Enable emulator acceleration
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
