@@ -1,5 +1,7 @@
 # Expanded iPhone beta check
 
+**Current Figma redesign is not delivered in TestFlight yet.** Productbe35483's fresh native42708462482 is running; signed build18 remains undispatched until its design/native gates pass. Interim43 fresh native42702271222 has verified compiled privacy, linked simulator identity and11 font assets. Compact/large42707605516 pass105/11 each; maximum text remains a preserved offscreen-test-target failure corrected in fixturefb8b25f for the next matrix. Gallery42707671113 passes188 commands/exact293-byte copy/native SQL/blob checks; PDF42707675583 passes58 commands and storage/draft/protocol assertions. Actual captures/provenance were inspected. These are simulator fixtures, not physical or signed18 proof. Store15 and the separate Anand17 review queue are unchanged.
+
 Current internal feedback beta **1.0.0 (17)**, signed run 42612628652/source e452a2d, Apple VALID build 4e6626be-2598-4c2e-a7ae-72e9b628ff51. Exact internal QA assignment and IN_BETA_TESTING are independently verified. Update Nylo through TestFlight and confirm the build number.
 
 Build 17 adds Responses as the default for new custom API connections and limited background completion for an already-started iPhone response. Existing saved connections and keys stay unchanged. It also carries build16's compact PDF cards, keyboard-open Remove and explicit API-format editor. Provider/model PDF capability still applies.
