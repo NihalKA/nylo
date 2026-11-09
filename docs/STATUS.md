@@ -1,5 +1,10 @@
 # Delivery status
 
+## Parallel follow-up in progress
+
+After the initial submission, the owner authorized continued improvements while Apple reviews build15. App source `a02f88e` adds a compact attachment row, shorter PDF warning and a direct focused API-format editor for the selected incompatible provider. No silent protocol/endpoint/key change occurs. Local typecheck76tests/security132 and Source CI42576088729 pass. PDF42576100714, gallery42576104831 and fresh native42576088809 are running; current rendered evidence and next beta assignment remain pending. An enabled30-minute continuation checks the existing runs and completes the tested internal beta; next run9November2026at12:57IST. The separate Apple review monitor remains enabled. The submitted build15 is preserved; these source changes do not change the binary in Apple's review queue.
+
+
 ## App Store submission verified — 9 November 2026
 
 **Version 1.0.0 (15) is submitted and WAITING_FOR_REVIEW.** Apple returned the exact build `6f7be5da-a57a-4267-a18d-015c6e57b16b` on the version relationship and `releaseType: AFTER_APPROVAL`. The authenticated console confirmed “1 Item Submitted”. Automatic release remains limited to the configured free India/US launch. Submission is not approval or public availability.
