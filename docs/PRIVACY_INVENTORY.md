@@ -1,6 +1,6 @@
 # Release privacy inventory
 
-Baseline checked against source 1079f85; live-device-check delta checked against 6470912 on 8 November 2026. Expanded source adds the attachment/context/reporting delta below, pending final-native reconciliation. This inventory is preparation for the final App Store declaration, not a submitted label.
+Current client behavior is reconciled against app289fa04 and the signed1.0.0(15) compiled-manifest audit. This remains preparation for the final App Store declaration, not a submitted or authenticated privacy label. Nylo has no app backend; chats/files/memory are local until a user chooses a provider request or export. The owner confirms no Nylo/NyloHQ prompt retention, but upstream model-provider practices were not independently verified from the client. Do not request a nonexistent app-backend repository or infer zero upstream collection from client architecture. The intended audience is adults18+, owner-confirmed on9November2026; age questionnaire completion is separate.
 
 | Data | Device storage | Off-device transfer | Purpose / control |
 | --- | --- | --- | --- |

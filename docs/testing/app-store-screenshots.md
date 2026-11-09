@@ -92,3 +92,22 @@ These are illustrative local examples rendered by the actual native app. They es
 ## Candidate 15 refresh in progress
 
 The grouped picker in app289fa04 supersedes the older picker asset above. A fresh store capture will use native run42563645051 with refresh false, original full-resolution PNGs and the same guarded local illustration flow. The illustrative default model is now gpt-5.6-luna, whose catalog presence and source-adapter text/PDF/image path were actually checked under a separate bounded authorization. The store lane itself still has no key and makes no provider request. Other configured model IDs remain examples, not verified capabilities. New files require actual native capture, full-resolution review and upload/read-back before the saved screenshot set is called current.
+
+
+## Candidate 15 refresh COMPLETE — 9 November 2026
+
+[Capture42568114632](https://github.com/NihalKA/nylo/actions/runs/42568114632) passes54/54 records and zero JUnit failures, native/JS289fa04, flow2798f22, refresh false. Root independently matches all177 bundle files against the fresh native archive, all four fixture hashes against Git, and all five original PNG hashes/CRC/opaque RGB1320×2868 format. The capture manifest remains unchanged (SHA2565c798e1dc164a32b29d915a6124b7cd9b697fad543eb0811bec205c6ff380edd). Exports are byte-identical under ignored artifacts/app-store-screenshots/export15; approval is recorded in review-manifest15.json for draft assets only.
+
+Root inspected the updated response, provider-grouped picker and attachment draft at full resolution. Each is complete, unobscured and keyboard/banner/secret-free. Inbox and Memory are byte-identical to the previously inspected/approved images. The picker shows NyloHQ once, three model-primary rows, a selection check, compact search and provider management. The illustrative default is gpt-5.6-luna. These remain human-authored examples, not live model answers or AI memory-tool proof.
+
+The existing English APP_IPHONE_67 set now contains exactly five current reviewed assets in this order:
+
+| View | Current Apple ID | Bytes | SHA-256 |
+| --- | --- | ---: | --- |
+| Response | `32c00019-73b7-892b-8033-0db79709e9da` |187089|`97ac031fea62fdef2a266e843456f43676897ece46d1c98bc0da3e9f56883dc6`|
+| Memory (unchanged) | `65c00019-73b7-892b-8009-14aaf4e5fdd6` |237839|`12ae9bf6667e09eae69b911fb265af4d68384e5a6b0d5ffa5d4e179637be9479`|
+| Grouped model picker | `fac00019-73b7-892b-8000-e89eba37cf3b` |233181|`f4507b69e841adaf0028299bb0815cccac6a60687d39f5b745acd7dbdacdc08c`|
+| Inbox (unchanged) | `c4800019-73b7-892b-8002-952f1ada7051` |213423|`293f431ab400b9bb7976d33f66801677af408ac0ff17a864162b8f7b3d877d2f`|
+| Attachment draft | `98000019-73b7-892b-8004-efbeed55c37e` |135947|`403116383641f50fc2a070a70ffc524f8902adac187016276d037c96755acc63`|
+
+All five are COMPLETE, source MD5/dimensions/sizes/order match, with no delivery errors/warnings. Three superseded assets were deleted only after their replacements were COMPLETE and verified; the identical inbox/memory resources were retained. Exact allowed asset IDs were checked before mutation to reject concurrent unknown uploads. Sanitized read-back: artifacts/app-store-screenshots/apple-upload-verification15.json. This updates the draft only; no review submission or new product score is implied.

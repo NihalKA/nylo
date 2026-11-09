@@ -1,6 +1,6 @@
 # Expanded iPhone beta check
 
-Current internal feedback beta **1.0.0(14)**, app source2517a7d, signed run42550246288/HEADc9002c2, Apple VALID ID93f7eb90-c986-49ee-b103-8077d07832b4. Assigned to Nylo Device QA with English notes; POST204, exact-build group GET and IN_BETA_TESTING verify availability. Update through TestFlight. Build13is the previous expanded candidate; its independent86point review supports the feedback direction, with no new score claimed for14. The95target and production gates remain open.
+Current internal feedback beta **1.0.0 (15)**, app source289fa04, signed run42563798870, Apple VALID build6f7be5da-a57a-4267-a18d-015c6e57b16b. Assigned to Nylo Device QA; exact-build group GET and IN_BETA_TESTING verify availability. Update through TestFlight. Provider headings now occur once per group, models are the primary rows, and Remove works while the keyboard is open. PDF connection guidance preserves the draft. Review021 is88/100 provisional; the95target and production gates remain open. Fresh compact/large/maximum-text evidence now passes across the recorded current-source runs.
 
 For the expanded feedback beta, check these on your iPhone:
 
