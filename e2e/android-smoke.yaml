@@ -36,10 +36,11 @@ appId: com.nylohq.nylo
 - inputText: "A draft that should survive reopening"
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard
-- inputText: "\nA second line."
+- pressKey: Enter
+- inputText: "A second line."
 - assertVisible:
     id: "chat-message"
-    text: "(?s).*A second line.*"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
 - tapOn: "Dismiss keyboard"
@@ -65,6 +66,9 @@ appId: com.nylohq.nylo
 - launchApp
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible: "(?s).*A draft that should survive reopening.*"
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - takeScreenshot: 06-restored-draft
 - tapOn: "Go back"
 - tapOn:
@@ -166,10 +170,12 @@ appId: com.nylohq.nylo
 - tapOn: "New conversation"
 - tapOn:
     id: "chat-message"
-- inputText: "An agent draft\nwith a second line."
+- inputText: "An agent draft"
+- pressKey: Enter
+- inputText: "with a second line."
 - assertVisible:
     id: "chat-message"
-    text: "(?s).*with a second line.*"
+    text: '(?s)An agent draft\nwith a second line[.]'
 - waitForAnimationToEnd
 - takeScreenshot: 10-agent-chat-keyboard
 - tapOn: "Dismiss keyboard"
