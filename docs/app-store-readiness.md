@@ -1,5 +1,15 @@
 # App Store preparation for the expanded Nylo beta
 
+## PDF follow-up delivered — TestFlight 1.0.0 (16)
+
+Build **1.0.0 (16)** is now available to the existing internal Nylo Device QA group. Apple build `4f12d3b2-fe6f-45a6-98a0-ddf62c7e6b41` is VALID; assignment returned204 and independent group/build-state reads verify the exact build and IN_BETA_TESTING. English test notes were saved/read back. Signed workflow42579991019 uses HEADa1a12d6/appa02f88e; the actual exported-archive audit confirms version1.0.0/build16/bundle/iPhonefamily1/11manifests/requiredSDKpresent/camera/noMic/noTracking/exempt encryption. Proof: ignored `artifacts/signed-16-audit/qa-assignment-verification.json`.
+
+The PDF card and warning are smaller; the model picker offers direct editing of the selected provider's API format. Opening/backing out sends nothing and preserves the saved connection and draft. A format change still requires explicit save and key re-entry; actual PDF support depends on the provider/model. Update via TestFlight to try build16.
+
+PDF42576100714 passes58commands. Fresh native42576088809 and automatic42577980036 pass all3profiles (compact96/large94/maxtext102completed, each11conditional skips). Fresh-native gallery42580144030 passes183/183, exact293-byte clipboard equality and nativeSQL/blob checks; recorded native/JSa02 with refreshfalse and fixture6a3964e hashes match. All17 current gallery checkpoints plus launch were inspected, including a full rendered restored image and exact draft. This supplies the missing rendered evidence from the earlier blank capture; its cause remains unproven. Evidence: `artifacts/pdf-polish-a02/fresh-gallery/verification.json`.
+
+No provider calls, physical/VoiceOver validation or new numerical score are claimed. The latest independent88/100 assessment and existing physical/live/resource gaps remain. **Submitted storebuild15 is still WAITING_FOR_REVIEW and remains associated with the store version; build16 was distributed internally only.** The30-minute PDF continuation is disabled after verified delivery. The separate4-hour Apple review/external-tester invitation follow-up remains active.
+
 ## App Store submission verified — 9 November 2026
 
 **Version 1.0.0 (15) is submitted and WAITING_FOR_REVIEW.** Apple returned the exact build `6f7be5da-a57a-4267-a18d-015c6e57b16b` on the version relationship and `releaseType: AFTER_APPROVAL`. The authenticated console confirmed “1 Item Submitted”. Automatic release remains limited to the configured free India/US launch. Submission is not approval or public availability.

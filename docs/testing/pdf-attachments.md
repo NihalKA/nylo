@@ -1,5 +1,17 @@
 # PDF attachment removal and connection recovery
 
+## PDF follow-up delivered — TestFlight 1.0.0 (16)
+
+Build **1.0.0 (16)** is now available to the existing internal Nylo Device QA group. Apple build `4f12d3b2-fe6f-45a6-98a0-ddf62c7e6b41` is VALID; assignment returned204 and independent group/build-state reads verify the exact build and IN_BETA_TESTING. English test notes were saved/read back. Signed workflow42579991019 uses HEADa1a12d6/appa02f88e; the actual exported-archive audit confirms version1.0.0/build16/bundle/iPhonefamily1/11manifests/requiredSDKpresent/camera/noMic/noTracking/exempt encryption. Proof: ignored `artifacts/signed-16-audit/qa-assignment-verification.json`.
+
+The PDF card and warning are smaller; the model picker offers direct editing of the selected provider's API format. Opening/backing out sends nothing and preserves the saved connection and draft. A format change still requires explicit save and key re-entry; actual PDF support depends on the provider/model. Update via TestFlight to try build16.
+
+PDF42576100714 passes58commands. Fresh native42576088809 and automatic42577980036 pass all3profiles (compact96/large94/maxtext102completed, each11conditional skips). Fresh-native gallery42580144030 passes183/183, exact293-byte clipboard equality and nativeSQL/blob checks; recorded native/JSa02 with refreshfalse and fixture6a3964e hashes match. All17 current gallery checkpoints plus launch were inspected, including a full rendered restored image and exact draft. This supplies the missing rendered evidence from the earlier blank capture; its cause remains unproven. Evidence: `artifacts/pdf-polish-a02/fresh-gallery/verification.json`.
+
+No provider calls, physical/VoiceOver validation or new numerical score are claimed. The latest independent88/100 assessment and existing physical/live/resource gaps remain. **Submitted storebuild15 is still WAITING_FOR_REVIEW and remains associated with the store version; build16 was distributed internally only.** The30-minute PDF continuation is disabled after verified delivery. The separate4-hour Apple review/external-tester invitation follow-up remains active.
+
+## Prior follow-up record
+
 ## Parallel follow-up evidence — 9 November 2026
 
 App `a02f88e` has current passing evidence:
@@ -15,13 +27,11 @@ Test-only `6a3964e` adds explicit image-preview and exact-draft visibility after
 
 Signed beta workflow [42579991019](https://github.com/NihalKA/nylo/actions/runs/42579991019), run16, HEADa1a12d6/appa02, is building. Exact exportedIPA audit, AppleVALID identity, recapture disposition and internalQA assignment remain pending. **Build16 is not yet delivered.** Submitted storebuild15 stays unchanged; no new provider requests or App Store version replacement occurred. Next scheduled continuation must inspect these existing runs without duplicating them, complete verified internal beta delivery, then disable the PDF follow-up task.
 
-
 ## Post-submission PDF refinement — native verification pending
 
 The owner authorized parallel improvements while submitted build15 waits for review. Source now uses a compact document row with an accessible44-point Remove icon, shorter API-format warning and inline Choose PDF connection action. In the grouped picker, each incompatible connection offers Edit API format. That route opens only the selected provider, places format controls first, preserves the chat draft and never automatically changes the protocol, endpoint or credential. A changed destination still requires explicit key re-entry and save through existing credential checks; listing a model still does not verify its PDF capability.
 
 The PDF fixture retains every removal/restoration/selection assertion and additionally visits the focused editor, selects Responses without saving, backs out, and verifies that the original Chat Completions connection remains disabled and the PDF/draft remain intact. Local typecheck76tests/security132/YAML/diff pass. Current native validation and screenshot review are pending; no beta delivery or store replacement is claimed. Build15 remains submitted WAITING_FOR_REVIEW with AFTER_APPROVAL; do not withdraw or replace it for this polish.
-
 
 ## Owner report — 9 November 2026
 
@@ -68,11 +78,9 @@ Exactly one refreshed run was dispatched: [42562916170](https://github.com/Nihal
 
 Refreshed JS bundle SHA-256: `d9293b2a46ce65944520c5655b14bfb54984fb441500cc7bd022c7732cd3f33f`. Fixture SHA-256: flow `3ccadcbc696c7429e4ce3d72de38379c7e678f9e2a708f61f4c89c0611bd46c5`; runner `c529d9ef29a87c0b241a2182a3f59065fecdceee395ce4847f39c16e7d9ae111`; PDF seed `f219bdb9425b163afa62c7e665f792d80318a8558bc192eddcda7467057df5ef`. These results validate source `3431646`, not the later grouped picker `289fa04`. The synthetic PDF tests local MIME/encoding/attachment behavior only, not live PDF understanding.
 
-
 ### Gallery: FAIL (test selector collision); attachments: PASS (289fa04)
 
 Root subsequently supplied `289fa04ae7ef07ba4b4824a0d34c52aaf497cf38` (grouped provider headings, compact model rows/search, original row accessibility labels and PDF guards preserved). After the PDF pass was inspected, exactly one gallery run [42563933430](https://github.com/NihalKA/nylo/actions/runs/42563933430) and one attachments run [42563942619](https://github.com/NihalKA/nylo/actions/runs/42563942619) were dispatched against native `42543975993`, refresh true. Both run API records confirm checkout `289fa04`. An attempted raw-SHA workflow dispatch returned HTTP 422 without creating any run; successful dispatches used `main` after checking its ref. No valid run was cancelled/replaced. No duplicate PDF lane was dispatched. Grouped-picker PDF-disabled native behavior remains outside the successful pre-grouping PDF run's provenance.
-
 
 ### Native build: PASS (48466d9); automatic matrix: NOT RUN (stale)
 
@@ -81,7 +89,6 @@ Root subsequently supplied `289fa04ae7ef07ba4b4824a0d34c52aaf497cf38` (grouped p
 [Automatic UI run 42564121710](https://github.com/NihalKA/nylo/actions/runs/42564121710) reports workflow success but its retained `decision.json` explicitly says `skipped_stale_auto`, `uiRequested=false`, `uiResult=not_run`: native source `48466d95d44cc8321f5d1e668ab97c973a47a932` differed from fixture checkout `2fc62627b6b2370fc6a4418fc47d87ad0b34bd46` app/build inputs. No three-profile UI matrix ran, so this is not three PASS results. The run was preserved; no duplicate matrix was dispatched.
 
 Root-owned [native run 42563645051](https://github.com/NihalKA/nylo/actions/runs/42563645051) targets grouping source `289fa04ae7ef07ba4b4824a0d34c52aaf497cf38` and remains pending/in progress at this intermediate review. No signing, Apple action, beta assignment, production approval or App Store submission was performed by this validator.
-
 
 ### Gallery failure diagnosis — 42563933430
 
@@ -92,7 +99,6 @@ The next fixture selector `Offline QA alternate.*` now matches the new nonintera
 The failure occurs before Copy response, clipboard comparison, file lifecycle and SQL verification. No original full 293-byte clipboard read or gallery storage PASS exists for this run. Earlier green gallery runs must not substitute for it. Grouped PDF-disabled native behavior was not exercised in this non-PDF gallery fixture.
 
 Gallery native source `2517a7d82f93f2e565d0adf6a7e1d4901026c152`, native run `42543975993`; JS/fixture source `289fa04ae7ef07ba4b4824a0d34c52aaf497cf38`, refresh true; iPhone 17 Pro Max / iOS 26.2. Bundle SHA-256 `2a897670a6c1bc4e4f3fb7f66e46e69813fe6c2c9a3cf081faba7c5a8e42ab0e`; flow `c14937bfb0b754bf21b3177f597d3d515728ec739d86d5be0c84061d4a36b1f4`; runner `c529d9ef29a87c0b241a2182a3f59065fecdceee395ce4847f39c16e7d9ae111`; gallery seed `cbe38e18844ce5978bf39b0848d9b9ce0b954b4e79251167f5abd14d41c71203`.
-
 
 ### Attachments: PASS — completed artifact review
 

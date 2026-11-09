@@ -1,6 +1,6 @@
 # Expanded iPhone beta check
 
-Current internal feedback beta **1.0.0 (15)**, app source289fa04, signed run42563798870, Apple VALID build6f7be5da-a57a-4267-a18d-015c6e57b16b. Assigned to Nylo Device QA; exact-build group GET and IN_BETA_TESTING verify availability. Update through TestFlight. Provider headings now occur once per group, models are the primary rows, and Remove works while the keyboard is open. PDF connection guidance preserves the draft. Review021 is88/100 provisional; the95target and production gates remain open. Fresh compact/large/maximum-text evidence now passes across the recorded current-source runs.
+Current internal feedback beta **1.0.0 (16)**, app sourcea02f88e, signed run42579991019, Apple VALID build4f12d3b2-fe6f-45a6-98a0-ddf62c7e6b41. Exact assignment to Nylo Device QA and IN_BETA_TESTING are independently verified. Update through TestFlight. Build16 adds compact PDF/file cards, keyboard-open Remove and a direct Edit API format route from an incompatible provider in the picker. Back without saving preserves the original connection, PDF and draft. Choosing an API format is explicit and changing destination requires key re-entry. Provider/model PDF capability still applies. Fresh3profile smoke,58-command PDF and183-command gallery/clipboard/storage checks pass. Review021 remains88/100 provisional for candidate15; no new score or physical/VoiceOver validation is inferred. Build15 remains the initial App Store submission in review; build16 is internal feedback only.
 
 For the expanded feedback beta, check these on your iPhone:
 
@@ -10,7 +10,7 @@ For the expanded feedback beta, check these on your iPhone:
 4. **Live check:** Settings → Live device check. Prepare, run live reply, approve the synthetic fact, run recall, then fully close/reopen and check restoration. Each live action explicitly confirms one request capped128output tokens. Ordinary chat calls use the normal output limit. Clean up test data and confirm personal drafts remain.
 5. **Usability:** judge design against the requested ChatGPT/Grok direction. Try larger text and VoiceOver for Message, Send, model picker, Memory, attachments and back navigation. Stop/background one ordinary response only if you choose to incur that provider request, then verify an honest interrupted state and explicit retry.
 
-Report phone/iOS/build and actual outcomes. Never include keys, private documents/photos or full personal conversations. Results remain on device until you share them. Simulator passes do not replace these checks; App Store production remains held.
+Report phone/iOS/build and actual outcomes. Never include keys, private documents/photos or full personal conversations. Results remain on device until you share them. Simulator passes do not replace these checks; Apple approval/public release and the documented product-evidence gaps remain separate.
 
 ---
 
