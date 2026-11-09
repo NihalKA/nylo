@@ -12,6 +12,7 @@ from pathlib import Path
 import plistlib
 import re
 import shutil
+import shlex
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -32,6 +33,9 @@ def run(label, args):
 
 mode = sys.argv[1]
 if mode == 'cleanup':
+    saved_search = root / 'original-search-list.json'
+    if saved_search.exists():
+        run('Restore original keychain search list', ['security', 'list-keychains', '-d', 'user', '-s', *json.loads(saved_search.read_text())])
     if keychain.exists():
         run('Delete disposable signing keychain', ['security', 'delete-keychain', str(keychain)])
     shutil.rmtree(root, ignore_errors=True)
@@ -49,8 +53,11 @@ elif mode == 'prepare':
         profile['ExpirationDate'].replace(tzinfo=timezone.utc) <= datetime.now(timezone.utc) or
         entitlements.get('get-task-allow') or profile.get('ProvisionedDevices') or profile.get('ProvisionsAllDevices')):
         raise SystemExit('Existing release profile identity/validity mismatch.')
+    search_list = shlex.split(run('Read original keychain search list', ['security', 'list-keychains', '-d', 'user']).decode())
+    (root / 'original-search-list.json').write_text(json.dumps(search_list))
     password = os.environ['CI_KEYCHAIN_PASSWORD']
     run('Create disposable signing keychain', ['security', 'create-keychain', '-p', password, str(keychain)])
+    run('Include signing identity in user search list', ['security', 'list-keychains', '-d', 'user', '-s', *search_list, str(keychain)])
     run('Configure signing keychain', ['security', 'set-keychain-settings', '-lut', '3600', str(keychain)])
     run('Unlock signing keychain', ['security', 'unlock-keychain', '-p', password, str(keychain)])
     run('Import existing certificate', ['security', 'import', str(root / 'identity.p12'), '-k', str(keychain), '-P', os.environ['IOS_CERT_PASSWORD'], '-T', '/usr/bin/codesign'])
@@ -74,6 +81,9 @@ elif mode == 'sign':
     if app != expected or plistlib.loads((app / 'Info.plist').read_bytes()).get('CFBundleIdentifier') != 'com.nylohq.nylo':
         raise SystemExit('Only the downloaded disposable Nylo simulator app may be signed.')
     identity = json.loads((root / 'identity.json').read_text())['sha1']
+    present = run('Verify prepared identity remains available', ['security', 'find-identity', '-v', '-p', 'codesigning', str(keychain)]).decode()
+    if identity not in present:
+        raise SystemExit('Prepared simulator signing identity is no longer usable.')
     shutil.copyfile(root / 'profile.mobileprovision', app / 'embedded.mobileprovision')
     run('Sign simulator with existing identity', ['codesign', '--force', '--sign', identity, '--keychain', str(keychain), '--generate-entitlement-der', '--entitlements', str(root / 'entitlements.plist'), str(app)])
     run('Verify simulator signature', ['codesign', '--verify', '--strict', str(app)])
