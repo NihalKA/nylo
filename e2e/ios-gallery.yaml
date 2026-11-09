@@ -181,6 +181,13 @@ appId: com.nylohq.nylo
       text: "(?s)Open Example: Attachments ready.*"
       above: "Chats, tab, 1 of 3"
     direction: DOWN
+# AX reports the card at y851–933 even though the tab bar starts at y877.
+# Move the inbox list upward inside its content region before the same row tap.
+- swipe:
+    start: "50%, 65%"
+    end: "50%, 35%"
+    duration: 500
+- waitForAnimationToEnd
 - tapOn: "(?s)Open Example: Attachments ready.*"
 - assertVisible: "QA note.txt.*"
 - assertVisible:
@@ -202,6 +209,13 @@ appId: com.nylohq.nylo
       text: "(?s)Open Example: Attachments ready.*"
       above: "Chats, tab, 1 of 3"
     direction: DOWN
+# AX reports the card at y851–933 even though the tab bar starts at y877.
+# Move the inbox list upward inside its content region before the same row tap.
+- swipe:
+    start: "50%, 65%"
+    end: "50%, 35%"
+    duration: 500
+- waitForAnimationToEnd
 - tapOn: "(?s)Open Example: Attachments ready.*"
 - assertVisible: "QA note.txt.*"
 - assertVisible: "Review these files"
