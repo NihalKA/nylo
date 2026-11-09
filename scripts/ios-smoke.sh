@@ -88,6 +88,15 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
     --assets-dest "$RUNNER_TEMP/nylo-app/Nylo.app" --max-workers 2
 fi
+if [ "$scenario" = background ]; then
+  mark_phase sign-background-simulator
+  # Use the existing Apple identity: ad-hoc restricted Keychain entitlements
+  # were rejected by macOS taskgated before simulator process startup.
+  codesign --display --verbose=4 "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-signature.txt 2>&1
+  codesign --display --entitlements :- "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-entitlements.plist 2>> artifacts/e2e/original-simulator-signature.txt
+  python3 scripts/sign-ci-simulator.py sign "$RUNNER_TEMP/nylo-app/Nylo.app"
+  echo 'Simulator signed using existing Apple identity; not signed-device/TestFlight proof.' >> artifacts/e2e/source.txt
+fi
 mark_phase discover-simulator
 xcrun simctl list -j > artifacts/e2e/simulator-inventory.json
 device_type="$(python3 - "$profile" <<'PY'
@@ -122,14 +131,7 @@ if [ "$profile" = large-text ]; then
 fi
 xcrun simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi --wifiMode active --wifiBars 3 --batteryState charged --batteryLevel 100
 mark_phase install-and-launch
-if [ "$scenario" = background ]; then
-  # Use the existing Apple identity: ad-hoc restricted Keychain entitlements
-  # were rejected by macOS taskgated before simulator process startup.
-  codesign --display --verbose=4 "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-signature.txt 2>&1
-  codesign --display --entitlements :- "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-entitlements.plist 2>> artifacts/e2e/original-simulator-signature.txt
-  python3 scripts/sign-ci-simulator.py sign "$RUNNER_TEMP/nylo-app/Nylo.app"
-  echo 'Simulator signed using existing Apple identity; not signed-device/TestFlight proof.' >> artifacts/e2e/source.txt
-fi
+
 xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8

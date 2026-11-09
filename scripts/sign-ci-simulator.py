@@ -24,6 +24,9 @@ keychain = root / 'ci.keychain-db'
 def run(label, args):
     result = subprocess.run(args, capture_output=True)
     if result.returncode:
+        if args[0] == 'codesign':
+            # codesign receives only public identity/path arguments, no secrets.
+            print(result.stderr.decode(errors='replace')[-6000:], file=sys.stderr)
         raise SystemExit(f'{label} failed ({result.returncode}); protected arguments suppressed.')
     return result.stdout
 
