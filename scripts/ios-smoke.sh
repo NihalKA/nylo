@@ -6,7 +6,11 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
+  echo 'Store captures require the large profile and the original native JS bundle.'
+  exit 1
+fi
 simulator_id=""
 phase="resolve-native-source"
 mark_phase() {
@@ -47,6 +51,9 @@ printf 'Scenario: %s\nProfile: %s\nNative run: %s\nUI run: %s\n' "$scenario" "$p
 shasum -a 256 "e2e/ios-$scenario.yaml" scripts/ios-smoke.sh scripts/seed-ios-gallery.py > artifacts/e2e/fixture-sha256.txt
 if [ "$scenario" = attachments ]; then
   shasum -a 256 scripts/owned-photo-metadata.py scripts/check-picked-photo-storage.py >> artifacts/e2e/fixture-sha256.txt
+fi
+if [ "$scenario" = store ]; then
+  shasum -a 256 scripts/seed-ios-store.py >> artifacts/e2e/fixture-sha256.txt
 fi
 mark_phase download-native-artifact
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
@@ -101,6 +108,22 @@ xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8
 xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
+if [ "$scenario" = store ]; then
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  mark_phase seed-store-examples
+  python3 scripts/seed-ios-store.py --container "$app_container" --manifest artifacts/e2e/store-manifest.json
+  shasum -a 256 artifacts/native/Nylo-simulator.zip > artifacts/e2e/native-archive-sha256.txt
+  # Preserve the complete installed bundle identity, not just its JS entry point.
+  python3 - "$RUNNER_TEMP/nylo-app/Nylo.app" <<'PYAPP'
+import hashlib, json, sys
+from pathlib import Path
+root = Path(sys.argv[1])
+files = {str(p.relative_to(root)): hashlib.sha256(p.read_bytes()).hexdigest()
+         for p in sorted(root.rglob('*')) if p.is_file()}
+Path('artifacts/e2e/native-bundle-sha256.json').write_text(json.dumps(files, indent=2) + '\n')
+PYAPP
+fi
 if [ "$scenario" = gallery ] || [ "$scenario" = attachments ]; then
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
@@ -163,6 +186,41 @@ if [ "$scenario" = attachments ]; then
   python3 scripts/check-picked-photo-storage.py --container "$app_container" \
     --simulator-id "$simulator_id" --source-jpeg artifacts/e2e/owned-picker-photo.jpg \
     --output-dir artifacts/e2e
+fi
+
+if [ "$scenario" = store ]; then
+  mark_phase store-capture-manifest
+  python3 - <<'PYSTORE'
+import hashlib, json, struct
+from pathlib import Path
+root = Path('artifacts/e2e')
+manifest = json.loads((root / 'store-manifest.json').read_text())
+names = ['store-01-inbox', 'store-02-response', 'store-03-model-picker',
+         'store-04-memory', 'store-05-attachment-draft']
+for name in names:
+    matches = list(root.rglob(name + '.png'))
+    assert len(matches) == 1, f'Expected exactly one native capture: {name}; got {matches}'
+    path = matches[0]
+    content = path.read_bytes()
+    assert content[:8] == b'\x89PNG\r\n\x1a\n' and content[12:16] == b'IHDR', path
+    width, height, depth, color = struct.unpack('>IIBB', content[16:26])
+    assert (width, height, depth, color) == (1320, 2868, 8, 2), f'Expected opaque 8-bit RGB 1320x2868 native PNG: {path}'
+    # RGB must also have no optional transparency chunk. Never rewrite pixels.
+    offset = 8
+    while offset < len(content):
+        length = struct.unpack('>I', content[offset:offset+4])[0]
+        kind = content[offset+4:offset+8]
+        assert kind != b'tRNS', f'Transparency is not accepted: {path}'
+        offset += length + 12
+    manifest['captures'].append(dict(file=str(path.relative_to(root)), width=width,
+        height=height, format='opaque RGB PNG', sha256=hashlib.sha256(content).hexdigest()))
+manifest.update(status='captured_awaiting_visual_review',
+    provenance={name: (root / name).read_text() for name in
+                ['source.txt', 'fixture-sha256.txt', 'js-bundle-sha256.txt', 'native-archive-sha256.txt']},
+    nativeBundleHashes='native-bundle-sha256.json',
+    resultMeaning='Asset flow completed only; JUnit is not full product approval, live AI evidence, or App Store approval.')
+(root / 'store-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+PYSTORE
 fi
 
 mark_phase complete

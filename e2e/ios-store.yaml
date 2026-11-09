@@ -1,0 +1,99 @@
+appId: com.nylohq.nylo
+---
+# Asset generation only. Never Send, Discover, test a provider, or visit Settings.
+- launchApp
+- extendedWaitUntil:
+    visible: "(?s)Open Example: A focused morning.*"
+    timeout: 30000
+- assertVisible: "(?s)Open Example: A thoughtful update.*"
+- assertVisible: "(?s)Open Example: Workshop notes.*"
+- waitForAnimationToEnd
+- takeScreenshot: store-01-inbox
+- tapOn:
+    text: "(?s)Open Example: A focused morning.*"
+    retryTapIfNoChange: false
+- assertVisible: "(?s).*Start small and leave room to breathe.*"
+- assertVisible: "(?s).*A little space can make a busy day feel more manageable.*"
+- assertVisible: "Choose model connection[.] NyloHQ, gpt-6-luna"
+- assertNotVisible: "Dismiss keyboard"
+- waitForAnimationToEnd
+- takeScreenshot: store-02-response
+- tapOn:
+    text: "Choose model connection[.] NyloHQ, gpt-6-luna"
+    retryTapIfNoChange: false
+- assertVisible: "Choose a model"
+- assertVisible: "NyloHQ[.] gpt-6-luna"
+- assertVisible: "NyloHQ[.] gpt-6[.]1-sol"
+- assertVisible: "NyloHQ[.] gpt-6-astra"
+- assertNotVisible: "Conversation title"
+- assertNotVisible: "Dismiss keyboard"
+- waitForAnimationToEnd
+- takeScreenshot: store-03-model-picker
+- tapOn:
+    text: "Close model picker"
+    retryTapIfNoChange: false
+- assertNotVisible: "Close model picker"
+- tapOn:
+    text: "Go back"
+    retryTapIfNoChange: false
+- tapOn:
+    text: "Agents, tab, 2 of 3"
+    retryTapIfNoChange: false
+- tapOn:
+    text: "Open Example: Writing partner"
+    retryTapIfNoChange: false
+- assertVisible: "Example: Writing partner"
+- tapOn:
+    text: "Memory"
+    retryTapIfNoChange: false
+- scrollUntilVisible:
+    element:
+      id: "agent-memory-input"
+      below: "Agent"
+    direction: DOWN
+    centerElement: true
+    visibilityPercentage: 100
+- tapOn:
+    id: "agent-memory-input"
+    retryTapIfNoChange: false
+- inputText: "Keep my writing warm, concise, and easy to read."
+- tapOn:
+    text: "Dismiss keyboard"
+    retryTapIfNoChange: false
+- assertNotVisible: "Dismiss keyboard"
+- scrollUntilVisible:
+    element: "Save memory"
+    direction: DOWN
+    visibilityPercentage: 100
+- assertVisible:
+    text: "Save memory"
+    enabled: true
+- tapOn:
+    text: "Save memory"
+    retryTapIfNoChange: false
+- scrollUntilVisible:
+    element: "Keep my writing warm, concise, and easy to read[.]"
+    direction: DOWN
+    visibilityPercentage: 100
+- assertVisible: "Saved memories"
+- assertVisible: "Edit memory"
+- assertVisible: "Forget memory"
+- waitForAnimationToEnd
+- takeScreenshot: store-04-memory
+- tapOn:
+    text: "Go back"
+    retryTapIfNoChange: false
+- tapOn:
+    text: "Chats, tab, 1 of 3"
+    retryTapIfNoChange: false
+- tapOn:
+    text: "(?s)Open Example: Workshop notes.*"
+    retryTapIfNoChange: false
+- assertVisible:
+    id: "chat-message"
+    text: "Help me turn this outline into a welcoming workshop."
+- assertVisible: "Remove Workshop outline[.]txt"
+- assertVisible: "Choose model connection[.] NyloHQ, gpt-6-luna"
+- assertNotVisible: "Dismiss keyboard"
+- waitForAnimationToEnd
+- takeScreenshot: store-05-attachment-draft

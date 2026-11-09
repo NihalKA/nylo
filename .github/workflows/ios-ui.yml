@@ -15,9 +15,9 @@ on:
         type: boolean
         default: false
       scenario:
-        description: First-use smoke or synthetic populated-state gallery
+        description: Smoke, QA gallery/attachments, or illustrative store asset capture
         type: choice
-        options: [smoke, gallery, attachments]
+        options: [smoke, gallery, attachments, store]
         default: smoke
 permissions:
   contents: read
