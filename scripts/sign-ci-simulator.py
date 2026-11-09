@@ -86,7 +86,7 @@ elif mode == 'sign':
         raise SystemExit('Prepared simulator signing identity is no longer usable.')
     shutil.copyfile(root / 'profile.mobileprovision', app / 'embedded.mobileprovision')
     run('Sign simulator with existing identity', ['codesign', '--force', '--sign', identity, '--keychain', str(keychain), '--generate-entitlement-der', '--entitlements', str(root / 'entitlements.plist'), str(app)])
-    run('Verify simulator signature', ['codesign', '--verify', '--strict', str(app)])
+    run('Verify simulator signature', ['codesign', '--verify', '--deep', '--strict', str(app)])
     evidence = Path('artifacts/e2e')
     evidence.mkdir(parents=True, exist_ok=True)
     result = subprocess.run(['codesign', '--display', '--verbose=4', str(app)], capture_output=True)

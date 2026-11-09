@@ -29,6 +29,11 @@ collect_diagnostics() {
     kill "$background_server_pid" || true
     xcrun simctl spawn "$simulator_id" log show --last 15m --style compact --predicate 'process == "Nylo" AND eventMessage CONTAINS "[NyloBackgroundResponse]"' > artifacts/e2e/background-native.log 2>&1 || true
   fi
+  if [ "$scenario" = background ]; then
+    # Simulator process signatures are also checked by the macOS host. Keep
+    # its reason separately from SpringBoard's generic launch denial.
+    sudo log show --last 5m --style compact --predicate 'process == "taskgated-helper" OR process == "taskgated" OR process == "amfid"' > artifacts/e2e/background-host-signing.log 2>&1 || true
+  fi
   if [ -n "$simulator_id" ]; then
     if [ "$scenario" = background ]; then
       # Preserve the OS denial reason even if install/launch fails before the
