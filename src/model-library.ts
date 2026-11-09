@@ -17,6 +17,21 @@ export function modelChoices(connections: Connection[]) {
     })),
   );
 }
+// Keep connection identity even when providers share a name or model ID.
+export function modelSections(connections: Connection[], search = "") {
+  const query = search.trim().toLowerCase();
+  return connections
+    .map((connection) => ({
+      key: connection.id,
+      connection,
+      data: connectionModels(connection)
+        .filter((model) =>
+          `${connection.name} ${model}`.toLowerCase().includes(query),
+        )
+        .map((model) => ({ id: `${connection.id}:${model}`, model })),
+    }))
+    .filter((section) => section.data.length > 0);
+}
 export function selectedConnection(
   connection: Connection,
   model?: string,

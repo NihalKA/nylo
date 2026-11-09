@@ -8,6 +8,7 @@ import {
 import {
   connectionModels,
   modelChoices,
+  modelSections,
   selectedConnection,
 } from "../src/model-library";
 import { recentAgentContext, sharedContextPrompt } from "../src/agent-context";
@@ -78,6 +79,37 @@ test("legacy and multi-model providers preserve a default and route one selected
   );
   assert.equal(connection.model, "one");
   assert.throws(() => selectedConnection(connection, "removed"), /no longer/);
+});
+test("grouped model search keeps identical model IDs bound to distinct connections", () => {
+  const other: Connection = {
+    ...connection,
+    id: "other-provider",
+    name: "Second provider",
+    baseUrl: "https://other.example/v1",
+  };
+  const providers = [connection, other];
+  const original = JSON.stringify(providers);
+  const sections = modelSections(providers, "  ONE  ");
+  assert.deepEqual(
+    sections.map((section) => ({
+      connectionId: section.connection.id,
+      models: section.data.map((item) => [item.id, item.model]),
+    })),
+    [
+      { connectionId: "provider", models: [["provider:one", "one"]] },
+      {
+        connectionId: "other-provider",
+        models: [["other-provider:one", "one"]],
+      },
+    ],
+  );
+  assert.deepEqual(
+    modelSections(providers, "second").map((s) => s.key),
+    ["other-provider"],
+  );
+  assert.deepEqual(modelSections(providers, "missing"), []);
+  assert.equal(modelSections(providers)[0].data.length, 2);
+  assert.equal(JSON.stringify(providers), original);
 });
 test("attachment validation rejects oversized, forged, duplicate and malformed content", () => {
   assert.equal(validateAttachments([photo, pdf, text]).length, 3);

@@ -1,5 +1,5 @@
 import { attachmentFlowReducer } from "../../src/attachment-flow";
-import { modelChoices } from "../../src/model-library";
+import { modelSections } from "../../src/model-library";
 import { Attachment } from "../../src/types";
 import { attachmentUri, validateAttachments } from "../../src/attachments";
 import {
@@ -25,6 +25,7 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  SectionList,
   Text,
   TextInput,
   View,
@@ -1017,95 +1018,146 @@ function Chat() {
                 also support PDF input. Choosing a connection sends nothing.
               </Text>
             ) : null}
-            <Field
-              testID="chat-model-search"
-              label="Search models"
-              value={modelSearch}
-              onChangeText={setModelSearch}
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-            <ScrollView
-              keyboardShouldPersistTaps="handled"
-              style={{ flexGrow: 0, flexShrink: 1 }}
+            <View
+              style={[
+                s.row,
+                {
+                  gap: 8,
+                  paddingHorizontal: 12,
+                  borderRadius: 12,
+                  backgroundColor: theme.surface,
+                },
+              ]}
             >
-              {modelChoices(data.connections)
-                .filter((choice) =>
-                  `${choice.connection.name} ${choice.model}`
-                    .toLowerCase()
-                    .includes(modelSearch.toLowerCase()),
-                )
-                .map(({ connection: c, model, id: choiceId }) => (
-                  <Pressable
-                    key={choiceId}
-                    accessibilityRole="radio"
-                    accessibilityLabel={`${c.name}. ${model}${hasPdf && c.protocol === "compatible" ? ". PDFs unavailable with Chat Completions" : ""}`}
-                    accessibilityState={{
-                      checked:
-                        c.id === connection?.id && model === connection.model,
-                      disabled:
-                        !!runningId || (hasPdf && c.protocol === "compatible"),
-                    }}
-                    disabled={
-                      !!runningId || (hasPdf && c.protocol === "compatible")
-                    }
-                    onPress={() =>
-                      void action(async () => {
-                        await update((d) => ({
-                          ...d,
-                          conversations: d.conversations.map((item) =>
-                            item.id === id
-                              ? { ...item, connectionId: c.id, model }
-                              : item,
-                          ),
-                        }));
-                        setModelPicker(false);
-                      })
-                    }
+              <Icon name="search" size={18} color={theme.sub} />
+              <TextInput
+                testID="chat-model-search"
+                accessibilityLabel="Search models"
+                placeholder="Search models or providers"
+                placeholderTextColor={theme.sub}
+                value={modelSearch}
+                onChangeText={setModelSearch}
+                autoCapitalize="none"
+                autoCorrect={false}
+                clearButtonMode="while-editing"
+                style={{
+                  flex: 1,
+                  minHeight: 44,
+                  paddingVertical: 10,
+                  color: theme.ink,
+                  fontSize: 16,
+                }}
+              />
+            </View>
+            <SectionList
+              sections={modelSections(data.connections, modelSearch)}
+              keyExtractor={(item) => item.id}
+              keyboardShouldPersistTaps="handled"
+              stickySectionHeadersEnabled={false}
+              style={{ flexGrow: 0, flexShrink: 1 }}
+              renderSectionHeader={({ section: { connection: c } }) => (
+                <View style={{ paddingTop: 16, paddingBottom: 4, gap: 4 }}>
+                  <Text
+                    accessibilityRole="header"
+                    style={[s.sub, { fontSize: 13, fontWeight: "600" }]}
+                  >
+                    {c.name}
+                  </Text>
+                  {hasPdf ? (
+                    <Text style={[s.sub, { fontSize: 12 }]}>
+                      {c.protocol === "compatible"
+                        ? "Chat Completions · PDFs unavailable"
+                        : c.protocol === "openai"
+                          ? "Responses"
+                          : "Claude Messages"}
+                    </Text>
+                  ) : null}
+                </View>
+              )}
+              renderItem={({
+                item: { id: choiceId, model },
+                section: { connection: c },
+              }) => (
+                <Pressable
+                  key={choiceId}
+                  accessibilityRole="radio"
+                  accessibilityLabel={`${c.name}. ${model}${hasPdf && c.protocol === "compatible" ? ". PDFs unavailable with Chat Completions" : ""}`}
+                  accessibilityState={{
+                    checked:
+                      c.id === connection?.id && model === connection.model,
+                    disabled:
+                      !!runningId || (hasPdf && c.protocol === "compatible"),
+                  }}
+                  disabled={
+                    !!runningId || (hasPdf && c.protocol === "compatible")
+                  }
+                  onPress={() =>
+                    void action(async () => {
+                      await update((d) => ({
+                        ...d,
+                        conversations: d.conversations.map((item) =>
+                          item.id === id
+                            ? { ...item, connectionId: c.id, model }
+                            : item,
+                        ),
+                      }));
+                      setModelPicker(false);
+                    })
+                  }
+                  style={({ pressed }) => [
+                    s.row,
+                    {
+                      minHeight: 50,
+                      gap: 12,
+                      paddingVertical: 12,
+                      paddingHorizontal: 4,
+                      borderRadius: 8,
+                      backgroundColor: pressed ? theme.surface : "transparent",
+                      opacity: hasPdf && c.protocol === "compatible" ? 0.45 : 1,
+                    },
+                  ]}
+                >
+                  <Text
                     style={[
-                      s.row,
+                      s.text,
                       {
-                        minHeight: 68,
-                        gap: 14,
-                        paddingVertical: 16,
-                        borderBottomWidth: 1,
-                        borderBottomColor: theme.line,
+                        flex: 1,
+                        fontWeight:
+                          c.id === connection?.id && model === connection.model
+                            ? "600"
+                            : "400",
                       },
                     ]}
                   >
-                    <View style={{ flex: 1, gap: 4 }}>
-                      <Text style={[s.text, { fontWeight: "600" }]}>
-                        {c.name}
-                      </Text>
-                      <Text style={s.sub}>{model}</Text>
-                      {hasPdf ? (
-                        <Text style={s.sub}>
-                          {c.protocol === "compatible"
-                            ? "Chat Completions · PDFs unavailable"
-                            : c.protocol === "openai"
-                              ? "Responses"
-                              : "Claude Messages"}
-                        </Text>
-                      ) : null}
-                    </View>
-                    {c.id === connection?.id && model === connection.model ? (
-                      <Icon name="checkmark" size={20} />
-                    ) : null}
-                  </Pressable>
-                ))}
-              <Text style={s.sub}>
-                Conversation context goes with your next message. Selecting a
-                model sends nothing.
-              </Text>
-              <Button
-                title="Manage providers"
-                secondary
-                onPress={() => {
-                  setModelPicker(false);
-                  router.push("/connection");
-                }}
-              />
-            </ScrollView>
+                    {model}
+                  </Text>
+                  {c.id === connection?.id && model === connection.model ? (
+                    <Icon name="checkmark" size={20} />
+                  ) : null}
+                </Pressable>
+              )}
+              ListEmptyComponent={
+                <Text style={[s.sub, { paddingVertical: 20 }]}>
+                  No models found. Try another search or manage your providers.
+                </Text>
+              }
+              ListFooterComponent={
+                <View style={{ paddingTop: 16, gap: 12 }}>
+                  <Text style={[s.sub, { fontSize: 12 }]}>
+                    Switching models sends nothing. Your next message includes
+                    this chat’s context.
+                  </Text>
+                  <Button
+                    title="Manage providers"
+                    secondary
+                    onPress={() => {
+                      setModelPicker(false);
+                      router.push("/connection");
+                    }}
+                  />
+                </View>
+              }
+            />
           </View>
         </View>
       </Modal>
