@@ -65,7 +65,7 @@ if [ "$scenario" = pdf ]; then
   shasum -a 256 scripts/seed-ios-pdf.py >> artifacts/e2e/fixture-sha256.txt
 fi
 if [ "$scenario" = background ]; then
-  shasum -a 256 scripts/seed-ios-background.py scripts/background-stream-server.py scripts/background-wait.js >> artifacts/e2e/fixture-sha256.txt
+  shasum -a 256 scripts/seed-ios-background.py scripts/background-stream-server.py scripts/background-wait.js scripts/sign-ci-simulator.py >> artifacts/e2e/fixture-sha256.txt
 fi
 if [ "$scenario" = attachments ]; then
   shasum -a 256 scripts/owned-photo-metadata.py scripts/check-picked-photo-storage.py >> artifacts/e2e/fixture-sha256.txt
@@ -123,24 +123,12 @@ fi
 xcrun simctl status_bar "$simulator_id" override --time '9:41' --dataNetwork wifi --wifiMode active --wifiBars 3 --batteryState charged --batteryLevel 100
 mark_phase install-and-launch
 if [ "$scenario" = background ]; then
-  # The simulator archive is intentionally compiled without device signing.
-  # SecureStore still needs an application identifier for its Keychain access.
-  # Apply a disposable simulator-only identity, never a device/release entitlement.
-  [ "${CI:-}" = 1 ] && [ "${GITHUB_ACTIONS:-}" = true ]
+  # Use the existing Apple identity: ad-hoc restricted Keychain entitlements
+  # were rejected by macOS taskgated before simulator process startup.
   codesign --display --verbose=4 "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-signature.txt 2>&1
   codesign --display --entitlements :- "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-entitlements.plist 2>> artifacts/e2e/original-simulator-signature.txt
-  cat > "$RUNNER_TEMP/background-simulator-entitlements.plist" <<'ENTITLEMENTS'
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0"><dict>
-  <key>application-identifier</key><string>NYLOCI0000.com.nylohq.nylo</string>
-  <key>keychain-access-groups</key><array><string>NYLOCI0000.com.nylohq.nylo</string></array>
-</dict></plist>
-ENTITLEMENTS
-  codesign --force --sign - --entitlements "$RUNNER_TEMP/background-simulator-entitlements.plist" "$RUNNER_TEMP/nylo-app/Nylo.app"
-  codesign --verify --strict "$RUNNER_TEMP/nylo-app/Nylo.app"
-  codesign --display --entitlements :- "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/simulator-entitlements.plist 2> artifacts/e2e/simulator-signature.txt
-  echo 'Simulator-only ad-hoc Keychain identity applied; not signed-device/TestFlight proof.' >> artifacts/e2e/source.txt
+  python3 scripts/sign-ci-simulator.py sign "$RUNNER_TEMP/nylo-app/Nylo.app"
+  echo 'Simulator signed using existing Apple identity; not signed-device/TestFlight proof.' >> artifacts/e2e/source.txt
 fi
 xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo

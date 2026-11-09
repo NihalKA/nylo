@@ -97,6 +97,7 @@ jobs:
     needs: eligibility
     if: needs.eligibility.outputs.run_ui == 'true'
     runs-on: macos-26
+    environment: apple-release
     strategy:
       fail-fast: false
       matrix:
@@ -113,6 +114,15 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
         if: inputs.refresh_js_bundle
+      - name: Prepare existing signing identity for background-only Keychain test
+        if: inputs.scenario == 'background'
+        run: python3 scripts/sign-ci-simulator.py prepare
+        env:
+          IOS_CERT_P12_BASE64: ${{ secrets.IOS_CERT_P12_BASE64 }}
+          IOS_CERT_PASSWORD: ${{ secrets.IOS_CERT_PASSWORD }}
+          IOS_PROFILE_BASE64: ${{ secrets.IOS_PROFILE_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          CI_KEYCHAIN_PASSWORD: ${{ secrets.CI_KEYCHAIN_PASSWORD }}
       - name: Install app, exercise first-use flows, capture evidence
         run: bash scripts/ios-smoke.sh
         env:
@@ -121,6 +131,9 @@ jobs:
           UI_SCENARIO: ${{ inputs.scenario || 'smoke' }}
           REFRESH_JS_BUNDLE: ${{ inputs.refresh_js_bundle && 'true' || 'false' }}
           GH_TOKEN: ${{ github.token }}
+      - name: Remove disposable simulator signing material
+        if: always() && inputs.scenario == 'background'
+        run: python3 scripts/sign-ci-simulator.py cleanup
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
