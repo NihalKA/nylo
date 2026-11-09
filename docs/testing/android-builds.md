@@ -1,10 +1,10 @@
-Current product `a0afe7e` corrects the report preview's actual native translucent-shadow colour mismatch. Fresh iOS42722415418 / signed Android12 42722421091 are running, SourceCI42722410071 succeeds. Earlier76/11 evidence below is interim; final distribution remains held for the new candidate's verification.
+Current product `a0afe7e` corrects the report preview's actual native translucent-shadow colour mismatch. Fresh iOS42722415418 is running; signed Android12 42722421091 succeeds. Automatic smoke42723901979 is running and rich gallery42724048318 is already pending on that exact APK. SourceCI42722410071 succeeds. Earlier76/11 evidence below is interim; final distribution remains held for the new candidate's verification.
 
 ## Current candidate11 compiled and smoke verified — delivery pending
 
 Signed native42717464908 succeeds on product76b80dc. Actual APK57,977,310 bytes has SHA256 `b870e80a3a9d6ebd4fcedc802aaa9ac9fffe784e92a4692aedb1939d8ec74bc7`; AAB40,359,121 bytes has SHA256 `0ef32dff258227b10a14d2b49dc60b6dd167d4d65dcb6e0c0551837c7f2997b8`. Archive GitHub digest/CRC, original certificate, package/version/permissions/nondebug/HTTPS, bundletool and11 actual runtime font assets verify. The protected JKS is unchanged.
 
-Automatic42719600103 passes both modes108 commands/12 skips,15 inspected PNGs each, with33px actual navigation clearance. Rich gallery42719642034 three-button passes92/2,13 inspected PNGs and34px clearance; gesture remains running. Final current parity acceptance/release remains pending. No current11 public release/Drive upload is claimed; old6/5 links remain available.
+Automatic42719600103 passes both modes108 commands/12 skips,15 inspected PNGs each, with33px actual navigation clearance. Rich gallery42719642034 three-button passes92/2,13 inspected PNGs and34px clearance; gesture fails before emulator launch during the Google system-image download (Connection reset), with zero Nylo commands/captures. Archive13721562476 digest/CRC and Git fixture hashes verify; original failure remains preserved, without an obsolete11 retry. Final current parity acceptance/release remains pending. No current11 public release/Drive upload is claimed; old6/5 links remain available.
 
 ## Current candidate11 — awaiting fresh UI acceptance
 
