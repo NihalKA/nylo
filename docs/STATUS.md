@@ -50,3 +50,8 @@ Store capture [42551583436](https://github.com/NihalKA/nylo/actions/runs/4255158
 The expanded description (2361 characters), keywords (87), promotional text (147), support and marketing URLs were saved to the English version localization and independently read back exactly. This copy explains BYOK charges, one active model per send, optional bounded same-agent context, compatible attachments and foreground limits. The screenshots contain explicitly illustrative examples, not live model outputs. No new quality score is inferred.
 
 A subsequent Apple GET confirms version 1.0.0 remains PREPARE_FOR_SUBMISSION with no associated build. No App Review or public release occurred. Support monitoring is owner-confirmed. Owner design judgment, physical iPhone/VoiceOver/live outcomes, final declarations and separate restricted review access remain open; NYLO_RELEASE_READY stays off.
+
+
+## Owner-reported PDF removal — source fix awaiting native validation
+
+The owner reported a blocked PDF send and an unresponsive Remove action in beta 14. Source `48466d9` makes attachment-strip taps reach Remove while typing, persists removal immediately, and adds a direct PDF connection chooser without changing provider formats/keys automatically. Typecheck and 75 tests pass. Native regression and fresh build are pending; these changes are not in delivered build 14. See testing/pdf-attachments.md. No provider requests or private policy contents were used.
