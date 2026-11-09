@@ -14,7 +14,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Connection, Protocol } from "../src/types";
 import {
   protocolDefaults,
@@ -88,12 +88,32 @@ const draftConnection = (protocol: Protocol = "openai"): Connection => ({
   model: "",
 });
 export default function Settings() {
+  const { id, purpose } = useLocalSearchParams<{
+    id?: string;
+    purpose?: string;
+  }>();
+  return (
+    <ProviderSettings
+      key={`${id || "list"}:${purpose || "general"}`}
+      editId={id}
+      pdfSetup={purpose === "pdf"}
+    />
+  );
+}
+function ProviderSettings({
+  editId,
+  pdfSetup,
+}: {
+  editId?: string;
+  pdfSetup: boolean;
+}) {
   const { data, saveConnection, deleteConnection, update, runningId } =
     useStore();
   const [draft, setDraft] = useState<Connection | null>(
-    data.connections.length ? null : draftConnection(),
+    data.connections.find((c) => c.id === editId) ||
+      (data.connections.length ? null : draftConnection()),
   );
-  const [advanced, setAdvanced] = useState(false);
+  const [advanced, setAdvanced] = useState(pdfSetup);
   const [catalog, dispatchCatalog] = useReducer(modelCatalogReducer, {
     kind: "unloaded",
     revision: 0,
@@ -150,6 +170,60 @@ export default function Settings() {
     });
     return () => listener.remove();
   }, [modelsOpen]);
+  const apiFormat = draft ? (
+    <View style={{ gap: 8 }}>
+      <Text style={s.text}>API format</Text>
+      <View style={[s.row, { flexWrap: "wrap", gap: 8 }]}>
+        {(
+          [
+            { id: "compatible", label: "Chat Completions" },
+            { id: "openai", label: "Responses" },
+            { id: "anthropic", label: "Messages" },
+          ] as const
+        ).map((format) => (
+          <Pressable
+            key={format.id}
+            accessibilityRole="radio"
+            accessibilityState={{
+              checked: draft.protocol === format.id,
+            }}
+            onPress={() => {
+              setDraft({ ...draft, protocol: format.id });
+              setKey("");
+            }}
+            style={{
+              minHeight: 44,
+              padding: 12,
+              borderRadius: 10,
+              backgroundColor:
+                draft.protocol === format.id ? theme.pale : theme.card,
+              borderWidth: 1,
+              borderColor: theme.line,
+            }}
+          >
+            <Text style={{ fontSize: 14, color: theme.ink }}>
+              {format.label}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+      <Text style={s.sub}>
+        Use the format your provider supports. Codex-style services commonly use
+        Responses. Changing the format clears an entered key; enter it again
+        before saving.
+      </Text>
+    </View>
+  ) : null;
+  if (editId && !data.connections.some((c) => c.id === editId))
+    return (
+      <Page>
+        <Header title="Connection unavailable" />
+        <Text style={s.sub}>
+          This connection was removed. Go back to choose another provider; your
+          chat draft is kept.
+        </Text>
+      </Page>
+    );
   if (modelsOpen && draft)
     return (
       <Page>
@@ -281,13 +355,23 @@ export default function Settings() {
     );
   return (
     <Page>
-      <Header title="AI providers" dismissKeyboard />
+      <Header
+        title={pdfSetup ? "PDF connection" : "AI providers"}
+        dismissKeyboard
+      />
       <FormScroll>
         <Text style={s.sub}>
-          Connect your provider with an API key. Its charges and data policies
-          apply.
+          {pdfSetup
+            ? "Use an API format and model that your provider supports. Your PDF and draft stay in the chat. Opening these settings sends nothing."
+            : "Connect your provider with an API key. Its charges and data policies apply."}
         </Text>
-        {data.connections.length ? (
+        {pdfSetup && draft ? (
+          <View style={{ gap: 12 }}>
+            <Text style={s.h2}>{draft.name}</Text>
+            {connectionProvider(draft) === "custom" ? apiFormat : null}
+          </View>
+        ) : null}
+        {!editId && data.connections.length ? (
           <View style={[s.between, { marginTop: 4 }]}>
             <Text style={s.h2}>Saved providers</Text>
             {!draft ? (
@@ -305,7 +389,7 @@ export default function Settings() {
             ) : null}
           </View>
         ) : null}
-        {data.connections.map((c) => (
+        {(editId ? [] : data.connections).map((c) => (
           <View key={c.id} style={[s.card, { gap: 12 }]}>
             <View style={[s.between, { gap: 12 }]}>
               <View style={{ flex: 1 }}>
@@ -406,6 +490,10 @@ export default function Settings() {
                     name="close"
                     label="Cancel connection"
                     onPress={() => {
+                      if (pdfSetup) {
+                        router.back();
+                        return;
+                      }
                       setDraft(null);
                       setKey("");
                     }}
@@ -413,65 +501,67 @@ export default function Settings() {
                 ) : null}
               </View>
             ) : null}
-            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
-              {providerPresets.map((preset) => (
-                <Pressable
-                  key={preset.id}
-                  accessibilityRole="radio"
-                  accessibilityLabel={preset.label}
-                  accessibilityState={{
-                    checked: selectedPreset(draft) === preset.id,
-                  }}
-                  onPress={() => {
-                    setDraft({
-                      ...draft,
-                      provider: preset.provider,
-                      protocol: preset.protocol,
-                      name: preset.name,
-                      baseUrl: preset.baseUrl,
-                      model: "",
-                      models: [],
-                    });
-                    setKey("");
-                    dispatchCatalog({
-                      type: "reset",
-                      revision: ++draftRevision.current,
-                    });
-                    setAdvanced(false);
-                  }}
-                  style={{
-                    minHeight: 48,
-                    minWidth: "45%",
-                    flexGrow: 1,
-                    borderWidth: 1,
-                    borderColor:
-                      selectedPreset(draft) === preset.id
-                        ? theme.ink
-                        : theme.line,
-                    backgroundColor:
-                      selectedPreset(draft) === preset.id
-                        ? theme.ink
-                        : theme.surface,
-                    borderRadius: 14,
-                    paddingHorizontal: 16,
-                    paddingVertical: 12,
-                  }}
-                >
-                  <Text
+            {!pdfSetup ? (
+              <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
+                {providerPresets.map((preset) => (
+                  <Pressable
+                    key={preset.id}
+                    accessibilityRole="radio"
+                    accessibilityLabel={preset.label}
+                    accessibilityState={{
+                      checked: selectedPreset(draft) === preset.id,
+                    }}
+                    onPress={() => {
+                      setDraft({
+                        ...draft,
+                        provider: preset.provider,
+                        protocol: preset.protocol,
+                        name: preset.name,
+                        baseUrl: preset.baseUrl,
+                        model: "",
+                        models: [],
+                      });
+                      setKey("");
+                      dispatchCatalog({
+                        type: "reset",
+                        revision: ++draftRevision.current,
+                      });
+                      setAdvanced(false);
+                    }}
                     style={{
-                      fontSize: 16,
-                      fontWeight: "600",
-                      color:
+                      minHeight: 48,
+                      minWidth: "45%",
+                      flexGrow: 1,
+                      borderWidth: 1,
+                      borderColor:
                         selectedPreset(draft) === preset.id
-                          ? "#FFFFFF"
-                          : theme.ink,
+                          ? theme.ink
+                          : theme.line,
+                      backgroundColor:
+                        selectedPreset(draft) === preset.id
+                          ? theme.ink
+                          : theme.surface,
+                      borderRadius: 14,
+                      paddingHorizontal: 16,
+                      paddingVertical: 12,
                     }}
                   >
-                    {preset.label}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "600",
+                        color:
+                          selectedPreset(draft) === preset.id
+                            ? "#FFFFFF"
+                            : theme.ink,
+                      }}
+                    >
+                      {preset.label}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            ) : null}
             {connectionProvider(draft) === "custom" &&
             (advanced || selectedPreset(draft) === "custom") ? (
               <Field
@@ -611,52 +701,9 @@ export default function Settings() {
                 color={theme.ink}
               />
             </Pressable>
-            {advanced && connectionProvider(draft) === "custom" ? (
-              <View style={{ gap: 8 }}>
-                <Text style={s.text}>API format</Text>
-                <View style={[s.row, { flexWrap: "wrap", gap: 8 }]}>
-                  {(
-                    [
-                      { id: "compatible", label: "Chat Completions" },
-                      { id: "openai", label: "Responses" },
-                      { id: "anthropic", label: "Messages" },
-                    ] as const
-                  ).map((format) => (
-                    <Pressable
-                      key={format.id}
-                      accessibilityRole="radio"
-                      accessibilityState={{
-                        checked: draft.protocol === format.id,
-                      }}
-                      onPress={() => {
-                        setDraft({ ...draft, protocol: format.id });
-                        setKey("");
-                      }}
-                      style={{
-                        minHeight: 44,
-                        padding: 12,
-                        borderRadius: 10,
-                        backgroundColor:
-                          draft.protocol === format.id
-                            ? theme.pale
-                            : theme.card,
-                        borderWidth: 1,
-                        borderColor: theme.line,
-                      }}
-                    >
-                      <Text style={{ fontSize: 14, color: theme.ink }}>
-                        {format.label}
-                      </Text>
-                    </Pressable>
-                  ))}
-                </View>
-                <Text style={s.sub}>
-                  Use the format your provider supports. Codex-style services
-                  commonly use Responses. Changing the format clears an entered
-                  key; enter it again before saving.
-                </Text>
-              </View>
-            ) : null}
+            {!pdfSetup && advanced && connectionProvider(draft) === "custom"
+              ? apiFormat
+              : null}
             {advanced ? (
               <Field
                 label="Connection name"

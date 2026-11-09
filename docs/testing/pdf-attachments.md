@@ -1,5 +1,12 @@
 # PDF attachment removal and connection recovery
 
+## Post-submission PDF refinement — native verification pending
+
+The owner authorized parallel improvements while submitted build15 waits for review. Source now uses a compact document row with an accessible44-point Remove icon, shorter API-format warning and inline Choose PDF connection action. In the grouped picker, each incompatible connection offers Edit API format. That route opens only the selected provider, places format controls first, preserves the chat draft and never automatically changes the protocol, endpoint or credential. A changed destination still requires explicit key re-entry and save through existing credential checks; listing a model still does not verify its PDF capability.
+
+The PDF fixture retains every removal/restoration/selection assertion and additionally visits the focused editor, selects Responses without saving, backs out, and verifies that the original Chat Completions connection remains disabled and the PDF/draft remain intact. Local typecheck76tests/security132/YAML/diff pass. Current native validation and screenshot review are pending; no beta delivery or store replacement is claimed. Build15 remains submitted WAITING_FOR_REVIEW with AFTER_APPROVAL; do not withdraw or replace it for this polish.
+
+
 ## Owner report — 9 November 2026
 
 On feedback beta 1.0.0 (14), the owner attached a PDF and tried to send it using `gpt-6-astra`. Nylo reported that PDFs require Responses or Claude Messages. The owner also reported that Remove did not remove the PDF. The screenshot establishes a blocked draft with the file still attached; it does not establish provider/model PDF capability or the exact touch sequence. The private policy file is not used in automated tests or uploaded by this investigation.

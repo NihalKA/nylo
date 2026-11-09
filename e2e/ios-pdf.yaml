@@ -40,6 +40,26 @@ appId: com.nylohq.nylo
     text: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
     enabled: false
 - takeScreenshot: pdf-04-connection-guidance
+- tapOn: "Edit API format for QA Chat Completions"
+- assertVisible: "PDF connection"
+- assertVisible: "API format"
+- assertVisible:
+    text: "Chat Completions"
+- takeScreenshot: pdf-07-focused-format-editor
+- tapOn: "Responses"
+- assertVisible:
+    text: "Responses"
+- tapOn: "Go back"
+- assertVisible: "Choose PDF connection"
+- assertVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy"
+- tapOn: "Choose PDF connection"
+- assertVisible:
+    text: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
+    enabled: false
+- takeScreenshot: pdf-08-unsaved-format-preserved
 - tapOn: "QA Responses[.] synthetic-model"
 - assertNotVisible: "Close model picker"
 - assertNotVisible: "Choose PDF connection"

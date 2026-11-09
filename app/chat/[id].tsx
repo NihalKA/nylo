@@ -683,17 +683,29 @@ function Chat() {
         </ScrollView>
         <View style={{ paddingBottom: 8, gap: 10 }}>
           {needsPdfConnection ? (
-            <View style={{ gap: 6 }}>
-              <Text accessibilityRole="alert" style={s.error}>
+            <View style={{ gap: 2 }}>
+              <Text
+                accessibilityRole="alert"
+                style={[s.sub, { color: theme.error }]}
+              >
                 {historyHasPdf
-                  ? "This chat includes a PDF. Choose a PDF connection to continue."
-                  : "This connection can’t send PDFs. Choose a PDF connection or remove the file. Your draft is kept."}
+                  ? "This chat’s PDF needs a supported API format."
+                  : "This API format doesn’t support PDFs."}
               </Text>
-              <Button
-                title="Choose PDF connection"
-                secondary
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel="Choose PDF connection"
                 onPress={openModelPicker}
-              />
+                style={[
+                  s.row,
+                  { minHeight: 44, gap: 6, alignSelf: "flex-start" },
+                ]}
+              >
+                <Text style={[s.text, { fontWeight: "600" }]}>
+                  Choose PDF connection
+                </Text>
+                <Icon name="chevron-forward" size={16} />
+              </Pressable>
             </View>
           ) : error ? (
             <Text accessibilityRole="alert" style={s.error}>
@@ -710,7 +722,14 @@ function Chat() {
               {attachments.map((file) => (
                 <View
                   key={file.id}
-                  style={[s.card, { padding: 10, gap: 4, width: 180 }]}
+                  style={[
+                    s.card,
+                    {
+                      padding: 8,
+                      gap: 6,
+                      width: file.mimeType.startsWith("image/") ? 156 : 260,
+                    },
+                  ]}
                 >
                   {file.mimeType.startsWith("image/") ? (
                     <Image
@@ -720,15 +739,31 @@ function Chat() {
                       resizeMode="contain"
                     />
                   ) : null}
-                  <Text numberOfLines={2} style={s.sub}>
-                    {file.name} · {Math.ceil(file.size / 1024)} KB
-                  </Text>
-                  <Button
-                    title="Remove"
-                    accessibilityLabel={`Remove ${file.name}`}
-                    secondary
-                    onPress={() => removeAttachment(file.id)}
-                  />
+                  <View style={[s.row, { gap: 8 }]}>
+                    {!file.mimeType.startsWith("image/") ? (
+                      <Icon
+                        name="document-text-outline"
+                        size={24}
+                        color={theme.sub}
+                      />
+                    ) : null}
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text
+                        numberOfLines={2}
+                        style={[s.sub, { color: theme.ink }]}
+                      >
+                        {file.name}
+                      </Text>
+                      <Text style={[s.sub, { fontSize: 12 }]}>
+                        {Math.ceil(file.size / 1024)} KB
+                      </Text>
+                    </View>
+                    <IconButton
+                      name="close"
+                      label={`Remove ${file.name}`}
+                      onPress={() => removeAttachment(file.id)}
+                    />
+                  </View>
                 </View>
               ))}
             </ScrollView>
@@ -1071,6 +1106,28 @@ function Chat() {
                           ? "Responses"
                           : "Claude Messages"}
                     </Text>
+                  ) : null}
+                  {hasPdf && c.protocol === "compatible" ? (
+                    <Pressable
+                      accessibilityRole="button"
+                      accessibilityLabel={`Edit API format for ${c.name}`}
+                      disabled={!!runningId}
+                      onPress={() => {
+                        setModelPicker(false);
+                        router.push({
+                          pathname: "/connection",
+                          params: { id: c.id, purpose: "pdf" },
+                        });
+                      }}
+                      style={[s.row, { minHeight: 44, gap: 6 }]}
+                    >
+                      <Text
+                        style={[s.sub, { color: theme.ink, fontWeight: "600" }]}
+                      >
+                        Edit API format
+                      </Text>
+                      <Icon name="chevron-forward" size={14} />
+                    </Pressable>
                   ) : null}
                 </View>
               )}
