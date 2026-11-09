@@ -51,7 +51,10 @@ appId: com.nylohq.nylo
     env:
       PHASE: complete
 - assertTrue: ${output.backgroundReady}
-- launchApp
+# launchApp defaults to terminating the process. This step tests app switching;
+# the separate explicit stopApp/cold launch at the end still tests restart.
+- launchApp:
+    stopApp: false
 - assertVisible: "Phase one[.] Completed in background[.]"
 - assertNotVisible: "Stop response"
 - takeScreenshot: background-02-completed
@@ -65,7 +68,10 @@ appId: com.nylohq.nylo
     env:
       PHASE: memory
 - assertTrue: ${output.backgroundReady}
-- launchApp
+# launchApp defaults to terminating the process. This step tests app switching;
+# the separate explicit stopApp/cold launch at the end still tests restart.
+- launchApp:
+    stopApp: false
 - assertVisible: "(?s)Response paused.*"
 - assertNotVisible: "Save memory"
 - takeScreenshot: background-03-memory-interrupted
