@@ -29,7 +29,7 @@ Four earlier restricted text/tool/recall provider requests were used under their
 
 ## App Store preparation
 
-App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Five reviewed native screenshots are uploaded and COMPLETE in the English draft. Updated feature copy is saved and read-back verified. Truthful age/privacy declarations, monitored support practice and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
+App6832224555, seller Nihal K A; signing/account configured. Draft version1.0.0 remains PREPARE_FOR_SUBMISSION, no store build association/submission. India and US only; availableInNewTerritories false, no preorders, both free prices verified. Public privacy/support site reflects attachments and quoted-file context. Five reviewed native screenshots are uploaded and COMPLETE in the English draft. Updated feature copy is saved and read-back verified. The owner confirmed on 9 November 2026 that admin@colorforfun.app is actively monitored for support and AI-response reports. Truthful age/privacy declarations and restricted functional review access remain incomplete. See app-store-readiness.md and RELEASE.md.
 
 No production approval or release is claimed. Do not treat Apple VALID, a passing simulator matrix or a reviewer score as physical/live/owner acceptance.
 
@@ -49,4 +49,4 @@ Store capture [42551583436](https://github.com/NihalKA/nylo/actions/runs/4255158
 
 The expanded description (2361 characters), keywords (87), promotional text (147), support and marketing URLs were saved to the English version localization and independently read back exactly. This copy explains BYOK charges, one active model per send, optional bounded same-agent context, compatible attachments and foreground limits. The screenshots contain explicitly illustrative examples, not live model outputs. No new quality score is inferred.
 
-A subsequent Apple GET confirms version 1.0.0 remains PREPARE_FOR_SUBMISSION with no associated build. No App Review or public release occurred. Support monitoring, owner design judgment, physical iPhone/VoiceOver/live outcomes, final declarations and separate restricted review access remain open; NYLO_RELEASE_READY stays off.
+A subsequent Apple GET confirms version 1.0.0 remains PREPARE_FOR_SUBMISSION with no associated build. No App Review or public release occurred. Support monitoring is owner-confirmed. Owner design judgment, physical iPhone/VoiceOver/live outcomes, final declarations and separate restricted review access remain open; NYLO_RELEASE_READY stays off.

@@ -73,7 +73,7 @@ Account creation and signing are already configured; do not ask for them again. 
 - Any new account-holder agreement, identity/trader verification or legally required attestation shown by Apple; this read-only check did not inspect or accept new agreements.
 - Actual launch-country/legal choices and unresolved declarations, after presenting the prepared accurate answers and implementation evidence. Do not invent an organization, address, provider policy or content frequency.
 - The separately authorized App Review credential and bounded provider budget through private input. Provider usage can cost money; the earlier six-call smoke allowance is not a review allowance.
-- A responsible monitored reporting/support intake and retention practice if the existing support owner has not established one.
+- Support/report monitoring is confirmed: on 9 November 2026, the owner stated that admin@colorforfun.app is actively monitored for App Store support and AI-response reports. This confirms monitoring only; no response-time guarantee or retention period was supplied.
 - Genuine owner design judgment and physical iPhone/live/VoiceOver outcomes. These are product-evidence gates, not legal attestations and not replaceable by a higher reviewer score.
 
 The original preparation was read-only. Subsequent authorized account changes aligned the draft version to 1.0.0, set the free price, configured India/US availability, saved expanded English version copy and uploaded five reviewed native screenshots to the draft. No agreement was accepted, age/privacy declaration attested, store build selected, purchase made or review submitted.
