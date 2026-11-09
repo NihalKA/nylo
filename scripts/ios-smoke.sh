@@ -30,6 +30,13 @@ collect_diagnostics() {
     xcrun simctl spawn "$simulator_id" log show --last 15m --style compact --predicate 'process == "Nylo" AND eventMessage CONTAINS "[NyloBackgroundResponse]"' > artifacts/e2e/background-native.log 2>&1 || true
   fi
   if [ -n "$simulator_id" ]; then
+    if [ "$scenario" = background ]; then
+      # Preserve the OS denial reason even if install/launch fails before the
+      # owned server starts. These disposable fixtures contain no real keys.
+      xcrun simctl spawn "$simulator_id" log show --last 5m --style compact --predicate 'eventMessage CONTAINS "com.nylohq.nylo" OR process == "amfid" OR process == "Nylo"' > artifacts/e2e/background-launch.log 2>&1 || true
+      mkdir -p artifacts/e2e/crash-reports
+      find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -name 'Nylo*.ips' -exec cp '{}' artifacts/e2e/crash-reports/ \; 2>/dev/null || true
+    fi
     xcrun simctl shutdown "$simulator_id" || true
     xcrun simctl delete "$simulator_id" || true
   fi
@@ -120,6 +127,8 @@ if [ "$scenario" = background ]; then
   # SecureStore still needs an application identifier for its Keychain access.
   # Apply a disposable simulator-only identity, never a device/release entitlement.
   [ "${CI:-}" = 1 ] && [ "${GITHUB_ACTIONS:-}" = true ]
+  codesign --display --verbose=4 "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-signature.txt 2>&1
+  codesign --display --entitlements :- "$RUNNER_TEMP/nylo-app/Nylo.app" > artifacts/e2e/original-simulator-entitlements.plist 2>> artifacts/e2e/original-simulator-signature.txt
   cat > "$RUNNER_TEMP/background-simulator-entitlements.plist" <<'ENTITLEMENTS'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
