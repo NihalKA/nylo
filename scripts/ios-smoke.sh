@@ -128,6 +128,9 @@ mark_phase native-flow
 if [ "$scenario" = gallery ]; then
   mark_phase clipboard-and-storage-verification
   xcrun simctl pbpaste "$simulator_id" > artifacts/e2e/copied-example.txt
+  # Preserve the original read for strict comparison. A separate verbose read
+  # supplies transport diagnostics; it never replaces a failed/empty result.
+  xcrun simctl pbpaste -v "$simulator_id" > artifacts/e2e/clipboard-read-diagnostic.txt 2>&1 || true
   python3 - <<'PY'
 from pathlib import Path
 assert Path('artifacts/e2e/copied-example.txt').read_text() == Path('artifacts/e2e/expected-copy.txt').read_text(), 'Copied response differs from the complete synthetic example'

@@ -152,6 +152,9 @@ appId: com.nylohq.nylo
 - assertVisible: "QA photo draft stays safe after camera fallback"
 - assertVisible: "Preview Photo.jpg"
 - assertVisible: "Remove Photo.jpg"
+# This path requires the 2517 source: a new successful import clears the old
+# local camera error before restart, rather than relying on remount to hide it.
+- assertNotVisible: "Camera is unavailable on this device[.] Choose Photo library or files instead[.]"
 - takeScreenshot: attachments-05b-retained-owned-metadata-photo
 - stopApp
 - launchApp
