@@ -24,6 +24,11 @@ appId: com.nylohq.nylo
     direction: DOWN
 - tapOn: "NyloHQ"
 - takeScreenshot: 04-provider-setup
+# The retained compact failure shows this system banner covering Go back;
+# tapping through it opened iOS Settings. Keep the navigation check unchanged.
+- extendedWaitUntil:
+    notVisible: "(?s).*Ready for Apple Intelligence.*"
+    timeout: 15000
 - tapOn: "Go back"
 - tapOn:
     text: "Chats, tab, 1 of 3"
