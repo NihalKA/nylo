@@ -26,7 +26,7 @@ CHAT_MESSAGES = {
 
 
 def exif_tag_inventory(payload):
-    """Bounded diagnostic tag IDs only; no acceptance decision or payload dump."""
+    """Bounded tag inventory; only scalar encoder values, never a payload dump."""
     data = payload[6:]
     require(data[:2] in (b"II", b"MM"), "Unknown TIFF byte order")
     endian = "<" if data[:2] == b"II" else ">"
@@ -50,12 +50,56 @@ def exif_tag_inventory(payload):
         for index in range(count):
             entry = offset + 2 + index * 12
             tag, kind, amount = u16(entry), u16(entry + 2), u32(entry + 4)
-            tags.append(dict(tag=f"0x{tag:04x}", type=kind, count=amount))
+            item = dict(tag=f"0x{tag:04x}", type=kind, count=amount)
+            if amount == 1 and kind in (3, 4):
+                item["value"] = u16(entry + 8) if kind == 3 else u32(entry + 8)
+            elif amount == 1 and kind == 5:
+                value_offset = u32(entry + 8)
+                item["value"] = [u32(value_offset), u32(value_offset + 4)]
+            tags.append(item)
             if tag in (0x8769, 0x8825) and kind == 4 and amount == 1:
                 pending.append(("GPS" if tag == 0x8825 else "Exif", u32(entry + 8)))
+        require(len({tag["tag"] for tag in tags}) == len(tags), "Duplicate TIFF tag")
+        require(u32(offset + 2 + count * 12) == 0, "Unexpected linked TIFF directory")
         result.append(dict(directory=name, tags=tags))
     require(not pending, "Too many TIFF directories")
     return result
+
+
+def validate_encoder_metadata(segments):
+    """Original Artist/GPS are forbidden; only observed fresh encoder fields allowed."""
+    exif_count = 0
+    allowed = {
+        "IFD0": {
+            "0x0112": ((3,), 1),       # Upright orientation, original orientation baked into pixels.
+            "0x011a": ((5,), [72, 1]), # Fresh encoder resolution, not source/camera metadata.
+            "0x011b": ((5,), [72, 1]),
+            "0x0128": ((3,), 2),
+            "0x8769": ((4,), None),    # Offset only; referenced Exif directory is checked too.
+        },
+        "Exif": {
+            "0xa001": ((3,), 1),       # sRGB.
+            "0xa002": ((3, 4), 32),    # Dimensions independently match the JPEG frame.
+            "0xa003": ((3, 4), 32),
+        },
+    }
+    inventories = []
+    for marker, payload, _, _ in segments:
+        if marker != 0xe1:
+            continue
+        require(payload.startswith(b"Exif\0\0"), "Unexpected APP1 metadata")
+        exif_count += 1
+        require(exif_count <= 1, "Multiple EXIF segments")
+        inventory = exif_tag_inventory(payload)
+        for directory in inventory:
+            require(directory["directory"] in allowed, "Original GPS or unexpected metadata directory")
+            for item in directory["tags"]:
+                require(item["tag"] in allowed[directory["directory"]], "Original Artist/GPS or unexpected EXIF tag")
+                kinds, value = allowed[directory["directory"]][item["tag"]]
+                require(item["type"] in kinds and item["count"] == 1, "Unexpected encoder tag type/count")
+                require(value is None or item.get("value") == value, "Unexpected encoder metadata value")
+        inventories.append(inventory)
+    return inventories
 
 
 def main():
@@ -142,15 +186,15 @@ def main():
         outputBytes=len(data),
         syntheticMarkerPresent=owned.MARKER in data,
         exifSegments=exif_reports,
-        strictNoExifRequirementPassed=not exif_reports,
+        hasExif=bool(exif_reports),
+        metadataContract="Original Artist/GPS absent; only explicitly allowlisted fresh encoder fields permitted",
     ), indent=2) + "\n")
-    require(not any(marker == 0xe1 and payload.startswith(b"Exif\0\0") for marker, payload, _, _ in segments),
-            "Stored picker JPEG still contains EXIF APP1")
+    validate_encoder_metadata(segments)
     require(owned.MARKER not in data, "Stored picker JPEG still contains synthetic Artist marker")
     (output / "picked-photo-storage-check.txt").write_text(
         "PASS: exact draft and single Photo.jpg retained after cold restart; all stored blob IDs equal all-chat references; "
         "removed first-import orphan absent. Target base64, byte size, JPEG SOI/EOI and 32x32 dimensions valid; "
-        "no EXIF APP1 or synthetic marker in stored JPEG. Synthetic CI fixture only.\n"
+        "original Artist/GPS and synthetic marker absent; only allowlisted encoder EXIF fields present. Synthetic CI fixture only.\n"
         f"Source SHA256: {hashlib.sha256(source).hexdigest()}\nOutput SHA256: {hashlib.sha256(data).hexdigest()}\n"
         "Limit: pipeline outcome only; Photos may strip EXIF before Nylo. No physical camera, HEIC, universal files, "
         "temporary-file deletion or native resource/task lifetime claim.\n")
