@@ -55,3 +55,12 @@ A subsequent Apple GET confirms version 1.0.0 remains PREPARE_FOR_SUBMISSION wit
 ## Owner-reported PDF removal — source fix awaiting native validation
 
 The owner reported a blocked PDF send and an unresponsive Remove action in beta 14. Source `48466d9` makes attachment-strip taps reach Remove while typing, persists removal immediately, and adds a direct PDF connection chooser without changing provider formats/keys automatically. Typecheck and 75 tests pass. Native regression and fresh build are pending; these changes are not in delivered build 14. See testing/pdf-attachments.md. No provider requests or private policy contents were used.
+
+
+## Grouped model picker and candidate 15 — validation in progress
+
+Owner feedback rejects repeated Custom provider headings in beta 14. App source `289fa04` groups models once per saved provider, uses compact model-primary rows and native search, and retains distinct connection identities and the PDF-removal fix. Typecheck, 76 tests, formatting and credential checks pass. Fresh native `42563645051` is queued behind the earlier `48466d9` build. Signed Fastlane candidate `42563798870` is run 15, pinned to `289fa04`; upload, Apple processing and QA assignment are not yet verified. Build 14 remains the delivered beta.
+
+The active test task is validating baseline/fixed PDF removal and current picker/gallery/attachment behavior with exact provenance. Do not duplicate its runs or overwrite its uncommitted PDF report. The uploaded store model-picker asset reflects source 2517a7d and needs replacement after the grouped picker is rendered and approved.
+
+The owner explicitly requested end-to-end App Store submission after these fixes. Submission authorization is already given. The privacy-console browser redirected to Apple sign-in; a factual sign-in request is pending. A new private card requests a separate expiring, restricted App Review key, with up to eight automated preflight calls capped at 128 output tokens each and Apple use constrained by its provider limits. No key has been provided or used as of this entry; expiry/cap facts remain pending. Never reuse the older smoke key. Age answers remain unset; no account/legal facts or final production acceptance are inferred.

@@ -43,3 +43,8 @@ Apple sign-in/2FA and contracts belong to the account holder. Prefer browser aut
 ## Recovery
 
 Preserve last known-good source and backups. Stop affected releases, fix forward with a new build/version and rerun relevant tests. App Store binaries cannot be instantly rolled back for existing installs. A release that changes native code or data schema needs native tests; do not use OTA updates to bypass review.
+
+
+## Candidate 15 in preparation
+
+Fastlane workflow [42563798870](https://github.com/NihalKA/nylo/actions/runs/42563798870), run 15, targets app source `289fa04`. It contains the keyboard-aware, immediately persisted attachment removal and provider-grouped model picker. This is a queued signed candidate, not verified TestFlight availability or App Review submission. Preserve beta 14 until relevant native evidence, exported-IPA audit, Apple processing and exact QA assignment are verified. Replace the older store model-picker screenshot before final submission.
