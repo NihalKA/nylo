@@ -1,5 +1,11 @@
 # Delivery status
 
+## Figma Warm Edition redesign — validation in progress
+
+The owner/Vivek requested the supplied Figma style for both iOS and Android. Source `23cd656` applies warm off-white surfaces, navy actions, grouped cards, selected states and revised report/memory presentation across the shared components. The actual signed-in Figma frames were inspected; see [implementation and provenance](testing/figma-warm-ui.md).
+
+Local typecheck, 82 tests, formatting, credential checks and colour contrast checks pass. Source CI42682172934 also passes. Native iPhone42682173117 and Android42682173057 are building; gallery42682195748 and PDF42682202754 are testing refreshed JS on the compatible previous simulator runtime. These are pending evidence, not new delivered builds. Android's automatic UI validation will exercise both real gesture and three-button system navigation and compare final composer controls to native navigation bounds. Current signed beta17 and store build15 remain unchanged. Updated captures will go to the default public Drive folder after inspection.
+
 ## iPhone17 and Android test builds delivered — 9 November 2026
 
 **Nylo 1.0.0 (17) is available to the existing internal Nylo Device QA group.** Signed workflow 42612628652 uses source e452a2d. Apple build `4e6626be-2598-4c2e-a7ae-72e9b628ff51` is VALID; assignment returned 204, and independent group/build-state reads confirm the exact build and IN_BETA_TESTING. English test notes were saved/read-back verified. The actual exported-IPA audit confirms version 1.0.0, build 17, correct bundle, iPhone family 1, eleven privacy manifests, required SDK declaration, camera purpose, no microphone or tracking, and exempt encryption. Evidence: `artifacts/signed-17-audit/qa-assignment-verification.json`. Build 16 remains the prior feedback beta.
