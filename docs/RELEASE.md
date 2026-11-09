@@ -1,5 +1,19 @@
 # iOS release
 
+## App Store submission verified — 9 November 2026
+
+**Version 1.0.0 (15) is submitted and WAITING_FOR_REVIEW.** Apple returned the exact build `6f7be5da-a57a-4267-a18d-015c6e57b16b` on the version relationship and `releaseType: AFTER_APPROVAL`. The authenticated console confirmed “1 Item Submitted”. Automatic release remains limited to the configured free India/US launch. Submission is not approval or public availability.
+
+The five current screenshots, English listing and functional private reviewer setup are included. App Privacy is published: Email Address, Photos or Videos, Customer Support, Other User Content and User ID, linked to the user, App Functionality; Other User Content also Product Personalization; no tracking. This accounts for optional support and authenticated provider-bound content, despite the client having no backend. Supported OpenAI default abuse-log retention is documented at https://developers.openai.com/api/docs/guides/your-data; `store: false` does not establish zero retention. No claim about NyloHQ upstream identity is inferred.
+
+The complete age questionnaire is saved and independently API-verified with `ageRatingOverrideV2: EIGHTEEN_PLUS` (17+ on older OS ratings). Infrequent general AI mature/medical/non-graphic sexual/violence references are declared; health/wellness topics true; graphic sexual/prolonged sadistic violence and chance-based activities none. Social distribution, interpersonal chat, advertising, browser access, parental controls and age assurance are false. Content-rights information is saved for third-party content access. No unsupported accessibility claim was added.
+
+Latest independent quality remains **88/100 provisional**, below the requested95; physical camera/VoiceOver and other previously recorded product-evidence gaps remain unverified. The owner's latest instruction explicitly directed submission and publication; submission does not retroactively satisfy those evidence goals or guarantee approval. No app-source changes or additional provider requests were made.
+
+Evidence: ignored `artifacts/app-store-preparation/submission15-verified.json`. An enabled four-hour follow-up monitors Apple review through verified public release; next run **9 November 2026, 16:08 IST**. It must avoid duplicate submissions, preserve secrets, handle actual review findings within scope and stop after verified public availability or a required external dependency.
+
+## Prior preparation record (superseded where the submission notice above differs)
+
 Current feedback beta: **1.0.0 (15)**, app source289fa04, signed42563798870, Apple VALID build6f7be5da-a57a-4267-a18d-015c6e57b16b. Actual exported-IPA audit passes11manifests/requiredSDWebImage/camera/noMic/family1/nonexemptfalse. Current compact/large/maximum-text flows, gallery/PDF/attachment checks and bounded live source-adapter memory/context/PDF/image checks pass. Internal Nylo Device QA assignment and IN_BETA_TESTING are verified with English notes. Build14 is the previous beta. Latest independent review021 is88/100 provisional, not95 or production approval.
 
 Store draft1.0.0 remains PREPARE_FOR_SUBMISSION, now with the exact build15 associated. Five current reviewed native screenshots are COMPLETE, updated English copy and private functional review instructions are saved/read-back verified. India/US only, free, no automatic territories/preorders. Support monitoring is owner-confirmed. The review-only key has a1,000,000-token limit and owner-planned revocation after review, without a fixed expiry. Its eight-request automated preflight allowance is exhausted. Final privacy/age declarations and physical/live-native/VoiceOver/owner acceptance remain open. The18+ choice is recorded, but Apple returned500 on the age override; no successful age completion is claimed. No App Review submission or production release has occurred.
@@ -43,7 +57,6 @@ Apple sign-in/2FA and contracts belong to the account holder. Prefer browser aut
 ## Recovery
 
 Preserve last known-good source and backups. Stop affected releases, fix forward with a new build/version and rerun relevant tests. App Store binaries cannot be instantly rolled back for existing installs. A release that changes native code or data schema needs native tests; do not use OTA updates to bypass review.
-
 
 ## Candidate 15 evidence
 

@@ -1,5 +1,19 @@
 # Delivery status
 
+## App Store submission verified — 9 November 2026
+
+**Version 1.0.0 (15) is submitted and WAITING_FOR_REVIEW.** Apple returned the exact build `6f7be5da-a57a-4267-a18d-015c6e57b16b` on the version relationship and `releaseType: AFTER_APPROVAL`. The authenticated console confirmed “1 Item Submitted”. Automatic release remains limited to the configured free India/US launch. Submission is not approval or public availability.
+
+The five current screenshots, English listing and functional private reviewer setup are included. App Privacy is published: Email Address, Photos or Videos, Customer Support, Other User Content and User ID, linked to the user, App Functionality; Other User Content also Product Personalization; no tracking. This accounts for optional support and authenticated provider-bound content, despite the client having no backend. Supported OpenAI default abuse-log retention is documented at https://developers.openai.com/api/docs/guides/your-data; `store: false` does not establish zero retention. No claim about NyloHQ upstream identity is inferred.
+
+The complete age questionnaire is saved and independently API-verified with `ageRatingOverrideV2: EIGHTEEN_PLUS` (17+ on older OS ratings). Infrequent general AI mature/medical/non-graphic sexual/violence references are declared; health/wellness topics true; graphic sexual/prolonged sadistic violence and chance-based activities none. Social distribution, interpersonal chat, advertising, browser access, parental controls and age assurance are false. Content-rights information is saved for third-party content access. No unsupported accessibility claim was added.
+
+Latest independent quality remains **88/100 provisional**, below the requested95; physical camera/VoiceOver and other previously recorded product-evidence gaps remain unverified. The owner's latest instruction explicitly directed submission and publication; submission does not retroactively satisfy those evidence goals or guarantee approval. No app-source changes or additional provider requests were made.
+
+Evidence: ignored `artifacts/app-store-preparation/submission15-verified.json`. An enabled four-hour follow-up monitors Apple review through verified public release; next run **9 November 2026, 16:08 IST**. It must avoid duplicate submissions, preserve secrets, handle actual review findings within scope and stop after verified public availability or a required external dependency.
+
+## Prior preparation record (superseded where the submission notice above differs)
+
 Updated 9 November 2026. iOS first; Android publication is deferred. The owner authorizes end-to-end development, testing, screenshots, TestFlight and App Store submission/release. Launch scope is **India and US only**, free, with automatic territory expansion and preorders disabled.
 
 ## Delivered beta and current candidate
