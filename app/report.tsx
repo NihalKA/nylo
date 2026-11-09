@@ -31,22 +31,33 @@ export default function Report() {
   const preview = `Nylo response report\nModel: ${message?.model || "Not recorded"}\n\n${details.trim() || "Please investigate this response."}${include && message ? `\n\nSelected response excerpt (up to 2000 characters):\n${message.text.slice(0, 2000)}` : ""}`;
   return (
     <Page>
-      <Header title="Report a response" />
+      <Header title="Report a response" titleStyle={{ letterSpacing: -0.45 }} />
       <FormScroll>
-        <Text style={s.h2}>Tell us what went wrong</Text>
+        <Text style={[s.h2, { letterSpacing: -0.18 }]}>
+          Tell us what went wrong
+        </Text>
         <Text style={s.sub}>
-          Reports go to admin@colorforfun.app using your email app. Nylo sends
-          nothing automatically. No API key, other messages or attachments are
-          included.
+          Reports go to{" "}
+          <Text style={{ color: theme.ink, fontWeight: "500" }}>
+            admin@colorforfun.app
+          </Text>{" "}
+          using your email app. Nylo sends nothing automatically. No API key,
+          other messages or attachments are included.
         </Text>
         <Field
           label="What should we review?"
-          labelStyle={s.h2}
+          labelStyle={{ ...s.h2, letterSpacing: -0.18 }}
           value={details}
           onChangeText={setDetails}
           maxLength={1500}
           multiline
-          style={{ minHeight: 140, fontSize: 14, lineHeight: 20 }}
+          style={{
+            minHeight: 140,
+            fontSize: 14,
+            lineHeight: 20,
+            borderColor: "rgba(198, 197, 208, 0.4)",
+          }}
+          placeholderTextColor={theme.quiet}
           placeholder="Unsafe content, a privacy concern, or another issue…"
         />
         <Text
@@ -54,19 +65,36 @@ export default function Report() {
             color: theme.quiet,
             fontSize: 11,
             fontWeight: "600",
+            letterSpacing: 0.33,
             alignSelf: "flex-end",
             marginTop: -14,
           }}
         >
           Optional details
         </Text>
-        <View style={[s.card, s.between, { gap: 12, flexWrap: "wrap" }]}>
+        <View
+          style={[
+            s.card,
+            s.between,
+            {
+              gap: 12,
+              flexWrap: "wrap",
+              borderColor: "rgba(198, 197, 208, 0.3)",
+            },
+          ]}
+        >
           <View style={{ flex: 1, minWidth: 160, gap: 6 }}>
-            <Text style={[s.text, { color: theme.text, fontWeight: "500" }]}>
+            <Text
+              style={[
+                s.text,
+                { color: theme.text, fontWeight: "500", letterSpacing: -0.08 },
+              ]}
+            >
               Include this response excerpt
             </Text>
             <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
-              Only this selected answer is added to the report.
+              Embeds the snippet directly into the generated draft for
+              investigation.
             </Text>
           </View>
           <Switch
@@ -78,7 +106,10 @@ export default function Report() {
           />
         </View>
         <View style={[s.between, { flexWrap: "wrap", gap: 8 }]}>
-          <Text accessibilityRole="header" style={s.h2}>
+          <Text
+            accessibilityRole="header"
+            style={[s.h2, { letterSpacing: -0.18 }]}
+          >
             Report preview
           </Text>
           <Text
@@ -86,6 +117,7 @@ export default function Report() {
               fontSize: 11,
               fontWeight: "600",
               color: "#8793C7",
+              letterSpacing: 0.33,
               backgroundColor: theme.line,
               borderRadius: 9,
               paddingHorizontal: 8,
@@ -95,7 +127,16 @@ export default function Report() {
             Automated Draft
           </Text>
         </View>
-        <View style={[s.card, { backgroundColor: "#F5F6F5", gap: 12 }]}>
+        <View
+          style={[
+            s.card,
+            {
+              backgroundColor: "rgba(243, 244, 243, 0.7)",
+              borderColor: "rgba(198, 197, 208, 0.4)",
+              gap: 12,
+            },
+          ]}
+        >
           <View style={s.between}>
             <Text
               style={{
@@ -185,7 +226,13 @@ export default function Report() {
             secondary
             destructive
             icon="trash-outline"
-            style={{ minHeight: 54, borderRadius: 27 }}
+            style={{
+              minHeight: 54,
+              borderRadius: 27,
+              backgroundColor: runningId
+                ? theme.muted
+                : "rgba(255, 218, 210, 0.5)",
+            }}
             disabled={!!runningId}
             onPress={() =>
               void (async () => {

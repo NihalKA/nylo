@@ -52,7 +52,7 @@ function ContextPreview({ text }: { text: string }) {
             <View style={[s.row, { gap: 8, alignItems: "flex-start" }]}>
               <View
                 style={{
-                  width: 6,
+                  width: index ? 6 : 5.38,
                   height: 6,
                   borderRadius: 3,
                   marginTop: 5,
@@ -209,6 +209,7 @@ function AgentDetail() {
         title="Agent"
         titleStyle={{
           fontSize: showContext ? 22 : 18,
+          fontWeight: "700",
           letterSpacing: showContext ? -0.55 : -0.45,
         }}
         dismissKeyboard
@@ -232,7 +233,11 @@ function AgentDetail() {
       >
         <View style={{ gap: 20, paddingTop: 20, paddingBottom: 24 }}>
           <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
-            <AgentAvatar agent={agent} size={48} />
+            <AgentAvatar
+              agent={agent}
+              size={48}
+              textStyle={{ fontSize: 18, fontWeight: "700", letterSpacing: 0 }}
+            />
             <View style={{ flex: 1, gap: 7 }}>
               <Text
                 style={[
@@ -264,7 +269,9 @@ function AgentDetail() {
             {
               backgroundColor: theme.muted,
               borderRadius: 24,
-              padding: 2,
+              padding: 1,
+              borderWidth: 1,
+              borderColor: "rgba(198, 197, 208, 0.3)",
               gap: 0,
               flexWrap: "wrap",
             },
@@ -287,14 +294,31 @@ function AgentDetail() {
                 paddingVertical: 10,
                 paddingHorizontal: 12,
                 borderRadius: 22,
-                backgroundColor: tab === t ? theme.card : "transparent",
+                backgroundColor: "transparent",
               }}
             >
+              {tab === t ? (
+                <View
+                  accessible={false}
+                  style={{
+                    position: "absolute",
+                    top: 3,
+                    bottom: 3,
+                    left: 2,
+                    right: 2,
+                    borderRadius: 19,
+                    borderWidth: 1,
+                    borderColor: "rgba(198, 197, 208, 0.2)",
+                    backgroundColor: theme.card,
+                  }}
+                />
+              ) : null}
               <Text
                 style={{
                   color: tab === t ? theme.ink : theme.quiet,
-                  fontWeight: "600",
+                  fontWeight: tab === t ? "700" : "600",
                   fontSize: 14,
+                  letterSpacing: 0.14,
                   maxWidth: "100%",
                   textAlign: "center",
                 }}
@@ -354,7 +378,15 @@ function AgentDetail() {
             />
             <Button
               title={editingId ? "Update memory" : "Save memory"}
-              style={{ minHeight: 46, borderRadius: 23 }}
+              style={{
+                minHeight: 46,
+                borderRadius: 23,
+                borderWidth: 1,
+                borderColor:
+                  !memory.trim() || runningId
+                    ? "rgba(198, 197, 208, 0.3)"
+                    : theme.primary,
+              }}
               secondary
               icon="add"
               disabled={
@@ -444,9 +476,9 @@ function AgentDetail() {
                     style={[
                       s.sub,
                       {
-                        fontSize: 11,
+                        fontSize: showContext ? 12 : 11,
                         fontWeight: "600",
-                        letterSpacing: 0.33,
+                        letterSpacing: showContext ? 0.24 : 0.33,
                         color: theme.quiet,
                         marginTop: 6,
                       },
@@ -504,7 +536,11 @@ function AgentDetail() {
 
             {agent.goal ? (
               <View style={{ gap: 6 }}>
-                <Text style={s.h2}>Current goal</Text>
+                <Text
+                  style={[s.h2, { fontWeight: "700", letterSpacing: -0.45 }]}
+                >
+                  Current goal
+                </Text>
                 <Text
                   style={[
                     s.text,
@@ -525,11 +561,32 @@ function AgentDetail() {
                 </Text>
               </View>
             ) : null}
-            <Text style={[s.h2, { fontSize: showContext ? 18 : 16 }]}>
+            <Text
+              style={[
+                s.h2,
+                {
+                  fontSize: showContext ? 18 : 16,
+                  fontWeight: "700",
+                  letterSpacing: showContext ? -0.45 : -0.4,
+                },
+              ]}
+            >
               Context between chats
             </Text>
             <View style={[s.between, { gap: 12 }]}>
-              <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
+              <Text
+                style={[
+                  s.text,
+                  {
+                    flex: 1,
+                    fontSize: showContext ? 16 : 14,
+                    fontWeight: "500",
+                    color: theme.text,
+                  },
+                ]}
+              >
+                Use recent chats
+              </Text>
               <Switch
                 accessibilityLabel="Use recent chats from this agent"
                 checkedThumb={showContext}
@@ -572,6 +629,11 @@ function AgentDetail() {
                       : "Review recent context"
                   }
                   secondary
+                  style={{
+                    minHeight: 46,
+                    borderRadius: 23,
+                    borderColor: "#E2E2E2",
+                  }}
                   onPress={() => setShowContext(!showContext)}
                 />
                 {showContext ? (

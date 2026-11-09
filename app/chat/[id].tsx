@@ -343,8 +343,12 @@ function Chat() {
           Keyboard.dismiss();
         }}
         titleStyle={{
-          fontSize: conversation.messages.length ? 18 : 22,
-          letterSpacing: conversation.messages.length ? -0.45 : -0.55,
+          fontSize: !conversation.messages.length && hasPdf ? 22 : 18,
+          fontWeight: conversation.messages.length || hasPdf ? "700" : "600",
+          letterSpacing:
+            !conversation.messages.length && hasPdf ? -0.33 : -0.45,
+          color:
+            conversation.messages.length || hasPdf ? theme.text : theme.ink,
         }}
         title={
           agent?.name ||
@@ -453,9 +457,10 @@ function Chat() {
                   s.h2,
                   {
                     textAlign: "center",
-                    fontSize: 28,
+                    fontSize: !agent && attachmentMenu ? 32 : 28,
                     fontWeight: "700",
-                    letterSpacing: -0.7,
+                    letterSpacing: !agent && attachmentMenu ? -0.8 : -0.7,
+                    color: hasPdf ? theme.text : theme.ink,
                   },
                 ]}
               >
@@ -464,7 +469,12 @@ function Chat() {
               <Text
                 style={[
                   s.sub,
-                  { textAlign: "center", maxWidth: 360, fontSize: 14 },
+                  {
+                    textAlign: "center",
+                    maxWidth: 360,
+                    fontSize: 14,
+                    color: agent ? theme.sub : theme.quiet,
+                  },
                 ]}
               >
                 {agent
@@ -1039,7 +1049,7 @@ function Chat() {
               backgroundColor: theme.card,
               borderTopLeftRadius: 28,
               borderTopRightRadius: 28,
-              borderWidth: 1,
+              borderTopWidth: 1,
               borderColor: theme.line,
             }}
           >
@@ -1051,7 +1061,7 @@ function Chat() {
                 height: 4,
                 borderRadius: 2,
                 backgroundColor: "#E2E2E2",
-                marginTop: -8,
+                marginTop: -4,
                 marginBottom: 4,
               }}
             />
@@ -1062,7 +1072,14 @@ function Chat() {
             >
               <Text
                 accessibilityRole="header"
-                style={[s.h2, { fontWeight: "700" }]}
+                style={[
+                  s.h2,
+                  {
+                    fontWeight: "700",
+                    letterSpacing: -0.45,
+                    paddingHorizontal: 4,
+                  },
+                ]}
               >
                 Attachments
               </Text>
@@ -1121,7 +1138,9 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: theme.overlay,
+            backgroundColor: hasPdf
+              ? "rgba(165, 164, 162, 0.8)"
+              : theme.overlay,
           }}
         >
           <Pressable
@@ -1142,11 +1161,11 @@ function Chat() {
               padding: hasPdf ? 20 : 24,
               paddingBottom: Math.max(insets.bottom, 16),
               gap: 12,
-              backgroundColor: theme.card,
-              borderTopLeftRadius: 28,
-              borderTopRightRadius: 28,
-              borderWidth: 1,
-              borderColor: theme.line,
+              backgroundColor: hasPdf ? theme.bg : theme.card,
+              borderTopLeftRadius: hasPdf ? 32 : 28,
+              borderTopRightRadius: hasPdf ? 32 : 28,
+              borderTopWidth: 1,
+              borderColor: hasPdf ? "rgba(255, 255, 255, 0.6)" : theme.line,
             }}
           >
             <View
@@ -1156,8 +1175,10 @@ function Chat() {
                 width: 40,
                 height: 4,
                 borderRadius: 2,
-                backgroundColor: "#E2E2E2",
-                marginTop: -12,
+                backgroundColor: hasPdf
+                  ? "rgba(198, 197, 208, 0.6)"
+                  : "#E2E2E2",
+                marginTop: hasPdf ? -8 : -14,
               }}
             />
             <View style={s.between}>
@@ -1196,8 +1217,9 @@ function Chat() {
                   paddingHorizontal: 12,
                   borderRadius: hasPdf ? 22 : 12,
                   borderWidth: 1,
-                  borderColor: theme.line,
+                  borderColor: hasPdf ? "rgba(198, 197, 208, 0.5)" : theme.line,
                   backgroundColor: theme.surface,
+                  marginHorizontal: hasPdf ? 0 : -4,
                 },
               ]}
             >
@@ -1226,9 +1248,20 @@ function Chat() {
               keyExtractor={(item) => item.id}
               keyboardShouldPersistTaps="handled"
               stickySectionHeadersEnabled={false}
-              style={{ flexGrow: 0, flexShrink: 1 }}
+              style={{
+                flexGrow: 0,
+                flexShrink: 1,
+                marginHorizontal: hasPdf ? 0 : -4,
+              }}
               renderSectionHeader={({ section: { connection: c } }) => (
-                <View style={{ paddingTop: 16, paddingBottom: 4, gap: 4 }}>
+                <View
+                  style={{
+                    paddingTop: 16,
+                    paddingBottom: 4,
+                    paddingHorizontal: hasPdf ? 0 : 4,
+                    gap: 4,
+                  }}
+                >
                   <Text
                     accessibilityRole="header"
                     style={[
@@ -1310,7 +1343,11 @@ function Chat() {
                   style={({ pressed }) => [
                     s.row,
                     {
-                      minHeight: hasPdf ? 62 : 54,
+                      minHeight: hasPdf
+                        ? c.protocol === "compatible"
+                          ? 46
+                          : 62
+                        : 54,
                       gap: 12,
                       paddingVertical: 12,
                       paddingHorizontal: 14,
@@ -1318,15 +1355,25 @@ function Chat() {
                       borderRadius: 12,
                       borderWidth: 1,
                       borderColor:
-                        c.id === connection?.id && model === connection.model
-                          ? theme.line
-                          : "transparent",
-                      backgroundColor:
-                        c.id === connection?.id && model === connection.model
-                          ? theme.surface
-                          : pressed
-                            ? theme.pale
+                        hasPdf && c.protocol === "compatible"
+                          ? "rgba(198, 197, 208, 0.3)"
+                          : c.id === connection?.id &&
+                              model === connection.model
+                            ? hasPdf
+                              ? "rgba(198, 197, 208, 0.7)"
+                              : theme.line
                             : "transparent",
+                      backgroundColor:
+                        hasPdf && c.protocol === "compatible"
+                          ? "rgba(238, 238, 237, 0.4)"
+                          : c.id === connection?.id &&
+                              model === connection.model
+                            ? hasPdf
+                              ? theme.card
+                              : theme.surface
+                            : pressed
+                              ? theme.pale
+                              : "transparent",
                       opacity: hasPdf && c.protocol === "compatible" ? 0.45 : 1,
                     },
                   ]}
@@ -1338,23 +1385,48 @@ function Chat() {
                         flex: 1,
                         fontFamily: hasPdf ? fonts.body : fonts.heading,
                         fontSize: hasPdf ? 14 : 16,
-                        color: hasPdf ? theme.ink : theme.text,
+                        lineHeight: hasPdf ? 20 : 24,
+                        color: hasPdf
+                          ? c.protocol === "compatible"
+                            ? theme.quiet
+                            : theme.ink
+                          : theme.text,
                         letterSpacing: hasPdf ? 0 : -0.08,
                         fontWeight:
-                          c.id === connection?.id && model === connection.model
-                            ? "600"
-                            : "400",
+                          hasPdf && c.protocol === "compatible"
+                            ? "500"
+                            : c.id === connection?.id &&
+                                model === connection.model
+                              ? "600"
+                              : "400",
                       },
                     ]}
                   >
                     {model}
                   </Text>
                   {c.id === connection?.id && model === connection.model ? (
-                    <Icon
-                      name={hasPdf ? "checkmark-circle" : "checkmark"}
-                      size={hasPdf ? 24 : 20}
-                      color={theme.primary}
-                    />
+                    hasPdf && c.protocol !== "compatible" ? (
+                      <View
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 12,
+                          backgroundColor: "rgba(6, 21, 66, 0.1)",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon name="checkmark" size={16} color={theme.ink} />
+                      </View>
+                    ) : (
+                      <Icon
+                        name="checkmark"
+                        size={hasPdf ? 18 : 20}
+                        color={
+                          hasPdf ? "rgba(118, 118, 128, 0.5)" : theme.primary
+                        }
+                      />
+                    )
                   ) : null}
                 </Pressable>
               )}
@@ -1365,7 +1437,16 @@ function Chat() {
               }
               ListFooterComponent={
                 <View style={{ paddingTop: 16, gap: 12 }}>
-                  <Text style={[s.sub, { fontSize: 12 }]}>
+                  <Text
+                    style={[
+                      s.sub,
+                      {
+                        fontSize: 12,
+                        lineHeight: 18,
+                        paddingHorizontal: hasPdf ? 0 : 4,
+                      },
+                    ]}
+                  >
                     Switching models sends nothing. Your next message includes
                     this chat’s context.
                   </Text>
@@ -1375,8 +1456,15 @@ function Chat() {
                       minHeight: hasPdf ? 46 : 52,
                       borderRadius: hasPdf ? 23 : 26,
                       backgroundColor: hasPdf ? theme.surface : theme.line,
+                      borderColor: hasPdf
+                        ? "rgba(198, 197, 208, 0.6)"
+                        : theme.line,
                     }}
-                    textStyle={{ color: hasPdf ? theme.ink : theme.text }}
+                    textStyle={{
+                      color: hasPdf ? theme.ink : theme.text,
+                      fontFamily: hasPdf ? fonts.heading : fonts.body,
+                      letterSpacing: hasPdf ? 0 : 0.14,
+                    }}
                     secondary
                     onPress={() => {
                       setModelPicker(false);

@@ -171,9 +171,15 @@ function AgentEdit() {
             },
           ]}
         >
-          <AgentAvatar agent={{ name, color }} size={48} />
+          <AgentAvatar
+            agent={{ name, color }}
+            size={48}
+            textStyle={{ fontWeight: "700", letterSpacing: -0.33 }}
+          />
           <View style={{ flex: 1, gap: 4 }}>
-            <Text style={s.h2}>{name || "Your agent"}</Text>
+            <Text style={[s.h2, { letterSpacing: -0.18 }]}>
+              {name || "Your agent"}
+            </Text>
             <Text style={[s.sub, { fontSize: 12, lineHeight: 16 }]}>
               Instructions and memory for the work you return to.
             </Text>
@@ -275,6 +281,7 @@ function AgentEdit() {
           }}
           placeholder="What should we call your agent?"
           maxLength={50}
+          style={{ letterSpacing: -0.08 }}
         />
         <View style={[s.row, { gap: 12 }]}>
           {colors.map((c) => (
@@ -314,6 +321,7 @@ function AgentEdit() {
           }}
           placeholder="What would you like help with?"
           maxLength={200}
+          style={{ letterSpacing: -0.08 }}
         />
         <Field
           label="How it should work"

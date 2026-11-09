@@ -76,7 +76,7 @@ export const s = StyleSheet.create({
   h2: {
     fontFamily: fonts.heading,
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "600",
     color: theme.ink,
     letterSpacing: -0.4,
   },
@@ -595,10 +595,12 @@ export function AgentAvatar({
   agent,
   large,
   size,
+  textStyle,
 }: {
   agent: Pick<Agent, "name" | "color">;
   large?: boolean;
   size?: number;
+  textStyle?: import("react-native").TextStyle;
 }) {
   return (
     <View
@@ -618,6 +620,7 @@ export function AgentAvatar({
           fontWeight: "600",
           fontFamily: fonts.heading,
           fontSize: size === 48 ? 22 : large ? 28 : 18,
+          ...textStyle,
         }}
         maxFontSizeMultiplier={1.4}
       >
