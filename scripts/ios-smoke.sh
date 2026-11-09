@@ -6,12 +6,13 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments|store|pdf) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store|pdf|background) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
   echo 'Store captures require the large profile and the original native JS bundle.'
   exit 1
 fi
 simulator_id=""
+background_server_pid=""
 phase="resolve-native-source"
 mark_phase() {
   phase="$1"
@@ -23,6 +24,10 @@ collect_diagnostics() {
   if [ -d "$HOME/.maestro/tests" ]; then
     mkdir -p artifacts/e2e/driver-diagnostics
     cp -R "$HOME/.maestro/tests/." artifacts/e2e/driver-diagnostics/ || true
+  fi
+  if [ -n "$background_server_pid" ]; then
+    kill "$background_server_pid" || true
+    xcrun simctl spawn "$simulator_id" log show --last 15m --style compact --predicate 'process == "Nylo" AND eventMessage CONTAINS "[NyloBackgroundResponse]"' > artifacts/e2e/background-native.log 2>&1 || true
   fi
   if [ -n "$simulator_id" ]; then
     xcrun simctl shutdown "$simulator_id" || true
@@ -51,6 +56,9 @@ printf 'Scenario: %s\nProfile: %s\nNative run: %s\nUI run: %s\n' "$scenario" "$p
 shasum -a 256 "e2e/ios-$scenario.yaml" scripts/ios-smoke.sh scripts/seed-ios-gallery.py > artifacts/e2e/fixture-sha256.txt
 if [ "$scenario" = pdf ]; then
   shasum -a 256 scripts/seed-ios-pdf.py >> artifacts/e2e/fixture-sha256.txt
+fi
+if [ "$scenario" = background ]; then
+  shasum -a 256 scripts/seed-ios-background.py scripts/background-stream-server.py scripts/background-wait.js >> artifacts/e2e/fixture-sha256.txt
 fi
 if [ "$scenario" = attachments ]; then
   shasum -a 256 scripts/owned-photo-metadata.py scripts/check-picked-photo-storage.py >> artifacts/e2e/fixture-sha256.txt
@@ -148,6 +156,30 @@ if [ "$scenario" = pdf ]; then
   mark_phase seed-owned-pdf
   python3 scripts/seed-ios-pdf.py --container "$app_container"
 fi
+if [ "$scenario" = background ]; then
+  [ "${REFRESH_JS_BUNDLE:-false}" = false ] || { echo 'Background validation requires a newly compiled native runtime.'; exit 1; }
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 scripts/seed-ios-background.py "$app_container"
+  cat > "$RUNNER_TEMP/background-tls.cnf" <<'CERT'
+[req]
+distinguished_name = dn
+x509_extensions = v3
+prompt = no
+[dn]
+CN = localhost
+[v3]
+subjectAltName = DNS:localhost,IP:127.0.0.1
+basicConstraints = critical,CA:TRUE
+keyUsage = critical,digitalSignature,keyEncipherment,keyCertSign
+extendedKeyUsage = serverAuth
+CERT
+  openssl req -x509 -newkey rsa:2048 -nodes -days 1 -config "$RUNNER_TEMP/background-tls.cnf" -keyout "$RUNNER_TEMP/background-tls.key" -out "$RUNNER_TEMP/background-tls.crt" > /dev/null 2>&1
+  xcrun simctl keychain "$simulator_id" add-root-cert "$RUNNER_TEMP/background-tls.crt"
+  python3 scripts/background-stream-server.py "$RUNNER_TEMP/background-tls.crt" "$RUNNER_TEMP/background-tls.key" "$app_container/Documents/SQLite/nylo.db" artifacts/e2e/background-server.jsonl > artifacts/e2e/background-server.log 2>&1 &
+  background_server_pid=$!
+  echo 'Owned localhost synthetic SSE only; no real provider, user data or credentials. SQL completion is checked while the driver keeps Nylo on Home.' > artifacts/e2e/background-disclosure.txt
+fi
 mark_phase install-driver
 curl -fsSL --retry 3 --retry-all-errors --retry-delay 3 --retry-max-time 120 --connect-timeout 15 --max-time 60 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
@@ -157,6 +189,25 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
 mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = background ]; then
+  mark_phase background-storage-verification
+  python3 - "$app_container/Documents/SQLite/nylo.db" <<'BGVERIFY'
+import json, sqlite3, sys
+from pathlib import Path
+with sqlite3.connect(Path(sys.argv[1]).as_uri()+'?mode=ro',uri=True) as db:
+    data=json.loads(db.execute('SELECT json FROM app_state WHERE id=1').fetchone()[0])
+chats={x['id']:x for x in data['conversations']}
+assert chats['background-background']['messages'][-1]['status']=='complete'
+assert chats['background-background']['messages'][-1]['text']=='Phase one. Completed in background.'
+assert chats['background-memory']['messages'][-1]['status']=='interrupted'
+assert chats['background-stop']['messages'][-1]['status']=='interrupted'
+assert not data['agents'][0]['memories']
+records=[json.loads(line) for line in Path('artifacts/e2e/background-server.jsonl').read_text().splitlines()]
+assert sorted(x['model'] for x in records if x['event']=='request')==['qa-background','qa-memory','qa-stop']
+assert sorted(x['kind'] for x in records if x['event']=='durable_while_home')==['background','memory']
+Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact, one request each. Simulator only; no physical expiration guarantee.\n')
+BGVERIFY
+fi
 if [ "$scenario" = pdf ]; then
   mark_phase pdf-storage-verification
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo

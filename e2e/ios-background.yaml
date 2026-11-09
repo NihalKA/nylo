@@ -1,0 +1,58 @@
+appId: com.nylohq.nylo
+---
+- launchApp
+- openLink: "nylo://connection?id=background-provider"
+- assertVisible: "Edit connection"
+- tapOn:
+    text: "API key"
+    index: 1
+- inputText: "nylo-ci-placeholder"
+- tapOn: "Dismiss keyboard"
+- scrollUntilVisible:
+    element: "Save connection"
+    direction: DOWN
+- tapOn: "Save connection"
+- assertVisible: "Done"
+- tapOn: "Done"
+- tapOn: "(?s)Open Example: background stream.*"
+- tapOn: "Send message"
+- tapOn: "Allow & send"
+- assertVisible: "Phase one.*"
+- pressKey: Home
+- takeScreenshot: background-01-home
+- runScript:
+    file: ../scripts/background-wait.js
+    env:
+      PHASE: complete
+- assertTrue: ${output.backgroundReady}
+- launchApp
+- assertVisible: "Phase one[.] Completed in background[.]"
+- assertNotVisible: "Stop response"
+- takeScreenshot: background-02-completed
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: memory stream.*"
+- tapOn: "Send message"
+- assertVisible: "Phase one.*"
+- pressKey: Home
+- runScript:
+    file: ../scripts/background-wait.js
+    env:
+      PHASE: memory
+- assertTrue: ${output.backgroundReady}
+- launchApp
+- assertVisible: "(?s)Response paused.*"
+- assertNotVisible: "Save memory"
+- takeScreenshot: background-03-memory-interrupted
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: stop stream.*"
+- tapOn: "Send message"
+- assertVisible: "Phase one.*"
+- tapOn: "Stop response"
+- assertVisible: "(?s)Response paused.*"
+- assertNotVisible: "Stop response"
+- takeScreenshot: background-04-stop
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Owned QA background.*"
+- assertVisible: "Phase one[.] Completed in background[.]"
+- takeScreenshot: background-05-cold-restored
