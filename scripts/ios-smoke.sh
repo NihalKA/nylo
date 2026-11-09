@@ -149,7 +149,7 @@ if [ "$scenario" = pdf ]; then
   python3 scripts/seed-ios-pdf.py --container "$app_container"
 fi
 mark_phase install-driver
-curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
+curl -fsSL --retry 3 --retry-delay 3 --retry-max-time 120 --connect-timeout 15 --max-time 60 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
 export MAESTRO_CLI_NO_ANALYTICS=1

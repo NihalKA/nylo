@@ -87,3 +87,8 @@ The saved screenshot set is `586a3e17-ab4c-442d-ab05-055c4e558d46`, display type
 Upload read-back verifies **COMPLETE** for every asset, no errors or warnings, exact source MD5 checksums, dimensions, sizes and relationship order. A fresh subsequent GET independently confirms all five COMPLETE states and the same order/sizes. Sanitized evidence is retained in ignored `artifacts/app-store-screenshots/apple-upload-verification.json`; no presigned upload URLs or credentials belong in public documentation.
 
 These are illustrative local examples rendered by the actual native app. They establish asset preparation and delivery, not live generation, cross-chat recall, signed-binary identity, a new quality score or Apple review approval. Version 1.0.0 remains `PREPARE_FOR_SUBMISSION` with no store build associated. No review was submitted and nothing was released.
+
+
+## Candidate 15 refresh in progress
+
+The grouped picker in app289fa04 supersedes the older picker asset above. A fresh store capture will use native run42563645051 with refresh false, original full-resolution PNGs and the same guarded local illustration flow. The illustrative default model is now gpt-5.6-luna, whose catalog presence and source-adapter text/PDF/image path were actually checked under a separate bounded authorization. The store lane itself still has no key and makes no provider request. Other configured model IDs remain examples, not verified capabilities. New files require actual native capture, full-resolution review and upload/read-back before the saved screenshot set is called current.

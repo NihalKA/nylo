@@ -14,15 +14,15 @@ appId: com.nylohq.nylo
     retryTapIfNoChange: false
 - assertVisible: "(?s).*Start small and leave room to breathe.*"
 - assertVisible: "(?s).*A little space can make a busy day feel more manageable.*"
-- assertVisible: "Choose model connection[.] NyloHQ, gpt-6-luna"
+- assertVisible: "Choose model connection[.] NyloHQ, gpt-5.6-luna"
 - assertNotVisible: "Dismiss keyboard"
 - waitForAnimationToEnd
 - takeScreenshot: store-02-response
 - tapOn:
-    text: "Choose model connection[.] NyloHQ, gpt-6-luna"
+    text: "Choose model connection[.] NyloHQ, gpt-5.6-luna"
     retryTapIfNoChange: false
 - assertVisible: "Choose a model"
-- assertVisible: "NyloHQ[.] gpt-6-luna"
+- assertVisible: "NyloHQ[.] gpt-5.6-luna"
 - assertVisible: "NyloHQ[.] gpt-6[.]1-sol"
 - assertVisible: "NyloHQ[.] gpt-6-astra"
 - assertNotVisible: "Conversation title"
@@ -93,7 +93,7 @@ appId: com.nylohq.nylo
     id: "chat-message"
     text: "Help me turn this outline into a welcoming workshop."
 - assertVisible: "Remove Workshop outline[.]txt"
-- assertVisible: "Choose model connection[.] NyloHQ, gpt-6-luna"
+- assertVisible: "Choose model connection[.] NyloHQ, gpt-5.6-luna"
 - assertNotVisible: "Dismiss keyboard"
 - waitForAnimationToEnd
 - takeScreenshot: store-05-attachment-draft

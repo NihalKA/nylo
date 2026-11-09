@@ -20,7 +20,7 @@ if not db_path.is_file():
     raise SystemExit("Launch the fresh app before seeding its database.")
 
 stamp = 1794120000000
-models = ["gpt-6-luna", "gpt-6.1-sol", "gpt-6-astra"]
+models = ["gpt-5.6-luna", "gpt-6.1-sol", "gpt-6-astra"]
 
 
 def chat(identifier, title, question=None, answer=None, agent=None, age=0):
