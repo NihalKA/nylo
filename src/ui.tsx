@@ -21,16 +21,30 @@ import { router, useSegments } from "expo-router";
 import { Agent, Conversation } from "./types";
 import { plainTextPreview } from "./domain";
 
+// Warm Edition: Figma WNCRguvh0wqYTgBUlbXZ9G, inspected 10 Nov 2026.
+// Shared by iOS and Android. Status colours stay distinct from the navy accent.
 export const theme = {
-  bg: "#FFFFFF",
+  bg: "#F9F9F8",
   card: "#FFFFFF",
-  surface: "#F4F4F5",
-  ink: "#1C1C1F",
-  sub: "#69696F",
-  line: "#E8E8EB",
+  surface: "#F3F4F3",
+  ink: "#1E2B58",
+  sub: "#676B76",
+  line: "#E8E8E7",
   green: "#087B65",
-  pale: "#EAF5F0",
-  error: "#9C3E38",
+  pale: "#EEF0F7",
+  error: "#A33C2D",
+  errorSurface: "#FCE9E5",
+  selected: "#E5E9F7",
+  muted: "#ECEDEB",
+  onPrimary: "#FFFFFF",
+  overlay: "#1E2B5866",
+};
+export const softShadow = {
+  shadowColor: theme.ink,
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.05,
+  shadowRadius: 6,
+  elevation: 1,
 };
 export const s = StyleSheet.create({
   page: { flex: 1, backgroundColor: theme.bg },
@@ -51,7 +65,7 @@ export const s = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     color: theme.ink,
-    letterSpacing: -0.9,
+    letterSpacing: -0.7,
   },
   h2: {
     fontSize: 19,
@@ -66,16 +80,21 @@ export const s = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0.5,
     color: theme.sub,
+    textTransform: "uppercase",
   },
   card: {
+    ...softShadow,
     padding: 18,
-    borderRadius: 16,
-    backgroundColor: theme.surface,
+    borderRadius: 18,
+    backgroundColor: theme.card,
+    borderWidth: 1,
+    borderColor: theme.line,
   },
   gap: { gap: 16 },
   section: { marginTop: 28, marginBottom: 14 },
   input: {
-    borderWidth: 0,
+    borderWidth: 1,
+    borderColor: theme.line,
     borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 13,
@@ -215,7 +234,7 @@ export function IconButton({
       style={({ pressed }) => ({
         width: 44,
         height: 44,
-        borderRadius: 13,
+        borderRadius: 16,
         justifyContent: "center",
         alignItems: "center",
         opacity: disabled ? 0.35 : pressed ? 0.55 : 1,
@@ -258,6 +277,7 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         {
+          ...(secondary || destructive ? {} : softShadow),
           minHeight: 48,
           paddingHorizontal: 18,
           paddingVertical: 12,
@@ -267,12 +287,14 @@ export function Button({
           alignItems: "center",
           justifyContent: "center",
           backgroundColor: secondary
-            ? theme.surface
+            ? destructive
+              ? theme.errorSurface
+              : theme.surface
             : destructive
               ? theme.error
               : theme.ink,
-          borderWidth: 0,
-          borderColor: theme.line,
+          borderWidth: secondary ? 1 : 0,
+          borderColor: destructive ? "#F1C9C1" : theme.line,
           opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
         },
         style,
@@ -420,9 +442,13 @@ export function ConversationRow({
         s.row,
         {
           gap: 12,
-          paddingVertical: 17,
-          borderBottomWidth: 1,
-          borderBottomColor: theme.line,
+          ...softShadow,
+          padding: 16,
+          marginBottom: 10,
+          borderWidth: 1,
+          borderColor: theme.line,
+          borderRadius: 20,
+          backgroundColor: pressed ? theme.pale : theme.card,
           opacity: pressed ? 0.5 : 1,
         },
       ]}

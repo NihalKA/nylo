@@ -24,7 +24,12 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        navigation: [gestural, threebutton]
     env:
+      ANDROID_NAVIGATION_MODE: ${{ matrix.navigation }}
       GH_TOKEN: ${{ github.token }}
       SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
       ALLOW_FAILED_AUDIT: ${{ inputs.allow_failed_audit || false }}
@@ -84,7 +89,7 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: android-ui-${{ github.run_id }}
+          name: android-ui-${{ github.run_id }}-${{ matrix.navigation }}
           path: artifacts/android-ui/
           if-no-files-found: ignore
           retention-days: 14

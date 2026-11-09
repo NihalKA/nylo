@@ -218,6 +218,7 @@ function AgentDetail() {
               value={memory}
               onChangeText={setMemory}
               multiline
+              style={{ backgroundColor: theme.card }}
               maxLength={1000}
               placeholder="Add a useful fact…"
             />
@@ -283,9 +284,11 @@ function AgentDetail() {
                     gap: 8,
                     flexDirection: fontScale > 1.5 ? "column" : "row",
                     alignItems: fontScale > 1.5 ? "stretch" : "center",
-                    paddingVertical: 18,
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.line,
+                    padding: 16,
+                    backgroundColor: theme.card,
+                    borderRadius: 18,
+                    borderWidth: 1,
+                    borderColor: theme.line,
                   },
                 ]}
               >
@@ -399,7 +402,7 @@ function AgentDetail() {
                   onPress={() => setShowContext(!showContext)}
                 />
                 {showContext ? (
-                  <Text selectable style={s.sub}>
+                  <Text selectable style={[s.sub, s.card]}>
                     {recentAgentContext(data, agent, "") ||
                       "No earlier conversation text yet."}
                   </Text>

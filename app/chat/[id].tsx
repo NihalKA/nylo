@@ -598,7 +598,7 @@ function Chat() {
                       {message.error ? (
                         <View
                           style={{
-                            backgroundColor: "#F7EBE6",
+                            backgroundColor: theme.errorSurface,
                             padding: 13,
                             borderRadius: 11,
                             gap: 8,
@@ -727,7 +727,7 @@ function Chat() {
                     {
                       padding: 8,
                       gap: 6,
-                      width: file.mimeType.startsWith("image/") ? 156 : 260,
+                      width: file.mimeType.startsWith("image/") ? 158 : 260,
                     },
                   ]}
                 >
@@ -818,6 +818,8 @@ function Chat() {
                 gap: 10,
                 padding: 8,
                 borderRadius: 28,
+                borderWidth: 1,
+                borderColor: theme.line,
                 backgroundColor: theme.surface,
               },
             ]}
@@ -943,7 +945,7 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "#00000055",
+            backgroundColor: theme.overlay,
           }}
         >
           <View
@@ -954,8 +956,10 @@ function Chat() {
               paddingBottom: Math.max(insets.bottom, 20),
               gap: 12,
               backgroundColor: theme.card,
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+              borderWidth: 1,
+              borderColor: theme.line,
             }}
           >
             <ScrollView
@@ -1007,7 +1011,7 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "#00000055",
+            backgroundColor: theme.overlay,
           }}
         >
           <Pressable
@@ -1029,8 +1033,10 @@ function Chat() {
               paddingBottom: Math.max(insets.bottom, 16),
               gap: 12,
               backgroundColor: theme.card,
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+              borderWidth: 1,
+              borderColor: theme.line,
             }}
           >
             <View style={s.between}>
@@ -1167,9 +1173,20 @@ function Chat() {
                       minHeight: 50,
                       gap: 12,
                       paddingVertical: 12,
-                      paddingHorizontal: 4,
-                      borderRadius: 8,
-                      backgroundColor: pressed ? theme.surface : "transparent",
+                      paddingHorizontal: 14,
+                      marginVertical: 3,
+                      borderRadius: 16,
+                      borderWidth: 1,
+                      borderColor:
+                        c.id === connection?.id && model === connection.model
+                          ? theme.line
+                          : "transparent",
+                      backgroundColor:
+                        c.id === connection?.id && model === connection.model
+                          ? theme.surface
+                          : pressed
+                            ? theme.pale
+                            : "transparent",
                       opacity: hasPdf && c.protocol === "compatible" ? 0.45 : 1,
                     },
                   ]}
@@ -1189,7 +1206,7 @@ function Chat() {
                     {model}
                   </Text>
                   {c.id === connection?.id && model === connection.model ? (
-                    <Icon name="checkmark" size={20} />
+                    <Icon name="checkmark-circle" size={22} color={theme.ink} />
                   ) : null}
                 </Pressable>
               )}
@@ -1227,7 +1244,7 @@ function Chat() {
         <View
           style={{
             flex: 1,
-            backgroundColor: "#17221A66",
+            backgroundColor: theme.overlay,
             justifyContent: "center",
             alignItems: "center",
             padding: 24,

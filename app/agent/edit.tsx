@@ -155,7 +155,7 @@ function AgentEdit() {
         }
       />
       <FormScroll>
-        <View style={[s.row, { gap: 14, paddingVertical: 8 }]}>
+        <View style={[s.card, s.row, { gap: 14, padding: 16 }]}>
           <AgentAvatar agent={{ name, color }} />
           <View style={{ flex: 1, gap: 4 }}>
             <Text style={s.h2}>{name || "Your agent"}</Text>
@@ -166,12 +166,16 @@ function AgentEdit() {
         </View>
         {!original && !source ? (
           <View style={{ gap: 10 }}>
-            <Text style={s.sub}>Start with a role</Text>
+            <Text style={s.eyebrow}>Start with a role</Text>
             <View style={[s.row, { gap: 7, flexWrap: "wrap" }]}>
               {templates.map((t) => (
                 <Pressable
                   accessibilityRole="button"
                   key={t.name}
+                  accessibilityState={{
+                    selected:
+                      name === t.name && instructions === t.instructions,
+                  }}
                   disabled={busy}
                   onPress={() =>
                     void (async () => {
@@ -192,7 +196,12 @@ function AgentEdit() {
                     })()
                   }
                   style={{
-                    backgroundColor: theme.surface,
+                    backgroundColor:
+                      name === t.name && instructions === t.instructions
+                        ? theme.ink
+                        : theme.surface,
+                    borderWidth: 1,
+                    borderColor: theme.line,
                     minHeight: 44,
                     justifyContent: "center",
                     paddingVertical: 10,
@@ -200,7 +209,16 @@ function AgentEdit() {
                     borderRadius: 22,
                   }}
                 >
-                  <Text style={{ color: theme.ink, fontSize: 13 }}>
+                  <Text
+                    style={{
+                      color:
+                        name === t.name && instructions === t.instructions
+                          ? theme.onPrimary
+                          : theme.ink,
+                      fontSize: 13,
+                      fontWeight: "600",
+                    }}
+                  >
                     {t.name}
                   </Text>
                 </Pressable>
@@ -233,7 +251,7 @@ function AgentEdit() {
                 borderRadius: 15,
                 backgroundColor: c,
                 borderWidth: 3,
-                borderColor: color === c ? "#B9CCBC" : theme.bg,
+                borderColor: color === c ? theme.ink : theme.bg,
               }}
             />
           ))}

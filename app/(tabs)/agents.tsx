@@ -64,9 +64,12 @@ export default function Agents() {
               s.row,
               {
                 gap: 16,
-                paddingVertical: 20,
-                borderBottomWidth: 1,
-                borderBottomColor: theme.line,
+                padding: 16,
+                marginBottom: 10,
+                backgroundColor: theme.card,
+                borderRadius: 20,
+                borderWidth: 1,
+                borderColor: theme.line,
                 opacity: pressed ? 0.6 : 1,
               },
             ]}

@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import { Tabs } from "expo-router";
 import { Icon, theme } from "../../src/ui";
 export default function MainTabs() {
@@ -22,10 +23,10 @@ export default function MainTabs() {
         options={{
           title: "Chats",
           tabBarIcon: ({ color, focused }) => (
-            <Icon
+            <TabIcon
               name={focused ? "chatbubbles" : "chatbubbles-outline"}
               color={color}
-              size={24}
+              focused={focused}
             />
           ),
         }}
@@ -35,10 +36,10 @@ export default function MainTabs() {
         options={{
           title: "Agents",
           tabBarIcon: ({ color, focused }) => (
-            <Icon
+            <TabIcon
               name={focused ? "people" : "people-outline"}
               color={color}
-              size={24}
+              focused={focused}
             />
           ),
         }}
@@ -48,14 +49,39 @@ export default function MainTabs() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color, focused }) => (
-            <Icon
+            <TabIcon
               name={focused ? "settings" : "settings-outline"}
               color={color}
-              size={24}
+              focused={focused}
             />
           ),
         }}
       />
     </Tabs>
+  );
+}
+
+function TabIcon({
+  name,
+  color,
+  focused,
+}: {
+  name: React.ComponentProps<typeof Icon>["name"];
+  color: React.ComponentProps<typeof Icon>["color"];
+  focused: boolean;
+}) {
+  return (
+    <View
+      style={{
+        width: 48,
+        height: 30,
+        borderRadius: 15,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: focused ? theme.selected : "transparent",
+      }}
+    >
+      <Icon name={name} color={color} size={23} />
+    </View>
   );
 }

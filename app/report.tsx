@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { Linking, Switch, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../src/store";
-import { Button, Field, FormScroll, Header, Page, confirm, s } from "../src/ui";
+import {
+  Button,
+  Field,
+  FormScroll,
+  Header,
+  Page,
+  confirm,
+  s,
+  theme,
+} from "../src/ui";
 export default function Report() {
   const { chatId, messageId } = useLocalSearchParams<{
     chatId: string;
@@ -20,7 +29,7 @@ export default function Report() {
     <Page>
       <Header title="Report a response" />
       <FormScroll>
-        <Text style={s.text}>Tell us what went wrong</Text>
+        <Text style={s.h2}>Tell us what went wrong</Text>
         <Text style={s.sub}>
           Reports go to admin@colorforfun.app using your email app. Nylo sends
           nothing automatically. No API key, other messages or attachments are
@@ -34,9 +43,15 @@ export default function Report() {
           multiline
           placeholder="Unsafe content, a privacy concern, or another issue…"
         />
-        <View style={{ gap: 8 }}>
-          <Text style={s.text}>Include this response excerpt</Text>
+        <View style={[s.card, s.between, { gap: 12, flexWrap: "wrap" }]}>
+          <View style={{ flex: 1, minWidth: 160, gap: 6 }}>
+            <Text style={s.text}>Include this response excerpt</Text>
+            <Text style={s.sub}>
+              Only this selected answer is added to the report.
+            </Text>
+          </View>
           <Switch
+            trackColor={{ false: theme.muted, true: theme.ink }}
             accessibilityLabel="Include selected response text"
             value={include}
             onValueChange={setInclude}
@@ -46,11 +61,12 @@ export default function Report() {
         <Text accessibilityRole="header" style={s.h2}>
           Report preview
         </Text>
-        <Text selectable style={s.sub}>
+        <Text selectable style={[s.sub, s.card]}>
           {preview}
         </Text>
         <Button
           title="Open email to send report"
+          icon="mail-outline"
           onPress={() =>
             void (async () => {
               try {

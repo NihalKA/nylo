@@ -13,6 +13,7 @@ import {
   confirm,
   s,
   theme,
+  softShadow,
 } from "../../src/ui";
 
 function SettingsRow({
@@ -50,11 +51,22 @@ function SettingsRow({
         },
       ]}
     >
-      <Icon
-        name={icon}
-        size={20}
-        color={destructive ? theme.error : theme.ink}
-      />
+      <View
+        style={{
+          width: 38,
+          height: 38,
+          borderRadius: 19,
+          backgroundColor: destructive ? theme.errorSurface : theme.surface,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon
+          name={icon}
+          size={19}
+          color={destructive ? theme.error : theme.ink}
+        />
+      </View>
       <View style={{ flex: 1, gap: 3 }}>
         <Text
           style={[s.text, { color: destructive ? theme.error : theme.ink }]}
@@ -71,7 +83,10 @@ function Group({ children }: { children: React.ReactNode }) {
   return (
     <View
       style={{
-        backgroundColor: theme.surface,
+        ...softShadow,
+        backgroundColor: theme.card,
+        borderWidth: 1,
+        borderColor: theme.line,
         borderRadius: 18,
         paddingHorizontal: 16,
       }}
@@ -114,7 +129,7 @@ export default function Settings() {
           Settings
         </Text>
         <View style={{ gap: 9 }}>
-          <Text style={[s.sub, { paddingLeft: 4 }]}>Your AI</Text>
+          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Your AI</Text>
           <Group>
             <SettingsRow
               title={
@@ -138,7 +153,9 @@ export default function Settings() {
           </Text>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.sub, { paddingLeft: 4 }]}>Data on this device</Text>
+          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>
+            Data on this device
+          </Text>
           <Group>
             <SettingsRow
               title="Export backup"
@@ -189,7 +206,7 @@ export default function Settings() {
           </Text>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.sub, { paddingLeft: 4 }]}>Help & privacy</Text>
+          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Help & privacy</Text>
           <Group>
             <SettingsRow
               title="Privacy policy"
@@ -215,7 +232,7 @@ export default function Settings() {
           </Group>
         </View>
         <View style={{ gap: 9 }}>
-          <Text style={[s.sub, { paddingLeft: 4 }]}>Advanced</Text>
+          <Text style={[s.eyebrow, { paddingLeft: 4 }]}>Advanced</Text>
           <Group>
             <SettingsRow
               title="Live device check"

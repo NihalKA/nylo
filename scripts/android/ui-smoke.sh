@@ -8,6 +8,22 @@ collect() {
 }
 trap collect EXIT
 adb install -r artifacts/android-build/Nylo-test.apk
+# Exercise the OS navigation configuration, not a painted mock navigation bar.
+mode="${ANDROID_NAVIGATION_MODE:-gestural}"
+case "$mode" in
+  gestural) expected_mode=2 ;;
+  threebutton) expected_mode=0 ;;
+  *) echo "Unknown Android navigation mode" >&2; exit 1 ;;
+esac
+adb shell cmd overlay enable-exclusive --category "com.android.internal.systemui.navbar.$mode"
+for attempt in {1..10}; do
+  actual_mode="$(adb shell settings get secure navigation_mode | tr -d '\r')"
+  [ "$actual_mode" != "$expected_mode" ] || break
+  sleep 1
+done
+[ "$actual_mode" = "$expected_mode" ] || { echo "System navigation mode did not apply" >&2; exit 1; }
+printf 'Navigation: %s\nSystem navigation_mode: %s\n' "$mode" "$actual_mode" > artifacts/android-ui/navigation-mode.txt
+adb shell cmd overlay list > artifacts/android-ui/navigation-overlays.txt
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0
 adb shell settings put global animator_duration_scale 0
@@ -17,3 +33,8 @@ unzip -q "$RUNNER_TEMP/android-maestro.zip" -d "$RUNNER_TEMP/android-maestro"
 export MAESTRO_CLI_NO_ANALYTICS=1
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 "$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml e2e/android-smoke.yaml
+
+# Retain real system-navigation and composer bounds after the keyboard is dismissed.
+adb shell uiautomator dump /sdcard/nylo-navigation.xml
+adb pull /sdcard/nylo-navigation.xml artifacts/android-ui/navigation-hierarchy.xml
+python3 scripts/android/check-navigation-insets.py artifacts/android-ui/navigation-hierarchy.xml "$mode"
