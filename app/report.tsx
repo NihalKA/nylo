@@ -131,7 +131,9 @@ export default function Report() {
           style={[
             s.card,
             {
-              backgroundColor: "rgba(243, 244, 243, 0.7)",
+              // Figma alpha composited over the page. An opaque surface keeps
+              // native elevation shadows from bleeding through the card fill.
+              backgroundColor: "#F5F6F5",
               borderColor: "rgba(198, 197, 208, 0.4)",
               gap: 12,
             },
@@ -229,9 +231,7 @@ export default function Report() {
             style={{
               minHeight: 54,
               borderRadius: 27,
-              backgroundColor: runningId
-                ? theme.muted
-                : "rgba(255, 218, 210, 0.5)",
+              backgroundColor: runningId ? theme.muted : "#FCEAE5",
             }}
             disabled={!!runningId}
             onPress={() =>
