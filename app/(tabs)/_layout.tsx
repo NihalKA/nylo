@@ -28,7 +28,7 @@ export default function MainTabs() {
           title: "Chats",
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name={focused ? "chatbubbles" : "chatbubbles-outline"}
+              name={focused ? "chatbox" : "chatbox-outline"}
               color={color}
               focused={focused}
             />

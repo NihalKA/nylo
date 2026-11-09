@@ -182,7 +182,7 @@ function AgentEdit() {
         {!original && !source ? (
           <View style={{ gap: 10 }}>
             <Text style={s.eyebrow}>Start with a role</Text>
-            <View style={[s.row, { gap: 7, flexWrap: "wrap" }]}>
+            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
               {templates.map((t) => (
                 <Pressable
                   accessibilityRole="button"
@@ -211,19 +211,41 @@ function AgentEdit() {
                     })()
                   }
                   style={{
-                    backgroundColor:
-                      name === t.name && instructions === t.instructions
-                        ? theme.primary
-                        : theme.surface,
-                    borderWidth: 1,
-                    borderColor: theme.line,
+                    minWidth:
+                      t.name === "Thinking partner"
+                        ? 134.36
+                        : t.name === "Writing partner"
+                          ? 125.58
+                          : 113.73,
+                    maxWidth: "100%",
+                    backgroundColor: "transparent",
                     minHeight: 44,
                     justifyContent: "center",
+                    alignItems: "center",
                     paddingVertical: 10,
                     paddingHorizontal: 12,
-                    borderRadius: 22,
                   }}
                 >
+                  <View
+                    accessible={false}
+                    style={{
+                      position: "absolute",
+                      top: 5,
+                      bottom: 5,
+                      left: 0,
+                      right: 0,
+                      borderRadius: 17,
+                      borderWidth: 1,
+                      borderColor:
+                        name === t.name && instructions === t.instructions
+                          ? theme.primary
+                          : "#C6C5D099",
+                      backgroundColor:
+                        name === t.name && instructions === t.instructions
+                          ? theme.primary
+                          : theme.surface,
+                    }}
+                  />
                   <Text
                     style={{
                       color:

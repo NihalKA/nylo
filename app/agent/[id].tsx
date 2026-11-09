@@ -16,6 +16,7 @@ import {
   Field,
   Header,
   IconButton,
+  MainNavigation,
   Page,
   confirm,
   s,
@@ -151,7 +152,10 @@ function AgentDetail() {
     <Page>
       <Header
         title="Agent"
-        titleStyle={{ fontSize: 22, letterSpacing: -0.55 }}
+        titleStyle={{
+          fontSize: showContext ? 22 : 18,
+          letterSpacing: showContext ? -0.55 : -0.45,
+        }}
         dismissKeyboard
         right={
           <IconButton
@@ -466,7 +470,9 @@ function AgentDetail() {
                 </Text>
               </View>
             ) : null}
-            <Text style={s.h2}>Context between chats</Text>
+            <Text style={[s.h2, { fontSize: showContext ? 18 : 16 }]}>
+              Context between chats
+            </Text>
             <View style={[s.between, { gap: 12 }]}>
               <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
               <Switch
@@ -555,6 +561,7 @@ function AgentDetail() {
           />
         </View>
       </ScrollView>
+      {!showContext ? <MainNavigation active="agents" /> : null}
     </Page>
   );
 }

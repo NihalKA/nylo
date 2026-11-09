@@ -333,6 +333,95 @@ export function IconButton({
     </Pressable>
   );
 }
+
+export function MainNavigation({
+  active,
+}: {
+  active: "chats" | "agents" | "settings";
+}) {
+  const destinations = [
+    {
+      key: "chats",
+      label: "Chats",
+      icon: "chatbox-outline",
+      selectedIcon: "chatbox",
+      path: "/",
+    },
+    {
+      key: "agents",
+      label: "Agents",
+      icon: "people-outline",
+      selectedIcon: "people",
+      path: "/(tabs)/agents",
+    },
+    {
+      key: "settings",
+      label: "Settings",
+      icon: "settings-outline",
+      selectedIcon: "settings",
+      path: "/(tabs)/settings",
+    },
+  ] as const;
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        marginHorizontal: -20,
+        backgroundColor: theme.bg,
+      }}
+    >
+      {destinations.map((item) => {
+        const selected = active === item.key;
+        return (
+          <Pressable
+            key={item.key}
+            testID={`detail-tab-${item.key}`}
+            accessibilityRole="tab"
+            accessibilityLabel={item.label}
+            accessibilityState={{ selected }}
+            onPress={() => router.navigate(item.path)}
+            style={{
+              flex: 1,
+              minHeight: 49,
+              paddingVertical: 4,
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 4,
+            }}
+          >
+            <View
+              style={{
+                width: 50,
+                height: 24,
+                borderRadius: 12,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: selected ? theme.selected : "transparent",
+              }}
+            >
+              <Icon
+                name={selected ? item.selectedIcon : item.icon}
+                size={23}
+                color={selected ? theme.ink : theme.quiet}
+              />
+            </View>
+            <Text
+              maxFontSizeMultiplier={1.6}
+              style={{
+                fontSize: 11,
+                fontWeight: "600",
+                letterSpacing: 0.33,
+                color: selected ? theme.ink : theme.quiet,
+              }}
+            >
+              {item.label}
+            </Text>
+          </Pressable>
+        );
+      })}
+    </View>
+  );
+}
 export function Button({
   title,
   accessibilityLabel,

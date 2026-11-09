@@ -145,6 +145,20 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 08-agent-memory
+- tapOn:
+    id: "detail-tab-agents"
+- waitForAnimationToEnd
+- assertVisible: "Create agent"
+- tapOn: "Open Writing partner"
+- scrollUntilVisible:
+    element: "Memory"
+    direction: DOWN
+- tapOn: "Memory"
+- scrollUntilVisible:
+    element: "QA sample: I prefer concise answers."
+    direction: DOWN
+- assertVisible: "QA sample: I prefer concise answers."
+- takeScreenshot: 08b-memory-navigation-restored
 - stopApp
 - launchApp
 - tapOn:
