@@ -1,5 +1,10 @@
 # Delivery status
 
+## Additional TestFlight tester
+
+The owner requested an additional tester. A private external TestFlight group and tester membership are created; existing owner/internal access is independently verified and preserved. Build15 is assigned to the external group and submitted for Apple's separate beta review, now WAITING_FOR_BETA_REVIEW, automatic notification enabled. Apple refused the invitation with NO_INSTALLABLE_BUILDS until that approval, so no invitation email is claimed sent. The existing review monitor will verify approval and send/verify the pending invitation without duplicating an automatic invite. No App Store Connect staff role or shared reviewer key was given to the tester. Initial storebuild15 stays in review; this does not replace it.
+
+
 ## Parallel PDF beta follow-up
 
 Appa02f88e passed source checks, PDF42576100714(58commands), gallery42576104831(181commands/exact293byteclipboard/SQL), freshnative42576088809 and auto3profilematrix42577980036(compact96/large94/maxtext102commands, each11conditional skips). Current PNGs/provenance/fixturehashes inspected; gallery14restorationcapture is blank and is explicitly withheld as rendered evidence. Test-only6a3964e adds positiveimage/draftchecks aftersettling; one fresh-nativegallery42580144030 is running. Signedbeta16 workflow42579991019 HEADa1a12d6/appa02 is building, unassigned; IPAaudit/AppleVALID/currentrecapture/QAverification still pending. No build16 delivery is claimed. The scheduled30min continuation handles the existing runs. Storebuild15 remains submitted and unchanged. See testing/pdf-attachments.md for exact evidence and limits.
