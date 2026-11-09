@@ -76,7 +76,7 @@ export const s = StyleSheet.create({
   h2: {
     fontFamily: fonts.heading,
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: "700",
     color: theme.ink,
     letterSpacing: -0.4,
   },

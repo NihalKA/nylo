@@ -25,6 +25,19 @@ import {
 
 function ContextPreview({ text }: { text: string }) {
   const sections = text.split(/\n\n(?=Conversation: )/);
+  const emphasis = (value: string) =>
+    value.split(/(\*\*[^*]+\*\*)/g).map((part, index) => (
+      <Text
+        key={index}
+        style={
+          part.startsWith("**")
+            ? { color: theme.ink, fontWeight: "600" }
+            : undefined
+        }
+      >
+        {part.startsWith("**") ? part.slice(2, -2) : part}
+      </Text>
+    ));
   return (
     <View style={[s.card, { gap: 16 }]}>
       {sections.map((section, index) => {
@@ -35,43 +48,85 @@ function ContextPreview({ text }: { text: string }) {
             : section.slice(0, split).replace(/^Conversation: /, "");
         const body = split < 0 ? section : section.slice(split + 1);
         return (
-          <View
-            key={index}
-            style={{
-              gap: 8,
-              paddingTop: index ? 16 : 0,
-              borderTopWidth: index ? 1 : 0,
-              borderTopColor: theme.line,
-            }}
-          >
-            <Text
-              style={{
-                color: theme.quiet,
-                fontSize: 11,
-                fontWeight: "600",
-                letterSpacing: 0.55,
-                textTransform: "uppercase",
-              }}
-            >
-              Conversation · {title}
-            </Text>
-            <Text
-              selectable
-              style={{ color: theme.text, fontSize: 14, lineHeight: 21 }}
-            >
-              {body.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
-                <Text
-                  key={i}
-                  style={
-                    part.startsWith("**")
-                      ? { color: theme.ink, fontWeight: "600" }
-                      : undefined
-                  }
-                >
-                  {part.startsWith("**") ? part.slice(2, -2) : part}
-                </Text>
-              ))}
-            </Text>
+          <View key={index} style={{ gap: 8 }}>
+            <View style={[s.row, { gap: 8, alignItems: "flex-start" }]}>
+              <View
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: 3,
+                  marginTop: 5,
+                  backgroundColor: index ? theme.primary : "#FE5D39",
+                }}
+              />
+              <Text
+                style={{
+                  flex: 1,
+                  color: theme.quiet,
+                  fontSize: 11,
+                  fontWeight: "600",
+                  letterSpacing: 0.55,
+                  textTransform: "uppercase",
+                }}
+              >
+                Conversation · {title}
+              </Text>
+            </View>
+            <View style={{ paddingLeft: 16, gap: 8 }}>
+              {body
+                .split(/\n(?=(?:user|assistant): )/)
+                .map((turn, turnIndex) => {
+                  const role = turn.match(/^(user|assistant): /)?.[0];
+                  const content = role ? turn.slice(role.length) : turn;
+                  return (
+                    <View key={turnIndex} style={{ gap: 8 }}>
+                      {content
+                        .split("\n\n")
+                        .map((paragraph, paragraphIndex) => {
+                          const callout = paragraph.startsWith("**");
+                          return (
+                            <View
+                              key={paragraphIndex}
+                              style={
+                                callout
+                                  ? {
+                                      backgroundColor: "#F3F4F3B3",
+                                      borderRadius: 8,
+                                      padding: 10,
+                                    }
+                                  : undefined
+                              }
+                            >
+                              <Text
+                                selectable
+                                style={{
+                                  color: paragraphIndex
+                                    ? theme.sub
+                                    : theme.text,
+                                  fontSize: paragraphIndex || callout ? 12 : 14,
+                                  lineHeight:
+                                    paragraphIndex || callout ? 18 : 20,
+                                }}
+                              >
+                                {paragraphIndex === 0 && role ? (
+                                  <Text
+                                    style={{
+                                      color: theme.ink,
+                                      fontWeight: "500",
+                                    }}
+                                  >
+                                    {role}
+                                  </Text>
+                                ) : null}
+                                {emphasis(paragraph)}
+                              </Text>
+                            </View>
+                          );
+                        })}
+                    </View>
+                  );
+                })}
+            </View>
           </View>
         );
       })}
