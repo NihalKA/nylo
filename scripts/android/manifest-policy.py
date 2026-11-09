@@ -17,6 +17,11 @@ for name in ['RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDI
         if node.get(a + 'name') == full:
             root.getroot().remove(node)
     ET.SubElement(root.getroot(), 'uses-permission', {a+'name': full, t+'node': 'remove'})
+# CAMERA permission otherwise implies required camera hardware in Play filters.
+for name in ['android.hardware.camera', 'android.hardware.camera.any', 'android.hardware.camera.autofocus']:
+    node = next((x for x in root.getroot().findall('uses-feature') if x.get(a+'name') == name), None)
+    if node is None: node = ET.SubElement(root.getroot(), 'uses-feature', {a+'name': name})
+    node.set(a+'required', 'false')
 application = root.getroot().find('application')
 assert application is not None
 application.set(a + 'usesCleartextTraffic', 'false')

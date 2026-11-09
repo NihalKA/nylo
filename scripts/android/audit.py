@@ -15,6 +15,8 @@ for name in ['RECORD_AUDIO', 'READ_MEDIA_AUDIO', 'READ_MEDIA_IMAGES', 'READ_MEDI
     assert 'android.permission.' + name + "'" not in permissions, name
 assert 'android.permission.INTERNET' in permissions
 assert 'android.permission.CAMERA' in permissions
+for feature in ['android.hardware.camera', 'android.hardware.camera.any', 'android.hardware.camera.autofocus']:
+    assert "uses-feature-not-required: name='" + feature + "'" in badging
 expected = (p / 'expected-certificate-sha256.txt').read_text().split()[0].lower()
 assert re.search(r'Signer #1 certificate SHA-256 digest: ([a-fA-F0-9]+)', signature).group(1).lower() == expected
 assert re.search(r'SHA256: ([A-Fa-f0-9:]+)', (p / 'aab-certificate.txt').read_text()).group(1).replace(':', '').lower() == expected
