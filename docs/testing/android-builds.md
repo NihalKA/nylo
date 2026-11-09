@@ -1,5 +1,11 @@
 # Android build and testing path
 
+## Current download — Figma Warm Edition, build6
+
+[Download the new Android APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-6/Nylo-test.apk) · [Release and checksum](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-6). This is the redesigned version, source23cd656/native42682173057, version1.0.0/code6,56580814bytes, SHA256 `6c3666b7ac9a86f27e02c28ff1853dd5d40661d6865969fbf6a9f4fad1aa2d27`. Public release-asset hash matches both exact native UI-test APKs; unauthenticated download200 verified.
+
+AndroidUI42686446060 passes gesture and three-button modes,100 commands/11 conditional skips each, with all28 captures inspected. Final composer bottom is2294 versus gesture bar top2337; three-button composer bottom2231 versus navigation top2274. These43-pixel clearances and model/attachment bounds were independently rechecked against actual native WindowManager InsetsSource records. Keyboard-open, dismissed, tabs and menu captures were reviewed. Compiled identity, protected release certificate, permissions and Google bundletool pass. Physical camera/picker/TalkBack/live-provider checks remain separate; generation remains foreground-only. The earlier code5 release below is historical and preserved.
+
 **Mobile download:** [Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-5/Nylo-test.apk). Open or share this public HTTPS link from the phone; T3 desktop file access and GitHub sign-in are not required. The [GitHub test prerelease](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-5) includes SHA256SUMS.txt. Its release-asset digest exactly matches the already-tested APK; unauthenticated download headers return200 with56,579,174bytes. Source tag points to20efaf2. Evidence: `artifacts/android-delivery-5/public-download-verification.json`. No Google Play purchase/publication.
 
 Nylo shares its Expo/React Native app code with iOS. The new Android workflow builds an installable signed APK and signed release AAB on standard GitHub Ubuntu runners. It does not purchase a Play account, upload to Google Play or establish store approval. Native/UI acceptance and the test-artifact delivery are recorded below; this is not Play approval.
