@@ -1,3 +1,11 @@
+Current product `a0afe7e` corrects the report preview's actual native translucent-shadow colour mismatch. Fresh iOS42722415418 / signed Android12 42722421091 are running, SourceCI42722410071 succeeds. Earlier76/11 evidence below is interim; final distribution remains held for the new candidate's verification.
+
+## Current candidate11 compiled and smoke verified — delivery pending
+
+Signed native42717464908 succeeds on product76b80dc. Actual APK57,977,310 bytes has SHA256 `b870e80a3a9d6ebd4fcedc802aaa9ac9fffe784e92a4692aedb1939d8ec74bc7`; AAB40,359,121 bytes has SHA256 `0ef32dff258227b10a14d2b49dc60b6dd167d4d65dcb6e0c0551837c7f2997b8`. Archive GitHub digest/CRC, original certificate, package/version/permissions/nondebug/HTTPS, bundletool and11 actual runtime font assets verify. The protected JKS is unchanged.
+
+Automatic42719600103 passes both modes108 commands/12 skips,15 inspected PNGs each, with33px actual navigation clearance. Rich gallery42719642034 three-button passes92/2,13 inspected PNGs and34px clearance; gesture remains running. Final current parity acceptance/release remains pending. No current11 public release/Drive upload is claimed; old6/5 links remain available.
+
 ## Current candidate11 — awaiting fresh UI acceptance
 
 Product76b80dc, signed run42717464908, version code11, is building. It includes the verified maximum-text scrolling fix and literal per-screen Figma font/alpha/picker corrections. Its own automatic two-navigation-mode smoke, rich gallery, actual binary identity/certificate/permissions/font audit and normal-size screenshots are required before publication. No current APK11 public link is claimed.
