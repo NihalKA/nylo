@@ -2,7 +2,7 @@ name: iOS native validation
 on:
   push:
     branches: [main]
-    paths: ['app/**', 'src/**', 'assets/**', 'app.json', 'package*.json', 'scripts/ios-simulator.sh', '.github/workflows/ios.yml']
+    paths: ['app/**', 'src/**', 'assets/**', 'modules/**', 'plugins/**', 'app.json', 'package*.json', 'scripts/ios-simulator.sh', '.github/workflows/ios.yml']
   workflow_dispatch:
 permissions:
   contents: read

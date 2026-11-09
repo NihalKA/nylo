@@ -66,7 +66,7 @@ const providerPresets = [
     id: "custom",
     label: "Custom API",
     provider: "custom",
-    protocol: "compatible",
+    protocol: "openai",
     name: "Custom provider",
     baseUrl: "",
   },

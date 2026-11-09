@@ -61,7 +61,7 @@ jobs:
             [[ "$NATIVE_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
             git fetch --no-tags origin "$NATIVE_SOURCE_SHA" --depth=1
             git diff --name-only "$NATIVE_SOURCE_SHA" "$checkout_sha" -- \
-              app src assets plugins config ios android app.json 'app.config.*' 'package*.json' \
+              app src assets modules plugins config ios android app.json 'app.config.*' 'package*.json' \
               tsconfig.json 'babel.config.*' 'metro.config.*' .nvmrc \
               scripts/ios-simulator.sh scripts/native-privacy-audit.py scripts/set-ios-build.mjs .github/workflows/ios.yml \
               > artifacts/ui-eligibility/runtime-drift.txt

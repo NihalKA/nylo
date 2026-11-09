@@ -31,6 +31,7 @@ import {
 import { readData, readKey, removeKey, writeData, writeKey } from "./storage";
 import { runAgent, safeError } from "./providers";
 import { streamingFetch } from "./transport";
+import { beginBackgroundResponse } from "./background-response";
 
 type AgentDraft = Omit<Agent, "id" | "createdAt" | "memories">;
 type SendOptions = {
@@ -79,9 +80,13 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [runningId, setRunningId] = useState<string | null>(null);
   const stagingCredentials = useRef(new Set<string>());
   const credentialOperations = useRef(createSerialExecutor());
-  const active = useRef<{ controller: AbortController; id: string } | null>(
-    null,
-  );
+  const active = useRef<{
+    controller: AbortController;
+    id: string;
+    canBackground: () => boolean;
+    deadline: number;
+    reviewingMemory: boolean;
+  } | null>(null);
   const durableUpdate = useRef<ReturnType<
     typeof createDurableUpdater<AppData>
   > | null>(null);
@@ -165,7 +170,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           );
       });
     const subscription = AppState.addEventListener("change", (state) => {
-      if (state !== "active") active.current?.controller.abort();
+      const response = active.current;
+      if (
+        response &&
+        ((state === "background" &&
+          (response.reviewingMemory || !response.canBackground())) ||
+          Date.now() >= response.deadline)
+      )
+        response.controller.abort();
     });
     return () => {
       mounted = false;
@@ -409,7 +421,17 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       throw new Error("Return to Nylo to send. Your draft is kept.");
     const assistantId = uid();
     const controller = new AbortController();
-    active.current = { controller, id: conversationId };
+    let backgroundLease: Awaited<
+      ReturnType<typeof beginBackgroundResponse>
+    > | null = null;
+    let backgroundExpired = false;
+    active.current = {
+      controller,
+      id: conversationId,
+      canBackground: () => backgroundLease?.held === true,
+      deadline: Date.now() + 180000,
+      reviewingMemory: false,
+    };
     setRunningId(conversationId);
     let pending = "";
     let lastFlush = Date.now();
@@ -448,6 +470,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const timeout = setTimeout(() => controller.abort(), 180000);
     const flushTimer = setInterval(flush, 200);
     try {
+      backgroundLease = await beginBackgroundResponse(
+        assistantId,
+        () => {
+          backgroundExpired = true;
+          controller.abort();
+        },
+        controller.signal,
+      );
+      if (controller.signal.aborted)
+        throw new Error("Return to Nylo to send. Your draft is kept.");
       await update((d) => ({
         ...d,
         deviceCheck:
@@ -521,16 +553,32 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             change.length > 1000
           )
             throw new Error("Invalid memory change.");
-          const allowed = await askPermission(
-            call.name === "remember_fact"
-              ? "Save this memory?"
-              : "Forget this memory?",
-            `${agent.name}: ${change}`,
-            call.name === "remember_fact" ? "Save memory" : "Forget",
-          );
+          // A memory decision must be reviewed in the foreground, never via a
+          // hidden alert while another app is open.
+          if (AppState.currentState !== "active") {
+            controller.abort();
+            throw new Error("Return to Nylo to review the memory change.");
+          }
+          if (active.current) active.current.reviewingMemory = true;
+          let allowed = false;
+          try {
+            allowed = await askPermission(
+              call.name === "remember_fact"
+                ? "Save this memory?"
+                : "Forget this memory?",
+              `${agent.name}: ${change}`,
+              call.name === "remember_fact" ? "Save memory" : "Forget",
+            );
+          } finally {
+            if (active.current?.controller === controller)
+              active.current.reviewingMemory = false;
+          }
+          if (controller.signal.aborted || AppState.currentState !== "active")
+            throw new Error(
+              "Response stopped. Return to Nylo to review memory changes.",
+            );
           if (!allowed)
             return JSON.stringify({ approved: false, changed: false });
-          if (controller.signal.aborted) throw new Error("Response stopped.");
           let output = "";
           await update((d) => ({
             ...d,
@@ -586,12 +634,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       await patch({
         status: controller.signal.aborted ? "interrupted" : "error",
         error: controller.signal.aborted
-          ? "Response paused. Retry to make a new request; the partial answer is kept until then."
+          ? backgroundExpired
+            ? "iOS ended background time. Your partial answer is saved. Retry in Nylo to make a new request."
+            : "Response paused. Retry to make a new request; the partial answer is kept until then."
           : safeError(error, key),
       }).catch(() => {});
     } finally {
       clearTimeout(timeout);
       clearInterval(flushTimer);
+      backgroundLease?.release();
       active.current = null;
       setRunningId(null);
     }
