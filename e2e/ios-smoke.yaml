@@ -104,6 +104,13 @@ appId: com.nylohq.nylo
                 commands:
                   - tapOn: "Dismiss keyboard"
                   - assertNotVisible: "Dismiss keyboard"
+# The new card spacing can leave the action at y924–972 below the safe
+# viewport. Require the complete target before the same single save tap.
+- scrollUntilVisible:
+    element: "Create agent"
+    direction: DOWN
+    centerElement: true
+    visibilityPercentage: 100
 - assertVisible: "Create agent"
 - tapOn: "Create agent"
 - assertVisible: "Agent"
