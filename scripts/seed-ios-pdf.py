@@ -18,7 +18,7 @@ if not db_path.is_file():
 pdf = b'%PDF-1.4\n% Owned synthetic QA document; no personal policy content.\n%%EOF\n'
 attachment = dict(id='pdf-owned', name='QA policy.pdf', mimeType='application/pdf', size=len(pdf), data=base64.b64encode(pdf).decode())
 stamp = 1794120000000
-connections = [dict(id='pdf-chat-completions', name='QA Chat Completions', protocol='compatible', baseUrl='https://example.invalid/v1', model='synthetic-model'), dict(id='pdf-responses', name='QA Responses', protocol='openai', baseUrl='https://responses.example.invalid/v1', model='synthetic-model')]
+connections = [dict(id='pdf-chat-completions', name='QA Chat Completions', provider='custom', protocol='compatible', baseUrl='https://example.invalid/v1', model='synthetic-model'), dict(id='pdf-responses', name='QA Responses', provider='custom', protocol='openai', baseUrl='https://responses.example.invalid/v1', model='synthetic-model')]
 chat = dict(id='pdf-removal', title='Example: PDF removal', connectionId=connections[0]['id'], draft='Explain this test policy', draftAttachments=[attachment], messages=[], createdAt=stamp, updatedAt=stamp)
 data = dict(version=1, connections=connections, defaultConnectionId=connections[0]['id'], agents=[], conversations=[chat])
 with sqlite3.connect(db_path) as db:
