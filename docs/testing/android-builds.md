@@ -1,6 +1,12 @@
-## Latest candidate10 — native validation in progress
+## Current candidate11 — awaiting fresh UI acceptance
 
-Productbe35483 corrects Shared Context markers/role labels/emphasis and heading weight found in the nine-screen comparison. Signed native42708462498 is building version code10; its automatic two-mode smoke and populated gallery must run on that exact binary before publication. No candidate10 release or public download is claimed. Candidate9 below is interim evidence; its successful gallery42706856228 has been fully inspected and is recorded in the current parity audit.
+Product76b80dc, signed run42717464908, version code11, is building. It includes the verified maximum-text scrolling fix and literal per-screen Figma font/alpha/picker corrections. Its own automatic two-navigation-mode smoke, rich gallery, actual binary identity/certificate/permissions/font audit and normal-size screenshots are required before publication. No current APK11 public link is claimed.
+
+Interim Android10 run42708462498 and both smoke/gallery modes are fully verified; its original three-button device-offline attempt is preserved. Those binaries are not released as final76. The next exact tested APK/AAB and checksums must come from native11, retaining the same original signing identity.
+
+## Interim candidate10 — verified, not released
+
+Productbe35483 corrects Shared Context markers/role labels/emphasis and heading weight found in the nine-screen comparison. Signed native42708462498 builds version code10. Smoke42711110409 ultimately passes108/12 in both modes after one failed-job-only three-button infrastructure retry; all30 PNGs and real33px clearance verify. Rich gallery42712767113 passes92/2 in each mode with all26 PNGs inspected, including actual shaded context emphasis. Full archive/Git fixture hashes, CRC, native identity/protected certificate/permissions and11 font assets match the exact APK. No candidate10 release or public download is claimed. Candidate9 below is interim evidence; its successful gallery42706856228 has been fully inspected and is recorded in the current parity audit.
 
 ## Current Figma candidate9 — not released
 
