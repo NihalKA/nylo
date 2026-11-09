@@ -2,6 +2,9 @@ appId: com.nylohq.nylo
 ---
 - launchApp
 - openLink: "nylo://connection?id=background-provider"
+- tapOn:
+    text: "^Open$"
+    retryTapIfNoChange: false
 - assertVisible: "Edit connection"
 - tapOn:
     text: "API key"
