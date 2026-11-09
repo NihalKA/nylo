@@ -76,6 +76,9 @@ platform :ios do
         project.save
         build_app(workspace: "ios/Nylo.xcworkspace", scheme: "Nylo", clean: true, export_method: "app-store", output_directory: "artifacts/release", output_name: "Nylo.ipa", export_options: { method: "app-store-connect", signingStyle: "manual", teamID: team, provisioningProfiles: { "com.nylohq.nylo" => parsed.fetch("Name") } })
         sh("cd .. && python3 scripts/native-privacy-audit.py artifacts/release/Nylo.ipa --output artifacts/native-privacy-audit.log")
+        require "shellwords"
+        audit_command = ["python3", "scripts/audit-ios-signing.py", "artifacts/release/Nylo.ipa", "--team", team, "--build", build_number, "--certificate-sha256", fingerprint, "--output", "artifacts/ipa-signing-audit.json"]
+        sh("cd .. && " + audit_command.shelljoin)
         upload_to_testflight(api_key: key, ipa: "artifacts/release/Nylo.ipa", skip_waiting_for_build_processing: true, distribute_external: false)
       ensure
         FileUtils.rm_f(installed)

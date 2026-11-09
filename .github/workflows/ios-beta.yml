@@ -50,5 +50,6 @@ jobs:
             ~/Library/Logs/gym/*.log
             Gemfile.lock
             artifacts/native-privacy-audit.log
+            artifacts/ipa-signing-audit.json
           if-no-files-found: ignore
           retention-days: 7
