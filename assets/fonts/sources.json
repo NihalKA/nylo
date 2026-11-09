@@ -52,7 +52,13 @@
       "wght": 400,
       "opsz": 14
     },
-    "sha256": "c32e5cbffea4faba8b195d02ba46386fd586ed6cbffe83e7944968c57bbe2514"
+    "sha256": "277d2dff62b6e16e44544236745af2917e2e5542f42853bb678f0564ae18ae5f",
+    "fontNames": {
+      "family": "Nylo Inter",
+      "style": "Regular",
+      "postScript": "NyloInter-Regular"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "Inter-500.ttf",
@@ -61,7 +67,13 @@
       "wght": 500,
       "opsz": 14
     },
-    "sha256": "27f58835552bab99090b601eccf6956dc21f4e8b8e4ef24091e1e490cfd7702a"
+    "sha256": "6a7bbbf1bc01f50d14e8fc1df764d7c38dee5ffa262c9e5fa880ee567224707f",
+    "fontNames": {
+      "family": "Nylo Inter",
+      "style": "Medium",
+      "postScript": "NyloInter-Medium"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "Inter-600.ttf",
@@ -70,7 +82,13 @@
       "wght": 600,
       "opsz": 14
     },
-    "sha256": "8adc84a3fb5d035bf90bfab48fc44d2c79262afcacc0be603237e953d63c4a2a"
+    "sha256": "f01baac0bb77f948039f23275419ee6a9bbe66a9e149810552fb0b0e402838ad",
+    "fontNames": {
+      "family": "Nylo Inter",
+      "style": "SemiBold",
+      "postScript": "NyloInter-SemiBold"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "Inter-700.ttf",
@@ -79,7 +97,13 @@
       "wght": 700,
       "opsz": 14
     },
-    "sha256": "d545b66313c57332870eb6c995b2dd2c290ee4619df8a065e8ff47a08c3a9a9a"
+    "sha256": "bb33bed849dddbe01498925ff105be93f25164023f097b1f2fe373d6e9d762c0",
+    "fontNames": {
+      "family": "Nylo Inter",
+      "style": "Bold",
+      "postScript": "NyloInter-Bold"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "PlusJakartaSans-500.ttf",
@@ -87,7 +111,13 @@
     "axes": {
       "wght": 500
     },
-    "sha256": "d8fce44c55bec32e48ceef13310ab7e8dcc05ca61f9c1e85d2bef794664247a3"
+    "sha256": "4a0a98f4b11cf09ccbaf68b23d8b671904700d2fdb0001348fd8aa7172625aa4",
+    "fontNames": {
+      "family": "Nylo Jakarta",
+      "style": "Medium",
+      "postScript": "NyloJakarta-Medium"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "PlusJakartaSans-600.ttf",
@@ -95,7 +125,13 @@
     "axes": {
       "wght": 600
     },
-    "sha256": "3521b15fca7e42d45d8197c2cbf8d44a7e0184f2de5737b49ec7284be16a7cca"
+    "sha256": "7bbb1493443eeed5eb98fbf56d462562b68e1810a7b2994bb30d0849393625ad",
+    "fontNames": {
+      "family": "Nylo Jakarta",
+      "style": "SemiBold",
+      "postScript": "NyloJakarta-SemiBold"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "PlusJakartaSans-700.ttf",
@@ -103,7 +139,13 @@
     "axes": {
       "wght": 700
     },
-    "sha256": "891e4d0bdbc3b2a9dffd31bde5d5ed43986ff1a6345f22cd48bcfb8e41b24194"
+    "sha256": "b87aa21f05a49e298a5828f2aa7f0051ba2ab973c0cf25191769e6e1fea8935d",
+    "fontNames": {
+      "family": "Nylo Jakarta",
+      "style": "Bold",
+      "postScript": "NyloJakarta-Bold"
+    },
+    "namingNote": "Unique static-weight names prevent CoreText serving a previously registered face; outlines unchanged."
   },
   {
     "file": "LiberationMono-Regular.ttf",

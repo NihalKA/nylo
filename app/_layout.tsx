@@ -2,7 +2,7 @@ import { Text } from "../src/typography";
 import React from "react";
 import { useFonts } from "expo-font";
 import { fontAssets } from "../src/typography";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Platform, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -12,6 +12,9 @@ import { s, theme } from "../src/ui";
 function Root() {
   const { ready, storageError } = useStore();
   const [fontsLoaded, fontError] = useFonts(fontAssets);
+  const loadingFont = fontsLoaded
+    ? undefined
+    : { fontFamily: Platform.OS === "ios" ? "System" : "sans-serif" };
   if (!ready || !fontsLoaded)
     return (
       <View
@@ -26,14 +29,14 @@ function Root() {
         ]}
       >
         {storageError || fontError ? (
-          <Text style={s.error}>
+          <Text style={[s.error, loadingFont]}>
             {storageError ||
               "Unable to load the app fonts. Please restart Nylo."}
           </Text>
         ) : (
           <>
             <ActivityIndicator color={theme.green} />
-            <Text style={s.sub}>Opening your space…</Text>
+            <Text style={[s.sub, loadingFont]}>Opening your space…</Text>
           </>
         )}
       </View>

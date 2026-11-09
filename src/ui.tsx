@@ -221,6 +221,79 @@ export function KeyboardDismissButton({
     />
   ) : null;
 }
+
+export function Switch({
+  value,
+  onValueChange,
+  accessibilityLabel,
+  disabled,
+  trackColor,
+  checkedThumb,
+}: {
+  value: boolean;
+  onValueChange: (value: boolean) => void;
+  accessibilityLabel: string;
+  disabled?: boolean;
+  trackColor?: { false?: string; true?: string };
+  checkedThumb?: boolean;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="switch"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ checked: value, disabled: !!disabled }}
+      disabled={disabled}
+      onPress={() => onValueChange(!value)}
+      style={{
+        minWidth: 48,
+        minHeight: 44,
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: disabled ? 0.45 : 1,
+      }}
+    >
+      <View
+        style={{
+          width: 48,
+          height: 28,
+          borderRadius: 14,
+          backgroundColor: value
+            ? trackColor?.true || "#059669"
+            : trackColor?.false || "#C6C5D0",
+          justifyContent: "center",
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            left: value ? 22 : 2,
+            width: 24,
+            height: 24,
+            borderRadius: 12,
+            backgroundColor: "#FFFFFF",
+          }}
+        />
+        {value && checkedThumb ? (
+          <View
+            style={{
+              position: "absolute",
+              right: 0,
+              width: 28,
+              height: 28,
+              borderRadius: 14,
+              backgroundColor: "#2563EB",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Icon name="checkmark" size={18} color="#FFFFFF" />
+          </View>
+        ) : null}
+      </View>
+    </Pressable>
+  );
+}
+
 export function IconButton({
   name,
   label,

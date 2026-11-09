@@ -1,11 +1,12 @@
 import { Text } from "../src/typography";
 import { fonts } from "../src/typography";
 import React, { useState } from "react";
-import { Linking, Switch, View } from "react-native";
+import { Linking, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../src/store";
 import {
   Button,
+  Switch,
   Field,
   FormScroll,
   Header,
@@ -151,7 +152,7 @@ export default function Report() {
                   { fontSize: 12, lineHeight: 18, color: theme.quiet },
                 ]}
               >
-                {message.text.slice(0, 2000)}
+                {`Selected response excerpt (up to 2000 characters):\n${message.text.slice(0, 2000)}`}
               </Text>
             </View>
           ) : null}

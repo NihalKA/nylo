@@ -1,6 +1,6 @@
 import { Text } from "../../src/typography";
 import React, { useRef, useState } from "react";
-import { Pressable, Switch, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { colors, isDeviceCheckConversation } from "../../src/domain";
@@ -8,6 +8,7 @@ import {
   AgentAvatar,
   Badge,
   Button,
+  Switch,
   Field,
   FormScroll,
   Header,
@@ -264,12 +265,21 @@ function AgentEdit() {
               style={{
                 width: 44,
                 height: 44,
-                borderRadius: 15,
-                backgroundColor: c,
-                borderWidth: 3,
-                borderColor: color === c ? theme.ink : theme.bg,
+                alignItems: "center",
+                justifyContent: "center",
               }}
-            />
+            >
+              <View
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 12,
+                  backgroundColor: c,
+                  borderWidth: color === c ? 2 : 0,
+                  borderColor: theme.ink,
+                }}
+              />
+            </Pressable>
           ))}
         </View>
         <Field

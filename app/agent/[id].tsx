@@ -2,13 +2,7 @@ import { Text } from "../../src/typography";
 import { fonts } from "../../src/typography";
 import { recentAgentContext } from "../../src/agent-context";
 import React, { useRef, useState } from "react";
-import {
-  Pressable,
-  ScrollView,
-  Switch,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { Pressable, ScrollView, View, useWindowDimensions } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
 import { uid } from "../../src/domain";
@@ -16,6 +10,7 @@ import {
   AgentAvatar,
   Badge,
   Button,
+  Switch,
   ConversationRow,
   Empty,
   Field,
@@ -178,7 +173,7 @@ function AgentDetail() {
       >
         <View style={{ gap: 20, paddingTop: 20, paddingBottom: 24 }}>
           <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
-            <AgentAvatar agent={agent} />
+            <AgentAvatar agent={agent} size={48} />
             <View style={{ flex: 1, gap: 7 }}>
               <Text
                 style={[
@@ -238,7 +233,7 @@ function AgentDetail() {
             >
               <Text
                 style={{
-                  color: tab === t ? theme.ink : theme.sub,
+                  color: tab === t ? theme.ink : theme.quiet,
                   fontWeight: "600",
                   fontSize: 14,
                   maxWidth: "100%",
@@ -291,6 +286,7 @@ function AgentDetail() {
                 backgroundColor: theme.card,
                 minHeight: 110,
                 borderRadius: 16,
+                borderColor: "#C6C5D066",
                 fontSize: 14,
                 lineHeight: 21,
               }}
@@ -299,6 +295,7 @@ function AgentDetail() {
             />
             <Button
               title={editingId ? "Update memory" : "Save memory"}
+              style={{ minHeight: 46, borderRadius: 23 }}
               secondary
               icon="add"
               disabled={
@@ -366,7 +363,7 @@ function AgentDetail() {
                     borderRadius: 16,
                     minHeight: 92,
                     borderWidth: 1,
-                    borderColor: theme.line,
+                    borderColor: "#C6C5D066",
                   },
                 ]}
               >
@@ -387,7 +384,13 @@ function AgentDetail() {
                   <Text
                     style={[
                       s.sub,
-                      { fontSize: 11, color: theme.quiet, marginTop: 6 },
+                      {
+                        fontSize: 11,
+                        fontWeight: "600",
+                        letterSpacing: 0.33,
+                        color: theme.quiet,
+                        marginTop: 6,
+                      },
                     ]}
                   >
                     {new Date(m.createdAt).toLocaleDateString()}
@@ -468,6 +471,8 @@ function AgentDetail() {
               <Text style={[s.text, { flex: 1 }]}>Use recent chats</Text>
               <Switch
                 accessibilityLabel="Use recent chats from this agent"
+                checkedThumb={showContext}
+                trackColor={{ true: showContext ? "#22C55E" : "#059669" }}
                 value={!!agent.shareRecentChats}
                 disabled={!!runningId}
                 onValueChange={(value) =>
@@ -527,7 +532,7 @@ function AgentDetail() {
             secondary
             destructive
             disabled={!!runningId}
-            style={{ backgroundColor: "transparent" }}
+            style={{ backgroundColor: "transparent", borderWidth: 0 }}
             onPress={() =>
               void action(async () => {
                 if (
