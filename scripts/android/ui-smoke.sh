@@ -37,4 +37,7 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 # Retain real system-navigation and composer bounds after the keyboard is dismissed.
 adb shell uiautomator dump /sdcard/nylo-navigation.xml
 adb pull /sdcard/nylo-navigation.xml artifacts/android-ui/navigation-hierarchy.xml
+# UIAutomator returns only the active app window on this API35 emulator;
+# SystemUI navigation is a separate window. Retain the real InsetsState too.
+adb shell dumpsys window displays > artifacts/android-ui/navigation-window-insets.txt
 python3 scripts/android/check-navigation-insets.py artifacts/android-ui/navigation-hierarchy.xml "$mode"

@@ -177,7 +177,9 @@ appId: com.nylohq.nylo
 - tapOn: "Go back"
 - tapOn: "Chats, tab, 1 of 3"
 - scrollUntilVisible:
-    element: "(?s)Open Example: Attachments ready.*"
+    element:
+      text: "(?s)Open Example: Attachments ready.*"
+      above: "Chats, tab, 1 of 3"
     direction: DOWN
 - tapOn: "(?s)Open Example: Attachments ready.*"
 - assertVisible: "QA note.txt.*"
@@ -196,7 +198,9 @@ appId: com.nylohq.nylo
 - stopApp
 - launchApp
 - scrollUntilVisible:
-    element: "(?s)Open Example: Attachments ready.*"
+    element:
+      text: "(?s)Open Example: Attachments ready.*"
+      above: "Chats, tab, 1 of 3"
     direction: DOWN
 - tapOn: "(?s)Open Example: Attachments ready.*"
 - assertVisible: "QA note.txt.*"
