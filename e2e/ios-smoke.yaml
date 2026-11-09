@@ -64,11 +64,53 @@ appId: com.nylohq.nylo
 - assertVisible:
     id: "chat-message"
 - tapOn: "Go back"
+# Maximum-text inbox row was y859–1123 while the tab bar began at877.
+# When its center is below that bar, move the content before the same row tap.
+- runFlow:
+    when:
+      notVisible:
+        text: "(?s)Open New conversation.*"
+        above: "Chats, tab, 1 of 3"
+    commands:
+      - swipe:
+          start: "50%, 65%"
+          end: "50%, 35%"
+          duration: 500
+- scrollUntilVisible:
+    element:
+      text: "(?s)Open New conversation.*"
+      above: "Chats, tab, 1 of 3"
+    direction: DOWN
+    centerElement: true
 - tapOn: "(?s)Open New conversation.*"
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
+# Maximum-text inbox row was y859–1123 while the tab bar began at877.
+# When its center is below that bar, move the content before the same row tap.
+- runFlow:
+    when:
+      notVisible:
+        text: "(?s)Open New conversation.*"
+        above: "Chats, tab, 1 of 3"
+    commands:
+      - swipe:
+          start: "50%, 65%"
+          end: "50%, 35%"
+          duration: 500
+- scrollUntilVisible:
+    element:
+      text: "(?s)Open New conversation.*"
+      above: "Chats, tab, 1 of 3"
+    direction: DOWN
+    centerElement: true
 - tapOn: "(?s)Open New conversation.*"
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - takeScreenshot: 06-restored-draft
 - tapOn: "Go back"
