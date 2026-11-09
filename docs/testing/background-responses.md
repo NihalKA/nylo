@@ -43,3 +43,11 @@ Exercise expiration, returning after the request deadline, foreground memory
 approval, background memory-tool interruption, and force-quit recovery. Verify
 no automatic repeat request or unapproved memory change occurs. A simulator pass
 alone cannot establish physical-device time grants.
+
+## Resumed native acceptance
+
+The owner explicitly resumed this work in the destination thread. Review added AbortSignal cancellation during native acquisition and disposal of a late native grant, and checks foreground state again after a memory-approval dialog. Source validation passes82tests. Custom API now defaults to Responses for new connections only; existing saved connections/credentials are not migrated.
+
+Native42590815925 compiled and launched the new module at2eeaab5, with a passing actual compiled privacy audit. The current-source native run42592315108 is separate. The old native's automatic UI run is stale/NOTRUN because the source advanced; it is not a passing interaction matrix.
+
+Scenario `background`, run42594020199, uses an owned localhost-only HTTPS/SSE server and disposable CI fixtures. The driver leaves Nylo on Home while a host-side SQLite gate requires durable completion before launch. Another request asks for a memory while Home and must interrupt without saving; foreground Stop and cold restoration are checked. It uses a public dummy fixture key, never a provider/reviewer key. Exactly one request per fixture model is required. Static native begin/end active-count logs are retained for cleanup inspection. The local fixture's TLS/SSE and SQLite gate and the actual app data parser/refusal checks pass; these do not establish native background behavior. The native flow and actual captures/logs are pending at this checkpoint. Physical time grants, screen lock, force-quit/resource behavior and real provider streaming remain separate.
