@@ -2,8 +2,9 @@ appId: com.nylohq.nylo
 ---
 - launchApp
 - tapOn: "(?s)Open Example: A focused morning.*"
-# Disposable CI Photos is seeded with our green PNG after the stock photos.
-# The inspected failure PNG/AX identifies it as the first/newest grid item.
+# Disposable CI Photos gets only our green 32x32 JPEG with synthetic EXIF.
+# Prior PNG evidence grounded index 0 as newest; inspect the new JPEG run
+# PNG/AX to confirm that ordering and actual owned selection still hold.
 - tapOn:
     id: "chat-message"
 - inputText: "QA photo draft stays safe"
@@ -120,3 +121,42 @@ appId: com.nylohq.nylo
     id: "chat-message"
     enabled: true
 - takeScreenshot: attachments-04-camera-recovery-interaction
+
+# A second import gets a fresh identity (no content deduplication). Retain it for
+# post-flow SQLite inspection; orphan checking must still catch the removed first.
+- tapOn: "Add attachment"
+- tapOn: "Photo library"
+- extendedWaitUntil:
+    visible:
+      id: "PXGGridLayout-Info"
+      index: 0
+    timeout: 60000
+- waitForAnimationToEnd:
+    timeout: 10000
+- takeScreenshot: attachments-05a-owned-metadata-picker
+- tapOn:
+    id: "PXGGridLayout-Info"
+    index: 0
+    retryTapIfNoChange: false
+- assertVisible:
+    text: "Done"
+    enabled: true
+- tapOn:
+    text: "Done"
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      text: "Add attachment"
+      enabled: true
+    timeout: 30000
+- assertVisible: "QA photo draft stays safe after camera fallback"
+- assertVisible: "Preview Photo.jpg"
+- assertVisible: "Remove Photo.jpg"
+- takeScreenshot: attachments-05b-retained-owned-metadata-photo
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: A focused morning.*"
+- assertVisible: "QA photo draft stays safe after camera fallback"
+- assertVisible: "Preview Photo.jpg"
+- assertVisible: "Remove Photo.jpg"
+- takeScreenshot: attachments-05c-restored-owned-metadata-photo

@@ -45,6 +45,9 @@ printf 'Native source: %s\nUI flows: %s\n' "$source_sha" "$flow_sha" > artifacts
 printf 'Refreshed JS bundle: %s\nJS source: %s\n' "${REFRESH_JS_BUNDLE:-false}" "$js_source_sha" >> artifacts/e2e/source.txt
 printf 'Scenario: %s\nProfile: %s\nNative run: %s\nUI run: %s\n' "$scenario" "$profile" "$SOURCE_RUN_ID" "${GITHUB_RUN_ID:-manual}" >> artifacts/e2e/source.txt
 shasum -a 256 "e2e/ios-$scenario.yaml" scripts/ios-smoke.sh scripts/seed-ios-gallery.py > artifacts/e2e/fixture-sha256.txt
+if [ "$scenario" = attachments ]; then
+  shasum -a 256 scripts/owned-photo-metadata.py scripts/check-picked-photo-storage.py >> artifacts/e2e/fixture-sha256.txt
+fi
 mark_phase download-native-artifact
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
 unzip -q artifacts/native/Nylo-simulator.zip -d "$RUNNER_TEMP/nylo-app"
@@ -104,7 +107,14 @@ if [ "$scenario" = gallery ] || [ "$scenario" = attachments ]; then
   mark_phase seed-synthetic-data
   python3 scripts/seed-ios-gallery.py --container "$app_container" --expected-copy artifacts/e2e/expected-copy.txt
   echo 'Synthetic offline QA data, not live model output or customer history.' > artifacts/e2e/gallery-disclosure.txt
-  if [ "$scenario" = attachments ]; then xcrun simctl addmedia "$simulator_id" artifacts/e2e/owned-picker-photo.png; fi
+  if [ "$scenario" = attachments ]; then
+    # Gallery keeps its original PNG. Only this newest owned EXIF JPEG is added to Photos.
+    sips -s format jpeg artifacts/e2e/owned-picker-photo.png --out artifacts/e2e/owned-picker-photo.jpg
+    python3 scripts/owned-photo-metadata.py --png artifacts/e2e/owned-picker-photo.png \
+      --jpeg artifacts/e2e/owned-picker-photo.jpg > artifacts/e2e/owned-photo-source-check.txt
+    shasum -a 256 artifacts/e2e/owned-picker-photo.png artifacts/e2e/owned-picker-photo.jpg >> artifacts/e2e/fixture-sha256.txt
+    xcrun simctl addmedia "$simulator_id" artifacts/e2e/owned-picker-photo.jpg
+  fi
 fi
 mark_phase install-driver
 curl -fsSL 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
@@ -140,6 +150,16 @@ with sqlite3.connect(Path(sys.argv[1]) / "Documents/SQLite/nylo.db") as db:
     assert "gallery-owned-text" not in stored, "Removed draft file was retained"
 Path("artifacts/e2e/attachment-storage-check.txt").write_text("PASS: native metadata and file blobs match; restored image retained, removed text blob deleted. Synthetic data only.\n")
 PYBLOBS
+fi
+
+if [ "$scenario" = attachments ]; then
+  mark_phase picked-photo-storage-verification
+  # Freeze the post-restart state before a read-only SQLite/WAL snapshot.
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 scripts/check-picked-photo-storage.py --container "$app_container" \
+    --simulator-id "$simulator_id" --source-jpeg artifacts/e2e/owned-picker-photo.jpg \
+    --output-dir artifacts/e2e
 fi
 
 mark_phase complete
