@@ -20,7 +20,8 @@ attachment = dict(id='pdf-owned', name='QA policy.pdf', mimeType='application/pd
 stamp = 1794120000000
 connections = [dict(id='pdf-chat-completions', name='QA Chat Completions', provider='custom', protocol='compatible', baseUrl='https://example.invalid/v1', model='synthetic-model'), dict(id='pdf-responses', name='QA Responses', provider='custom', protocol='openai', baseUrl='https://responses.example.invalid/v1', model='synthetic-model')]
 chat = dict(id='pdf-removal', title='Example: PDF removal', connectionId=connections[0]['id'], draft='Explain this test policy', draftAttachments=[attachment], messages=[], createdAt=stamp, updatedAt=stamp)
-data = dict(version=1, connections=connections, defaultConnectionId=connections[0]['id'], agents=[], conversations=[chat])
+route_chat = {**chat, 'id': 'pdf-connection', 'title': 'Example: PDF connection', 'draftAttachments': [{**attachment, 'id': 'pdf-owned-route'}], 'updatedAt': stamp-1}
+data = dict(version=1, connections=connections, defaultConnectionId=connections[0]['id'], agents=[], conversations=[chat, route_chat])
 with sqlite3.connect(db_path) as db:
     row = db.execute('SELECT json FROM app_state WHERE id=1').fetchone()
     previous = json.loads(row[0]) if row else {}

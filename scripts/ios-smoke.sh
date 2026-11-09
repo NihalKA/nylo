@@ -157,6 +157,31 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
 mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = pdf ]; then
+  mark_phase pdf-storage-verification
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 - "$app_container/Documents/SQLite/nylo.db" <<'PYPDF'
+import json, sqlite3, sys
+from pathlib import Path
+with sqlite3.connect(Path(sys.argv[1]).as_uri() + '?mode=ro', uri=True) as db:
+    data = json.loads(db.execute('SELECT json FROM app_state WHERE id=1').fetchone()[0])
+    chats = {chat['id']: chat for chat in data['conversations']}
+    assert set(chats) == {'pdf-removal', 'pdf-connection'}, 'Unexpected fixture data'
+    removed, routed = chats['pdf-removal'], chats['pdf-connection']
+    assert not removed.get('draftAttachments'), 'Removed PDF returned after restart'
+    assert removed['draft'] == 'Explain this test policy please', 'Removal changed the draft'
+    assert routed['connectionId'] == 'pdf-responses', 'Connection choice did not persist'
+    assert routed['draft'] == 'Explain this test policy', 'Connection choice changed the draft'
+    assert len(routed['draftAttachments']) == 1 and routed['draftAttachments'][0]['id'] == 'pdf-owned-route', 'Connection choice lost the PDF'
+    assert all(not chat['messages'] for chat in chats.values()), 'An offline test accepted a message'
+    refs = {a['id'] for chat in chats.values() for a in chat.get('draftAttachments', [])}
+    stored = {row[0] for row in db.execute('SELECT id FROM attachment_blobs')}
+    assert stored == refs == {'pdf-owned-route'}, 'Removed PDF blob was retained or selected PDF was lost'
+Path('artifacts/e2e/pdf-storage-check.txt').write_text('PASS: single-tap PDF removal persisted without its blob; exact text drafts and chosen connection retained; no accepted messages.\n')
+print('Owned PDF removal, exact drafts, connection persistence and blob cleanup verified.')
+PYPDF
+fi
 if [ "$scenario" = gallery ]; then
   mark_phase clipboard-and-storage-verification
   xcrun simctl pbpaste "$simulator_id" > artifacts/e2e/copied-example.txt

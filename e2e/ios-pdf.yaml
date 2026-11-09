@@ -11,12 +11,14 @@ appId: com.nylohq.nylo
 - tapOn:
     text: "Send message"
     retryTapIfNoChange: false
-- assertVisible: "(?s)PDFs need.*"
+- assertVisible: "Choose PDF connection"
 - takeScreenshot: pdf-01-blocked-with-keyboard
 - tapOn:
     text: "Remove QA policy.pdf"
     retryTapIfNoChange: false
 - assertNotVisible: "Remove QA policy.pdf"
+- assertNotVisible: "Choose PDF connection"
+- assertNotVisible: "(?s)PDFs need.*"
 - assertVisible:
     id: "chat-message"
     text: "Explain this test policy please"
@@ -29,3 +31,30 @@ appId: com.nylohq.nylo
     id: "chat-message"
     text: "Explain this test policy please"
 - takeScreenshot: pdf-03-removal-restored
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: PDF connection.*"
+- assertVisible: "Choose PDF connection"
+- tapOn: "Choose PDF connection"
+- assertVisible: "(?s)PDFs need Responses or Claude Messages.*"
+- assertVisible:
+    text: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
+    enabled: false
+- takeScreenshot: pdf-04-connection-guidance
+- tapOn: "QA Responses[.] synthetic-model"
+- assertNotVisible: "Close model picker"
+- assertNotVisible: "Choose PDF connection"
+- assertVisible: "Choose model connection[.] QA Responses, synthetic-model"
+- assertVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy"
+- takeScreenshot: pdf-05-connection-selected
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: PDF connection.*"
+- assertVisible: "Choose model connection[.] QA Responses, synthetic-model"
+- assertVisible: "Remove QA policy.pdf"
+- assertVisible:
+    id: "chat-message"
+    text: "Explain this test policy"
+- takeScreenshot: pdf-06-connection-restored
