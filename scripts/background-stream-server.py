@@ -11,6 +11,7 @@ import time
 cert, key, db_path, evidence = map(Path, sys.argv[1:])
 lock = threading.Lock()
 counts = {}
+home = {kind: threading.Event() for kind in ["background", "memory"]}
 def record(event, **facts):
     with lock:
         with evidence.open('a') as f: f.write(json.dumps(dict(event=event, time=time.time(), **facts))+'\n')
@@ -31,17 +32,28 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.wfile.write(('data: '+json.dumps(value)+'\n\n').encode());self.wfile.flush()
         try:
             event(dict(type='response.output_text.delta', delta='Phase one. '))
-            time.sleep(8 if model != 'qa-stop' else 30)
+            if model == 'qa-stop':
+                time.sleep(30)
+            else:
+                # The final output/tool is produced only after the driver's Home
+                # action and control request. Slow CI cannot finish it in foreground.
+                if not home[model.removeprefix('qa-')].wait(60):
+                    record('home_gate_timeout', model=model)
+                    return
+                time.sleep(.5)
             if model == 'qa-memory':
                 event(dict(type='response.output_item.done',output_index=0,item=dict(type='function_call',call_id='owned-call',name='remember_fact',arguments=json.dumps(dict(text='Owned QA memory must not save in background')))))
             else:
                 event(dict(type='response.output_text.delta',delta='Completed in background.'))
+            record('final_output_sent', model=model)
             event(dict(type='response.completed'));record('stream_finished', model=model)
         except (BrokenPipeError,ConnectionResetError,ssl.SSLError): record('client_stopped',model=model)
     def do_GET(self):
         if self.server.server_port != 8766 or self.path not in ['/complete','/memory']:
             self.send_error(404);return
         kind = 'background' if self.path == '/complete' else 'memory'
+        record('home_gate_entered', kind=kind)
+        home[kind].set()
         ready = False
         for _ in range(120):
             try:

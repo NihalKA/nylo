@@ -1,11 +1,14 @@
 appId: com.nylohq.nylo
 ---
 - launchApp
-- openLink: "nylo://connection?id=background-provider"
-- tapOn:
-    text: "^Open$"
-    retryTapIfNoChange: false
+- tapOn: "Settings, tab, 3 of 3"
+- tapOn: "(?s)Manage AI providers.*"
+- assertVisible: "AI providers"
+- tapOn: "Edit Owned localhost QA"
 - assertVisible: "Edit connection"
+- scrollUntilVisible:
+    element: "API key"
+    direction: DOWN
 - tapOn:
     text: "API key"
     index: 1
@@ -17,6 +20,7 @@ appId: com.nylohq.nylo
 - tapOn: "Save connection"
 - assertVisible: "Done"
 - tapOn: "Done"
+- tapOn: "Chats, tab, 1 of 3"
 - tapOn: "(?s)Open Example: background stream.*"
 - tapOn: "Send message"
 - tapOn: "Allow & send"

@@ -205,6 +205,11 @@ assert not data['agents'][0]['memories']
 records=[json.loads(line) for line in Path('artifacts/e2e/background-server.jsonl').read_text().splitlines()]
 assert sorted(x['model'] for x in records if x['event']=='request')==['qa-background','qa-memory','qa-stop']
 assert sorted(x['kind'] for x in records if x['event']=='durable_while_home')==['background','memory']
+for kind in ['background','memory']:
+    entered=next(x['time'] for x in records if x['event']=='home_gate_entered' and x['kind']==kind)
+    finished=next(x['time'] for x in records if x['event']=='final_output_sent' and x['model']=='qa-'+kind)
+    persisted=next(x['time'] for x in records if x['event']=='durable_while_home' and x['kind']==kind)
+    assert entered < finished <= persisted, 'Output must be produced and persisted after Home, before foreground return'
 Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact, one request each. Simulator only; no physical expiration guarantee.\n')
 BGVERIFY
 fi
