@@ -12,7 +12,7 @@ p = container / 'Documents/SQLite/nylo.db'
 assert p.is_file()
 stamp = 1794200000000
 connection = dict(id='background-provider', name='Owned localhost QA', provider='custom', protocol='openai', baseUrl='https://localhost:8765/v1', model='qa-background', models=['qa-background', 'qa-memory', 'qa-stop'])
-agent = dict(id='background-agent', name='QA background agent', description='Owned local memory fixture', instructions='No real provider or user data.', color='#246B58', createdAt=stamp, memories=[])
+agent = dict(connectionId=connection['id'], id='background-agent', name='QA background agent', description='Owned local memory fixture', instructions='No real provider or user data.', color='#246B58', createdAt=stamp, memories=[])
 chats = []
 for kind in ['background', 'memory', 'stop']:
     chat = dict(id='background-'+kind, title='Example: '+kind+' stream', connectionId=connection['id'], model='qa-'+kind, draft='Owned QA '+kind, messages=[], createdAt=stamp, updatedAt=stamp)
