@@ -24,7 +24,8 @@ def verify(directory):
     identity = json.loads((directory / 'build-identity.json').read_text())
     source = (directory / 'source.txt').read_text().strip()
     assert identity['source'] == source
-    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip() == source
+    # A test-only fixture correction may validate an existing native build.
+    subprocess.run(['git', 'diff', '--exit-code', source, 'HEAD', '--', 'app', 'src', 'assets', 'modules', 'plugins', 'app.json', 'package.json', 'package-lock.json', 'babel.config.js', 'metro.config.js', 'scripts/android/configure-build.py', 'scripts/android/release.init.gradle'], check=True)
     assert identity['assets'] == assets(), 'Build assets differ from checkout'
     with zipfile.ZipFile(directory / 'Nylo-test.apk') as apk:
         assert apk.testzip() is None

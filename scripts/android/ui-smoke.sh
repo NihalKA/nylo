@@ -53,7 +53,7 @@ export UI_BUILD_MARKER=""
 if [ -f artifacts/android-build/build-identity.json ]; then
   export UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/android-build/build-identity.json"))["marker"])')"
 fi
-"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml "$flow"
+"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test -e "UI_BUILD_MARKER=$UI_BUILD_MARKER" --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml "$flow"
 
 # Retain real system-navigation and composer bounds after the keyboard is dismissed.
 adb shell uiautomator dump /sdcard/nylo-navigation.xml

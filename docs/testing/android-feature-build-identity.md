@@ -20,10 +20,11 @@ work; it does not approve unresolved Figma layout gaps or change iOS delivery.
   downloads, not a compiled APK, Metro bundle or Gradle output. The three custom
   plugins modify iOS image/camera implementation only, not Android UI.
 - android-ui.yml previously excluded feature source runs. Manual feature
-  validation now accepts this branch, pins its fixtures to the exact source SHA,
+  validation now accepts this branch, records its fixture SHA and requires identical app/native inputs,
   and revalidates the downloaded APK. Automatic workflow_run changes take effect
   only once present on the default branch; until then dispatch this workflow on
-  the exact feature branch with the explicit successful native run ID.
+  the feature branch with the explicit successful native run ID. Test-only fixture
+  corrections may validate an existing binary after an enforced runtime-input diff.
 
 ## Fresh-build contract
 
@@ -45,3 +46,7 @@ uses 1170px at 480dpi = 390dp width, font scale 1.0, with real system insets.
 This evidence establishes binary identity and exercised screens, not complete
 visual parity. No privacy, attachment, consent, provider or iOS/store behavior
 is changed. Existing source/design review gates are not weakened.
+
+Maestro receives UI_BUILD_MARKER explicitly with `-e`; non-MAESTRO_ shell
+variables are not automatically imported by the CLI. This test-only correction
+does not require a new native compilation.
