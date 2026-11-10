@@ -2,7 +2,7 @@ import { Text } from "../../src/typography";
 import { fonts } from "../../src/typography";
 import Constants from "expo-constants";
 import React, { useRef, useState } from "react";
-import { Linking, Platform, Pressable, View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 import { router } from "expo-router";
 import { emptyData } from "../../src/types";
 import { useStore } from "../../src/store";
@@ -395,8 +395,7 @@ export default function Settings() {
             ? ` (${Constants.nativeBuildVersion})`
             : ""}
         </Text>
-        {Platform.OS === "android" &&
-        process.env.EXPO_PUBLIC_UI_BUILD_MARKER ? (
+        {process.env.EXPO_PUBLIC_UI_BUILD_MARKER ? (
           <Text testID="ui-build-marker" style={[s.sub, { fontSize: 12 }]}>
             {process.env.EXPO_PUBLIC_UI_BUILD_MARKER}
           </Text>
