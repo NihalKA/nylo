@@ -26,7 +26,10 @@ assert re.fullmatch(r'[a-f0-9]{64}', args.certificate_sha256), 'Invalid expected
 def command(argv):
     result = subprocess.run(argv, capture_output=True)
     if result.returncode:
-        raise SystemExit(f'Exported IPA audit failed: {Path(argv[0]).name} exited {result.returncode}')
+        operation = ' '.join(value.split('=')[0] for value in argv[1:] if value.startswith('-'))
+        detail = result.stderr.decode(errors='replace').strip()[:1200]
+        detail = re.sub(r'/[^\s:]+', lambda match: '<path>/' + Path(match[0]).name, detail)
+        raise SystemExit(f'Exported IPA audit failed: {Path(argv[0]).name} {operation} exited {result.returncode}: {detail}')
     return result.stdout
 
 
@@ -67,7 +70,7 @@ with tempfile.TemporaryDirectory(prefix='nylo-export-audit-') as directory:
     assert entitlements.get('com.apple.developer.team-identifier') == args.team
     assert not entitlements.get('get-task-allow', False), 'Export allows debugging'
     prefix = Path(directory) / 'signer-'
-    command(['/usr/bin/codesign', '-d', '--extract-certificates', str(prefix), str(app)])
+    command(['/usr/bin/codesign', '-d', '--extract-certificates=' + str(prefix), str(app)])
     signer = hashlib.sha256(Path(str(prefix) + '0').read_bytes()).hexdigest()
     assert signer == args.certificate_sha256, 'Exported signer differs from protected distribution identity'
     profile = plistlib.loads(command(['/usr/bin/security', 'cms', '-D', '-i', str(app / 'embedded.mobileprovision')]))
