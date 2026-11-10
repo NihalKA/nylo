@@ -101,7 +101,9 @@ jobs:
       fail-fast: false
       matrix:
         profile: ${{ inputs.scenario != 'smoke' && inputs.scenario != '' && fromJSON('["large"]') || inputs.profile && inputs.profile != 'all' && fromJSON(format('["{0}"]', inputs.profile)) || fromJSON('["compact","large","large-text"]') }}
-    timeout-minutes: 20
+    # Compact CI simulators spend several minutes booting and about 10s per tap.
+    # Retain the full smoke flow and allow its navigation/restart tail to finish.
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
