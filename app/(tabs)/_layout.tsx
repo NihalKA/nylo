@@ -1,8 +1,10 @@
 import React from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import { Tabs } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Icon, theme } from "../../src/ui";
 export default function MainTabs() {
+  const { bottom } = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
@@ -20,6 +22,10 @@ export default function MainTabs() {
           width: "100%",
           alignSelf: "center",
           borderTopWidth: 0,
+          // Reserve the system button/gesture area below Android's tab targets.
+          ...(Platform.OS === "android"
+            ? { height: 56 + bottom, paddingBottom: bottom }
+            : {}),
         },
         tabBarItemStyle: { minHeight: 48, paddingTop: 4 },
         sceneStyle: { backgroundColor: theme.bg },

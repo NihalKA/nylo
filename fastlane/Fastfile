@@ -60,7 +60,7 @@ platform :ios do
         FileUtils.mkdir_p(profile_dir)
         FileUtils.cp(profile, installed)
         sh("cd .. && node scripts/set-ios-build.mjs #{build_number}")
-        sh("cd .. && npx expo prebuild --platform ios --no-install")
+        sh("cd .. && npx expo prebuild --clean --platform ios --no-install")
         sh("cd ../ios && pod install")
         require "xcodeproj"
         project_path = File.expand_path("../ios/Nylo.xcodeproj", __dir__)
@@ -79,6 +79,7 @@ platform :ios do
         require "shellwords"
         audit_command = ["python3", "scripts/audit-ios-signing.py", "artifacts/release/Nylo.ipa", "--team", team, "--build", build_number, "--certificate-sha256", fingerprint, "--output", "artifacts/ipa-signing-audit.json"]
         sh("cd .. && " + audit_command.shelljoin)
+        sh("cd .. && python3 scripts/ios-build-identity.py verify artifacts/release/Nylo.ipa")
         upload_to_testflight(api_key: key, ipa: "artifacts/release/Nylo.ipa", skip_waiting_for_build_processing: true, distribute_external: false)
       ensure
         FileUtils.rm_f(installed)

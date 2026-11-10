@@ -395,6 +395,11 @@ export default function Settings() {
             ? ` (${Constants.nativeBuildVersion})`
             : ""}
         </Text>
+        {process.env.EXPO_PUBLIC_UI_BUILD_MARKER ? (
+          <Text testID="ui-build-marker" style={[s.sub, { fontSize: 12 }]}>
+            {process.env.EXPO_PUBLIC_UI_BUILD_MARKER}
+          </Text>
+        ) : null}
         <Pressable
           accessibilityRole="button"
           onPress={() => router.push("/licenses")}

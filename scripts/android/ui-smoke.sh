@@ -37,13 +37,23 @@ case "$scenario" in
   smoke) flow=e2e/android-smoke.yaml ;;
   gallery)
     flow=e2e/android-gallery.yaml
+    adb shell wm size 1170x2532
+    adb shell wm density 480
+    adb shell settings put system font_scale 1.0
+    adb shell wm size > artifacts/android-ui/viewport.txt
+    adb shell wm density >> artifacts/android-ui/viewport.txt
+    adb shell settings get system font_scale >> artifacts/android-ui/viewport.txt
     python3 scripts/seed-android-gallery.py artifacts/android-ui/Nylo-QA-gallery.json
     adb push artifacts/android-ui/Nylo-QA-gallery.json /sdcard/Download/Nylo-QA-gallery.json
     ;;
   *) echo "Unknown Android UI scenario" >&2; exit 1 ;;
 esac
 printf 'Scenario: %s\n' "$scenario" >> artifacts/android-ui/provenance.txt
-"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml "$flow"
+export UI_BUILD_MARKER=""
+if [ -f artifacts/android-build/build-identity.json ]; then
+  export UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/android-build/build-identity.json"))["marker"])')"
+fi
+"$RUNNER_TEMP/android-maestro/maestro/bin/maestro" test -e "UI_BUILD_MARKER=$UI_BUILD_MARKER" --test-output-dir "$PWD/artifacts/android-ui" --format junit --output artifacts/android-ui/results.xml "$flow"
 
 # Retain real system-navigation and composer bounds after the keyboard is dismissed.
 adb shell uiautomator dump /sdcard/nylo-navigation.xml
