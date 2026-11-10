@@ -31,6 +31,9 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element: ".*Connect your AI.*"
     direction: DOWN
+    timeout: 120000
+    speed: 80
+    waitToSettleTimeoutMs: 500
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "AI providers"

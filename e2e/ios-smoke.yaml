@@ -16,6 +16,9 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element: ".*Connect your AI.*"
     direction: DOWN
+    timeout: 120000
+    speed: 80
+    waitToSettleTimeoutMs: 500
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "AI providers"
@@ -280,14 +283,17 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 09-restored-memory
-# Actual maximum-text AX placed this button at y26–187 behind the fixed Agent
-# header. Require the whole target below that header before the same single tap.
+# Center the complete action before tapping. The retained standard-size AX
+# exposes duplicate Agent title nodes; its relative below selector rejected a
+# button at y194–242 below both titles at y75–104. Use full visibility and
+# centering to keep the action clear of the fixed header and bottom tabs.
 - scrollUntilVisible:
-    element:
-      text: "New conversation"
-      below: "Agent"
+    element: "New conversation"
     direction: UP
+    visibilityPercentage: 100
     centerElement: true
+    timeout: 120000
+    waitToSettleTimeoutMs: 500
 - tapOn: "New conversation"
 - tapOn:
     id: "chat-message"
