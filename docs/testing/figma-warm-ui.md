@@ -1,6 +1,6 @@
 # Figma Warm Edition implementation
 
-**Superseded acceptance scope:** app23/build6 below is a style adaptation. The new owner request requires complete current parity. Live all-frame SVG inspection and the current screen inventory are recorded in [Current Figma parity audit](figma-current-parity.md). iPhone18 distribution remains held pending that work.
+**Superseded acceptance scope:** app23/build6 below is a style adaptation. The new owner request requires complete current parity. Live all-frame SVG inspection and the current screen inventory are recorded in [Current Figma parity audit](figma-current-parity.md). Current native acceptance and the signed-release delivery state are tracked there; the adaptation below remains historical.
 
 Owner/Vivek requested the shared iOS and Android interface follow [this Figma file](https://www.figma.com/design/WNCRguvh0wqYTgBUlbXZ9G/Untitled). Inspected the signed-in file on 10 November 2026 using its rendered frames and Properties panel; the optional Figma MCP is not connected. No design layers were edited.
 
