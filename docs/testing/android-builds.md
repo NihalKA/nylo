@@ -1,12 +1,29 @@
+# Current Android12 test delivery
+
+[Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk) · [Release and checksum](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-12).
+
+Product `a0afe7e6b6fdc82a5d457b2a8b8bb89213bdc55d`, signed native42722421091, Nylo1.0.0/code12. APK57,977,294 bytes, SHA256 `8623c2776bb63044d6be8e6be3ba131c51e581e10f4398c8431c4ce3e937b10b`. AAB40,359,123 bytes, SHA256 `fc19943c421133a2e56c440417042c301d2c4833e4420ead5a52cb9cf711b7a0`. Full artifact13721378481 GitHub digest/CRC, reexecuted compiled audit, protected original certificate/package/permissions/nondebug/HTTPS, pinned bundletool and11 actual font assets verify. JKS unchanged.
+
+| Evidence           | Gesture                                                                     | Three-button                  |
+| ------------------ | --------------------------------------------------------------------------- | ----------------------------- |
+| Smoke42723901979   | 108 commands/12 conditional skips;15 inspected PNGs;33px composer clearance | 108/12;15 inspected PNGs;33px |
+| Gallery42724048318 | 92/2;13 inspected PNGs;34px clearance                                       | 92/2;13 inspected PNGs;34px   |
+
+All56 captures were inspected; exact native APK, fixtureacf128c hashes, archive GitHub digests/CRC, JUnit and WindowManager navigation bounds reconcile. Current nine-screen comparison includes the corrected report preview flat RGB245/246/245, privacy opt-in and cold-restored files. Public prerelease asset SHA256 and57,977,294-byte unauthenticated200 response match the tested APK. Evidence: `artifacts/android-delivery-12/public-download-verification.json` and `artifacts/figma-current/android12-*/verification.json`.
+
+This is the current Android test delivery; prior6/5 releases remain preserved. No Play purchase/upload occurred. Generation remains foreground-only; physical camera, TalkBack and new live-provider checks remain separate. New Drive upload and iPhone18 are still pending.
+
+---
+
 Current product `a0afe7e` corrects the report preview's actual native translucent-shadow colour mismatch. Fresh iOS42722415418 is running; signed Android12 42722421091 succeeds. Automatic smoke42723901979 is running and rich gallery42724048318 is already pending on that exact APK. SourceCI42722410071 succeeds. Earlier76/11 evidence below is interim; final distribution remains held for the new candidate's verification.
 
-## Current candidate11 compiled and smoke verified — delivery pending
+## Interim candidate11 compiled and smoke verified — delivery pending
 
 Signed native42717464908 succeeds on product76b80dc. Actual APK57,977,310 bytes has SHA256 `b870e80a3a9d6ebd4fcedc802aaa9ac9fffe784e92a4692aedb1939d8ec74bc7`; AAB40,359,121 bytes has SHA256 `0ef32dff258227b10a14d2b49dc60b6dd167d4d65dcb6e0c0551837c7f2997b8`. Archive GitHub digest/CRC, original certificate, package/version/permissions/nondebug/HTTPS, bundletool and11 actual runtime font assets verify. The protected JKS is unchanged.
 
 Automatic42719600103 passes both modes108 commands/12 skips,15 inspected PNGs each, with33px actual navigation clearance. Rich gallery42719642034 three-button passes92/2,13 inspected PNGs and34px clearance; gesture fails before emulator launch during the Google system-image download (Connection reset), with zero Nylo commands/captures. Archive13721562476 digest/CRC and Git fixture hashes verify; original failure remains preserved, without an obsolete11 retry. Final current parity acceptance/release remains pending. No current11 public release/Drive upload is claimed; old6/5 links remain available.
 
-## Current candidate11 — awaiting fresh UI acceptance
+## Interim candidate11 — awaiting fresh UI acceptance
 
 Product76b80dc, signed run42717464908, version code11, is building. It includes the verified maximum-text scrolling fix and literal per-screen Figma font/alpha/picker corrections. Its own automatic two-navigation-mode smoke, rich gallery, actual binary identity/certificate/permissions/font audit and normal-size screenshots are required before publication. No current APK11 public link is claimed.
 

@@ -2,7 +2,7 @@ Current product `a0afe7e` corrects the report preview's actual native translucen
 
 # Expanded iPhone beta check
 
-**Current Figma redesign is not delivered in TestFlight yet.** Producta0afe7e's fresh native42722415418 is running; build18 remains undispatched until current design/native gates pass. Local82 tests/typecheck/format/security183/font11 and SourceCI42722410071 pass. The report surface correction responds to actual Android11 native pixels, not a speculative palette change.
+**Current Figma redesign is not delivered in TestFlight yet.** Producta0afe7e's fresh native42722415418 succeeds, with independent actual privacy/linked-identity/font verification. Automatic3-profile42725119521, gallery42725164453 and PDF42725170655 are running on the exact fresh native with refreshfalse; build18 remains undispatched until current design/native gates pass. Local82 tests/typecheck/format/security183/font11 and SourceCI42722410071 pass. The report surface correction responds to actual Android11 native pixels, not a speculative palette change.
 
 Interim76 fresh native42717459570 has verified privacy, linked simulator identity and11 exact font assets. Automatic42720294162 passes compact109/13, large109/13 and maximum text118/11; all48 native captures are inspected. Gallery42720606388 passes188 commands, exact293-byte clipboard and executed native SQL/blob assertions (19 native captures); PDF42720612010 passes58 commands and exact draft/protocol/blob assertions (9 native captures). All76 native captures, GitHub digests/CRC and fixture8888f2d hashes verify, with refreshfalse. These results preserve completed regression proof while the actual report-fill correction requires its own final native evidence.
 
