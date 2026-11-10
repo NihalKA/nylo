@@ -74,11 +74,13 @@ appId: com.nylohq.nylo
 - tapOn: "Go back"
 # Maximum-text inbox row was y859–1123 while the tab bar began at877.
 # When its center is below that bar, move the content before the same row tap.
+# Compare against the middle tab, which shares the full-width row’s horizontal
+# centre; the left Chats tab can reject an otherwise visible row.
 - runFlow:
     when:
       notVisible:
         text: "(?s)Open New conversation.*"
-        above: "Chats, tab, 1 of 3"
+        above: "Agents, tab, 2 of 3"
     commands:
       - swipe:
           start: "50%, 65%"
@@ -87,7 +89,7 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element:
       text: "(?s)Open New conversation.*"
-      above: "Chats, tab, 1 of 3"
+      above: "Agents, tab, 2 of 3"
     direction: DOWN
     centerElement: true
 - tapOn: "(?s)Open New conversation.*"
@@ -99,11 +101,13 @@ appId: com.nylohq.nylo
 - launchApp
 # Maximum-text inbox row was y859–1123 while the tab bar began at877.
 # When its center is below that bar, move the content before the same row tap.
+# Compare against the middle tab, which shares the full-width row’s horizontal
+# centre; the left Chats tab can reject an otherwise visible row.
 - runFlow:
     when:
       notVisible:
         text: "(?s)Open New conversation.*"
-        above: "Chats, tab, 1 of 3"
+        above: "Agents, tab, 2 of 3"
     commands:
       - swipe:
           start: "50%, 65%"
@@ -112,7 +116,7 @@ appId: com.nylohq.nylo
 - scrollUntilVisible:
     element:
       text: "(?s)Open New conversation.*"
-      above: "Chats, tab, 1 of 3"
+      above: "Agents, tab, 2 of 3"
     direction: DOWN
     centerElement: true
 - tapOn: "(?s)Open New conversation.*"
