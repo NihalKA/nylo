@@ -11,7 +11,7 @@ Product `a0afe7e6b6fdc82a5d457b2a8b8bb89213bdc55d`, signed native42722421091, Ny
 
 All56 captures were inspected; exact native APK, fixtureacf128c hashes, archive GitHub digests/CRC, JUnit and WindowManager navigation bounds reconcile. Current nine-screen comparison includes the corrected report preview flat RGB245/246/245, privacy opt-in and cold-restored files. Public prerelease asset SHA256 and57,977,294-byte unauthenticated200 response match the tested APK. Evidence: `artifacts/android-delivery-12/public-download-verification.json` and `artifacts/figma-current/android12-*/verification.json`.
 
-This is the current Android test delivery; prior6/5 releases remain preserved. No Play purchase/upload occurred. Generation remains foreground-only; physical camera, TalkBack and new live-provider checks remain separate. New Drive upload and iPhone18 are still pending.
+This is the current Android test delivery; prior6/5 releases remain preserved. No Play purchase/upload occurred. Generation remains foreground-only; physical camera, TalkBack and new live-provider checks remain separate. Internal iPhone1.0.0(19) is independently delivered. The final review pack is ready; new Drive upload awaits Google sign-in.
 
 ---
 
