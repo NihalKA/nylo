@@ -15,14 +15,14 @@
     },
     "audit": {
       "path": "docs/testing/figma-full-file-audit.md",
-      "sha256": "08a69db430adbf63c676379bbd3896e67ba0539b068213a3911c41ec7a345ca5",
+      "sha256": "01512e43715e9051ada493c144acb122c1e57b0e81df23d3643241edf8e42239",
       "provenance": "Owner-reopened audit findings, 2026-11-10; pending full review.",
       "kind": "audit-record"
     },
     "node-progress": {
       "kind": "audit-record",
       "path": "docs/testing/figma-node-audit-progress.md",
-      "sha256": "aa10fcca3c8f7227abfefe6a540e5ec7da5384e913a1262b9199a8c616bbfb12",
+      "sha256": "216aaac2a8001b61fded725019b90a22dd4aca97cf19381b82664dc540490c9f",
       "provenance": "2026-11-10 retained official MCP direct per-node facts / explicit source review; incomplete audit, no rendered approval."
     },
     "context-facts": {
@@ -174,6 +174,12 @@
       "path": "docs/testing/figma-memory-context-hierarchy-audit.md",
       "sha256": "f113f3a8e51c9e8f3ad3c0a3694e1b576424551dfecd4e0842b1fd990f307cc5",
       "provenance": "2026-11-10 fresh originalPNG/complete file/source comparison; expanded hierarchy and section findings. Action scope unresolved; no implementation approval."
+    },
+    "earlier-current-pairs": {
+      "kind": "audit-record",
+      "path": "docs/design/figma-earlier-current-pairs.json",
+      "sha256": "765cb612599240bec7ee26837ffbbba3911111cc1edae4c6ca0a2984bf139c05",
+      "provenance": "Fresh complete-file properties/hierarchy comparison for491 pairs; actual originalPNG comparison; no native acceptance."
     }
   },
   "nodes": {
@@ -188,1111 +194,1357 @@
       ]
     },
     "1:2": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:494",
+      "target": "app/(tabs)/settings.tsx Settings / src/ui.tsx Page",
+      "rationale": "Individually reconciled complete-file pair1:2->2:494: all local rendering properties/hierarchy identical; root only translated2110px on document canvas. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:494"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:3": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:495",
+      "target": "src/ui.tsx Page/s.shell",
+      "rationale": "Individually reconciled complete-file pair1:3->2:495: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:495"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:4": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:496",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:4->2:496: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:496"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:5": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:497",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:5->2:497: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:497"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:6": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:498",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:6->2:498: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:498"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:7": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:499",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:7->2:499: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:499"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:8": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:500",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:8->2:500: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:500"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:9": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:501",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:9->2:501: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:501"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:10": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:502",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:10->2:502: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:502"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:11": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:503",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:11->2:503: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:503"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:12": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:504",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:12->2:504: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:504"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:13": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:505",
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Individually reconciled complete-file pair1:13->2:505: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:505"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:14": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:506",
+      "target": "app/(tabs)/settings.tsx Settings title/FormScroll",
+      "rationale": "Individually reconciled complete-file pair1:14->2:506: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:506"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:15": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:507",
+      "target": "app/(tabs)/settings.tsx Settings title/FormScroll",
+      "rationale": "Individually reconciled complete-file pair1:15->2:507: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:507"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:16": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:508",
+      "target": "app/(tabs)/settings.tsx Settings title",
+      "rationale": "Individually reconciled complete-file pair1:16->2:508: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:508"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:17": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:509",
+      "target": "app/(tabs)/settings.tsx FormScroll",
+      "rationale": "Individually reconciled complete-file pair1:17->2:509: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:509"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:18": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:510",
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Individually reconciled complete-file pair1:18->2:510: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:510"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:19": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:511",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:19->2:511: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:511"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:20": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:512",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:20->2:512: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:512"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:21": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:513",
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "Individually reconciled complete-file pair1:21->2:513: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:513"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:22": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:514",
+      "target": "app/(tabs)/settings.tsx SettingsRow with detail",
+      "rationale": "Individually reconciled complete-file pair1:22->2:514: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:514"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:23": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:515",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:23->2:515: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:515"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:24": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:516",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:24->2:516: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:516"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:25": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:517",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:25->2:517: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:517"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:26": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:518",
+      "target": "assets/figma/key.svg / SettingsRow design=key",
+      "rationale": "Individually reconciled complete-file pair1:26->2:518: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:518"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:27": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:519",
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Individually reconciled complete-file pair1:27->2:519: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:519"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:28": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:520",
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Individually reconciled complete-file pair1:28->2:520: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:520"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:29": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:521",
+      "target": "app/(tabs)/settings.tsx SettingsRow title with detail",
+      "rationale": "Individually reconciled complete-file pair1:29->2:521: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:521"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:30": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:522",
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Individually reconciled complete-file pair1:30->2:522: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:522"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:31": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:523",
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Individually reconciled complete-file pair1:31->2:523: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:523"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:32": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:524",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:32->2:524: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:524"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:33": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:525",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:33->2:525: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:525"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:34": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:526",
+      "target": "app/(tabs)/settings.tsx provider/backup disclosure Text",
+      "rationale": "Individually reconciled complete-file pair1:34->2:526: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:526"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:35": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:527",
+      "target": "app/(tabs)/settings.tsx provider disclosure",
+      "rationale": "Individually reconciled complete-file pair1:35->2:527: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:527"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:36": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:528",
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Individually reconciled complete-file pair1:36->2:528: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:528"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:37": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:529",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:37->2:529: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:529"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:38": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:530",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:38->2:530: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:530"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:39": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:531",
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "Individually reconciled complete-file pair1:39->2:531: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:531"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:40": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:532",
+      "target": "app/(tabs)/settings.tsx first plain SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:40->2:532: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:532"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:41": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:533",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:41->2:533: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:533"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:42": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:534",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:42->2:534: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:534"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:43": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:535",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:43->2:535: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:535"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:44": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:536",
+      "target": "assets/figma/export.svg / SettingsRow design=export",
+      "rationale": "Individually reconciled complete-file pair1:44->2:536: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:536"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:45": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:537",
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Individually reconciled complete-file pair1:45->2:537: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:537"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:46": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:538",
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Individually reconciled complete-file pair1:46->2:538: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:538"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:47": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:539",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:47->2:539: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:539"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:48": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:540",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:48->2:540: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:540"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:49": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:541",
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:49->2:541: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:541"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:50": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:542",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:50->2:542: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:542"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:51": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:543",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:51->2:543: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:543"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:52": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:544",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:52->2:544: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:544"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:53": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:545",
+      "target": "assets/figma/restore.svg / SettingsRow design=restore",
+      "rationale": "Individually reconciled complete-file pair1:53->2:545: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:545"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:54": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:546",
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Individually reconciled complete-file pair1:54->2:546: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:546"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:55": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:547",
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Individually reconciled complete-file pair1:55->2:547: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:547"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:56": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:548",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:56->2:548: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:548"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:57": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:549",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:57->2:549: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:549"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:58": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:550",
+      "target": "app/(tabs)/settings.tsx provider/backup disclosure Text",
+      "rationale": "Individually reconciled complete-file pair1:58->2:550: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:550"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:59": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:551",
+      "target": "app/(tabs)/settings.tsx backup disclosure",
+      "rationale": "Individually reconciled complete-file pair1:59->2:551: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:551"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:60": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:552",
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Individually reconciled complete-file pair1:60->2:552: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:552"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:61": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:553",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:61->2:553: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:553"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:62": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:554",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:62->2:554: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:554"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:63": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:555",
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "Individually reconciled complete-file pair1:63->2:555: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:555"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:64": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:556",
+      "target": "app/(tabs)/settings.tsx first plain SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:64->2:556: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:556"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:65": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:557",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:65->2:557: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:557"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:66": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:558",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:66->2:558: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:558"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:67": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:559",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:67->2:559: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:559"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:68": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:560",
+      "target": "assets/figma/privacy.svg / SettingsRow design=privacy",
+      "rationale": "Individually reconciled complete-file pair1:68->2:560: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:560"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:69": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:561",
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Individually reconciled complete-file pair1:69->2:561: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:561"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:70": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:562",
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Individually reconciled complete-file pair1:70->2:562: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:562"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:71": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:563",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:71->2:563: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:563"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:72": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:564",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:72->2:564: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:564"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:73": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:565",
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:73->2:565: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:565"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:74": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:566",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:74->2:566: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:566"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:75": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:567",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:75->2:567: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:567"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:76": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:568",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:76->2:568: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:568"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:77": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:569",
+      "target": "assets/figma/mail.svg / SettingsRow design=mail",
+      "rationale": "Individually reconciled complete-file pair1:77->2:569: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:569"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:78": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:570",
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Individually reconciled complete-file pair1:78->2:570: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:570"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:79": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:571",
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Individually reconciled complete-file pair1:79->2:571: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:571"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:80": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:572",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:80->2:572: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:572"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:81": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:573",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:81->2:573: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:573"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:82": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:574",
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Individually reconciled complete-file pair1:82->2:574: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:574"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:83": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:575",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:83->2:575: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:575"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:84": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:576",
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Individually reconciled complete-file pair1:84->2:576: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:576"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:85": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:577",
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "Individually reconciled complete-file pair1:85->2:577: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:577"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:86": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:578",
+      "target": "app/(tabs)/settings.tsx SettingsRow with detail",
+      "rationale": "Individually reconciled complete-file pair1:86->2:578: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:578"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:87": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:579",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:87->2:579: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:579"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:88": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:580",
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "Individually reconciled complete-file pair1:88->2:580: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:580"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:89": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:581",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:89->2:581: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:581"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:90": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:582",
+      "target": "assets/figma/deviceCheck.svg / SettingsRow design=deviceCheck",
+      "rationale": "Individually reconciled complete-file pair1:90->2:582: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:582"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:91": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:583",
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Individually reconciled complete-file pair1:91->2:583: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:583"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:92": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:584",
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Individually reconciled complete-file pair1:92->2:584: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:584"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:93": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:585",
+      "target": "app/(tabs)/settings.tsx SettingsRow title with detail",
+      "rationale": "Individually reconciled complete-file pair1:93->2:585: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:585"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:94": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:586",
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Individually reconciled complete-file pair1:94->2:586: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:586"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:95": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:587",
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Individually reconciled complete-file pair1:95->2:587: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:587"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:96": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:588",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:96->2:588: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:588"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:97": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:589",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:97->2:589: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:589"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:98": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:590",
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:98->2:590: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:590"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:99": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:591",
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Individually reconciled complete-file pair1:99->2:591: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:591"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:100": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:592",
+      "target": "app/(tabs)/settings.tsx destructive icon disc",
+      "rationale": "Individually reconciled complete-file pair1:100->2:592: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:592"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:101": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:593",
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:101->2:593: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:593"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:102": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:594",
+      "target": "assets/figma/deleteData.svg / SettingsRow design=deleteData",
+      "rationale": "Individually reconciled complete-file pair1:102->2:594: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:594"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:103": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:595",
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Individually reconciled complete-file pair1:103->2:595: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:595"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:104": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:596",
+      "target": "app/(tabs)/settings.tsx destructive title",
+      "rationale": "Individually reconciled complete-file pair1:104->2:596: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:596"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:105": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:597",
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "Individually reconciled complete-file pair1:105->2:597: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:597"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:106": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:598",
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Individually reconciled complete-file pair1:106->2:598: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:598"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:107": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:599",
+      "target": "app/(tabs)/_layout.tsx MainTabs",
+      "rationale": "Individually reconciled complete-file pair1:107->2:599: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:599"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:108": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:600",
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Individually reconciled complete-file pair1:108->2:600: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:600"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:109": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:601",
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Individually reconciled complete-file pair1:109->2:601: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:601"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:110": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:602",
+      "target": "assets/figma/tabChats.svg / MainTabs inactive Chats",
+      "rationale": "Individually reconciled complete-file pair1:110->2:602: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:602"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:111": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:603",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:111->2:603: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:603"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:112": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:604",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:112->2:604: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:604"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:113": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:605",
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Individually reconciled complete-file pair1:113->2:605: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:605"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:114": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:606",
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Individually reconciled complete-file pair1:114->2:606: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:606"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:115": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:607",
+      "target": "assets/figma/tabAgents.svg / MainTabs inactive Agents",
+      "rationale": "Individually reconciled complete-file pair1:115->2:607: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:607"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:116": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:608",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:116->2:608: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:608"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:117": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:609",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:117->2:609: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:609"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:118": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:610",
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Individually reconciled complete-file pair1:118->2:610: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:610"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:119": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:611",
+      "target": "app/(tabs)/_layout.tsx TabIcon selected Settings background",
+      "rationale": "Individually reconciled complete-file pair1:119->2:611: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:611"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:120": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:612",
+      "target": "app/(tabs)/_layout.tsx TabIcon selected Settings background",
+      "rationale": "Individually reconciled complete-file pair1:120->2:612: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:612"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:121": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:613",
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Individually reconciled complete-file pair1:121->2:613: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:613"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:122": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:614",
+      "target": "assets/figma/tabSettingsActive.svg / MainTabs active Settings",
+      "rationale": "Individually reconciled complete-file pair1:122->2:614: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:614"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:123": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:615",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:123->2:615: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:615"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:124": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:616",
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Individually reconciled complete-file pair1:124->2:616: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:616"
+        "earlier-current-pairs",
+        "live-file",
+        "settings-node-audit"
+      ]
     },
     "1:125": {
       "status": "unreviewed",
@@ -3599,13 +3851,15 @@
       "duplicateOf": "2:872"
     },
     "1:381": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
+      "status": "duplicate",
+      "duplicateOf": "2:873",
+      "target": "app/report.tsx report model metadata Text",
+      "rationale": "Individually reconciled complete-file pair1:381->2:873: all local rendering properties/hierarchy identical. Current target has its own explicit source/reference disposition; preserve that target's planned gaps/exceptions. Original pairPNG differences are retained in the pair ledger; no pixel-identity or native approval claimed.",
       "evidence": [
-        "metadata"
-      ],
-      "duplicateOf": "2:873"
+        "earlier-current-pairs",
+        "live-file",
+        "node-progress"
+      ]
     },
     "1:382": {
       "status": "unreviewed",
@@ -11528,39 +11782,74 @@
       "name": "Nylo \u2014 Settings (Warm Edition)",
       "checks": {
         "geometry": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. Explicit123-node source/reference review. Detail columns205.14/181.45, divider ownership and selected navigation paint need planned corrections; native safe-area/hit regions are narrow exceptions, not full geometry approval. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "typography": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. Nimbus/Jakarta/Inter roles mapped; provider disclosure21 versus21.13 and tab label implicit14 leading recorded as gaps. Real text scales without clipping. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "artwork": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. All17 actual app vectors have original matching source dimensions/paint; three mockOS vectors use real native bars. Per-callsite painted placement remains a fresh rendered gate. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "colours-effects": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. Card white/radius12/borderE7E7E5/shadow0,2,8 navy4%; muted40 discs, red destructive disc/text and lavender selected paint mapped independently. Selected disc source50x24 differs from50.425x22.3333. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "content": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. AllSettings labels/disclosures/actions present. Real configured-provider copy/version/legal link are explicit app extensions, not fake reference data. Full provider charges/no-cloud-sync guidance and destructive scope preserved. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "states-actions": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. Source branches reviewed: provider empty/configured, operation busy/locked, disabled during send, export/restore/delete confirmation/cancel, errors/notices, native URL destinations. No standalone keyboard input here; downstream provider/editor/native sheets audited separately. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         },
         "responsive-accessibility": {
-          "reviewed": false,
-          "finding": "Individual audit pending",
-          "evidence": []
+          "reviewed": true,
+          "finding": "EarlierSettings full-property/hierarchy pair reconciliation agrees with currentSettings source disposition. 20 inset/max576 shell; retain realOS safe areas and44+ hits/dynamic text. Bound descriptions while allowing growth; no hardcoded screen height or clipped copy. Equal390 logical width/native tab centres remain release checks. Original PNGs differ at one pixel and are retained; no native approval.",
+          "evidence": [
+            "earlier-current-pairs",
+            "settings-node-audit",
+            "frame-1:2",
+            "frame-2:494"
+          ]
         }
       }
     },
@@ -12783,7 +13072,7 @@
   "baseProductFingerprint": "7042893a9f4eff8f2f13235f7eae626b5ea790d8dc2a8369aaf0c2d96da8661b",
   "discovery": {
     "path": "docs/design/figma-discovered-scope.json",
-    "sha256": "b5fdcf44a96902120119b807100e14ef0798d2a28743b476a98c13b7e440f91c"
+    "sha256": "f4372bed60200c7574f08e681f39999f43934e8af07b5fdc7e461fa37d9340d6"
   },
   "releaseObligations": [
     {
@@ -12791,10 +13080,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "reference",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|reference evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -12802,10 +13094,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "empty",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|empty evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -12813,10 +13108,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "populated",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|populated evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -12824,10 +13122,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "selected",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|selected evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -12835,10 +13136,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "error",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|error evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -12846,10 +13150,13 @@
       "platform": "ios",
       "scope": "1:2",
       "state": "keyboard",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|keyboard evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -13985,10 +14292,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "reference",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|reference evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -13996,10 +14306,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "empty",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|empty evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -14007,10 +14320,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "populated",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|populated evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -14018,10 +14334,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "selected",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|selected evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -14029,10 +14348,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "error",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|error evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -14040,10 +14362,13 @@
       "platform": "android",
       "scope": "1:2",
       "state": "keyboard",
-      "mode": "capture",
-      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|keyboard evidence/exception remains independently required; this exception does not waive it.",
       "evidence": [
-        "audit"
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
       ]
     },
     {
@@ -15781,6 +16106,230 @@
       "rationale": "Capture actual Settings external-destination with reference-derived styles and honest operation/provider data; source branch reviewed in settings-node-audit. Retain functional confirmation, cancellation and persistence assertions.",
       "evidence": [
         "settings-node-audit",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|busy",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "busy",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|busy evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|disabled-during-send",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "disabled-during-send",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|disabled-during-send evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|export-confirmation",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "export-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|export-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|restore-confirmation",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "restore-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|restore-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|delete-confirmation",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "delete-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|delete-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|confirmation-cancel",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "confirmation-cancel",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|confirmation-cancel evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|success-notice",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "success-notice",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|success-notice evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "ios|1:2|external-destination",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "external-destination",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required ios|2:494|external-destination evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|busy",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "busy",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|busy evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|disabled-during-send",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "disabled-during-send",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|disabled-during-send evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|export-confirmation",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "export-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|export-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|restore-confirmation",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "restore-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|restore-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|delete-confirmation",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "delete-confirmation",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|delete-confirmation evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|confirmation-cancel",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "confirmation-cancel",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|confirmation-cancel evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|success-notice",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "success-notice",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|success-notice evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
+        "frame-2:494"
+      ]
+    },
+    {
+      "id": "android|1:2|external-destination",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "external-destination",
+      "mode": "exception",
+      "rationale": "EarlierSettings has all123 local render properties/hierarchy identical to2:494 except2110px document placement. This is the same product state, not a second UI. Retain both originalPNG references and the one-pixel raster difference. Required android|2:494|external-destination evidence/exception remains independently required; this exception does not waive it.",
+      "evidence": [
+        "earlier-current-pairs",
+        "settings-node-audit",
+        "frame-1:2",
         "frame-2:494"
       ]
     }

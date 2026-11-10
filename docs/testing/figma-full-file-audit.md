@@ -73,7 +73,7 @@ The complete recursive font inventory accounts for251 text nodes and262 font-nam
 occurrences including inline overrides:11 design faces map to the12 available
 runtime faces. See `../design/figma-font-audit.json`. Three missing original state
 SVGs are acquired and hash-bound; [the artwork audit](figma-artwork-state-audit.md)
-records their exact painted bounds and remaining callsite checks. **1,197 of1,325
+records their exact painted bounds and remaining callsite checks. **1,073 of1,325
 node dispositions remain unreviewed.** No Astra completeness approval exists.
 
 Chats inbox, Agents landing, provider editor and live-check have no standalone frame

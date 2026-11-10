@@ -17,7 +17,7 @@ acceptance or implementation approval is claimed. Signed20 has succeeded, but it
 corrected distribution remains held. Dashboard files remain untouched.
 
 Audit progress: Settings has123 explicit per-node source/reference dispositions;
-1,197 of1,325 file nodes remain unreviewed. The recursive font inventory includes
+1,073 of1,325 file nodes remain unreviewed. The recursive font inventory includes
 all inline overrides, and three missing original state SVGs have been exported
 through the working browser. No product changes, new native build or completeness
 approval are implied. See the [artwork audit](testing/figma-artwork-state-audit.md).

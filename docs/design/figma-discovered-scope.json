@@ -136,14 +136,22 @@
   },
   "scopes": {
     "1:2": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "states": [
         "reference",
         "empty",
         "populated",
         "selected",
         "error",
-        "keyboard"
+        "keyboard",
+        "busy",
+        "disabled-during-send",
+        "export-confirmation",
+        "restore-confirmation",
+        "delete-confirmation",
+        "confirmation-cancel",
+        "success-notice",
+        "external-destination"
       ]
     },
     "1:125": {

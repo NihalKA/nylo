@@ -82,3 +82,20 @@ operation error/success/busy/disabled, each destructive/backup confirmation and
 cancellation, and external destinations. There is no direct Settings text input;
 only that direct keyboard state has a narrow exception, with downstream provider/
 editor/native transitions retained separately. Other screens/states remain open.
+
+## Earlier/current complete-property reconciliation
+
+All491 earlier/current pairs have now been compared using **every retained render
+property**, plus parent relationships, in `docs/design/figma-earlier-current-pairs.json`.
+The486 non-root pairs match exactly; the five root transforms differ only by2110px
+document x placement. This is stronger than the earlier metadata/ID-prefix match.
+Original PNGs still retain their observed small raster differences; equal design
+properties are not represented as byte-identical exports.
+
+Only124 pairs whose current targets already have explicit source dispositions are
+now marked duplicate (123Settings plus the separately reviewed report model line).
+The other367 pairs remain unreviewed alongside their targets. Earlier Settings'
+states are retained as explicit duplicate exceptions tied to the corresponding
+mandatory currentSettings obligations; no state is silently removed. This closes
+identity reconciliation, not source review of the remaining screens or native
+visual acceptance.

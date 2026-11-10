@@ -293,7 +293,7 @@ class CoverageGateTests(unittest.TestCase):
 
     def test_native_image_declared_dimensions_must_match_bytes(self):
         self.release_fixture()
-        self.m['comparisons'][0]['pixelWidth'] = 1233
+        next(c for c in self.m['comparisons'] if c['mode'] == 'capture')['pixelWidth'] = 1233
         self.assertTrue(any('PNG width/density' in x for x in self.check('release')))
 
     def test_missing_state_or_extension_is_rejected(self):
@@ -369,14 +369,14 @@ class CoverageGateTests(unittest.TestCase):
     def test_invented_binary_identity_and_metadata_image_rejected(self):
         self.release_fixture()
         self.m['binaries']['android']['sourceCommit'] = 'not-a-commit'
-        self.m['comparisons'][0]['nativeEvidence'] = 'metadata'
+        next(c for c in self.m['comparisons'] if c['mode'] == 'capture')['nativeEvidence'] = 'metadata'
         errors = self.check('release')
         self.assertIn('binary android: stale/unverified Git source', errors)
         self.assertTrue(any('expected native-original-png' in x for x in errors))
 
     def test_capture_session_viewport_mismatch_rejected(self):
         self.release_fixture()
-        self.m['comparisons'][0]['fontScale'] = 2
+        next(c for c in self.m['comparisons'] if c['mode'] == 'capture')['fontScale'] = 2
         self.assertTrue(any('capture-session image/state/viewport identity mismatch' in x
                             for x in self.check('release')))
 
