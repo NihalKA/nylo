@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
   "snapshot": {
     "path": "docs/design/figma-page-0-1.xml",
@@ -10,20 +10,34 @@
     "metadata": {
       "path": "docs/design/figma-page-0-1.xml",
       "sha256": "c2a2b6682a6e181af60bd69c388d71dfc7803c3504beb2c208edf71572be4047",
-      "provenance": "Official MCP get_metadata, Page1 0:1, 2026-11-10"
+      "provenance": "Official MCP get_metadata, Page1 0:1, 2026-11-10",
+      "kind": "audit-record"
     },
     "audit": {
       "path": "docs/testing/figma-full-file-audit.md",
-      "sha256": "a821fb1556cfa566bec7a44c04af752661703c7d0ba30b838df48fcc1dcbf817",
-      "provenance": "Owner-reopened audit findings, 2026-11-10; pending full review."
+      "sha256": "c6ca2a7cd75df9bfbe4a53320f7b6ba06c817c9c4f05aea313f89bf9b8041443",
+      "provenance": "Owner-reopened audit findings, 2026-11-10; pending full review.",
+      "kind": "audit-record"
+    },
+    "node-progress": {
+      "kind": "audit-record",
+      "path": "docs/testing/figma-node-audit-progress.md",
+      "sha256": "15f6ba9a870020e6f00fc43b692f66692c4862c01d8433adf36f7e7c2ad7e8ef",
+      "provenance": "2026-11-10 retained official MCP direct per-node facts / explicit source review; incomplete audit, no rendered approval."
+    },
+    "context-facts": {
+      "kind": "audit-record",
+      "path": "docs/design/figma-context-facts.json",
+      "sha256": "835b6fc656d98bcceccff6044580dbc76ed058c4443f8c5e4c97f140e1a9917b",
+      "provenance": "2026-11-10 retained official MCP direct per-node facts / explicit source review; incomplete audit, no rendered approval."
     }
   },
   "nodes": {
     "0:1": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Figma page organization (not a rendered app screen)",
+      "rationale": "One observed page organizing14 frames; screen routes map individually. This does not close hidden/prototype domains.",
+      "evidence": ["metadata", "audit"]
     },
     "1:2": {
       "status": "unreviewed",
@@ -3475,64 +3489,64 @@
       "evidence": ["metadata"]
     },
     "2:496": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:497": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:498": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:499": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:500": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:501": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:502": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:503": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:504": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:505": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "exception",
+      "target": "Native system status bar / Page safe-area inset",
+      "rationale": "Exact mock status-bar node inspected in retained Settings context; real OS time/radio/wifi/battery must remain native, not duplicated in app content.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:506": {
       "status": "unreviewed",
@@ -3547,10 +3561,10 @@
       "evidence": ["metadata"]
     },
     "2:508": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:509": {
       "status": "unreviewed",
@@ -3571,10 +3585,10 @@
       "evidence": ["metadata"]
     },
     "2:512": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:513": {
       "status": "unreviewed",
@@ -3625,10 +3639,10 @@
       "evidence": ["metadata"]
     },
     "2:521": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:522": {
       "status": "unreviewed",
@@ -3637,10 +3651,10 @@
       "evidence": ["metadata"]
     },
     "2:523": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx SettingsRow detail",
+      "rationale": "Explicit reference two-paragraph description20px leading/205.14px column. Known planned settings-wrap gap; not implemented or visually accepted.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:524": {
       "status": "unreviewed",
@@ -3661,10 +3675,10 @@
       "evidence": ["metadata"]
     },
     "2:527": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:528": {
       "status": "unreviewed",
@@ -3679,10 +3693,10 @@
       "evidence": ["metadata"]
     },
     "2:530": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:531": {
       "status": "unreviewed",
@@ -3727,10 +3741,10 @@
       "evidence": ["metadata"]
     },
     "2:538": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:539": {
       "status": "unreviewed",
@@ -3781,10 +3795,10 @@
       "evidence": ["metadata"]
     },
     "2:547": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:548": {
       "status": "unreviewed",
@@ -3805,10 +3819,10 @@
       "evidence": ["metadata"]
     },
     "2:551": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:552": {
       "status": "unreviewed",
@@ -3823,10 +3837,10 @@
       "evidence": ["metadata"]
     },
     "2:554": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:555": {
       "status": "unreviewed",
@@ -3871,10 +3885,10 @@
       "evidence": ["metadata"]
     },
     "2:562": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:563": {
       "status": "unreviewed",
@@ -3925,10 +3939,10 @@
       "evidence": ["metadata"]
     },
     "2:571": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:572": {
       "status": "unreviewed",
@@ -3955,10 +3969,10 @@
       "evidence": ["metadata"]
     },
     "2:576": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:577": {
       "status": "unreviewed",
@@ -4009,10 +4023,10 @@
       "evidence": ["metadata"]
     },
     "2:585": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:586": {
       "status": "unreviewed",
@@ -4021,10 +4035,10 @@
       "evidence": ["metadata"]
     },
     "2:587": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:588": {
       "status": "unreviewed",
@@ -4075,10 +4089,10 @@
       "evidence": ["metadata"]
     },
     "2:596": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/(tabs)/settings.tsx Settings/SettingsRow typography",
+      "rationale": "Individual reference text/font role and source style inspected; disposition in node-progress table. Equal-width rendered/state acceptance remains a later obligation.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:597": {
       "status": "unreviewed",
@@ -5737,10 +5751,10 @@
       "evidence": ["metadata"]
     },
     "2:873": {
-      "status": "unreviewed",
-      "target": "",
-      "rationale": "Enumerated from metadata; individual design/code disposition still required.",
-      "evidence": ["metadata"]
+      "status": "mapped",
+      "target": "app/report.tsx report model metadata Text",
+      "rationale": "Exact reference mono12/16 versus source12/18; planned report-model-leading correction. Preserve actual model/report bytes.",
+      "evidence": ["metadata", "node-progress", "context-facts"]
     },
     "2:874": {
       "status": "unreviewed",
@@ -9007,49 +9021,65 @@
   },
   "domains": {
     "pages": {
-      "status": "unknown",
-      "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "status": "observed",
+      "rationale": "Normal signed-in page list had one Page1 row; full metadata root0:1 has14 top-level frames. Other domains are still open.",
+      "evidence": ["metadata", "audit"],
+      "items": {
+        "0:1": {
+          "status": "exception",
+          "target": "Figma page organization",
+          "rationale": "Design document page, not an additional runtime screen; all14 frames inventoried separately.",
+          "evidence": ["metadata"]
+        }
+      }
     },
     "hidden-layers": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "components-variants-libraries": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "variables-styles": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "fonts": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "assets": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "prototypes-transitions": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "states": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     },
     "app-extensions": {
       "status": "unknown",
       "rationale": "Full domain accounting and independent evidence pending.",
-      "evidence": []
+      "evidence": [],
+      "items": {}
     }
   },
   "gaps": [
@@ -9116,6 +9146,14 @@
       "status": "planned",
       "plan": "Review header/search/group/row rhythm at390dp; do not arbitrarily change sheet height.",
       "evidence": ["audit"]
+    },
+    {
+      "id": "report-model-leading",
+      "nodes": ["2:873"],
+      "target": "app/report.tsx",
+      "status": "planned",
+      "plan": "Use the measured16px line height for the12px mono model line; preserve actual model identity/report payload and accessible growth. Confirm equal-width native layout after approved implementation.",
+      "evidence": ["node-progress", "context-facts"]
     }
   ],
   "extensions": [
@@ -9124,31 +9162,1986 @@
       "rules": [],
       "states": [],
       "rationale": "No standalone frame in visible inventory. Shared design rules and all app states still require explicit review.",
-      "evidence": ["audit"]
+      "evidence": ["audit"],
+      "id": "chats-inbox"
     },
     {
       "scope": "Agents landing",
       "rules": [],
       "states": [],
       "rationale": "No standalone frame in visible inventory. Shared design rules and all app states still require explicit review.",
-      "evidence": ["audit"]
+      "evidence": ["audit"],
+      "id": "agents-landing"
     },
     {
       "scope": "provider editor",
       "rules": [],
       "states": [],
       "rationale": "No standalone frame in visible inventory. Shared design rules and all app states still require explicit review.",
-      "evidence": ["audit"]
+      "evidence": ["audit"],
+      "id": "provider-editor"
     },
     {
       "scope": "live-check",
       "rules": [],
       "states": [],
       "rationale": "No standalone frame in visible inventory. Shared design rules and all app states still require explicit review.",
-      "evidence": ["audit"]
+      "evidence": ["audit"],
+      "id": "live-check"
     }
   ],
   "comparisons": [],
   "functionalProofs": {},
-  "baseProductFingerprint": "0d0c09acfae6727128a2003af1724da2e810a54f675dde60dca9e95573aea640"
+  "baseProductFingerprint": "e536af6aecafab227a5a9c27f10b420b64a631e2347c40b42eee443ccfb11d93",
+  "discovery": {
+    "path": "docs/design/figma-discovered-scope.json",
+    "sha256": "1fea57ac9d51539c5b4c95cd28d730ddd600236690102db197296831b2638a51"
+  },
+  "releaseObligations": [
+    {
+      "id": "ios|1:2|reference",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:2|empty",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:2|populated",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:2|selected",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:2|error",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:2|keyboard",
+      "platform": "ios",
+      "scope": "1:2",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|reference",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|empty",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|populated",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|selected",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|error",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:125|keyboard",
+      "platform": "ios",
+      "scope": "1:125",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|reference",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|empty",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|populated",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|selected",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|error",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:235|keyboard",
+      "platform": "ios",
+      "scope": "1:235",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|reference",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|empty",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|populated",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|selected",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|error",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:322|keyboard",
+      "platform": "ios",
+      "scope": "1:322",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|reference",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|empty",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|populated",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|selected",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|error",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|1:404|keyboard",
+      "platform": "ios",
+      "scope": "1:404",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|reference",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|empty",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|populated",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|selected",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|error",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:494|keyboard",
+      "platform": "ios",
+      "scope": "2:494",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|reference",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|empty",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|populated",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|selected",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|error",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:617|keyboard",
+      "platform": "ios",
+      "scope": "2:617",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|reference",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|empty",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|populated",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|selected",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|error",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:727|keyboard",
+      "platform": "ios",
+      "scope": "2:727",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|reference",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|empty",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|populated",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|selected",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|error",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:814|keyboard",
+      "platform": "ios",
+      "scope": "2:814",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|reference",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|empty",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|populated",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|selected",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|error",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:896|keyboard",
+      "platform": "ios",
+      "scope": "2:896",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|reference",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|empty",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|populated",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|selected",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|error",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:986|keyboard",
+      "platform": "ios",
+      "scope": "2:986",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|reference",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|empty",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|populated",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|selected",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|error",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1050|keyboard",
+      "platform": "ios",
+      "scope": "2:1050",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|reference",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|empty",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|populated",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|selected",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|error",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1139|keyboard",
+      "platform": "ios",
+      "scope": "2:1139",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|reference",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|empty",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|populated",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|selected",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|error",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|2:1234|keyboard",
+      "platform": "ios",
+      "scope": "2:1234",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|reference",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|empty",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|populated",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|selected",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|error",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|chats-inbox|keyboard",
+      "platform": "ios",
+      "scope": "chats-inbox",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|reference",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|empty",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|populated",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|selected",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|error",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|agents-landing|keyboard",
+      "platform": "ios",
+      "scope": "agents-landing",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|reference",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|empty",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|populated",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|selected",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|error",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|provider-editor|keyboard",
+      "platform": "ios",
+      "scope": "provider-editor",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|reference",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|empty",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|populated",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|selected",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|error",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "ios|live-check|keyboard",
+      "platform": "ios",
+      "scope": "live-check",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|reference",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|empty",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|populated",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|selected",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|error",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:2|keyboard",
+      "platform": "android",
+      "scope": "1:2",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|reference",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|empty",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|populated",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|selected",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|error",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:125|keyboard",
+      "platform": "android",
+      "scope": "1:125",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|reference",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|empty",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|populated",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|selected",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|error",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:235|keyboard",
+      "platform": "android",
+      "scope": "1:235",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|reference",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|empty",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|populated",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|selected",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|error",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:322|keyboard",
+      "platform": "android",
+      "scope": "1:322",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|reference",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|empty",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|populated",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|selected",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|error",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|1:404|keyboard",
+      "platform": "android",
+      "scope": "1:404",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|reference",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|empty",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|populated",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|selected",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|error",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:494|keyboard",
+      "platform": "android",
+      "scope": "2:494",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|reference",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|empty",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|populated",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|selected",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|error",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:617|keyboard",
+      "platform": "android",
+      "scope": "2:617",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|reference",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|empty",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|populated",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|selected",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|error",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:727|keyboard",
+      "platform": "android",
+      "scope": "2:727",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|reference",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|empty",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|populated",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|selected",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|error",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:814|keyboard",
+      "platform": "android",
+      "scope": "2:814",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|reference",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|empty",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|populated",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|selected",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|error",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:896|keyboard",
+      "platform": "android",
+      "scope": "2:896",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|reference",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|empty",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|populated",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|selected",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|error",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:986|keyboard",
+      "platform": "android",
+      "scope": "2:986",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|reference",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|empty",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|populated",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|selected",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|error",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1050|keyboard",
+      "platform": "android",
+      "scope": "2:1050",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|reference",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|empty",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|populated",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|selected",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|error",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1139|keyboard",
+      "platform": "android",
+      "scope": "2:1139",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|reference",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|empty",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|populated",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|selected",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|error",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|2:1234|keyboard",
+      "platform": "android",
+      "scope": "2:1234",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|reference",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|empty",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|populated",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|selected",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|error",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|chats-inbox|keyboard",
+      "platform": "android",
+      "scope": "chats-inbox",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|reference",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|empty",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|populated",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|selected",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|error",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|agents-landing|keyboard",
+      "platform": "android",
+      "scope": "agents-landing",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|reference",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|empty",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|populated",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|selected",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|error",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|provider-editor|keyboard",
+      "platform": "android",
+      "scope": "provider-editor",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|reference",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "reference",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|empty",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "empty",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|populated",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "populated",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|selected",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "selected",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|error",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "error",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    },
+    {
+      "id": "android|live-check|keyboard",
+      "platform": "android",
+      "scope": "live-check",
+      "state": "keyboard",
+      "mode": "capture",
+      "rationale": "Conservative pending audit: capture or independently review a narrow inapplicable-state exception; never silently drop a state.",
+      "evidence": ["audit"]
+    }
+  ],
+  "binaries": {}
 }

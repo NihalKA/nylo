@@ -53,6 +53,7 @@ Run from repository root (Python standard library only):
 python3 scripts/verify-figma-coverage.py inventory
 python3 scripts/verify-figma-coverage.py implementation
 python3 scripts/verify-figma-coverage.py release
+python3 scripts/verify-figma-coverage.py changes --base-ref <full-pre-change-SHA>
 python3 -m unittest discover -s tests -p 'test_figma_coverage.py'
 ```
 
@@ -81,3 +82,68 @@ dynamic text, consent/real data require narrow exceptions, not general parity wa
 The verifier cannot authenticate an author or judge image quality. Its integrity
 checks support a real independent review and do not replace it. Do not confuse
 passing verifier unit tests with a passing design gate. Current gates should fail.
+
+## Schema2: discovered scope and release evidence
+
+`docs/design/figma-discovered-scope.json` is a separate discovered-item inventory,
+hash-bound by the manifest. Each domain has `enumerationComplete` and `items`
+(unique IDs). The manifest needs a reviewed disposition for every discovered item.
+`extraNodes` adds nodes discovered outside the baseline XML, explicitly classifying
+page/parent and whether each is a screen; discovered screens also require state
+obligations. They cannot be silently dropped. `extensionIds` includes the known Chats/Agents/provider/live-check scopes.
+`scopes` lists every screen/extension and every required state; enumeration stays
+false until actually audited. Conservative initial states are reference, empty,
+populated, selected, error and keyboard; inapplicable cases require a narrow reviewed
+exception, not silent omission. Additional discovered states must be added.
+
+`releaseObligations` contains one unique `platform|scope|state` ID per combination.
+Each binds a capture requirement or evidence-backed exception into the inventory
+review. Release comparisons cover every obligation exactly once. A capture cannot
+be downgraded to an exception after inventory approval.
+
+Each evidence-table entry has `kind`, repository-relative `path`, SHA256 and
+provenance. Original native/reference PNGs have distinct kinds. PNG chunks, CRC,
+scanline data and actual dimensions are checked. Comparison `density`,390 logical
+width, pixel bounds and logical safe insets must be numeric and consistent with the
+original files. `referenceDensity`/`referenceContentBounds` explicitly account for
+export shadows/scaling; they never replace the original image. Noninterlaced PNG
+is required; convert neither evidence nor density merely to obtain a pass.
+
+`binaries` identifies each tested native artifact using `artifactEvidence` of kind
+`binary-artifact`, a full Git `sourceCommit`, `productFingerprint`, platform,
+`buildId` and numeric CI `runId`. A `binary-identity-receipt` must bind those fields
+to the actual artifact SHA and compiled audit checks (identity/fonts12/SVG45/
+privacy/archive, plus Android original certificate/bundletool or iOS linked identity).
+The verifier checks ZIP CRC, artifact bytes and the committed source fingerprint.
+These receipts summarize actual retained audits; they must never be invented.
+
+A comparison names its `binary`, `sessionEvidence` and `captureId`. The typed
+`native-capture-session` JSON binds the binary SHA/source/build/run and an
+`originalCaptures` declaration. Its captures index binds each ID to `imageEvidence`,
+SHA, scope/state, density, pixel width, logical width, font scale, safe insets and
+content bounds. This detects changed identities/configuration; it does not by
+itself prove that an image was captured truthfully or was never manipulated.
+
+`functionalProofs` has separate compact/large/max iOS, two Android modes, iOS
+gallery/PDF/photo and both Android galleries. Each binds actual JUnit, executed
+command receipt, Git fixture manifest, binary and explicit configuration. Required
+behavioral assertions (draft/memory/navigation, exact293copy, SQL/blob, protocol,
+photo/recovery/EXIF as applicable) need passed evidence from native logs/receipts.
+An eligibility-only run or all-skipped JUnit cannot pass. No simulated receipt
+generation is authorized; synthetic fixtures exist only in unit-test tempdirs.
+
+The rendered review receipt requires `releaseDigest`, covering comparison records,
+the evidence-table hashes/provenance, binary records, functional proofs and gap
+resolutions/evidence. The inventory receipt requires `auditDigest`; it excludes
+later resolution progress but binds original plans and scope. Both require model
+`gpt-6-astra`, independent=true, honest score10, approved decision, no unresolved
+findings, review date and an actual report path/SHA. The rendered receipt also
+binds the final product fingerprint. Policy/audit changes require fresh review.
+
+The product fingerprint includes native build scripts/workflows, fastlane/Gemfile
+locks, app configuration, dependencies and package lifecycle/app scripts, excluding
+only the owner's two dashboard package scripts. Unknown script/workflow helpers
+are conservatively build-affecting; the three review-gate helpers and known source
+checks/site workflows are explicitly separate. Test fixtures have a separate fingerprint.
+Source CI tests the gate and enforces authorization on the pre-change Git snapshot;
+it does not claim branch protection, visual correctness or authenticated authorship.

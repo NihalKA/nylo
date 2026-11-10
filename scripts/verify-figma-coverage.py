@@ -5,6 +5,14 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+import subprocess
+import tempfile
+import io
+import tarfile
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from figma_evidence import (HEX40, canonical, git, package_runtime, product_file, tree_fingerprint)
+from figma_release import release_digest, verify_release
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,7 +23,8 @@ DOMAINS = {'pages', 'hidden-layers', 'components-variants-libraries',
 CHECKS = {'geometry', 'typography', 'artwork', 'colours-effects', 'content',
           'states-actions', 'responsive-accessibility'}
 AUDIT_INPUTS = ['AGENTS.md', 'docs/adr/0001-figma-coverage-before-implementation.md',
-                'docs/testing/figma-full-file-audit.md', 'scripts/verify-figma-coverage.py']
+                'docs/testing/figma-full-file-audit.md', 'scripts/verify-figma-coverage.py',
+                'scripts/figma_evidence.py', 'scripts/figma_release.py']
 
 
 def sha(data):
@@ -36,21 +45,7 @@ def safe_path(root, value):
 
 
 def product_fingerprint(root):
-    # Actual checkout bytes, including added files; dashboard package scripts excluded.
-    files = []
-    for directory in ['app', 'src', 'assets', 'modules', 'plugins']:
-        files.extend(p for p in (root / directory).rglob('*') if p.is_file()
-                     and not any(x in p.parts for x in ['node_modules', '.git', 'build']))
-    for name in ['app.json', 'app.config.ts', 'app.config.js', 'package-lock.json',
-                 'babel.config.js', 'metro.config.js', 'tsconfig.json']:
-        if (root / name).is_file():
-            files.append(root / name)
-    entries = [(p.relative_to(root).as_posix(), sha(p.read_bytes())) for p in sorted(set(files))]
-    if (root / 'package.json').exists():
-        package = json.loads((root / 'package.json').read_text())
-        entries.append(('package-runtime', sha(canonical({k: package.get(k) for k in
-                        ['main', 'dependencies', 'devDependencies', 'overrides', 'resolutions']}))))
-    return sha(canonical(entries))
+    return tree_fingerprint(root)
 
 
 def audit_digest(root, manifest):
@@ -58,7 +53,7 @@ def audit_digest(root, manifest):
     # implementing an approved plan would invalidate its pre-implementation review.
     inputs = [(name, sha(safe_path(root, name).read_bytes())) for name in AUDIT_INPUTS]
     inventory = {k: v for k, v in manifest.items()
-                 if k not in {'comparisons', 'functionalProofs', 'evidence', 'gaps'}}
+                 if k not in {'comparisons', 'functionalProofs', 'binaries', 'evidence', 'gaps'}}
     inventory['gaps'] = [{k: v for k, v in gap.items()
                           if k not in {'status', 'resolution', 'resolutionEvidence'}}
                          for gap in manifest['gaps']]
@@ -79,6 +74,37 @@ def audit_digest(root, manifest):
     return sha(canonical({'manifest': inventory, 'inputs': inputs}))
 
 
+def verify_changes(root, base_ref):
+    """Check authorization on the PRE-change checkout, not implemented source."""
+    if not base_ref:
+        base_ref = git(root, 'rev-parse', 'HEAD^').decode().strip()
+    if not HEX40.fullmatch(base_ref) or base_ref == '0' * 40:
+        raise ValueError('changes requires an existing full base commit SHA')
+    changed = set(git(root, 'diff', '--name-only', '--no-renames', base_ref).decode().splitlines())
+    changed.update(git(root, 'ls-files', '--others', '--exclude-standard').decode().splitlines())
+    runtime = {name for name in changed if product_file(name)}
+    if 'package.json' in changed:
+        old = json.loads(git(root, 'show', base_ref + ':package.json'))
+        new = json.loads((root / 'package.json').read_text())
+        if package_runtime(old) != package_runtime(new):
+            runtime.add('package.json')
+    if not runtime:
+        return [], 'audit/docs/test-only change; no product authorization inferred'
+    with tempfile.TemporaryDirectory() as directory:
+        baseline = Path(directory)
+        archive = git(root, 'archive', '--format=tar', base_ref)
+        with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
+            tar.extractall(baseline, filter='data')
+        try:
+            errors, digest = verify(baseline, 'implementation')
+            current = json.loads(safe_path(root, MANIFEST).read_text())
+            if audit_digest(root, current) != digest:
+                errors.append('inventory/policy changed alongside product: obtain review before coding')
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return [f'product frozen: baseline authorization unavailable ({type(exc).__name__})'], None
+        return errors, digest
+
+
 def verify(root, phase, manifest_path=MANIFEST):
     errors = []
 
@@ -87,13 +113,25 @@ def verify(root, phase, manifest_path=MANIFEST):
             errors.append(message)
 
     m = json.loads(safe_path(root, manifest_path).read_text())
-    need(m.get('schemaVersion') == 1, 'unsupported manifest schema')
+    need(m.get('schemaVersion') == 2, 'unsupported manifest schema')
     snapshot = safe_path(root, m['snapshot']['path']).read_bytes()
     need(sha(snapshot) == m['snapshot']['sha256'], 'stale metadata snapshot digest')
     page = ET.fromstring(snapshot)
-    source = {e.attrib['id']: e for e in page.iter() if 'id' in e.attrib}
+    elements = [e for e in page.iter() if 'id' in e.attrib]
+    need(len(elements) == len({e.attrib['id'] for e in elements}), 'duplicate source XML node IDs')
+    source = {e.attrib['id']: e for e in elements}
     frames = {e.attrib['id'] for e in page if e.tag == 'frame'}
     need(len(source) == 1322 and len(frames) == 14, 'scope changed: re-inventory whole file')
+    discovered_bytes = safe_path(root, m['discovery']['path']).read_bytes()
+    need(sha(discovered_bytes) == m['discovery']['sha256'], 'stale discovered-scope digest')
+    discovered = json.loads(discovered_bytes)
+    extra_ids = [item['id'] for item in discovered['extraNodes']]
+    need(len(extra_ids) == len(set(extra_ids)) and not set(extra_ids).intersection(source),
+         'duplicate discovered node IDs')
+    for item in discovered['extraNodes']:
+        need(isinstance(item.get('isScreen'), bool) and 'parent' in item and bool(item.get('page')),
+             f"discovered node {item['id']}: classify page/parent/screen scope")
+        source[item['id']] = ET.Element(item['type'], item)
     nodes = m['nodes']
     need(set(nodes) == set(source), 'node coverage differs from metadata (missing/extra IDs)')
     need(set(m['frames']) == frames, 'frame coverage differs from metadata')
@@ -130,10 +168,24 @@ def verify(root, phase, manifest_path=MANIFEST):
             need(result.get('reviewed') is True and bool(result.get('finding')),
                  f'frame {frame_id}/{check}: unreviewed')
             refs(result, f'frame {frame_id}/{check}')
+    need(set(discovered['domains']) == DOMAINS, 'discovered domain inventory incomplete')
     for domain, entry in m['domains'].items():
         need(entry.get('status') in {'observed', 'not-present'} and bool(entry.get('rationale')),
              f'domain {domain}: unknown/unexplained')
         refs(entry, f'domain {domain}')
+        observed = discovered['domains'].get(domain, {})
+        need(observed.get('enumerationComplete') is True, f'domain {domain}: enumeration incomplete')
+        item_ids = [item['id'] for item in observed.get('items', [])]
+        need(len(item_ids) == len(set(item_ids)) and set(entry.get('items', {})) == set(item_ids),
+             f'domain {domain}: discovered items not reconciled')
+        need((entry.get('status') == 'observed' and bool(item_ids)) or
+             (entry.get('status') == 'not-present' and not item_ids),
+             f'domain {domain}: presence disagrees with discovered inventory')
+        for item_id, disposition in entry.get('items', {}).items():
+            need(disposition.get('status') in {'mapped', 'exception'} and
+                 bool(disposition.get('target')) and bool(disposition.get('rationale')),
+                 f'domain {domain}/{item_id}: missing disposition')
+            refs(disposition, f'domain {domain}/{item_id}')
     for gap in m['gaps']:
         label = 'gap ' + gap['id']
         need(gap.get('status') in {'planned', 'resolved'} and bool(gap.get('plan'))
@@ -146,11 +198,38 @@ def verify(root, phase, manifest_path=MANIFEST):
             need(bool(gap.get('resolutionEvidence')) and
                  all(x in evidence for x in gap.get('resolutionEvidence', [])),
                  f'{label}: resolution evidence missing')
-    need(bool(m.get('extensions')), 'missing app-extension accounting')
+    required_extensions = {'chats-inbox', 'agents-landing', 'provider-editor', 'live-check'}
+    extension_ids = [entry.get('id') for entry in m.get('extensions', [])]
+    need(required_extensions.issubset(discovered['extensionIds']) and
+         len(extension_ids) == len(set(extension_ids)) and
+         set(extension_ids) == set(discovered['extensionIds']), 'missing discovered/known extension scopes')
     for entry in m.get('extensions', []):
         need(all(entry.get(k) for k in ['scope', 'rules', 'states', 'rationale']),
              'extension missing rules/states/rationale')
         refs(entry, 'extension')
+
+    scopes = discovered['scopes']
+    discovered_screens = {item['id'] for item in discovered['extraNodes'] if item.get('isScreen') is True}
+    need(frames.union(discovered['extensionIds'], discovered_screens).issubset(scopes),
+         'missing discovered screen scopes')
+    required_obligations = set()
+    for scope, definition in scopes.items():
+        states = definition.get('states', [])
+        need(definition.get('enumerationComplete') is True and bool(states) and
+             len(states) == len(set(states)), f'scope {scope}: states not exhaustively reviewed')
+        for platform in ['ios', 'android']:
+            for state in states:
+                required_obligations.add(f'{platform}|{scope}|{state}')
+    obligations = m.get('releaseObligations', [])
+    keys = [o['id'] for o in obligations]
+    need(len(keys) == len(set(keys)) and set(keys) == required_obligations,
+         'release obligations omit discovered screens/states/extensions')
+    for entry in obligations:
+        need(entry.get('id') == f"{entry.get('platform')}|{entry.get('scope')}|{entry.get('state')}",
+             'obligation key does not match scope/state/platform')
+        need(entry.get('mode') in {'capture', 'exception'} and bool(entry.get('rationale')),
+             'obligation missing capture plan or narrow exception')
+        refs(entry, 'obligation ' + entry['id'])
 
     digest = audit_digest(root, m)
 
@@ -172,8 +251,8 @@ def verify(root, phase, manifest_path=MANIFEST):
         if expected_fingerprint:
             need(receipt.get('productFingerprint') == expected_fingerprint,
                  f'{kind}: stale product review')
-            need(receipt.get('comparisonsDigest') == sha(canonical(m['comparisons'])),
-                 f'{kind}: stale native comparisons review')
+            need(receipt.get('releaseDigest') == release_digest(m, digest, expected_fingerprint),
+                 f'{kind}: stale release evidence/proofs/resolutions review')
 
     if phase in {'implementation', 'release'}:
         review('inventory')
@@ -182,45 +261,20 @@ def verify(root, phase, manifest_path=MANIFEST):
              'product changed since inventory baseline; review actual changes before new implementation')
     if phase == 'release':
         fingerprint = product_fingerprint(root)
-        comparisons = m.get('comparisons', [])
-        required = {(platform, frame) for platform in ['ios', 'android']
-                    for frame in frames if frame.startswith('2:')}
-        need({(c['platform'], c['frame']) for c in comparisons} == required,
-             'release requires both platforms/all nine current frames')
-        for c in comparisons:
-            label = f"comparison {c['platform']}/{c['frame']}"
-            need(c.get('productFingerprint') == fingerprint, f'{label}: stale product source')
-            need(c.get('referenceLogicalWidth') == c.get('nativeLogicalWidth') == 390,
-                 f'{label}: unequal logical viewport widths')
-            density = c.get('density', 0)
-            need(density > 0 and c.get('pixelWidth') == density * 390,
-                 f'{label}: inconsistent pixel width/density')
-            need(c.get('fontScale', 0) > 0 and bool(c.get('safeInsets'))
-                 and bool(c.get('contentBounds')) and bool(c.get('findings'))
-                 and bool(c.get('sourceCommit')) and len(c.get('binarySha256', '')) == 64,
-                 f'{label}: incomplete native identity/geometry/review')
-            need(c.get('accepted') is True, f'{label}: not accepted')
-            refs(c, label)
-            for key in ['nativeEvidence', 'referenceEvidence']:
-                need(c.get(key) in c.get('evidence', []), f'{label}: missing {key}')
-        need(set(m.get('functionalProofs', {})) == {'ios-compact', 'ios-large',
-             'ios-max', 'android-gesture', 'android-threebutton', 'gallery', 'pdf', 'photo'},
-             'missing required native functional profiles')
-        for label, proof in m.get('functionalProofs', {}).items():
-            need(proof.get('accepted') is True and proof.get('productFingerprint') == fingerprint,
-                 f'functional {label}: missing/stale acceptance')
-            refs(proof, 'functional ' + label)
+        verify_release(root, m, fingerprint, need, refs, safe_path)
         review('rendered', fingerprint)
     return errors, digest
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=['inventory', 'implementation', 'release'])
+    parser.add_argument('phase', choices=['inventory', 'implementation', 'release', 'changes'])
+    parser.add_argument('--base-ref', help='full PRE-change Git commit SHA (CI push/PR base)')
     args = parser.parse_args()
     try:
-        errors, digest = verify(ROOT, args.phase)
-    except (OSError, ValueError, KeyError, TypeError, ET.ParseError) as exc:
+        errors, digest = (verify_changes(ROOT, args.base_ref) if args.phase == 'changes'
+                          else verify(ROOT, args.phase))
+    except (OSError, ValueError, KeyError, TypeError, ET.ParseError, subprocess.CalledProcessError) as exc:
         print(f'BLOCKED: invalid/missing audit input: {exc}', file=sys.stderr)
         return 1
     print(f'Audit digest: {digest}')

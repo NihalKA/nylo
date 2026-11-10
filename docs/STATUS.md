@@ -14,17 +14,17 @@ The owner reports that the delivered build still does not match the Figma design
 
 Signed20 workflow42798741091 continues, but QA distribution and final Drive publication are held for this visual review. Existing13 bytes will not be replaced or relabeled as a correction.
 
-## Current MCP Figma correction accepted — Android13 delivered, iPhone20 building
+## Historical Android13 sign-off — visual acceptance withdrawn
 
-All nine current Figma frames are accepted on product `dcef4f6` with documented privacy, dynamic-text/44pt, native-safe-area, real-data and maximum static-copy-density exceptions. Official MCP context/screenshots and original artwork informed this correction. Current proof covers88 inspected iOS captures and57 Android captures, all three iPhone profiles, both real Android navigation modes, exact293-byte clipboard, native SQL/blob and owned-photo pipeline checks. Earlier failed UI/infra attempts remain preserved; test-only viewport/Files recovery fixes did not rebuild the app. See the [MCP gap audit](testing/figma-mcp-gap-audit.md).
+The previous sign-off treated nine Figma frames as accepted on product `dcef4f6`. The owner subsequently rejected its visual result; that visual acceptance is withdrawn. Documented functional evidence and specific privacy, accessibility, native-safe-area and real-data exceptions remain limited to their stated scope. Official MCP context/screenshots and original artwork informed this correction. Current proof covers88 inspected iOS captures and57 Android captures, all three iPhone profiles, both real Android navigation modes, exact293-byte clipboard, native SQL/blob and owned-photo pipeline checks. Earlier failed UI/infra attempts remain preserved; test-only viewport/Files recovery fixes did not rebuild the app. See the [MCP gap audit](testing/figma-mcp-gap-audit.md).
 
 **Android13 is delivered:** [download the exact tested APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/Nylo-test.apk). Version1.0.0/code13,61,701,992 bytes, SHA256 `36073b00813572c4423f0c85d11ea9b4c2dc46e1fe615b1de18a10ec92c4e10e`. Public tag targetsdcef; GitHub asset digest/size, unauthenticated200 and public checksum match the tested binary. Original certificate, permissions, APK+AAB/ZIP CRC, Google bundletool, twelve fonts/45 SVGs and33/34px actual navigation clearance verify. Prior12/6/5 releases are preserved. No Play publication occurred.
 
-**Signed iPhone20 is building, not available yet.** Workflow42798741091 was dispatched once after all native gates and fresh Apple19VALID/GitHub counter19 checks. Its source43b30b3 has identical app/native inputs to productdcef. Actual exported IPA audits, Apple processing and independently verified usual internal QA availability remain required. TestFlight19 remains the previous available version. Initial Store15 and external17 are untouched.
+**Signed iPhone20 compiled successfully; corrected distribution is held.** Workflow42798741091 used source43b30b3, with the same app inputs asdcef. A successful workflow does not establish Apple processing, QA availability or installation. No assignment as the corrected result is authorized while visual acceptance is reopened. TestFlight19 remains the previous verified available version. Initial Store15 and external17 are untouched.
 
 The new24-screen/6-sheet review pack is prepared locally with the exact13 APK and no new TestFlight claim. Final dated Drive delivery remains pending; Google Drive authentication is confirmed, with no login action needed.
 
-## Reopened live Figma MCP audit — corrected candidate, 10 November 2026
+## Historical initial MCP correction checkpoint — 10 November 2026
 
 The owner identified remaining differences after Android12/iOS19 delivery. Authenticated official Figma MCP inspection of all nine current frames confirms missing original artwork, header/form geometry, sheet blur, fixed actions, attachment shelf details and report typography. The earlier delivery below remains available; its parity sign-off is superseded by this reopened [gap audit](testing/figma-mcp-gap-audit.md).
 
@@ -32,7 +32,7 @@ The corrected source candidate bundles45 unchanged original SVG exports with nod
 
 Test-only fixture corrections keep maximum-text roles, Save and Memory selections within the actual content viewport, retaining100% visibility and all persistence assertions. Latest targeted42796026157 uses the same native binary with refreshfalse. The corrected real-photo flow42794171474 passes87 commands/two conditional skips, all11 native captures inspected; actual SQLite/blob/draft receipts and independently parsed owned JPEG/allowlisted encoder metadata verify. Its extra system-Files Cancel recovery was not needed in the successful run. Overall acceptance remains open only for maximum-text iOS. No product rebuild or corrected release is claimed. The24-capture/6-sheet review pack is prepared and inspected locally, with the exact13 APK and no TestFlight availability claim; upload remains held for acceptance.
 
-## Current Figma UI — mobile builds and Drive pack delivered, 10 November 2026
+## Prior a0 release — Android12 / iPhone19 / Drive pack delivered
 
 The nine distinct current Figma screens are implemented in product `a0afe7e` and accepted against fresh iOS Simulator and Android Emulator evidence, with documented privacy, accessibility, real-data and native-safe-area exceptions. The actual14 SVG exports confirm primary actions `#1E2B58` / white text, reading ink `#061542` and the bundled Inter, Plus Jakarta Sans, Nimbus Sans and Liberation Mono faces. Earlier product23/build6 is a historical style adaptation. See the [current design audit](testing/figma-current-parity.md). Android12 and internal TestFlight1.0.0(19) are delivered. The final review pack is delivered to the public Drive folder linked below.
 

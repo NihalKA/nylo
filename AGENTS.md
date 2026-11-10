@@ -25,6 +25,10 @@ large-title/jade direction in `docs/QUALITY.md`.
 Audit/docs/verifier corrections may proceed while these gates are blocked.
 Do not weaken gates to accommodate incomplete evidence. No new native compile
 for a test-only change; inspect existing runs before any build/retry.
+Source CI runs `changes --base-ref <pre-change SHA>`: product changes require an
+approved inventory on that earlier checkout. A review added alongside product code
+does not authorize it retroactively. Audit-only changes remain allowed. This is a
+CI check, not a claim that repository branch protection or authorship is configured.
 
 ## Before finalizing or distributing
 

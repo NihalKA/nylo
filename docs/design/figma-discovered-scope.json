@@ -1,0 +1,254 @@
+{
+  "provenance": "Baseline known scope,2026-11-10. Enumerations remain INCOMPLETE pending actual whole-file audit, not assumptions of absence.",
+  "extraNodes": [],
+  "extensionIds": [
+    "chats-inbox",
+    "agents-landing",
+    "provider-editor",
+    "live-check"
+  ],
+  "domains": {
+    "pages": {
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "0:1",
+          "name": "Page1",
+          "provenance": "Observed normal page list plus full official MCP canvas metadata,2026-11-10."
+        }
+      ]
+    },
+    "hidden-layers": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "components-variants-libraries": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "variables-styles": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "fonts": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "assets": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "prototypes-transitions": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "states": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "app-extensions": {
+      "enumerationComplete": false,
+      "items": []
+    }
+  },
+  "scopes": {
+    "1:2": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:125": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:235": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:322": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:404": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:494": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:617": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:727": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:814": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:896": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:986": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1050": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1139": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1234": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "chats-inbox": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "agents-landing": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "provider-editor": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "live-check": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    }
+  }
+}

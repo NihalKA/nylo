@@ -64,3 +64,19 @@ remain intact; do not rebuild unchanged binaries or weaken functional assertions
 Before future sign-off, verify source and delivered binary identity, complete
 design inventory, equal-width rendered comparisons, all states and documented
 exceptions separately. Report build, upload, availability and installation precisely.
+
+## Independent safeguards review and correction
+
+[Astra's safeguards review](../reviews/022-figma-safeguards.md) found seven real
+contract gaps in the first verifier: mutable release evidence, unvalidated image
+geometry/binary identity, missing state/extension obligations, omitted native build
+inputs, incomplete discovered-domain reconciliation, procedural-only CI freeze and
+contradictory historical wording. No audit score or approval was given.
+
+Schema2 separates inventory approval from a full release-evidence digest, checks
+original PNG bytes and capture-session/binary/source/configuration binding, and
+requires a discovered screen/state matrix plus explicit native functional profiles.
+CI evaluates product authorization against the pre-change checkout. Known extensions
+cannot disappear from scope, and additional discovered items require dispositions.
+These integrity checks still cannot authenticate an author or replace actual
+independent visual review. Regression tests use synthetic temporary fixtures only.
