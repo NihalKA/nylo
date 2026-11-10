@@ -1,5 +1,19 @@
 # Delivery status
 
+## Owner reopened visual acceptance of Android13
+
+The owner requires a complete whole-file inventory and an independent GPT-6 Astra
+10/10 audit-completeness review **before further Android/iPhone product changes**.
+The [full-file audit](testing/figma-full-file-audit.md), root AGENTS.md, ADR0001 and
+phased verifier make this mandatory. The tracked1,322-node/14-frame manifest starts
+with pending individual reviews; unknown domains block the gate. No new visual
+acceptance or implementation approval is claimed. Signed20 has succeeded, but its
+corrected distribution remains held. Dashboard files remain untouched.
+
+The owner reports that the delivered build still does not match the Figma design. The build13 link and exact binary identity are verified, and the functional/native evidence below remains source-specific. The previous full visual sign-off was too broad and is reopened. All nine live frames are being rechecked for full layout geometry at comparable phone widths. One concrete Settings difference is already identified: the Figma detail column wraps into two lines while native13 can collapse it to one, changing card and section heights.
+
+Signed20 workflow42798741091 continues, but QA distribution and final Drive publication are held for this visual review. Existing13 bytes will not be replaced or relabeled as a correction.
+
 ## Current MCP Figma correction accepted — Android13 delivered, iPhone20 building
 
 All nine current Figma frames are accepted on product `dcef4f6` with documented privacy, dynamic-text/44pt, native-safe-area, real-data and maximum static-copy-density exceptions. Official MCP context/screenshots and original artwork informed this correction. Current proof covers88 inspected iOS captures and57 Android captures, all three iPhone profiles, both real Android navigation modes, exact293-byte clipboard, native SQL/blob and owned-photo pipeline checks. Earlier failed UI/infra attempts remain preserved; test-only viewport/Files recovery fixes did not rebuild the app. See the [MCP gap audit](testing/figma-mcp-gap-audit.md).

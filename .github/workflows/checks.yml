@@ -23,6 +23,8 @@ jobs:
       - run: node scripts/security-check.mjs
       - run: python3 scripts/check-design-fonts.py
       - run: python3 scripts/check-design-assets.py
+      # Tests the gate; it does not assert that incomplete visual coverage passes.
+      - run: python3 -m unittest discover -s tests -p 'test_figma_coverage.py'
       - run: npm run format:check
       - run: npm run check
       - run: npx expo-doctor

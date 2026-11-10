@@ -1,5 +1,12 @@
 # Live Figma MCP audit — 10 November 2026
 
+**Superseded visual acceptance:** the owner rejected Android13 after delivery.
+The historical implementation/evidence below does not establish complete layout
+parity. Follow the [reopened whole-file audit](figma-full-file-audit.md), root
+AGENTS.md and ADR0001. All1,322 nodes/14 frames and file-wide domains must be
+accounted for; independent Astra10/10 completeness is required before product edits.
+Signed20 succeeded but corrected QA distribution and new Drive publication are held.
+
 The owner rejected the earlier full-parity claim for Android12/iOS19. This audit reopens design acceptance using the authenticated official Figma MCP, rather than treating the historical sign-off as proof.
 
 File `WNCRguvh0wqYTgBUlbXZ9G`, Page1 `0:1`, has14 frames: nine current `2:*` screens and five earlier `1:*` duplicates. All nine current frames were read with high-fidelity `get_design_context`, including their screenshots, fonts, hierarchy, dimensions and original artwork. The current file has no additional standalone inbox, provider editor, agent library or live-check frame. Their existing functional screens remain part of the app.

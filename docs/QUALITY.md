@@ -1,5 +1,11 @@
 # Quality and independent review
 
+For current Figma work, the owner now requires the [whole-file audit](testing/figma-full-file-audit.md),
+independent GPT-6 Astra **10/10 audit completeness before product changes**, and a
+separate rendered-UI review before finalization. Follow [AGENTS.md](../AGENTS.md)
+and [ADR0001](adr/0001-figma-coverage-before-implementation.md). The historical
+rubric and jade/large-title direction below do not establish current Figma parity.
+
 The user approved delivery on 8 November 2026 with iOS publication first, Android publication later, and an independent model score at every material milestone. Primary implementation: GPT-6.1 Sol. Independent reviewer: GPT-6 Astra. Claude is currently disabled in this environment; no claim of Claude review is made.
 
 ## Rubric (100 points)
@@ -36,6 +42,7 @@ The second source review at commit 337d99e withholds all 30 visual/native points
 ## Design references and decisions
 
 Research checked 8 November 2026:
+
 - Meta's original WhatsApp interface/design article and its visual examples: https://www.meta.com/design-at-meta/blog/whatsapp-user-interface-update/
 - Apple tab-bar guidance: https://developer.apple.com/design/human-interface-guidelines/tab-bars
 - Apple accessibility guidance: https://developer.apple.com/design/human-interface-guidelines/accessibility
