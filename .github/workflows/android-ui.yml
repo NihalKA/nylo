@@ -37,6 +37,8 @@ jobs:
     env:
       # Keep the emulator and Maestro within the hosted runner memory budget.
       JAVA_TOOL_OPTIONS: "-Xmx1024m"
+      DISPLAY: ":99"
+      LIBGL_ALWAYS_SOFTWARE: "true"
       ANDROID_NAVIGATION_MODE: ${{ matrix.navigation }}
       GH_TOKEN: ${{ github.token }}
       SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
@@ -94,8 +96,17 @@ jobs:
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
-      - name: Install emulator crash debugger
-        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends gdb
+      - name: Install emulator debugger and Mesa software display
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends gdb xvfb libgl1-mesa-dri mesa-utils
+          Xvfb :99 -screen 0 1280x1024x24 -nolisten tcp > "$RUNNER_TEMP/nylo-xvfb.log" 2>&1 &
+          for attempt in {1..10}; do
+            if glxinfo -B > "$RUNNER_TEMP/nylo-renderer.txt" 2>&1; then break; fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/nylo-renderer.txt"
+          grep -qi llvmpipe "$RUNNER_TEMP/nylo-renderer.txt"
       - uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
         with:
           api-level: 35
@@ -106,7 +117,7 @@ jobs:
           profile: pixel_6
           ram-size: 2048
           disable-animations: true
-          emulator-options: "-no-window -gpu swiftshader -feature -Vulkan -verbose -no-snapshot -noaudio -no-boot-anim -camera-back none"
+          emulator-options: "-no-window -gpu host -feature -Vulkan -verbose -no-snapshot -noaudio -no-boot-anim -camera-back none"
           script: bash scripts/android/ui-smoke.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
