@@ -1,5 +1,15 @@
 # Delivery status
 
+## Current MCP Figma correction accepted — Android13 delivered, iPhone20 building
+
+All nine current Figma frames are accepted on product `dcef4f6` with documented privacy, dynamic-text/44pt, native-safe-area, real-data and maximum static-copy-density exceptions. Official MCP context/screenshots and original artwork informed this correction. Current proof covers88 inspected iOS captures and57 Android captures, all three iPhone profiles, both real Android navigation modes, exact293-byte clipboard, native SQL/blob and owned-photo pipeline checks. Earlier failed UI/infra attempts remain preserved; test-only viewport/Files recovery fixes did not rebuild the app. See the [MCP gap audit](testing/figma-mcp-gap-audit.md).
+
+**Android13 is delivered:** [download the exact tested APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/Nylo-test.apk). Version1.0.0/code13,61,701,992 bytes, SHA256 `36073b00813572c4423f0c85d11ea9b4c2dc46e1fe615b1de18a10ec92c4e10e`. Public tag targetsdcef; GitHub asset digest/size, unauthenticated200 and public checksum match the tested binary. Original certificate, permissions, APK+AAB/ZIP CRC, Google bundletool, twelve fonts/45 SVGs and33/34px actual navigation clearance verify. Prior12/6/5 releases are preserved. No Play publication occurred.
+
+**Signed iPhone20 is building, not available yet.** Workflow42798741091 was dispatched once after all native gates and fresh Apple19VALID/GitHub counter19 checks. Its source43b30b3 has identical app/native inputs to productdcef. Actual exported IPA audits, Apple processing and independently verified usual internal QA availability remain required. TestFlight19 remains the previous available version. Initial Store15 and external17 are untouched.
+
+The new24-screen/6-sheet review pack is prepared locally with the exact13 APK and no new TestFlight claim. Final dated Drive delivery remains pending; Google Drive authentication is confirmed, with no login action needed.
+
 ## Reopened live Figma MCP audit — corrected candidate, 10 November 2026
 
 The owner identified remaining differences after Android12/iOS19 delivery. Authenticated official Figma MCP inspection of all nine current frames confirms missing original artwork, header/form geometry, sheet blur, fixed actions, attachment shelf details and report typography. The earlier delivery below remains available; its parity sign-off is superseded by this reopened [gap audit](testing/figma-mcp-gap-audit.md).

@@ -1,3 +1,15 @@
+# Current MCP Figma correction delivered — Android1.0.0/code13
+
+[Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/Nylo-test.apk) · [SHA256SUMS](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/SHA256SUMS.txt). Exact tested APK61,701,992 bytes/SHA256 `36073b00813572c4423f0c85d11ea9b4c2dc46e1fe615b1de18a10ec92c4e10e`, product `dcef4f6`. Public prerelease tag/source, asset digest/size, unauthenticated200 and checksum independently verify. Prior12/6/5 remain preserved.
+
+Signed native42774779097, smoke42776237018 and gallery42790989097 verify the exact APK. Gesture smoke106 commands/12 conditional skips; three-button110/11 including explicitly handled Pixel Launcher ANR; gallery92/2 each. All57 retained native PNGs are inspected, covering the nine supplied current states and actual33/34px WindowManager clearance. Initial device-offline failures before launch remain preserved; bounded attempt2 uses the same binaries.
+
+The full GitHub archive digest/ZIP CRC, APK+AAB identity/source/version, original protected certificate, nondebug/HTTPS/permissions, Google bundletool and12 actual font/45 original SVG asset hashes verify. AAB42,308,869 bytes/SHA256 `94d301606d0a60b40a23a0825f978c6ff679e2460e4e45161377b4bf9ba307e0` is retained locally. Evidence: `artifacts/android-delivery-13/public-download-verification.json` and `artifacts/figma-mcp-current/android-*/verification.json`.
+
+This is a GitHub test prerelease. Generation remains foreground-only; no Play upload, physical-device, TalkBack or new live-provider certification is claimed. Native bars,44pt targets, dynamic text, real data and report opt-in take precedence over illustrative mock states. New signed iPhone20 and the new Drive pack are still pending; previous19/12 delivery below is historical.
+
+---
+
 # Current Android12 test delivery
 
 [Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk) · [Release and checksum](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-12).

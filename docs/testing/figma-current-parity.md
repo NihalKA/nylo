@@ -1,3 +1,5 @@
+> The reopened official MCP audit is now accepted on productdcef4f6 after fresh native proof (88 iOS/57 Android captures), with the documented privacy/accessibility/native-safe-area/real-data/maximum-static-copy exceptions. [MCP audit](figma-mcp-gap-audit.md). Android13 is delivered; signed iPhone20 and the updated Drive pack remain pending. Historical a0 evidence below remains source-specific.
+
 > Acceptance reopened on10 November2026 at the owner's request. The authenticated live MCP audit found additional omissions in the previously delivered apps. See [the current gap audit](figma-mcp-gap-audit.md); previous native evidence below covers a0/Android12/iOS19, not the corrected candidate.
 
 # Current Figma parity audit

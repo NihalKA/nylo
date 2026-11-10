@@ -1,3 +1,13 @@
+# Current MCP Figma correction — signed20 building
+
+All current native/UI gates are accepted on product `dcef4f6` with documented exceptions. Fresh native42774779366 verifies actual privacy/required SDK/camera/no microphone or tracking, linked simulator identity, twelve exact fonts and45 original SVG assets. Compact/large smoke107/13 each, targeted maximum-text42796026157 passes109/13, gallery42790970776 passes192/exact293-byte clipboard/native SQL/blob, PDF42790976216 passes58, and owned-photo42794171474 passes87/two skips with actual draft/blob/metadata receipts. All88 selected native PNGs are inspected and actual native JavaScript bytes match; refreshfalse throughout.
+
+Earlier maximum-text fixture taps hit fixed controls/navigation; strict viewport/full-visibility corrections retain all assertions and reuse the same native binary. The original photo Files Cancel failure is preserved; the successful run skips the bounded extra-Cancel branch. Owned-photo source/output hashes and allowlisted encoder metadata verify. Photos may strip metadata before Nylo; no physical camera, HEIC, universal-file or native-resource-lifetime claim is made. Maximum static intro/empty-state copy can remain dense/clipped; exercised controls remain reachable.
+
+**Signed workflow42798741091 is confirmed build20/source43b30b3 and is running.** Dispatched once after native acceptance and fresh Apple latest19VALID/no20 plus GitHub counter19 checks. App/native inputs matchdcef. No20 upload, processing or availability claim is made yet. Actual exported IPA privacy/signature/original certificate/team/app/profile/font12 audits and Apple VALID/exact-ID/notes/usual internal QA/IN_BETA_TESTING/owner membership readbacks are required before availability. Previous TestFlight19 remains available. Store15 and external17 are unchanged. Android13 is independently delivered; the new Drive pack remains pending.
+
+---
+
 # Current Figma beta delivered — 1.0.0 (19)
 
 Available to the existing usual internal Nylo Device QA account. Signed workflow42732648140/sourcec6f333c/appa0afe7e succeeds; Apple exact build `3deddabf-72ce-4ce9-bf76-47c849d65fdc` is VALID. English notes were saved and independently read back; assignment to the usual internal group returned204. Independent group/build-state/owner-membership reads confirm the exact19 build and IN_BETA_TESTING. Existing tester state is INSTALLED for the app; installation of19 itself is not confirmed. Update through TestFlight and check1.0.0(19).
