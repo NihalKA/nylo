@@ -2,14 +2,21 @@ import React from "react";
 import { Platform, View } from "react-native";
 import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Icon, theme } from "../../src/ui";
+import { BrandLine, TabPill, haptic, theme, useTheme } from "../../src/ui";
 export default function MainTabs() {
+  useTheme();
   const { bottom } = useSafeAreaInsets();
   return (
     <Tabs
+      screenListeners={({ navigation }) => ({
+        tabPress: () => {
+          if (!navigation.isFocused()) haptic.select();
+        },
+      })}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.ink,
+        animation: "shift",
+        tabBarActiveTintColor: theme.accentText,
         tabBarInactiveTintColor: theme.quiet,
         tabBarLabelStyle: {
           fontSize: 11,
@@ -21,13 +28,31 @@ export default function MainTabs() {
           maxWidth: 576,
           width: "100%",
           alignSelf: "center",
+          // The faded brand ribbon below is the only separator.
           borderTopWidth: 0,
+          elevation: 0,
           // Reserve the system button/gesture area below Android's tab targets.
           ...(Platform.OS === "android"
-            ? { height: 56 + bottom, paddingBottom: bottom }
+            ? { height: 60 + bottom, paddingBottom: bottom }
             : {}),
         },
         tabBarItemStyle: { minHeight: 48, paddingTop: 4 },
+        // A fine ribbon of the logo gradient that dissolves towards both
+        // edges of the bar.
+        tabBarBackground: () => (
+          <View style={{ flex: 1, backgroundColor: theme.bg }}>
+            <BrandLine
+              fade
+              height={1}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "4%",
+                right: "4%",
+              }}
+            />
+          </View>
+        ),
         sceneStyle: { backgroundColor: theme.bg },
       }}
     >
@@ -36,7 +61,7 @@ export default function MainTabs() {
         options={{
           title: "Chats",
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
+            <TabPill
               name={focused ? "chatbox" : "chatbox-outline"}
               color={color}
               focused={focused}
@@ -49,7 +74,7 @@ export default function MainTabs() {
         options={{
           title: "Agents",
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
+            <TabPill
               name={focused ? "people" : "people-outline"}
               color={color}
               focused={focused}
@@ -62,7 +87,7 @@ export default function MainTabs() {
         options={{
           title: "Settings",
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
+            <TabPill
               name={focused ? "settings" : "settings-outline"}
               color={color}
               focused={focused}
@@ -71,50 +96,5 @@ export default function MainTabs() {
         }}
       />
     </Tabs>
-  );
-}
-
-function TabIcon({
-  name,
-  color,
-  focused,
-}: {
-  name: React.ComponentProps<typeof Icon>["name"];
-  color: React.ComponentProps<typeof Icon>["color"];
-  focused: boolean;
-}) {
-  return (
-    <View
-      style={{
-        width: 50,
-        height: 24,
-        borderRadius: 12,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor:
-          focused && name.startsWith("settings")
-            ? theme.selected
-            : "transparent",
-      }}
-    >
-      <Icon
-        name={name}
-        color={color}
-        size={23}
-        design={
-          name.startsWith("chatbox")
-            ? focused
-              ? undefined
-              : "tabChats"
-            : name.startsWith("people")
-              ? focused
-                ? "tabAgentsActive"
-                : "tabAgents"
-              : focused
-                ? "tabSettingsActive"
-                : "tabSettings"
-        }
-      />
-    </View>
   );
 }

@@ -57,7 +57,7 @@ def verify(path):
             binary_hash = digest(z.read(root + '/' + info['CFBundleExecutable']))
         archive_hash = digest(path.read_bytes())
     assert info['CFBundleIdentifier'] == 'com.nylohq.nylo'
-    for value in [identity['marker'], '#F9F9F8', '#1E2B58']:
+    for value in [identity['marker'], '#F7F8FA', '#3358E0']:
         assert value.encode() in bundle, f'Missing bundle string: {value}'
     for name, sha in identity['assets'].items():
         assert sha in packaged, f'Missing original design asset: {name}'

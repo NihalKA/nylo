@@ -5,7 +5,12 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#05081A"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.nylohq.nylo",
@@ -16,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#246B58",
+        "backgroundColor": "#05081A",
         "foregroundImage": "./assets/adaptive-icon.png"
       },
       "predictiveBackGestureEnabled": false,
@@ -42,7 +47,16 @@
       "./plugins/with-image-pods.cjs",
       "./plugins/with-image-render-priority.cjs",
       "./plugins/with-camera-availability.cjs",
-      "expo-image"
+      "expo-image",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": false,
+          "recordAudioAndroid": false,
+          "enableBackgroundPlayback": false,
+          "enableBackgroundRecording": false
+        }
+      ]
     ],
     "scheme": "nylo"
   }

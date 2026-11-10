@@ -1,7 +1,8 @@
 import React from "react";
 import { Image } from "expo-image";
+import { theme } from "./theme";
 
-// Original Figma SVG exports; their viewboxes, colours and intrinsic sizes are unchanged.
+// Original Figma SVG exports; their files, viewboxes and intrinsic sizes are unchanged.
 const artwork = {
   memoryBack: {
     source: require("../assets/figma/memoryBack.svg"),
@@ -232,13 +233,73 @@ const artwork = {
 
 export type DesignIconName = keyof typeof artwork;
 
-export function DesignIcon({ name }: { name: DesignIconName }) {
+// Each original SVG is single-colour. Its colour role is mapped to the live
+// palette so the same artwork stays legible in light and dark appearance.
+type Role = "ink" | "sub" | "quiet" | "lineStrong" | "error" | "onPrimary";
+const roles: Record<DesignIconName, Role> = {
+  memoryBack: "ink",
+  chatMore: "ink",
+  checkedThumb: "onPrimary",
+  key: "ink",
+  chevron: "lineStrong",
+  export: "ink",
+  restore: "ink",
+  privacy: "ink",
+  mail: "ink",
+  deviceCheck: "ink",
+  deleteData: "error",
+  tabChats: "quiet",
+  tabAgents: "quiet",
+  tabSettingsActive: "ink",
+  back: "ink",
+  more: "ink",
+  forward: "onPrimary",
+  options: "ink",
+  addWhite: "onPrimary",
+  addMuted: "quiet",
+  editMemory: "sub",
+  deleteMemory: "sub",
+  tabAgentsActive: "ink",
+  tabSettings: "quiet",
+  reportBack: "ink",
+  reportMore: "ink",
+  reportShield: "quiet",
+  mailWhite: "onPrimary",
+  removeResponse: "error",
+  fileDocument: "ink",
+  removeFile: "quiet",
+  addFile: "quiet",
+  down: "quiet",
+  add: "ink",
+  send: "onPrimary",
+  photos: "ink",
+  camera: "ink",
+  files: "ink",
+  close: "quiet",
+  search: "quiet",
+  modelCheck: "ink",
+  pdfRobotDisabled: "quiet",
+  pdfRobot: "ink",
+  pdfCheck: "ink",
+  pdfEdit: "ink",
+};
+
+export function DesignIcon({
+  name,
+  tint,
+}: {
+  name: DesignIconName;
+  /** Overrides the role colour, e.g. the accent for a selected tab. */
+  tint?: string;
+}) {
   const item = artwork[name];
+  const role = roles[name];
   return (
     <Image
       source={item.source}
       style={{ width: item.width, height: item.height }}
       contentFit="contain"
+      tintColor={tint ?? (role === "onPrimary" ? undefined : theme[role])}
       accessible={false}
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"

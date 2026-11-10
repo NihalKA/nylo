@@ -1,10 +1,11 @@
 import React from "react";
 import { View } from "react-native";
 import { Text } from "../src/typography";
-import { FormScroll, Header, Page, s } from "../src/ui";
+import { FormScroll, Header, Page, s, useTheme } from "../src/ui";
 import notices from "../assets/fonts/notices.json";
 
 export default function Licenses() {
+  useTheme();
   return (
     <Page>
       <Header title="Font licenses" />

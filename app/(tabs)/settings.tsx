@@ -1,13 +1,32 @@
 import { Text } from "../../src/typography";
 import { fonts } from "../../src/typography";
 import Constants from "expo-constants";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Linking, Pressable, View } from "react-native";
+import { AppearancePreference } from "../../src/theme";
+import { hapticsEnabled, setHapticsEnabled } from "../../src/haptics";
+import { setSoundsEnabled, soundsEnabled } from "../../src/sounds";
 import { router } from "expo-router";
 import { emptyData } from "../../src/types";
 import { useStore } from "../../src/store";
 import { exportBackup, pickBackup } from "../../src/backup";
-import { FormScroll, Icon, Page, confirm, s, theme } from "../../src/ui";
+import {
+  FormScroll,
+  Icon,
+  Page,
+  Segmented,
+  Switch,
+  Tappable,
+  confirm,
+  rgba,
+  s,
+  theme,
+  useTheme,
+  Press,
+  BrandMark,
+  BrandWordmark,
+  BrandLine,
+} from "../../src/ui";
 import { DesignIconName } from "../../src/design-icons";
 
 function SettingsRow({
@@ -30,12 +49,16 @@ function SettingsRow({
   last?: boolean;
 }) {
   return (
-    <Pressable
+    <Tappable
       accessibilityRole="button"
       accessibilityLabel={[title, detail].filter(Boolean).join(". ")}
+      accessibilityState={{ disabled: !!disabled }}
       disabled={disabled}
       onPress={onPress}
-      style={({ pressed }) => [
+      feel={destructive ? "warn" : "button"}
+      scaleTo={0.985}
+      ripple={rgba(destructive ? theme.error : theme.primary, 0.18)}
+      style={[
         s.row,
         {
           minHeight: 58,
@@ -43,8 +66,8 @@ function SettingsRow({
           paddingVertical: 16,
           paddingHorizontal: 16,
           borderBottomWidth: last ? 0 : 1,
-          borderBottomColor: "#F0F0EE",
-          opacity: disabled ? 0.4 : pressed ? 0.55 : 1,
+          borderBottomColor: theme.hairline,
+          opacity: disabled ? 0.4 : 1,
         },
       ]}
     >
@@ -53,7 +76,7 @@ function SettingsRow({
           width: 40,
           height: 40,
           borderRadius: 20,
-          backgroundColor: destructive ? "#FFDAD2" : theme.muted,
+          backgroundColor: destructive ? theme.errorSurface : theme.pale,
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -87,8 +110,72 @@ function SettingsRow({
           </Text>
         ) : null}
       </View>
-      <Icon name="chevron-forward" design="chevron" size={20} color="#C6C5D0" />
-    </Pressable>
+      <Icon name="chevron-forward" design="chevron" size={20} />
+    </Tappable>
+  );
+}
+function PreferenceRow({
+  icon,
+  title,
+  detail,
+  value,
+  onChange,
+  last,
+}: {
+  icon: React.ComponentProps<typeof Icon>["name"];
+  title: string;
+  detail: string;
+  value: boolean;
+  onChange: (value: boolean) => void;
+  last?: boolean;
+}) {
+  return (
+    <View
+      style={[
+        s.row,
+        {
+          minHeight: 58,
+          gap: 16,
+          paddingVertical: 12,
+          paddingLeft: 16,
+          paddingRight: 8,
+          borderBottomWidth: last ? 0 : 1,
+          borderBottomColor: theme.hairline,
+        },
+      ]}
+    >
+      <View
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: theme.pale,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Icon name={icon} size={19} color={theme.accentText} />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text
+          style={[
+            s.text,
+            { fontWeight: "500", letterSpacing: -0.4, lineHeight: 24 },
+          ]}
+        >
+          {title}
+        </Text>
+        <Text style={[s.sub, { color: theme.quiet, lineHeight: 20 }]}>
+          {detail}
+        </Text>
+      </View>
+      <Switch
+        accessibilityLabel={title}
+        value={value}
+        onValueChange={onChange}
+        trackColor={{ true: theme.primary }}
+      />
+    </View>
   );
 }
 function Group({ children }: { children: React.ReactNode }) {
@@ -97,10 +184,10 @@ function Group({ children }: { children: React.ReactNode }) {
       style={{
         backgroundColor: theme.card,
         borderWidth: 1,
-        borderColor: "#E7E7E5",
-        borderRadius: 12,
+        borderColor: theme.hairline,
+        borderRadius: 18,
         overflow: "hidden",
-        boxShadow: "0px 2px 8px rgba(30,43,88,0.04)",
+        boxShadow: theme.cardShadow,
       }}
     >
       {children}
@@ -108,7 +195,24 @@ function Group({ children }: { children: React.ReactNode }) {
   );
 }
 
+const appearanceOptions: {
+  value: AppearancePreference;
+  label: string;
+  icon: React.ComponentProps<typeof Icon>["name"];
+}[] = [
+  { value: "system", label: "System", icon: "phone-portrait-outline" },
+  { value: "light", label: "Light", icon: "sunny-outline" },
+  { value: "dark", label: "Dark", icon: "moon-outline" },
+];
+
 export default function Settings() {
+  const { preference, setPreference } = useTheme();
+  const [sounds, setSounds] = useState(true);
+  const [vibration, setVibration] = useState(true);
+  useEffect(() => {
+    void soundsEnabled().then(setSounds);
+    void hapticsEnabled().then(setVibration);
+  }, []);
   const { data, importBackup, runningId } = useStore();
   const [busy, setBusy] = useState(false);
   const actionLocked = useRef(false);
@@ -131,7 +235,7 @@ export default function Settings() {
     }
   };
   return (
-    <Page>
+    <Page aura>
       <FormScroll contentStyle={{ gap: 24, paddingTop: 8 }}>
         <Text
           accessibilityRole="header"
@@ -150,6 +254,30 @@ export default function Settings() {
         >
           Settings
         </Text>
+        <View style={{ gap: 8 }}>
+          <Text
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: theme.sub,
+                paddingLeft: 4,
+              },
+            ]}
+          >
+            Appearance
+          </Text>
+          <Segmented
+            label="Appearance"
+            options={appearanceOptions}
+            value={preference}
+            onChange={setPreference}
+          />
+        </View>
         <View style={{ gap: 4 }}>
           <Text
             style={[
@@ -160,7 +288,64 @@ export default function Settings() {
                 fontSize: 12,
                 lineHeight: 18,
                 letterSpacing: 0.6,
-                color: "rgba(69,70,79,0.9)",
+                color: theme.sub,
+                paddingLeft: 4,
+              },
+            ]}
+          >
+            Sound & touch
+          </Text>
+          <Group>
+            <PreferenceRow
+              icon="musical-notes-outline"
+              title="Sounds"
+              detail="Soft tones for taps, sending and replies"
+              value={sounds}
+              onChange={(value) => {
+                setSoundsEnabled(value);
+                setSounds(value);
+              }}
+            />
+            <PreferenceRow
+              icon="pulse-outline"
+              title="Vibration"
+              detail="A distinct feel for each kind of action"
+              value={vibration}
+              onChange={(value) => {
+                setHapticsEnabled(value);
+                setVibration(value);
+              }}
+              last
+            />
+          </Group>
+          <Text
+            style={[
+              s.sub,
+              {
+                fontSize: 13,
+                lineHeight: 21,
+                fontFamily: fonts.nimbus,
+                paddingHorizontal: 4,
+                paddingTop: 4,
+                color: theme.quiet,
+              },
+            ]}
+          >
+            Sounds follow your iPhone’s silent switch and play alongside your
+            music.
+          </Text>
+        </View>
+        <View style={{ gap: 4 }}>
+          <Text
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: theme.sub,
                 paddingLeft: 4,
               },
             ]}
@@ -194,7 +379,7 @@ export default function Settings() {
                 fontFamily: fonts.nimbus,
                 paddingHorizontal: 4,
                 paddingTop: 4,
-                color: "rgba(69,70,79,0.8)",
+                color: theme.quiet,
               },
             ]}
           >
@@ -212,7 +397,7 @@ export default function Settings() {
                 fontSize: 12,
                 lineHeight: 18,
                 letterSpacing: 0.6,
-                color: "rgba(69,70,79,0.9)",
+                color: theme.sub,
                 paddingLeft: 4,
               },
             ]}
@@ -274,7 +459,7 @@ export default function Settings() {
                 fontFamily: fonts.nimbus,
                 paddingHorizontal: 4,
                 paddingTop: 4,
-                color: "rgba(69,70,79,0.8)",
+                color: theme.quiet,
               },
             ]}
           >
@@ -292,7 +477,7 @@ export default function Settings() {
                 fontSize: 12,
                 lineHeight: 18,
                 letterSpacing: 0.6,
-                color: "rgba(69,70,79,0.9)",
+                color: theme.sub,
                 paddingLeft: 4,
               },
             ]}
@@ -335,7 +520,7 @@ export default function Settings() {
                 fontSize: 12,
                 lineHeight: 18,
                 letterSpacing: 0.6,
-                color: "rgba(69,70,79,0.9)",
+                color: theme.sub,
                 paddingLeft: 4,
               },
             ]}
@@ -389,8 +574,15 @@ export default function Settings() {
             {notice}
           </Text>
         ) : null}
-        <Text style={[s.sub, { paddingVertical: 8, textAlign: "center" }]}>
-          Nylo · {Constants.expoConfig?.version || "Development"}
+        <View style={{ alignItems: "center", gap: 10, paddingTop: 12 }}>
+          <BrandLine style={{ width: 56 }} />
+          <View style={[s.row, { gap: 8 }]}>
+            <BrandMark height={20} />
+            <BrandWordmark height={18} />
+          </View>
+        </View>
+        <Text style={[s.sub, { paddingBottom: 8, textAlign: "center" }]}>
+          Version {Constants.expoConfig?.version || "Development"}
           {Constants.nativeBuildVersion
             ? ` (${Constants.nativeBuildVersion})`
             : ""}
@@ -400,7 +592,8 @@ export default function Settings() {
             {process.env.EXPO_PUBLIC_UI_BUILD_MARKER}
           </Text>
         ) : null}
-        <Pressable
+        <Press
+          feel="tick"
           accessibilityRole="button"
           onPress={() => router.push("/licenses")}
           style={{
@@ -410,7 +603,7 @@ export default function Settings() {
           }}
         >
           <Text style={[s.sub, { fontSize: 12 }]}>Font licenses</Text>
-        </Pressable>
+        </Press>
       </FormScroll>
     </Page>
   );

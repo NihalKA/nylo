@@ -10,6 +10,12 @@ export async function readData(): Promise<AppData> {
 export async function writeData(data: AppData) {
   localStorage.setItem("nylo.mobile.v1", JSON.stringify(data));
 }
+export async function readPreference(key: string): Promise<string | null> {
+  return localStorage.getItem(`nylo.pref.${key}`);
+}
+export async function writePreference(key: string, value: string) {
+  localStorage.setItem(`nylo.pref.${key}`, value);
+}
 export async function readKey(id: string, destination: string) {
   return decodeCredential(keys.get(id) ?? null, destination);
 }

@@ -29,7 +29,19 @@ export function plainTextPreview(text: string) {
     .replace(/\s+/g, " ")
     .trim();
 }
-export const colors = ["#1B5E3F", "#8C6239", "#585289", "#406F8E", "#A65454"];
+// Agent "aura" colours. Each seeds a generative mesh avatar (src/organic.tsx).
+// Agents saved with earlier colours keep them; any #RRGGBB stays valid.
+export const agentColors = [
+  { hex: "#2F5BEA", name: "Ocean" },
+  { hex: "#6A4DF4", name: "Iris" },
+  { hex: "#B23F96", name: "Orchid" },
+  { hex: "#D9483F", name: "Coral" },
+  { hex: "#C2650F", name: "Amber" },
+  { hex: "#1F8A4C", name: "Fern" },
+  { hex: "#0E7F86", name: "Lagoon" },
+  { hex: "#4B5A8A", name: "Dusk" },
+] as const;
+export const colors: string[] = agentColors.map((c) => c.hex);
 export const protocolDefaults: Record<
   Protocol,
   { name: string; baseUrl: string }

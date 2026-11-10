@@ -30,7 +30,7 @@ def verify(directory):
     with zipfile.ZipFile(directory / 'Nylo-test.apk') as apk:
         assert apk.testzip() is None
         bundle = apk.read('assets/index.android.bundle')
-        for value in [identity['marker'], '#F9F9F8', '#1E2B58']:
+        for value in [identity['marker'], '#F7F8FA', '#3358E0']:
             assert value.encode() in bundle, f'Missing bundle string: {value}'
         packaged = {digest(apk.read(n)) for n in apk.namelist() if n.endswith(('.svg', '.ttf'))}
         for name, value in identity['assets'].items():

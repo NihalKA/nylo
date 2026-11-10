@@ -5,7 +5,17 @@ import { router } from "expo-router";
 import Constants from "expo-constants";
 import { createConversation, uid, removeDeviceCheckData } from "../src/domain";
 import { useStore } from "../src/store";
-import { Button, FormScroll, Header, Page, confirm, s, theme } from "../src/ui";
+import {
+  Button,
+  FormScroll,
+  Header,
+  Page,
+  confirm,
+  s,
+  theme,
+  useTheme,
+  Press,
+} from "../src/ui";
 
 // A different runtime is evidence of reopening/reloading, not a VoiceOver pass.
 const sessionId = uid();
@@ -14,6 +24,7 @@ const testInstructions =
   "Answer briefly using your saved memories when relevant.";
 
 export default function DeviceCheck() {
+  useTheme();
   const { data, update, send, stop, runningId } = useStore();
   const [selected, setSelected] = useState(
     data.deviceCheck?.connectionId || data.defaultConnectionId,
@@ -147,7 +158,7 @@ export default function DeviceCheck() {
           <>
             <Text style={s.eyebrow}>CHOOSE A SAVED PROVIDER</Text>
             {data.connections.map((c) => (
-              <Pressable
+              <Press
                 key={c.id}
                 accessibilityRole="radio"
                 accessibilityState={{ checked: selected === c.id }}
@@ -167,7 +178,7 @@ export default function DeviceCheck() {
                 <Text style={s.sub}>
                   {new URL(c.baseUrl).host} · {c.model}
                 </Text>
-              </Pressable>
+              </Press>
             ))}
             {!data.connections.length ? (
               <Button
@@ -204,7 +215,7 @@ export default function DeviceCheck() {
                           "Synthetic test data. Safe to remove after checking.",
                         instructions: testInstructions,
                         connectionId: connection.id,
-                        color: "#246B58",
+                        color: theme.green,
                         memories: [],
                         createdAt: Date.now(),
                       },
