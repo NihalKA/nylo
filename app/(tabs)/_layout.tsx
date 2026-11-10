@@ -16,6 +16,9 @@ export default function MainTabs() {
         },
         tabBarStyle: {
           backgroundColor: theme.bg,
+          maxWidth: 576,
+          width: "100%",
+          alignSelf: "center",
           borderTopWidth: 0,
         },
         tabBarItemStyle: { minHeight: 48, paddingTop: 4 },
@@ -82,10 +85,30 @@ function TabIcon({
         borderRadius: 12,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: focused ? theme.selected : "transparent",
+        backgroundColor:
+          focused && name.startsWith("settings")
+            ? theme.selected
+            : "transparent",
       }}
     >
-      <Icon name={name} color={color} size={23} />
+      <Icon
+        name={name}
+        color={color}
+        size={23}
+        design={
+          name.startsWith("chatbox")
+            ? focused
+              ? undefined
+              : "tabChats"
+            : name.startsWith("people")
+              ? focused
+                ? "tabAgentsActive"
+                : "tabAgents"
+              : focused
+                ? "tabSettingsActive"
+                : "tabSettings"
+        }
+      />
     </View>
   );
 }

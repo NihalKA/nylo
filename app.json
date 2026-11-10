@@ -41,7 +41,8 @@
       ],
       "./plugins/with-image-pods.cjs",
       "./plugins/with-image-render-priority.cjs",
-      "./plugins/with-camera-availability.cjs"
+      "./plugins/with-camera-availability.cjs",
+      "expo-image"
     ],
     "scheme": "nylo"
   }

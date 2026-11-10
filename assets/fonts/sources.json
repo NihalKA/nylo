@@ -164,5 +164,16 @@
     "source": "https://deb.debian.org/debian/pool/main/f/fonts-liberation/fonts-liberation_2.1.5-3_all.deb",
     "packageSHA256": "3d5c47480067b9615f6bf9b0eda6eefcab9d837af609827015445e8e759b5b8c",
     "sha256": "f32df582a2aab128c07b2f7e36e7b928dc5f6bd82657b905c04f91459f9e5cf9"
+  },
+  {
+    "file": "Inter-Italic-variable.ttf",
+    "source": "https://raw.githubusercontent.com/google/fonts/5bb28733cec313b63fbd415b574b5ae35c8aa8b8/ofl/inter/Inter-Italic%5Bopsz,wght%5D.ttf",
+    "sha256": "acd98e64795781b2058f07b18475e0ecee2a0fe2b42a49e2f9e37d0d6bf66ce6"
+  },
+  {
+    "file": "Inter-400Italic.ttf",
+    "source": "Inter-Italic-variable.ttf",
+    "sha256": "ce932a7b5ea5d90b5925a4fdd18846ba3544c81df626d5ec5b54c20140004d3a",
+    "derivation": "Static opsz14/wght400 instance; unique Nylo internal names; original outlines and OFL retained."
   }
 ]

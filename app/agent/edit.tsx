@@ -12,6 +12,7 @@ import {
   Field,
   FormScroll,
   Header,
+  IconButton,
   Page,
   s,
   theme,
@@ -148,6 +149,19 @@ function AgentEdit() {
   return (
     <Page>
       <Header
+        centerTitle={!original && !fromChat}
+        right={
+          <IconButton
+            name="ellipsis-horizontal"
+            design="more"
+            label={
+              showOptions
+                ? "Hide additional options"
+                : "Additional agent options"
+            }
+            onPress={() => setShowOptions(!showOptions)}
+          />
+        }
         dismissKeyboard
         titleStyle={{ fontSize: 22, letterSpacing: -0.55 }}
         title={
@@ -158,7 +172,7 @@ function AgentEdit() {
               : "Create an agent"
         }
       />
-      <FormScroll>
+      <FormScroll contentStyle={{ paddingTop: 4, paddingBottom: 24 }}>
         <View
           style={[
             s.card,
@@ -167,6 +181,8 @@ function AgentEdit() {
               gap: 16,
               padding: 16,
               minHeight: 91,
+              boxShadow:
+                "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
               backgroundColor: theme.surface,
             },
           ]}
@@ -176,8 +192,8 @@ function AgentEdit() {
             size={48}
             textStyle={{ fontWeight: "700", letterSpacing: -0.33 }}
           />
-          <View style={{ flex: 1, gap: 4 }}>
-            <Text style={[s.h2, { letterSpacing: -0.18 }]}>
+          <View style={{ flex: 1 }}>
+            <Text style={[s.h2, { letterSpacing: -0.18, lineHeight: 22.5 }]}>
               {name || "Your agent"}
             </Text>
             <Text style={[s.sub, { fontSize: 12, lineHeight: 16 }]}>
@@ -186,9 +202,11 @@ function AgentEdit() {
           </View>
         </View>
         {!original && !source ? (
-          <View style={{ gap: 10 }}>
+          <View style={{ gap: 8 }}>
             <Text style={s.eyebrow}>Start with a role</Text>
-            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
+            <View
+              style={[s.row, { columnGap: 8, rowGap: 0, flexWrap: "wrap" }]}
+            >
               {templates.map((t) => (
                 <Pressable
                   accessibilityRole="button"
@@ -228,7 +246,7 @@ function AgentEdit() {
                     minHeight: 44,
                     justifyContent: "center",
                     alignItems: "center",
-                    paddingVertical: 10,
+                    paddingVertical: 5,
                     paddingHorizontal: 12,
                   }}
                 >
@@ -259,7 +277,8 @@ function AgentEdit() {
                           ? theme.onPrimary
                           : theme.ink,
                       fontSize: 12,
-                      fontWeight: "600",
+                      lineHeight: 16,
+                      fontWeight: "500",
                       letterSpacing: 0.24,
                     }}
                   >
@@ -283,7 +302,7 @@ function AgentEdit() {
           maxLength={50}
           style={{ letterSpacing: -0.08 }}
         />
-        <View style={[s.row, { gap: 12 }]}>
+        <View style={[s.row, { gap: 6, marginTop: -16 }]}>
           {colors.map((c) => (
             <Pressable
               accessibilityRole="radio"
@@ -304,8 +323,10 @@ function AgentEdit() {
                   height: 36,
                   borderRadius: 12,
                   backgroundColor: c,
-                  borderWidth: color === c ? 2 : 0,
-                  borderColor: theme.ink,
+                  boxShadow:
+                    color === c
+                      ? "0px 0px 0px 2px #F9F9F8, 0px 0px 0px 4px #061542"
+                      : undefined,
                 }}
               />
             </Pressable>
@@ -335,13 +356,25 @@ function AgentEdit() {
           scrollEnabled={false}
           placeholder="Be thoughtful and direct. Help me explore options and choose the next step…"
           maxLength={8000}
-          style={{ minHeight: 131, fontSize: 14, lineHeight: 20 }}
+          style={{
+            minHeight: 131,
+            fontSize: 14,
+            lineHeight: 22.75,
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+          }}
           help="These instructions guide every conversation with this agent."
         />
         <Field
           label="Current goal"
           labelStyle={s.eyebrow}
-          style={{ minHeight: 108, fontSize: 14, lineHeight: 20 }}
+          style={{
+            minHeight: 108,
+            fontSize: 14,
+            lineHeight: 22.75,
+            paddingHorizontal: 12,
+            paddingVertical: 12,
+          }}
           value={goal}
           onChangeText={setGoal}
           multiline
@@ -350,18 +383,6 @@ function AgentEdit() {
           placeholder="What outcome are you working toward?"
           help="Shared across this agent’s chats until you change it."
         />
-        <Pressable
-          accessibilityRole="button"
-          accessibilityState={{ expanded: showOptions }}
-          onPress={() => setShowOptions(!showOptions)}
-          style={{ minHeight: 44, justifyContent: "center" }}
-        >
-          <Text style={[s.sub, { fontWeight: "600" }]}>
-            {showOptions
-              ? "Hide additional options"
-              : "Additional agent options"}
-          </Text>
-        </Pressable>
         {showOptions ? (
           <View style={{ gap: 20 }}>
             <Text style={s.text}>Working approach</Text>
@@ -407,7 +428,7 @@ function AgentEdit() {
                 help="Review this excerpt before saving. It becomes an editable memory; the original conversation moves into this agent."
               />
             ) : null}
-            <View style={{ gap: 10 }}>
+            <View style={{ gap: 8 }}>
               <Text
                 style={{ fontSize: 12, fontWeight: "600", color: theme.ink }}
               >
@@ -455,15 +476,26 @@ function AgentEdit() {
           </View>
         ) : null}
         {error ? <Text style={s.error}>{error}</Text> : null}
+      </FormScroll>
+      <View
+        style={{
+          paddingTop: 12,
+          paddingBottom: 12,
+          borderTopWidth: 1,
+          borderTopColor: "rgba(232,232,231,0.6)",
+          backgroundColor: theme.bg,
+        }}
+      >
         <Button
           title={original ? "Save changes" : "Save & start agent"}
           accessibilityLabel={original ? "Save changes" : "Create agent"}
           icon="arrow-forward"
+          designIcon="forward"
           iconPosition="end"
           loading={busy}
           onPress={() => void save()}
         />
-      </FormScroll>
+      </View>
     </Page>
   );
 }

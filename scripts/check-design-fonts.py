@@ -49,5 +49,5 @@ for path in sorted(FONT_DIR.glob("*.ttf")):
         assert weight == int(path.stem.rsplit("-", 1)[-1]), path
     runtime_fonts.append({"file": path.name, "postScript": postscript, "weight": weight})
 
-assert len(runtime_fonts) == 11, len(runtime_fonts)
+assert len(runtime_fonts) == 12, len(runtime_fonts)
 print(json.dumps({"fonts": runtime_fonts, "checks": "SFNT bounds, source hashes, static weights and unique native face names passed"}, indent=2))

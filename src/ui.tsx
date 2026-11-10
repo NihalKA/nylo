@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { DesignIcon, DesignIconName } from "./design-icons";
 import { router, useSegments } from "expo-router";
 import { Agent, Conversation } from "./types";
 import { plainTextPreview } from "./domain";
@@ -56,7 +57,7 @@ export const s = StyleSheet.create({
   shell: {
     flex: 1,
     width: "100%",
-    maxWidth: 860,
+    maxWidth: 576,
     alignSelf: "center",
     paddingHorizontal: 20,
   },
@@ -116,11 +117,14 @@ export function Icon({
   name,
   size = 20,
   color = theme.ink,
+  design,
 }: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   size?: number;
   color?: ColorValue;
+  design?: DesignIconName;
 }) {
+  if (design) return <DesignIcon name={design} />;
   return (
     <Ionicons
       accessible={false}
@@ -162,33 +166,44 @@ export function Header({
   titleStyle,
   dismissKeyboard,
   onDismissKeyboard,
+  centerTitle = false,
+  backDesign = "back",
 }: {
   title: string;
   right?: React.ReactNode;
   titleStyle?: import("react-native").TextStyle;
   dismissKeyboard?: boolean;
   onDismissKeyboard?: () => void;
+  centerTitle?: boolean;
+  backDesign?: DesignIconName;
 }) {
   return (
-    <View style={[s.between, { minHeight: 56, gap: 8 }]}>
-      <View style={[s.row, { flex: 1, gap: 10 }]}>
-        <IconButton
-          name={Platform.OS === "ios" ? "chevron-back" : "arrow-back"}
-          label="Go back"
-          onPress={() =>
-            router.canGoBack() ? router.back() : router.replace("/")
-          }
-        />
-        <Text
-          accessibilityRole="header"
-          numberOfLines={1}
-          maxFontSizeMultiplier={1.6}
-          style={[s.h2, { flex: 1 }, titleStyle]}
-        >
-          {title}
-        </Text>
-      </View>
-      <View style={s.row}>
+    <View style={[s.between, { minHeight: 56, marginHorizontal: -12 }]}>
+      <IconButton
+        name={Platform.OS === "ios" ? "chevron-back" : "arrow-back"}
+        design={backDesign}
+        label="Go back"
+        onPress={() =>
+          router.canGoBack() ? router.back() : router.replace("/")
+        }
+      />
+      <Text
+        accessibilityRole="header"
+        numberOfLines={1}
+        maxFontSizeMultiplier={1.6}
+        style={[
+          s.h2,
+          {
+            flex: 1,
+            textAlign: centerTitle ? "center" : "left",
+            lineHeight: 28,
+          },
+          titleStyle,
+        ]}
+      >
+        {title}
+      </Text>
+      <View style={[s.row, { minWidth: 44 }]}>
         {dismissKeyboard ? (
           <KeyboardDismissButton onDismiss={onDismissKeyboard} />
         ) : null}
@@ -286,7 +301,7 @@ export function Switch({
               justifyContent: "center",
             }}
           >
-            <Icon name="checkmark" size={18} color="#FFFFFF" />
+            <DesignIcon name="checkedThumb" />
           </View>
         ) : null}
       </View>
@@ -301,6 +316,7 @@ export function IconButton({
   color,
   disabled,
   size = 20,
+  design,
 }: {
   name: React.ComponentProps<typeof Ionicons>["name"];
   label: string;
@@ -308,6 +324,7 @@ export function IconButton({
   color?: ColorValue;
   disabled?: boolean;
   size?: number;
+  design?: DesignIconName;
 }) {
   return (
     <Pressable
@@ -327,6 +344,7 @@ export function IconButton({
     >
       <Icon
         name={name}
+        design={design}
         size={size}
         color={typeof color === "number" ? theme.ink : (color ?? undefined)}
       />
@@ -368,6 +386,9 @@ export function MainNavigation({
         flexDirection: "row",
         marginHorizontal: -20,
         backgroundColor: theme.bg,
+        borderTopWidth: 1,
+        borderTopColor: "rgba(198, 197, 208, 0.2)",
+        paddingHorizontal: 24,
       }}
     >
       {destinations.map((item) => {
@@ -386,7 +407,7 @@ export function MainNavigation({
               paddingVertical: 4,
               alignItems: "center",
               justifyContent: "center",
-              gap: 4,
+              gap: 2,
             }}
           >
             <View
@@ -396,11 +417,25 @@ export function MainNavigation({
                 borderRadius: 12,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: selected ? theme.selected : "transparent",
+                backgroundColor:
+                  selected && item.key === "settings"
+                    ? theme.selected
+                    : "transparent",
               }}
             >
               <Icon
                 name={selected ? item.selectedIcon : item.icon}
+                design={
+                  item.key === "chats"
+                    ? "tabChats"
+                    : item.key === "agents"
+                      ? selected
+                        ? "tabAgentsActive"
+                        : "tabAgents"
+                      : selected
+                        ? "tabSettingsActive"
+                        : "tabSettings"
+                }
                 size={23}
                 color={selected ? theme.ink : theme.quiet}
               />
@@ -434,6 +469,7 @@ export function Button({
   style,
   textStyle,
   iconPosition = "start",
+  designIcon,
 }: {
   title: string;
   accessibilityLabel?: string;
@@ -446,6 +482,7 @@ export function Button({
   style?: ViewStyle;
   textStyle?: import("react-native").TextStyle;
   iconPosition?: "start" | "end";
+  designIcon?: DesignIconName;
 }) {
   return (
     <Pressable
@@ -455,7 +492,9 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         {
-          ...(secondary || destructive ? {} : softShadow),
+          ...(secondary || destructive
+            ? {}
+            : { boxShadow: "0px 4px 16px -2px rgba(30,43,88,0.08)" }),
           minHeight: 48,
           paddingHorizontal: 18,
           paddingVertical: 12,
@@ -486,6 +525,7 @@ export function Button({
       ) : icon && iconPosition === "start" ? (
         <Icon
           name={icon}
+          design={designIcon}
           color={secondary ? (destructive ? theme.error : theme.ink) : "#FFF"}
           size={17}
         />
@@ -510,6 +550,7 @@ export function Button({
       {!loading && icon && iconPosition === "end" ? (
         <Icon
           name={icon}
+          design={designIcon}
           color={
             secondary
               ? destructive
@@ -527,14 +568,18 @@ export function Field({
   label,
   help,
   labelStyle,
+  inputHint,
+  gap = 7,
   ...props
 }: TextInputProps & {
   label: string;
   help?: string;
   labelStyle?: import("react-native").TextStyle;
+  inputHint?: string;
+  gap?: number;
 }) {
   return (
-    <View style={{ gap: 7 }}>
+    <View style={{ gap }}>
       <Text
         style={[
           { fontSize: 14, fontWeight: "600", color: theme.ink },
@@ -543,16 +588,37 @@ export function Field({
       >
         {label}
       </Text>
-      <TextInput
-        accessibilityLabel={label}
-        placeholderTextColor={theme.sub}
-        {...props}
-        style={[
-          s.input,
-          props.multiline ? { minHeight: 100, textAlignVertical: "top" } : null,
-          props.style,
-        ]}
-      />
+      <View>
+        <TextInput
+          accessibilityLabel={label}
+          placeholderTextColor={theme.sub}
+          {...props}
+          style={[
+            s.input,
+            props.multiline
+              ? { minHeight: 100, textAlignVertical: "top" }
+              : null,
+            props.style,
+          ]}
+        />
+        {inputHint ? (
+          <Text
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              bottom: 8,
+              right: 16,
+              fontSize: 11,
+              lineHeight: 14,
+              fontWeight: "600",
+              letterSpacing: 0.33,
+              color: theme.quiet,
+            }}
+          >
+            {inputHint}
+          </Text>
+        ) : null}
+      </View>
       {help ? (
         <Text
           style={[s.sub, { fontSize: 12, lineHeight: 18, color: theme.quiet }]}
@@ -750,13 +816,19 @@ export async function confirm(
     ),
   );
 }
-export function FormScroll({ children }: { children: React.ReactNode }) {
+export function FormScroll({
+  children,
+  contentStyle,
+}: {
+  children: React.ReactNode;
+  contentStyle?: ViewStyle;
+}) {
   return (
     <ScrollView
       automaticallyAdjustKeyboardInsets
       keyboardDismissMode="on-drag"
       keyboardShouldPersistTaps="handled"
-      contentContainerStyle={{ gap: 20, paddingBottom: 44 }}
+      contentContainerStyle={[{ gap: 20, paddingBottom: 44 }, contentStyle]}
       showsVerticalScrollIndicator={false}
     >
       {children}

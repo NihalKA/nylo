@@ -1,3 +1,5 @@
+> Acceptance reopened on10 November2026 at the owner's request. The authenticated live MCP audit found additional omissions in the previously delivered apps. See [the current gap audit](figma-mcp-gap-audit.md); previous native evidence below covers a0/Android12/iOS19, not the corrected candidate.
+
 # Current Figma parity audit
 
 The owner requires the complete current design on iOS and Android. Earlier app23/build6 is a style adaptation, not acceptance of this audit.

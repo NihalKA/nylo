@@ -1,0 +1,407 @@
+{
+  "key": {
+    "file": "key.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:517",
+    "width": 19.1667,
+    "height": 10.0,
+    "sha256": "3e3214e91658ff2ec54837202f9ebf1f83cabbf842bf8515f4124363c01ad83a"
+  },
+  "chevron": {
+    "file": "chevron.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:524",
+    "width": 9.8125,
+    "height": 16.6667,
+    "sha256": "cab5af0b99569c9fca870090c10f6df8b51e6d9f46a8ab866fe0fc9416d33c7c"
+  },
+  "export": {
+    "file": "export.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:535",
+    "width": 13.3333,
+    "height": 13.3333,
+    "sha256": "ff5496b35f6e9c1da6291b6b6185e44731499a4231b6418bccf8a496f5361754"
+  },
+  "restore": {
+    "file": "restore.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:544",
+    "width": 13.3333,
+    "height": 13.3333,
+    "sha256": "165972207eaa57f5df16069e5dd987b7d4bc7054e112dd09a30f3eaad064db71"
+  },
+  "privacy": {
+    "file": "privacy.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:559",
+    "width": 13.3333,
+    "height": 16.6667,
+    "sha256": "c668f122b4681de8d80e472edf298221b4b5d25ad22bad990e08ee438dcc04e8"
+  },
+  "mail": {
+    "file": "mail.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:568",
+    "width": 16.6667,
+    "height": 13.3333,
+    "sha256": "8d45cb80e234482a4a6101aea394a898b9546e73160ea01c929f1b0165552567"
+  },
+  "deviceCheck": {
+    "file": "deviceCheck.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:581",
+    "width": 16.6667,
+    "height": 17.5,
+    "sha256": "69e846de26905a0a33155198e0fb49cdfd7d757c87fd654b5bcbc85041b73b97"
+  },
+  "deleteData": {
+    "file": "deleteData.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:593",
+    "width": 13.3333,
+    "height": 15.0,
+    "sha256": "2e0934b86e862eeda95ed152dfd6fd7176c2e905098f62ec5af371cb11739486"
+  },
+  "tabChats": {
+    "file": "tabChats.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:601",
+    "width": 20.0,
+    "height": 20.0,
+    "sha256": "d2926dfd45cf7d79ace3ed39bf723334fcf3f3d03a82ff605aab63a0f276256e"
+  },
+  "tabAgents": {
+    "file": "tabAgents.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:606",
+    "width": 22.0,
+    "height": 16.0,
+    "sha256": "35124c63e91d9683838bf1df2e2d5d222d3e52c3503e5e8cad9d78fefbb98700"
+  },
+  "tabSettingsActive": {
+    "file": "tabSettingsActive.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:494",
+    "node": "2:613",
+    "width": 18.425,
+    "height": 18.3333,
+    "sha256": "f1f46876689019b393eb0600dfdc49faa5b51e0bbdbd4035685811da1d3bb843"
+  },
+  "back": {
+    "file": "back.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:727",
+    "node": "2:742",
+    "width": 9.8125,
+    "height": 16.6667,
+    "sha256": "917043ee2ca7855f497f26141fe866bc7a34b9552aa98ae51ec41c8560829e93"
+  },
+  "more": {
+    "file": "more.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:727",
+    "node": "2:748",
+    "width": 14.6667,
+    "height": 3.66667,
+    "sha256": "01846ee1db3de75a48eb05a4c148e2cbbebd7ccfa28574ebb8b609bef56f40b4"
+  },
+  "forward": {
+    "file": "forward.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:727",
+    "node": "2:812",
+    "width": 12.0,
+    "height": 12.0,
+    "sha256": "f20fc86bf99e7b68294efb517fc5158832a2258f9bec967f32c613652e2b51ef"
+  },
+  "options": {
+    "file": "options.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:639",
+    "width": 16.5,
+    "height": 16.5,
+    "sha256": "086d0e71ba17458f52a3aee81ce23c65e472e4b1691671d6de3567a0396cc45e"
+  },
+  "addWhite": {
+    "file": "addWhite.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:654",
+    "width": 11.6667,
+    "height": 11.6667,
+    "sha256": "142bb8949bf0021c2fc326e2cecc262f55946ecf4b37a596a19b72e177508538"
+  },
+  "addMuted": {
+    "file": "addMuted.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:672",
+    "width": 10.5,
+    "height": 10.5,
+    "sha256": "c739af1e971dfbaed0baa961051f550b129648548fda33ab03c8bfc58d6af129"
+  },
+  "editMemory": {
+    "file": "editMemory.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:690",
+    "width": 31.0,
+    "height": 33.3333,
+    "sha256": "e1968d26c2e72089379df99956e3ff9f7f35e16d83708b52950b66a7d47c801d"
+  },
+  "deleteMemory": {
+    "file": "deleteMemory.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:693",
+    "width": 29.3333,
+    "height": 35.0,
+    "sha256": "465444f7e176d3ec94d202fc9e1bcd17809ce98a7848fe4b5636340ef723c4c5"
+  },
+  "tabAgentsActive": {
+    "file": "tabAgentsActive.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:716",
+    "width": 22.0,
+    "height": 16.0,
+    "sha256": "cf629e3e3c8a936477a72749d0998bc09a5d1681bfafb87bff793769f17248fc"
+  },
+  "tabSettings": {
+    "file": "tabSettings.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:722",
+    "width": 20.1,
+    "height": 20.0,
+    "sha256": "11167110cb2e54a0aaf8c450b0210557a3ae95429d332142abacdea0243eef8d"
+  },
+  "reportBack": {
+    "file": "reportBack.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:814",
+    "node": "2:829",
+    "width": 17.8125,
+    "height": 28.6667,
+    "sha256": "92ebcedb05690fc66d57a4f75557177c58b6f37bc8f5ba8629fdc405f1f102d6"
+  },
+  "reportMore": {
+    "file": "reportMore.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:814",
+    "node": "2:834",
+    "width": 22.6667,
+    "height": 13.6667,
+    "sha256": "56066b387b95346d626f7c142999dc4dd599654a939dcb5d7f34985e4da7674b"
+  },
+  "reportShield": {
+    "file": "reportShield.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:814",
+    "node": "2:874",
+    "width": 12.0,
+    "height": 15.0,
+    "sha256": "5085006426617388843a7f24176a178c55495283905c6911cbcdd48b828a03e5"
+  },
+  "mailWhite": {
+    "file": "mailWhite.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:814",
+    "node": "2:883",
+    "width": 15.0,
+    "height": 12.0,
+    "sha256": "be9757315aadf8fe9ffddcb569d9b43d4f723972456ef684906c98f538953ac5"
+  },
+  "removeResponse": {
+    "file": "removeResponse.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:814",
+    "node": "2:891",
+    "width": 15.0,
+    "height": 10.875,
+    "sha256": "40e2738fc06efc30171173dd11f38639d35633eefab0c50f2409eb458e5d9a46"
+  },
+  "fileDocument": {
+    "file": "fileDocument.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:924",
+    "width": 13.3333,
+    "height": 16.6667,
+    "sha256": "ec45cdf2ffb5c18dbbba3c04cf5e3d58c1a4922cbc7f0b877a50884cb5a5180e"
+  },
+  "removeFile": {
+    "file": "removeFile.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:918",
+    "width": 13.3333,
+    "height": 21.3333,
+    "sha256": "ad96855737587028d6e8ab4645f570c487b85b7001af3233d9dcfb58aef0ba42"
+  },
+  "addFile": {
+    "file": "addFile.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:940",
+    "width": 10.5,
+    "height": 10.5,
+    "sha256": "c739af1e971dfbaed0baa961051f550b129648548fda33ab03c8bfc58d6af129"
+  },
+  "down": {
+    "file": "down.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:949",
+    "width": 8.0,
+    "height": 4.93333,
+    "sha256": "813b7106d86591031275ae05d5170a03d7d57055785d25676da83ca6da7d77e1"
+  },
+  "add": {
+    "file": "add.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:956",
+    "width": 11.6667,
+    "height": 11.6667,
+    "sha256": "7228aa9ea7eaf6105afe34fc407c5af6a3f8467b56b93cc2c71044351be1cd3a"
+  },
+  "send": {
+    "file": "send.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:963",
+    "width": 13.3333,
+    "height": 13.3333,
+    "sha256": "6c3471f49d769115bc408ba3ab146f965b087969cbf9677cfc0a3145fc972417"
+  },
+  "photos": {
+    "file": "photos.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:986",
+    "node": "2:1023",
+    "width": 18.3333,
+    "height": 18.3333,
+    "sha256": "1ea4ca7eb62eb129e91dc1d9cb6eadf9c7ee0ef4df0537d9aaa0a7504f264b49"
+  },
+  "camera": {
+    "file": "camera.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:986",
+    "node": "2:1031",
+    "width": 18.3333,
+    "height": 16.5,
+    "sha256": "1c52c4a68c7ca69594cf53c262c77171b2b827ded1bdae5cd74002eb1199bc92"
+  },
+  "files": {
+    "file": "files.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:986",
+    "node": "2:1039",
+    "width": 14.6667,
+    "height": 18.3333,
+    "sha256": "7d9ac6f2abce702c50424f94c03fcff401f597ddfa7358159d518bfb39a742aa"
+  },
+  "close": {
+    "file": "close.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1234",
+    "node": "2:1288",
+    "width": 11.6667,
+    "height": 11.6667,
+    "sha256": "c067381cbe70b8628992c0bcd0127b9c22d9b99d633e3dd3ef3847d8654e21b5"
+  },
+  "search": {
+    "file": "search.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1234",
+    "node": "2:1298",
+    "width": 15.0,
+    "height": 15.0,
+    "sha256": "3997dcc66ac493b6de6c20aebcc5f26f885a489bc11470db21aa5a178fc87091"
+  },
+  "modelCheck": {
+    "file": "modelCheck.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1234",
+    "node": "2:1308",
+    "width": 13.5833,
+    "height": 10.0208,
+    "sha256": "0bdbf24ec4d38cbfa0757fcc2faa9eb7968879c216e4471aee03e6cf997e0032"
+  },
+  "pdfRobotDisabled": {
+    "file": "pdfRobotDisabled.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1139",
+    "node": "2:1190",
+    "width": 16.5,
+    "height": 14.25,
+    "sha256": "af6314dbf1bb8575dc232dca2c3cb0e4188701e7508af192897bbf55c62a61d0"
+  },
+  "pdfRobot": {
+    "file": "pdfRobot.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1139",
+    "node": "2:1216",
+    "width": 16.5,
+    "height": 14.25,
+    "sha256": "72f2fd6d368ade95098ff323a9c58bc9ac74c2f7a1933b86d4ab520f93d66c81"
+  },
+  "pdfCheck": {
+    "file": "pdfCheck.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1139",
+    "node": "2:1226",
+    "width": 12.225,
+    "height": 9.01875,
+    "sha256": "121713f23840bde5990333cb9b7b057994f481fba1b85f8b1b33d56d93d3d62d"
+  },
+  "pdfEdit": {
+    "file": "pdfEdit.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1139",
+    "node": "2:1187",
+    "width": 4.625,
+    "height": 7.5,
+    "sha256": "0b19126730e9295d256d2dd6d0816ede5ab67ce721423936c494b622f18525eb"
+  },
+  "checkedThumb": {
+    "file": "checkedThumb.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:1050",
+    "node": "2:1097",
+    "width": 24.0,
+    "height": 24.0,
+    "sha256": "1a0c0402df9dab77c7900123624364eb2c9698ecc1a21a7f8c4ca34971f1809c"
+  },
+  "chatMore": {
+    "file": "chatMore.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:896",
+    "node": "2:983",
+    "width": 16.0,
+    "height": 4.0,
+    "sha256": "b83b8cf41a68c857c811b5012e9fe1a0eb360a3afb14a094fca856cce26f82a3"
+  },
+  "memoryBack": {
+    "file": "memoryBack.svg",
+    "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+    "frame": "2:617",
+    "node": "2:633",
+    "width": 10.7937,
+    "height": 18.3333,
+    "sha256": "9435f90871ee9900ea3c03552b12055f1f5b96674a5252b4e6b236bc94f2e106"
+  }
+}

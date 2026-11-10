@@ -7,20 +7,14 @@ import { router } from "expo-router";
 import { emptyData } from "../../src/types";
 import { useStore } from "../../src/store";
 import { exportBackup, pickBackup } from "../../src/backup";
-import {
-  FormScroll,
-  Icon,
-  NyloMark,
-  Page,
-  confirm,
-  s,
-  theme,
-} from "../../src/ui";
+import { FormScroll, Icon, Page, confirm, s, theme } from "../../src/ui";
+import { DesignIconName } from "../../src/design-icons";
 
 function SettingsRow({
   title,
   detail,
   icon,
+  design,
   onPress,
   disabled,
   destructive,
@@ -29,6 +23,7 @@ function SettingsRow({
   title: string;
   detail?: string;
   icon: React.ComponentProps<typeof Icon>["name"];
+  design: DesignIconName;
   onPress: () => void;
   disabled?: boolean;
   destructive?: boolean;
@@ -48,7 +43,7 @@ function SettingsRow({
           paddingVertical: 16,
           paddingHorizontal: 16,
           borderBottomWidth: last ? 0 : 1,
-          borderBottomColor: theme.line,
+          borderBottomColor: "#F0F0EE",
           opacity: disabled ? 0.4 : pressed ? 0.55 : 1,
         },
       ]}
@@ -65,11 +60,12 @@ function SettingsRow({
       >
         <Icon
           name={icon}
+          design={design}
           size={19}
           color={destructive ? theme.error : theme.ink}
         />
       </View>
-      <View style={{ flex: 1, gap: 3 }}>
+      <View style={{ flex: 1 }}>
         <Text
           style={[
             s.text,
@@ -78,6 +74,7 @@ function SettingsRow({
               fontSize: detail ? 18 : 16,
               fontWeight: detail ? "600" : "500",
               letterSpacing: detail ? -0.45 : -0.4,
+              lineHeight: 24,
               color: destructive ? theme.error : theme.ink,
             },
           ]}
@@ -85,10 +82,12 @@ function SettingsRow({
           {title}
         </Text>
         {detail ? (
-          <Text style={[s.sub, { color: theme.quiet }]}>{detail}</Text>
+          <Text style={[s.sub, { color: theme.quiet, lineHeight: 20 }]}>
+            {detail}
+          </Text>
         ) : null}
       </View>
-      <Icon name="chevron-forward" size={20} color="#C6C5D0" />
+      <Icon name="chevron-forward" design="chevron" size={20} color="#C6C5D0" />
     </Pressable>
   );
 }
@@ -101,6 +100,7 @@ function Group({ children }: { children: React.ReactNode }) {
         borderColor: "#E7E7E5",
         borderRadius: 12,
         overflow: "hidden",
+        boxShadow: "0px 2px 8px rgba(30,43,88,0.04)",
       }}
     >
       {children}
@@ -132,7 +132,7 @@ export default function Settings() {
   };
   return (
     <Page>
-      <FormScroll>
+      <FormScroll contentStyle={{ gap: 24, paddingTop: 8 }}>
         <Text
           accessibilityRole="header"
           maxFontSizeMultiplier={1.6}
@@ -141,17 +141,29 @@ export default function Settings() {
             {
               fontFamily: fonts.nimbus,
               fontSize: 16,
+              lineHeight: 24,
               letterSpacing: -0.4,
-              paddingTop: 12,
-              paddingBottom: 8,
+              paddingTop: 0,
+              paddingBottom: 0,
             },
           ]}
         >
           Settings
         </Text>
-        <View style={{ gap: 9 }}>
+        <View style={{ gap: 4 }}>
           <Text
-            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: "rgba(69,70,79,0.9)",
+                paddingLeft: 4,
+              },
+            ]}
           >
             Your AI
           </Text>
@@ -168,6 +180,7 @@ export default function Settings() {
                   : "Use your own provider and API key"
               }
               icon="key-outline"
+              design="key"
               onPress={() => router.push("/connection")}
               last
             />
@@ -180,6 +193,8 @@ export default function Settings() {
                 lineHeight: 21,
                 fontFamily: fonts.nimbus,
                 paddingHorizontal: 4,
+                paddingTop: 4,
+                color: "rgba(69,70,79,0.8)",
               },
             ]}
           >
@@ -187,9 +202,20 @@ export default function Settings() {
             policies apply.
           </Text>
         </View>
-        <View style={{ gap: 9 }}>
+        <View style={{ gap: 4 }}>
           <Text
-            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: "rgba(69,70,79,0.9)",
+                paddingLeft: 4,
+              },
+            ]}
           >
             Data on this device
           </Text>
@@ -197,6 +223,7 @@ export default function Settings() {
             <SettingsRow
               title="Export backup"
               icon="arrow-up-outline"
+              design="export"
               disabled={disabled}
               onPress={() =>
                 void action(async () => {
@@ -215,6 +242,7 @@ export default function Settings() {
             <SettingsRow
               title="Restore backup"
               icon="arrow-down-outline"
+              design="restore"
               disabled={disabled}
               onPress={() =>
                 void action(async () => {
@@ -242,9 +270,11 @@ export default function Settings() {
               s.sub,
               {
                 fontSize: 13,
-                lineHeight: 21,
+                lineHeight: 21.13,
                 fontFamily: fonts.nimbus,
                 paddingHorizontal: 4,
+                paddingTop: 4,
+                color: "rgba(69,70,79,0.8)",
               },
             ]}
           >
@@ -252,9 +282,20 @@ export default function Settings() {
             devices.
           </Text>
         </View>
-        <View style={{ gap: 9 }}>
+        <View style={{ gap: 4 }}>
           <Text
-            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: "rgba(69,70,79,0.9)",
+                paddingLeft: 4,
+              },
+            ]}
           >
             Help & privacy
           </Text>
@@ -262,6 +303,7 @@ export default function Settings() {
             <SettingsRow
               title="Privacy policy"
               icon="shield-checkmark-outline"
+              design="privacy"
               onPress={() =>
                 void action(() =>
                   Linking.openURL(
@@ -273,6 +315,7 @@ export default function Settings() {
             <SettingsRow
               title="Contact support"
               icon="mail-outline"
+              design="mail"
               onPress={() =>
                 void action(() =>
                   Linking.openURL("mailto:admin@colorforfun.app"),
@@ -282,9 +325,20 @@ export default function Settings() {
             />
           </Group>
         </View>
-        <View style={{ gap: 9 }}>
+        <View style={{ gap: 4 }}>
           <Text
-            style={[s.eyebrow, { fontFamily: fonts.nimbus, paddingLeft: 4 }]}
+            style={[
+              s.eyebrow,
+              {
+                fontFamily: fonts.nimbus,
+                fontWeight: "700",
+                fontSize: 12,
+                lineHeight: 18,
+                letterSpacing: 0.6,
+                color: "rgba(69,70,79,0.9)",
+                paddingLeft: 4,
+              },
+            ]}
           >
             Advanced
           </Text>
@@ -292,12 +346,14 @@ export default function Settings() {
             <SettingsRow
               title="Live device check"
               icon="pulse-outline"
+              design="deviceCheck"
               detail="Check replies, memory and persistence"
               onPress={() => router.push("/device-check")}
             />
             <SettingsRow
               title="Delete all local data"
               icon="trash-outline"
+              design="deleteData"
               destructive
               disabled={disabled}
               last

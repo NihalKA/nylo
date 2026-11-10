@@ -1,7 +1,8 @@
 import { Text } from "../src/typography";
 import { fonts } from "../src/typography";
 import React, { useState } from "react";
-import { Linking, View } from "react-native";
+import * as Clipboard from "expo-clipboard";
+import { Alert, Linking, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../src/store";
 import {
@@ -11,6 +12,7 @@ import {
   FormScroll,
   Header,
   Icon,
+  IconButton,
   Page,
   confirm,
   s,
@@ -31,20 +33,52 @@ export default function Report() {
   const preview = `Nylo response report\nModel: ${message?.model || "Not recorded"}\n\n${details.trim() || "Please investigate this response."}${include && message ? `\n\nSelected response excerpt (up to 2000 characters):\n${message.text.slice(0, 2000)}` : ""}`;
   return (
     <Page>
-      <Header title="Report a response" titleStyle={{ letterSpacing: -0.45 }} />
-      <FormScroll>
-        <Text style={[s.h2, { letterSpacing: -0.18 }]}>
-          Tell us what went wrong
-        </Text>
-        <Text style={s.sub}>
-          Reports go to{" "}
-          <Text style={{ color: theme.ink, fontWeight: "500" }}>
-            admin@colorforfun.app
-          </Text>{" "}
-          using your email app. Nylo sends nothing automatically. No API key,
-          other messages or attachments are included.
-        </Text>
+      <Header
+        title="Report a response"
+        backDesign="reportBack"
+        titleStyle={{ letterSpacing: -0.45 }}
+        right={
+          <IconButton
+            name="ellipsis-horizontal"
+            design="reportMore"
+            label="Report options"
+            onPress={() =>
+              Alert.alert(
+                "Report options",
+                "Copy only the report shown in the preview. Nothing is sent.",
+                [
+                  {
+                    text: "Copy report preview",
+                    onPress: () => {
+                      void Clipboard.setStringAsync(preview).catch(() =>
+                        setError("Could not copy the report preview."),
+                      );
+                    },
+                  },
+                  { text: "Cancel", style: "cancel" },
+                ],
+              )
+            }
+          />
+        }
+      />
+      <FormScroll contentStyle={{ gap: 24, paddingTop: 8, paddingBottom: 36 }}>
+        <View style={{ gap: 2.75 }}>
+          <Text style={[s.h2, { letterSpacing: -0.18 }]}>
+            Tell us what went wrong
+          </Text>
+          <Text style={[s.sub, { lineHeight: 22.75 }]}>
+            Reports go to{" "}
+            <Text style={{ color: theme.ink, fontWeight: "500" }}>
+              admin@colorforfun.app
+            </Text>{" "}
+            using your email app. Nylo sends nothing automatically. No API key,
+            other messages or attachments are included.
+          </Text>
+        </View>
         <Field
+          gap={4}
+          inputHint="Optional details"
           label="What should we review?"
           labelStyle={{ ...s.h2, letterSpacing: -0.18 }}
           value={details}
@@ -53,6 +87,7 @@ export default function Report() {
           multiline
           style={{
             minHeight: 140,
+            paddingBottom: 32,
             fontSize: 14,
             lineHeight: 20,
             borderColor: "rgba(198, 197, 208, 0.4)",
@@ -60,30 +95,18 @@ export default function Report() {
           placeholderTextColor={theme.quiet}
           placeholder="Unsafe content, a privacy concern, or another issue…"
         />
-        <Text
-          style={{
-            color: theme.quiet,
-            fontSize: 11,
-            fontWeight: "600",
-            letterSpacing: 0.33,
-            alignSelf: "flex-end",
-            marginTop: -14,
-          }}
-        >
-          Optional details
-        </Text>
         <View
           style={[
             s.card,
             s.between,
             {
-              gap: 12,
+              gap: 16,
               flexWrap: "wrap",
               borderColor: "rgba(198, 197, 208, 0.3)",
             },
           ]}
         >
-          <View style={{ flex: 1, minWidth: 160, gap: 6 }}>
+          <View style={{ flex: 1, minWidth: 160, gap: 4 }}>
             <Text
               style={[
                 s.text,
@@ -105,104 +128,124 @@ export default function Report() {
             disabled={!message}
           />
         </View>
-        <View style={[s.between, { flexWrap: "wrap", gap: 8 }]}>
-          <Text
-            accessibilityRole="header"
-            style={[s.h2, { letterSpacing: -0.18 }]}
-          >
-            Report preview
-          </Text>
-          <Text
-            style={{
-              fontSize: 11,
-              fontWeight: "600",
-              color: "#8793C7",
-              letterSpacing: 0.33,
-              backgroundColor: theme.line,
-              borderRadius: 9,
-              paddingHorizontal: 8,
-              paddingVertical: 3,
-            }}
-          >
-            Automated Draft
-          </Text>
-        </View>
-        <View
-          style={[
-            s.card,
-            {
-              // Figma alpha composited over the page. An opaque surface keeps
-              // native elevation shadows from bleeding through the card fill.
-              backgroundColor: "#F5F6F5",
-              borderColor: "rgba(198, 197, 208, 0.4)",
-              gap: 12,
-            },
-          ]}
-        >
-          <View style={s.between}>
+        <View style={{ gap: 4 }}>
+          <View style={[s.between, { flexWrap: "wrap", gap: 8 }]}>
+            <Text
+              accessibilityRole="header"
+              style={[s.h2, { letterSpacing: -0.18 }]}
+            >
+              Report preview
+            </Text>
             <Text
               style={{
-                color: theme.ink,
-                fontSize: 14,
+                fontSize: 11,
                 fontWeight: "600",
-                letterSpacing: 0.14,
+                color: "#8793C7",
+                letterSpacing: 0.33,
+                backgroundColor: theme.line,
+                borderRadius: 9,
+                paddingHorizontal: 8,
+                paddingVertical: 3,
               }}
             >
-              Nylo response report
+              Automated Draft
             </Text>
-            <Icon
-              name="shield-checkmark-outline"
-              size={16}
-              color={theme.quiet}
-            />
           </View>
-          <Text
-            selectable
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: 12,
-              lineHeight: 18,
-              color: theme.sub,
-            }}
+          <View
+            style={[
+              s.card,
+              {
+                // Figma alpha composited over the page. An opaque surface keeps
+                // native elevation shadows from bleeding through the card fill.
+                backgroundColor: "#F5F6F5",
+                borderColor: "rgba(198, 197, 208, 0.4)",
+                gap: 8,
+                padding: 16,
+                boxShadow: "0px 1px 3px rgba(30,43,88,0.04)",
+              },
+            ]}
           >
-            Model: {message?.model || "Not recorded"}
-          </Text>
-          <Text
-            selectable
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: 13,
-              lineHeight: 20,
-              color: theme.text,
-            }}
-          >
-            {details.trim() || "Please investigate this response."}
-          </Text>
-          {include && message ? (
             <View
               style={{
-                backgroundColor: theme.card,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: "#C6C5D033",
-                padding: 12,
+                borderBottomWidth: 1,
+                borderBottomColor: "rgba(198,197,208,0.3)",
+                paddingBottom: 9,
+                gap: 2,
               }}
             >
+              <View style={s.between}>
+                <Text
+                  style={{
+                    color: theme.ink,
+                    fontSize: 14,
+                    fontWeight: "600",
+                    letterSpacing: 0.14,
+                  }}
+                >
+                  Nylo response report
+                </Text>
+                <Icon
+                  name="shield-checkmark-outline"
+                  design="reportShield"
+                  size={16}
+                  color={theme.quiet}
+                />
+              </View>
               <Text
                 selectable
-                style={[
-                  s.sub,
-                  { fontSize: 12, lineHeight: 18, color: theme.quiet },
-                ]}
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  lineHeight: 18,
+                  color: theme.sub,
+                }}
               >
-                {`Selected response excerpt (up to 2000 characters):\n${message.text.slice(0, 2000)}`}
+                Model: {message?.model || "Not recorded"}
               </Text>
             </View>
-          ) : null}
+            <Text
+              selectable
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: 13,
+                lineHeight: 20,
+                color: theme.text,
+              }}
+            >
+              {details.trim() || "Please investigate this response."}
+            </Text>
+            {include && message ? (
+              <View
+                style={{
+                  backgroundColor: theme.card,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "#C6C5D033",
+                  padding: 8,
+                }}
+              >
+                <Text
+                  selectable
+                  style={[
+                    s.sub,
+                    {
+                      fontSize: 12,
+                      lineHeight: 16,
+                      color: theme.quiet,
+                      fontStyle: "italic",
+                    },
+                  ]}
+                >
+                  {`Selected response excerpt (up to 2000 characters):\n${message.text.slice(0, 2000)}`}
+                </Text>
+              </View>
+            ) : null}
+          </View>
         </View>
         <Button
           title="Open email to send report"
           icon="mail-outline"
+          designIcon="mailWhite"
           onPress={() =>
             void (async () => {
               try {
@@ -217,7 +260,17 @@ export default function Report() {
             })()
           }
         />
-        <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
+        <Text
+          style={[
+            s.sub,
+            {
+              fontSize: 12,
+              lineHeight: 18,
+              textAlign: "center",
+              marginTop: -8,
+            },
+          ]}
+        >
           Review and send in your email app. Opening the draft does not deliver
           a report. For urgent personal safety concerns, contact local emergency
           services.
@@ -228,6 +281,7 @@ export default function Report() {
             secondary
             destructive
             icon="trash-outline"
+            designIcon="removeResponse"
             style={{
               minHeight: 54,
               borderRadius: 27,

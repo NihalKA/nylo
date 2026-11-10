@@ -1,6 +1,7 @@
 const { withPodfile } = require("expo/config-plugins");
 const START =
   "# Nylo image SDK versions (source-built for vendor privacy resources)";
+// ExpoImage requires ~> 0.14.6; the source-built manipulator has no version constraint.
 const END = "# End Nylo image SDK versions";
 function pinImagePods(contents) {
   if (contents.includes(START)) {
@@ -21,7 +22,7 @@ function pinImagePods(contents) {
   return contents.replace(
     anchor,
     (line, indent) =>
-      `${line}\n${indent}${START}\n${indent}pod 'SDWebImage', '5.21.6'\n${indent}pod 'SDWebImageWebPCoder', '0.15.0'\n${indent}${END}`,
+      `${line}\n${indent}${START}\n${indent}pod 'SDWebImage', '5.21.6'\n${indent}pod 'SDWebImageWebPCoder', '0.14.6'\n${indent}${END}`,
   );
 }
 module.exports = (config) =>

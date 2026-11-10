@@ -1,3 +1,4 @@
+import { BlurTargetView, BlurView } from "expo-blur";
 import { Text, TextInput, fonts } from "../../src/typography";
 import { attachmentFlowReducer } from "../../src/attachment-flow";
 import { modelSections } from "../../src/model-library";
@@ -51,6 +52,7 @@ import {
   confirm,
   s,
   theme,
+  softShadow,
 } from "../../src/ui";
 
 function MessageText({ text }: { text: string }) {
@@ -167,6 +169,7 @@ function Chat() {
   const picking =
     attachmentFlow.kind === "closing" || attachmentFlow.kind === "picking";
   const [modelSearch, setModelSearch] = useState("");
+  const blurTarget = useRef<React.ComponentRef<typeof View>>(null);
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -336,691 +339,776 @@ function Chat() {
   };
   return (
     <Page>
-      <Header
-        dismissKeyboard={keyboardVisible}
-        onDismissKeyboard={() => {
-          composer.current?.blur();
-          Keyboard.dismiss();
-        }}
-        titleStyle={{
-          fontSize: !conversation.messages.length && hasPdf ? 22 : 18,
-          fontWeight: conversation.messages.length || hasPdf ? "700" : "600",
-          letterSpacing:
-            !conversation.messages.length && hasPdf ? -0.33 : -0.45,
-          color:
-            conversation.messages.length || hasPdf ? theme.text : theme.ink,
-        }}
-        title={
-          agent?.name ||
-          (conversation.messages.length ? conversation.title : "New chat")
-        }
-        right={
-          <IconButton
-            name="ellipsis-horizontal"
-            label="Conversation options"
-            onPress={() => {
-              setTitle(conversation.title);
-              setMenu(true);
-            }}
-          />
-        }
-      />
-      {agent && !keyboardVisible ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={`View ${agent.name} memory. ${agent.memories.length} saved facts shared across this agent’s conversations.`}
-          onPress={() =>
-            router.push({
-              pathname: "/agent/[id]",
-              params: { id: agent.id, section: "memory" },
-            })
+      <BlurTargetView ref={blurTarget} style={{ flex: 1 }}>
+        <Header
+          centerTitle={!agent && !conversation.messages.length}
+          dismissKeyboard={keyboardVisible}
+          onDismissKeyboard={() => {
+            composer.current?.blur();
+            Keyboard.dismiss();
+          }}
+          titleStyle={{
+            fontSize: !conversation.messages.length ? 22 : 18,
+            fontWeight: conversation.messages.length || hasPdf ? "700" : "600",
+            letterSpacing:
+              !conversation.messages.length && hasPdf ? -0.33 : -0.45,
+            color:
+              conversation.messages.length || hasPdf ? theme.text : theme.ink,
+          }}
+          title={
+            agent?.name ||
+            (conversation.messages.length ? conversation.title : "New chat")
           }
-          style={[
-            s.row,
-            {
-              minHeight: 44,
-              gap: 8,
-              paddingVertical: 6,
-              marginBottom: 4,
-            },
-          ]}
-        >
-          <Icon name="albums-outline" color={theme.sub} size={16} />
-          <View style={{ flex: 1 }}>
-            <Text style={[s.sub, { fontSize: 13 }]}>
-              Memory · {agent.memories.length} saved{" "}
-              {agent.memories.length === 1 ? "fact" : "facts"}
-            </Text>
-          </View>
-          <Icon name="chevron-forward" color={theme.sub} size={12} />
-        </Pressable>
-      ) : null}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={insets.top}
-        behavior={
-          Platform.OS === "ios"
-            ? "padding"
-            : Platform.OS === "android"
-              ? "height"
-              : undefined
-        }
-      >
-        <ScrollView
-          ref={scroll}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode={
-            Platform.OS === "ios" ? "interactive" : "on-drag"
+          right={
+            <IconButton
+              name="ellipsis-horizontal"
+              design="chatMore"
+              label="Conversation options"
+              onPress={() => {
+                setTitle(conversation.title);
+                setMenu(true);
+              }}
+            />
           }
-          contentContainerStyle={{
-            paddingTop: 12,
-            paddingBottom: 28,
-            gap: 24,
-            flexGrow: 1,
-          }}
-          onScroll={(event) => {
-            const { contentOffset, layoutMeasurement, contentSize } =
-              event.nativeEvent;
-            nearBottom.current =
-              contentSize.height - contentOffset.y - layoutMeasurement.height <
-              120;
-          }}
-          scrollEventThrottle={100}
-          onContentSizeChange={() => {
-            if (!conversation.messages.length)
-              scroll.current?.scrollTo({ y: 0, animated: false });
-            else if (nearBottom.current)
-              scroll.current?.scrollToEnd({ animated: false });
-          }}
-          onLayout={() => {
-            if (!conversation.messages.length)
-              scroll.current?.scrollTo({ y: 0, animated: false });
-            else if (nearBottom.current)
-              scroll.current?.scrollToEnd({ animated: false });
-          }}
-        >
-          {!conversation.messages.length ? (
-            <View
-              style={{
-                display: keyboardVisible ? "none" : "flex",
-                flexGrow: 1,
-                alignItems: "center",
-                justifyContent: fontScale > 1.5 ? "flex-start" : "center",
-                gap: 16,
-                paddingVertical: 28,
-              }}
-            >
-              {agent ? <AgentAvatar agent={agent} /> : null}
-              <Text
-                style={[
-                  s.h2,
-                  {
-                    textAlign: "center",
-                    fontSize: !agent && attachmentMenu ? 32 : 28,
-                    fontWeight: "700",
-                    letterSpacing: !agent && attachmentMenu ? -0.8 : -0.7,
-                    color: hasPdf ? theme.text : theme.ink,
-                  },
-                ]}
-              >
-                {agent ? `Work with ${agent.name}` : "Let’s begin"}
-              </Text>
-              <Text
-                style={[
-                  s.sub,
-                  {
-                    textAlign: "center",
-                    maxWidth: 360,
-                    fontSize: 14,
-                    color: agent ? theme.sub : theme.quiet,
-                  },
-                ]}
-              >
-                {agent
-                  ? `${agent.description || "Your instructions and approved memories are ready."}`
-                  : "A question, a draft, or a fresh idea."}
-              </Text>
-              {!connection ? (
-                <Button
-                  title="Connect your first model"
-                  onPress={() => router.push("/connection")}
-                />
-              ) : text.length === 0 && !attachments.length ? (
-                <View style={{ gap: 4, marginTop: 8 }}>
-                  {["Help me write", "Think it through"].map((label) => (
-                    <Pressable
-                      key={label}
-                      accessibilityRole="button"
-                      onPress={() => {
-                        setText((current) =>
-                          starterDraft(
-                            current,
-                            label === "Help me write"
-                              ? "Help me write "
-                              : "Help me think through ",
-                          ),
-                        );
-                        composer.current?.focus();
-                      }}
-                      style={[
-                        s.row,
-                        { gap: 10, minHeight: 44, paddingHorizontal: 16 },
-                      ]}
-                    >
-                      <Icon
-                        name={
-                          label === "Help me write"
-                            ? "create-outline"
-                            : "bulb-outline"
-                        }
-                        size={17}
-                        color={theme.sub}
-                      />
-                      <Text style={s.sub}>{label}</Text>
-                    </Pressable>
-                  ))}
-                </View>
-              ) : null}
-            </View>
-          ) : (
-            <>
-              {conversation.messages.map((message, index) => (
-                <View
-                  key={message.id}
-                  style={{
-                    gap: 10,
-                    alignItems:
-                      message.role === "user" ? "flex-end" : "stretch",
-                  }}
-                >
-                  {message.role === "user" ? (
-                    <View
-                      style={{
-                        backgroundColor: theme.surface,
-                        paddingVertical: 12,
-                        paddingHorizontal: 16,
-                        borderRadius: 22,
-                        maxWidth: "90%",
-                      }}
-                    >
-                      {message.attachments?.map((file) => (
-                        <View key={file.id} style={{ gap: 6, marginBottom: 8 }}>
-                          {file.mimeType.startsWith("image/") ? (
-                            <Image
-                              source={{ uri: attachmentUri(file) }}
-                              accessibilityLabel={`Attached photo: ${file.name}`}
-                              style={{
-                                width: 180,
-                                height: 140,
-                                borderRadius: 12,
-                                maxWidth: "100%",
-                              }}
-                              resizeMode="contain"
-                            />
-                          ) : null}
-                          <Text style={s.sub}>
-                            {file.name} · {Math.ceil(file.size / 1024)} KB
-                          </Text>
-                        </View>
-                      ))}
-                      <Text
-                        selectable
-                        style={[s.text, { fontSize: 14, lineHeight: 20 }]}
-                      >
-                        {message.text}
-                      </Text>
-                    </View>
-                  ) : (
-                    <View style={{ gap: 12 }}>
-                      {agent || message.status === "streaming" ? (
-                        <View style={[s.row, { gap: 8 }]}>
-                          {agent ? (
-                            <View
-                              style={{
-                                width: 22,
-                                height: 22,
-                                borderRadius: 7,
-                                backgroundColor: agent.color + "15",
-                                justifyContent: "center",
-                                alignItems: "center",
-                              }}
-                            >
-                              <Text
-                                style={{
-                                  color: agent.color,
-                                  fontSize: 12,
-                                  fontWeight: "600",
-                                }}
-                              >
-                                {agent.name[0]}
-                              </Text>
-                            </View>
-                          ) : null}
-                          <Text
-                            style={{
-                              fontSize: 12,
-                              fontWeight: "600",
-                              color: theme.sub,
-                            }}
-                          >
-                            {agent?.name || "Nylo"}
-                          </Text>
-                          {message.status === "streaming" ? (
-                            <ActivityIndicator size="small" color={theme.sub} />
-                          ) : null}
-                        </View>
-                      ) : null}
-                      {message.actions?.map((label, i) => (
-                        <View key={i} style={[s.row, { gap: 5 }]}>
-                          <Icon
-                            name="checkmark-circle-outline"
-                            size={13}
-                            color={theme.green}
-                          />
-                          <Text style={{ fontSize: 11, color: theme.green }}>
-                            {label}
-                          </Text>
-                        </View>
-                      ))}
-                      {message.text ? (
-                        <MessageText text={message.text} />
-                      ) : message.status === "streaming" ? (
-                        <Text style={s.sub}>Thinking…</Text>
-                      ) : null}
-                      {message.error ? (
-                        <View
-                          style={{
-                            backgroundColor: theme.errorSurface,
-                            padding: 13,
-                            borderRadius: 11,
-                            gap: 8,
-                          }}
-                        >
-                          <Text style={s.error}>{message.error}</Text>
-                          {index === conversation.messages.length - 1 ? (
-                            <Button
-                              title="Retry response"
-                              secondary
-                              disabled={!!runningId}
-                              icon="refresh-outline"
-                              onPress={() =>
-                                void action(() => send(id, "", true))
-                              }
-                              style={{
-                                alignSelf: "flex-start",
-                                minHeight: 44,
-                                paddingVertical: 8,
-                              }}
-                            />
-                          ) : null}
-                        </View>
-                      ) : null}
-                      {message.text && message.status !== "streaming" ? (
-                        <View style={[s.row, { gap: 3 }]}>
-                          <IconButton
-                            name={
-                              copied === message.id
-                                ? "checkmark"
-                                : "copy-outline"
-                            }
-                            label="Copy response"
-                            onPress={() =>
-                              void action(async () => {
-                                await Clipboard.setStringAsync(message.text);
-                                setCopied(message.id);
-                                setTimeout(() => setCopied(null), 1500);
-                              })
-                            }
-                          />
-                          <IconButton
-                            name="flag-outline"
-                            label="Report response"
-                            onPress={() =>
-                              router.push({
-                                pathname: "/report",
-                                params: { chatId: id, messageId: message.id },
-                              })
-                            }
-                          />
-                          {agent ? (
-                            <IconButton
-                              name="bookmark-outline"
-                              label="Review as memory"
-                              onPress={() =>
-                                router.push({
-                                  pathname: "/agent/[id]",
-                                  params: {
-                                    id: agent.id,
-                                    section: "memory",
-                                    draftMemory: message.text.slice(0, 1000),
-                                  },
-                                })
-                              }
-                            />
-                          ) : null}
-                          {message.model &&
-                          message.model !== connection?.model ? (
-                            <Text style={[s.sub, { fontSize: 12, flex: 1 }]}>
-                              {message.model}
-                            </Text>
-                          ) : null}
-                        </View>
-                      ) : null}
-                    </View>
-                  )}
-                </View>
-              ))}
-            </>
-          )}
-        </ScrollView>
-        <View style={{ paddingBottom: 8, gap: 10 }}>
-          {needsPdfConnection ? (
-            <View style={{ gap: 2 }}>
-              <Text
-                accessibilityRole="alert"
-                style={[s.sub, { color: theme.error }]}
-              >
-                {historyHasPdf
-                  ? "This chat’s PDF needs a supported API format."
-                  : "This API format doesn’t support PDFs."}
-              </Text>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Choose PDF connection"
-                onPress={openModelPicker}
-                style={[
-                  s.row,
-                  { minHeight: 44, gap: 6, alignSelf: "flex-start" },
-                ]}
-              >
-                <Text style={[s.text, { fontWeight: "600" }]}>
-                  Choose PDF connection
-                </Text>
-                <Icon name="chevron-forward" size={16} />
-              </Pressable>
-            </View>
-          ) : error ? (
-            <Text accessibilityRole="alert" style={s.error}>
-              {error}
-            </Text>
-          ) : null}
-          {attachments.length ? (
-            <ScrollView
-              horizontal
-              keyboardShouldPersistTaps="always"
-              style={{ flexGrow: 0 }}
-              contentContainerStyle={{
-                gap: 12,
-                alignItems: "center",
-                paddingVertical: 4,
-              }}
-            >
-              {attachments.map((file) => {
-                const image = file.mimeType.startsWith("image/");
-                return (
-                  <View
-                    key={file.id}
-                    style={{
-                      padding: 10,
-                      gap: 6,
-                      width: image ? 144 : 176,
-                      minHeight: image ? 165 : 134,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: theme.fileLine,
-                      backgroundColor: theme.file,
-                    }}
-                  >
-                    {image ? (
-                      <View>
-                        <Image
-                          source={{ uri: attachmentUri(file) }}
-                          accessibilityLabel={`Preview ${file.name}`}
-                          style={{ width: 122, height: 96, borderRadius: 8 }}
-                          resizeMode="contain"
-                        />
-                        <Text
-                          style={{
-                            position: "absolute",
-                            bottom: 6,
-                            left: 6,
-                            backgroundColor: "#00000066",
-                            color: "#FFF",
-                            borderRadius: 4,
-                            paddingHorizontal: 5,
-                            paddingVertical: 3,
-                            fontSize: 10,
-                          }}
-                        >
-                          {file.mimeType.split("/")[1]?.toUpperCase()}
-                        </Text>
-                      </View>
-                    ) : (
-                      <View
-                        style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: 8,
-                          backgroundColor: "#E8E8E799",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          marginBottom: 18,
-                        }}
-                      >
-                        <Icon
-                          name="document-text-outline"
-                          size={18}
-                          color={theme.ink}
-                        />
-                      </View>
-                    )}
-                    <View style={{ paddingRight: image ? 30 : 0 }}>
-                      <Text
-                        numberOfLines={2}
-                        style={{
-                          color: theme.ink,
-                          fontSize: 12,
-                          lineHeight: 16,
-                          fontWeight: image ? "400" : "500",
-                        }}
-                      >
-                        {file.name}
-                      </Text>
-                      <Text
-                        style={{
-                          color: theme.quiet,
-                          fontSize: 11,
-                          lineHeight: 16,
-                        }}
-                      >
-                        {Math.ceil(file.size / 1024)} KB
-                        {!image && file.mimeType.startsWith("text/")
-                          ? " · Plain text"
-                          : ""}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        position: "absolute",
-                        right: 0,
-                        ...(image ? { bottom: 4 } : { top: 0 }),
-                      }}
-                    >
-                      <IconButton
-                        name="close"
-                        size={14}
-                        label={`Remove ${file.name}`}
-                        onPress={() => removeAttachment(file.id)}
-                      />
-                    </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
-          ) : null}
-          {picking ? (
-            <Text accessibilityLiveRegion="polite" style={s.sub}>
-              {attachmentPreparation === "reading"
-                ? "Reading attachment…"
-                : attachmentPreparation === "encoding"
-                  ? "Finishing photo…"
-                  : attachmentPreparation === "decoding"
-                    ? "Preparing photo…"
-                    : attachmentPreparation === "opening"
-                      ? "Opening photo…"
-                      : attachmentPreparation === "inspecting"
-                        ? "Checking attachment…"
-                        : "Choosing attachment…"}
-            </Text>
-          ) : null}
-          <View style={s.between}>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Choose model connection${connection ? `. ${connection.name}, ${connection.model}` : ""}`}
-              onPress={openModelPicker}
-              style={[
-                s.row,
-                {
-                  gap: 6,
-                  alignSelf: "flex-start",
-                  flex: 1,
-                  minWidth: 0,
-                  minHeight: 44,
-                  paddingVertical: 6,
-                },
-              ]}
-            >
-              <Text
-                numberOfLines={1}
-                maxFontSizeMultiplier={1.6}
-                style={{ fontSize: 12, color: theme.quiet, flexShrink: 1 }}
-              >
-                {connection ? `${connection.model}` : "Choose a model"}
-              </Text>
-              <Icon name="chevron-down" size={12} color={theme.sub} />
-            </Pressable>
-          </View>
-          <View
+        />
+        {agent && !keyboardVisible ? (
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={`View ${agent.name} memory. ${agent.memories.length} saved facts shared across this agent’s conversations.`}
+            onPress={() =>
+              router.push({
+                pathname: "/agent/[id]",
+                params: { id: agent.id, section: "memory" },
+              })
+            }
             style={[
               s.row,
               {
-                alignItems: "flex-end",
-                gap: 10,
-                padding: 4,
-                borderRadius: 27,
-                borderWidth: 1,
-                borderColor: theme.fileLine,
-                backgroundColor: theme.file,
+                minHeight: 44,
+                gap: 8,
+                paddingVertical: 6,
+                marginBottom: 4,
               },
             ]}
           >
-            <IconButton
-              name="add"
-              label="Add attachment"
-              disabled={picking || submitting || !!runningId}
-              onPress={() => {
-                composer.current?.blur();
-                Keyboard.dismiss();
-                dispatchAttachment({ type: "open" });
-              }}
-            />
-            <TextInput
-              ref={composer}
-              accessibilityLabel="Message"
-              testID="chat-message"
-              value={text}
-              onChangeText={setText}
-              maxLength={20000}
-              multiline
-              placeholder={agent ? `Message ${agent.name}…` : "Message Nylo…"}
-              placeholderTextColor={theme.sub}
-              style={{
-                flex: 1,
-                fontSize: 14,
-                lineHeight: 20,
-                color: theme.ink,
-                minHeight: 36,
-                maxHeight: 150,
-                paddingHorizontal: 5,
-                paddingTop: 6,
-                paddingBottom: 6,
-              }}
-              onKeyPress={(event) => {
-                if (
-                  Platform.OS === "web" &&
-                  event.nativeEvent.key === "Enter" &&
-                  !(event as unknown as { shiftKey: boolean }).shiftKey
-                ) {
-                  event.preventDefault();
-                  void submit();
-                }
-              }}
-            />
-            {isRunning ? (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Stop response"
-                onPress={stop}
+            <Icon name="albums-outline" color={theme.sub} size={16} />
+            <View style={{ flex: 1 }}>
+              <Text style={[s.sub, { fontSize: 13 }]}>
+                Memory · {agent.memories.length} saved{" "}
+                {agent.memories.length === 1 ? "fact" : "facts"}
+              </Text>
+            </View>
+            <Icon name="chevron-forward" color={theme.sub} size={12} />
+          </Pressable>
+        ) : null}
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={insets.top}
+          behavior={
+            Platform.OS === "ios"
+              ? "padding"
+              : Platform.OS === "android"
+                ? "height"
+                : undefined
+          }
+        >
+          <ScrollView
+            ref={scroll}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode={
+              Platform.OS === "ios" ? "interactive" : "on-drag"
+            }
+            contentContainerStyle={{
+              paddingTop: 12,
+              paddingBottom: 28,
+              gap: 24,
+              flexGrow: 1,
+            }}
+            onScroll={(event) => {
+              const { contentOffset, layoutMeasurement, contentSize } =
+                event.nativeEvent;
+              nearBottom.current =
+                contentSize.height -
+                  contentOffset.y -
+                  layoutMeasurement.height <
+                120;
+            }}
+            scrollEventThrottle={100}
+            onContentSizeChange={() => {
+              if (!conversation.messages.length)
+                scroll.current?.scrollTo({ y: 0, animated: false });
+              else if (nearBottom.current)
+                scroll.current?.scrollToEnd({ animated: false });
+            }}
+            onLayout={() => {
+              if (!conversation.messages.length)
+                scroll.current?.scrollTo({ y: 0, animated: false });
+              else if (nearBottom.current)
+                scroll.current?.scrollToEnd({ animated: false });
+            }}
+          >
+            {!conversation.messages.length ? (
+              <View
                 style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 22,
-                  backgroundColor: theme.primary,
+                  display: keyboardVisible ? "none" : "flex",
+                  flexGrow: 1,
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: fontScale > 1.5 ? "flex-start" : "center",
+                  gap: 16,
+                  paddingVertical: 28,
                 }}
               >
-                <Icon name="stop" size={16} color="#FFF" />
-              </Pressable>
+                {agent ? <AgentAvatar agent={agent} /> : null}
+                <Text
+                  style={[
+                    s.h2,
+                    {
+                      textAlign: "center",
+                      fontSize: !agent && attachmentMenu ? 32 : 28,
+                      fontWeight: "700",
+                      letterSpacing: !agent && attachmentMenu ? -0.8 : -0.7,
+                      color: hasPdf ? theme.text : theme.ink,
+                    },
+                  ]}
+                >
+                  {agent ? `Work with ${agent.name}` : "Let’s begin"}
+                </Text>
+                <Text
+                  style={[
+                    s.sub,
+                    {
+                      textAlign: "center",
+                      maxWidth: 360,
+                      fontSize: 14,
+                      color: agent ? theme.sub : theme.quiet,
+                    },
+                  ]}
+                >
+                  {agent
+                    ? `${agent.description || "Your instructions and approved memories are ready."}`
+                    : "A question, a draft, or a fresh idea."}
+                </Text>
+                {!connection ? (
+                  <Button
+                    title="Connect your first model"
+                    onPress={() => router.push("/connection")}
+                  />
+                ) : text.length === 0 && !attachments.length ? (
+                  <View style={{ gap: 4, marginTop: 8 }}>
+                    {["Help me write", "Think it through"].map((label) => (
+                      <Pressable
+                        key={label}
+                        accessibilityRole="button"
+                        onPress={() => {
+                          setText((current) =>
+                            starterDraft(
+                              current,
+                              label === "Help me write"
+                                ? "Help me write "
+                                : "Help me think through ",
+                            ),
+                          );
+                          composer.current?.focus();
+                        }}
+                        style={[
+                          s.row,
+                          { gap: 10, minHeight: 44, paddingHorizontal: 16 },
+                        ]}
+                      >
+                        <Icon
+                          name={
+                            label === "Help me write"
+                              ? "create-outline"
+                              : "bulb-outline"
+                          }
+                          size={17}
+                          color={theme.sub}
+                        />
+                        <Text style={s.sub}>{label}</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                ) : null}
+              </View>
             ) : (
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Send message"
-                disabled={
-                  (!text.trim() && !attachments.length) ||
-                  !!runningId ||
-                  submitting ||
-                  picking
-                }
-                onPress={() => void submit()}
-                style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 22,
-                  backgroundColor:
-                    (text.trim() || attachments.length) && !runningId
-                      ? theme.primary
-                      : "#E1E1E4",
+              <>
+                {conversation.messages.map((message, index) => (
+                  <View
+                    key={message.id}
+                    style={{
+                      gap: 10,
+                      alignItems:
+                        message.role === "user" ? "flex-end" : "stretch",
+                    }}
+                  >
+                    {message.role === "user" ? (
+                      <View
+                        style={{
+                          backgroundColor: theme.surface,
+                          paddingVertical: 12,
+                          paddingHorizontal: 16,
+                          borderRadius: 22,
+                          maxWidth: "90%",
+                        }}
+                      >
+                        {message.attachments?.map((file) => (
+                          <View
+                            key={file.id}
+                            style={{ gap: 6, marginBottom: 8 }}
+                          >
+                            {file.mimeType.startsWith("image/") ? (
+                              <Image
+                                source={{ uri: attachmentUri(file) }}
+                                accessibilityLabel={`Attached photo: ${file.name}`}
+                                style={{
+                                  width: 180,
+                                  height: 140,
+                                  borderRadius: 12,
+                                  maxWidth: "100%",
+                                }}
+                                resizeMode="contain"
+                              />
+                            ) : null}
+                            <Text style={s.sub}>
+                              {file.name} · {Math.ceil(file.size / 1024)} KB
+                            </Text>
+                          </View>
+                        ))}
+                        <Text
+                          selectable
+                          style={[s.text, { fontSize: 14, lineHeight: 20 }]}
+                        >
+                          {message.text}
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={{ gap: 12 }}>
+                        {agent || message.status === "streaming" ? (
+                          <View style={[s.row, { gap: 8 }]}>
+                            {agent ? (
+                              <View
+                                style={{
+                                  width: 22,
+                                  height: 22,
+                                  borderRadius: 7,
+                                  backgroundColor: agent.color + "15",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: agent.color,
+                                    fontSize: 12,
+                                    fontWeight: "600",
+                                  }}
+                                >
+                                  {agent.name[0]}
+                                </Text>
+                              </View>
+                            ) : null}
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                fontWeight: "600",
+                                color: theme.sub,
+                              }}
+                            >
+                              {agent?.name || "Nylo"}
+                            </Text>
+                            {message.status === "streaming" ? (
+                              <ActivityIndicator
+                                size="small"
+                                color={theme.sub}
+                              />
+                            ) : null}
+                          </View>
+                        ) : null}
+                        {message.actions?.map((label, i) => (
+                          <View key={i} style={[s.row, { gap: 5 }]}>
+                            <Icon
+                              name="checkmark-circle-outline"
+                              size={13}
+                              color={theme.green}
+                            />
+                            <Text style={{ fontSize: 11, color: theme.green }}>
+                              {label}
+                            </Text>
+                          </View>
+                        ))}
+                        {message.text ? (
+                          <MessageText text={message.text} />
+                        ) : message.status === "streaming" ? (
+                          <Text style={s.sub}>Thinking…</Text>
+                        ) : null}
+                        {message.error ? (
+                          <View
+                            style={{
+                              backgroundColor: theme.errorSurface,
+                              padding: 13,
+                              borderRadius: 11,
+                              gap: 8,
+                            }}
+                          >
+                            <Text style={s.error}>{message.error}</Text>
+                            {index === conversation.messages.length - 1 ? (
+                              <Button
+                                title="Retry response"
+                                secondary
+                                disabled={!!runningId}
+                                icon="refresh-outline"
+                                onPress={() =>
+                                  void action(() => send(id, "", true))
+                                }
+                                style={{
+                                  alignSelf: "flex-start",
+                                  minHeight: 44,
+                                  paddingVertical: 8,
+                                }}
+                              />
+                            ) : null}
+                          </View>
+                        ) : null}
+                        {message.text && message.status !== "streaming" ? (
+                          <View style={[s.row, { gap: 3 }]}>
+                            <IconButton
+                              name={
+                                copied === message.id
+                                  ? "checkmark"
+                                  : "copy-outline"
+                              }
+                              label="Copy response"
+                              onPress={() =>
+                                void action(async () => {
+                                  await Clipboard.setStringAsync(message.text);
+                                  setCopied(message.id);
+                                  setTimeout(() => setCopied(null), 1500);
+                                })
+                              }
+                            />
+                            <IconButton
+                              name="flag-outline"
+                              label="Report response"
+                              onPress={() =>
+                                router.push({
+                                  pathname: "/report",
+                                  params: { chatId: id, messageId: message.id },
+                                })
+                              }
+                            />
+                            {agent ? (
+                              <IconButton
+                                name="bookmark-outline"
+                                label="Review as memory"
+                                onPress={() =>
+                                  router.push({
+                                    pathname: "/agent/[id]",
+                                    params: {
+                                      id: agent.id,
+                                      section: "memory",
+                                      draftMemory: message.text.slice(0, 1000),
+                                    },
+                                  })
+                                }
+                              />
+                            ) : null}
+                            {message.model &&
+                            message.model !== connection?.model ? (
+                              <Text style={[s.sub, { fontSize: 12, flex: 1 }]}>
+                                {message.model}
+                              </Text>
+                            ) : null}
+                          </View>
+                        ) : null}
+                      </View>
+                    )}
+                  </View>
+                ))}
+              </>
+            )}
+          </ScrollView>
+          <View style={{ paddingBottom: 8, gap: 10 }}>
+            {needsPdfConnection ? (
+              <View style={{ gap: 2 }}>
+                <Text
+                  accessibilityRole="alert"
+                  style={[s.sub, { color: theme.error }]}
+                >
+                  {historyHasPdf
+                    ? "This chat’s PDF needs a supported API format."
+                    : "This API format doesn’t support PDFs."}
+                </Text>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Choose PDF connection"
+                  onPress={openModelPicker}
+                  style={[
+                    s.row,
+                    { minHeight: 44, gap: 6, alignSelf: "flex-start" },
+                  ]}
+                >
+                  <Text style={[s.text, { fontWeight: "600" }]}>
+                    Choose PDF connection
+                  </Text>
+                  <Icon name="chevron-forward" size={16} />
+                </Pressable>
+              </View>
+            ) : error ? (
+              <Text accessibilityRole="alert" style={s.error}>
+                {error}
+              </Text>
+            ) : null}
+            {attachments.length ? (
+              <ScrollView
+                horizontal
+                keyboardShouldPersistTaps="always"
+                style={{ flexGrow: 0 }}
+                contentContainerStyle={{
+                  gap: 12,
                   alignItems: "center",
-                  justifyContent: "center",
+                  paddingVertical: 4,
                 }}
               >
+                {attachments.map((file) => {
+                  const image = file.mimeType.startsWith("image/");
+                  return (
+                    <View
+                      key={file.id}
+                      style={{
+                        padding: image ? 10 : 12,
+                        gap: 8,
+                        boxShadow:
+                          "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
+                        width: image ? 144 : 176,
+                        minHeight: image ? 165 : 134,
+                        borderRadius: 12,
+                        borderWidth: 1,
+                        borderColor: theme.fileLine,
+                        backgroundColor: theme.file,
+                      }}
+                    >
+                      {image ? (
+                        <View>
+                          <Image
+                            source={{ uri: attachmentUri(file) }}
+                            accessibilityLabel={`Preview ${file.name}`}
+                            style={{ width: 122, height: 96, borderRadius: 8 }}
+                            resizeMode="cover"
+                          />
+                          <Text
+                            style={{
+                              position: "absolute",
+                              bottom: 6,
+                              left: 6,
+                              backgroundColor: "#00000066",
+                              color: "#FFF",
+                              borderRadius: 4,
+                              paddingHorizontal: 5,
+                              paddingVertical: 3,
+                              fontSize: 10,
+                            }}
+                          >
+                            {file.mimeType.split("/")[1]?.toUpperCase()}
+                          </Text>
+                        </View>
+                      ) : (
+                        <View
+                          style={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: 8,
+                            backgroundColor: "#E8E8E799",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginBottom: 18,
+                            borderWidth: 1,
+                            borderColor: "rgba(198,197,208,0.3)",
+                          }}
+                        >
+                          <Icon
+                            name="document-text-outline"
+                            design="fileDocument"
+                            size={18}
+                            color={theme.ink}
+                          />
+                        </View>
+                      )}
+                      <View style={{ paddingRight: image ? 30 : 0 }}>
+                        <Text
+                          numberOfLines={2}
+                          style={{
+                            color: theme.ink,
+                            fontSize: 12,
+                            lineHeight: 16,
+                            fontWeight: image ? "400" : "500",
+                          }}
+                        >
+                          {file.name}
+                        </Text>
+                        <Text
+                          style={{
+                            color: theme.quiet,
+                            fontSize: 11,
+                            lineHeight: 16,
+                          }}
+                        >
+                          {Math.ceil(file.size / 1024)} KB
+                          {!image && file.mimeType.startsWith("text/")
+                            ? " · Plain text"
+                            : ""}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          ...(image ? { bottom: 4 } : { top: 0 }),
+                        }}
+                      >
+                        <IconButton
+                          name="close"
+                          design="removeFile"
+                          size={14}
+                          label={`Remove ${file.name}`}
+                          onPress={() => removeAttachment(file.id)}
+                        />
+                      </View>
+                    </View>
+                  );
+                })}
+                {attachments.length < 4 ? (
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel="Add file"
+                    disabled={picking || submitting || !!runningId}
+                    onPress={() => {
+                      composer.current?.blur();
+                      Keyboard.dismiss();
+                      dispatchAttachment({ type: "open" });
+                    }}
+                    style={({ pressed }) => ({
+                      width: 112,
+                      minHeight: 134,
+                      borderRadius: 12,
+                      borderWidth: 1,
+                      borderStyle: "dashed",
+                      borderColor: "#D8D5CD",
+                      backgroundColor: "rgba(249,249,248,0.6)",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      opacity:
+                        picking || submitting || runningId
+                          ? 0.4
+                          : pressed
+                            ? 0.6
+                            : 1,
+                    })}
+                  >
+                    <Icon name="add" design="addFile" />
+                    <Text
+                      style={{
+                        fontSize: 11,
+                        lineHeight: 16.5,
+                        color: theme.quiet,
+                      }}
+                    >
+                      Add file
+                    </Text>
+                  </Pressable>
+                ) : null}
+              </ScrollView>
+            ) : null}
+            {picking ? (
+              <Text accessibilityLiveRegion="polite" style={s.sub}>
+                {attachmentPreparation === "reading"
+                  ? "Reading attachment…"
+                  : attachmentPreparation === "encoding"
+                    ? "Finishing photo…"
+                    : attachmentPreparation === "decoding"
+                      ? "Preparing photo…"
+                      : attachmentPreparation === "opening"
+                        ? "Opening photo…"
+                        : attachmentPreparation === "inspecting"
+                          ? "Checking attachment…"
+                          : "Choosing attachment…"}
+              </Text>
+            ) : null}
+            <View style={s.between}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={`Choose model connection${connection ? `. ${connection.name}, ${connection.model}` : ""}`}
+                onPress={openModelPicker}
+                style={[
+                  s.row,
+                  {
+                    gap: 6,
+                    alignSelf: "flex-start",
+                    flex: 1,
+                    minWidth: 0,
+                    minHeight: 44,
+                    paddingVertical: 6,
+                  },
+                ]}
+              >
+                <Text
+                  numberOfLines={1}
+                  maxFontSizeMultiplier={1.6}
+                  style={{ fontSize: 12, color: theme.quiet, flexShrink: 1 }}
+                >
+                  {connection ? `${connection.model}` : "Choose a model"}
+                </Text>
                 <Icon
-                  name="arrow-up"
-                  size={20}
-                  color={
-                    (text.trim() || attachments.length) && !runningId
-                      ? "#FFF"
-                      : "#9AA394"
-                  }
+                  name="chevron-down"
+                  design="down"
+                  size={12}
+                  color={theme.sub}
                 />
               </Pressable>
-            )}
-          </View>
-          {runningId ? (
-            <Text
-              style={{ textAlign: "center", fontSize: 12, color: theme.sub }}
+            </View>
+            <View
+              style={[
+                s.row,
+                {
+                  alignItems: "flex-end",
+                  gap: 10,
+                  padding: 4,
+                  boxShadow:
+                    "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
+                  borderRadius: 27,
+                  borderWidth: 1,
+                  borderColor: theme.fileLine,
+                  backgroundColor: theme.file,
+                },
+              ]}
             >
-              {runningId && !isRunning
-                ? "Another conversation is responding."
-                : isRunning
-                  ? "Working on this device. Keep the app open."
-                  : "Saved on this device. AI can make mistakes."}
-            </Text>
-          ) : null}
-        </View>
-      </KeyboardAvoidingView>
+              <IconButton
+                name="add"
+                design="add"
+                label="Add attachment"
+                disabled={picking || submitting || !!runningId}
+                onPress={() => {
+                  composer.current?.blur();
+                  Keyboard.dismiss();
+                  dispatchAttachment({ type: "open" });
+                }}
+              />
+              <TextInput
+                ref={composer}
+                accessibilityLabel="Message"
+                testID="chat-message"
+                value={text}
+                onChangeText={setText}
+                maxLength={20000}
+                multiline
+                placeholder={agent ? `Message ${agent.name}…` : "Message Nylo…"}
+                placeholderTextColor={theme.sub}
+                style={{
+                  flex: 1,
+                  fontSize: 14,
+                  lineHeight: 20,
+                  color: theme.ink,
+                  minHeight: 36,
+                  maxHeight: 150,
+                  paddingHorizontal: 5,
+                  paddingTop: 6,
+                  paddingBottom: 6,
+                }}
+                onKeyPress={(event) => {
+                  if (
+                    Platform.OS === "web" &&
+                    event.nativeEvent.key === "Enter" &&
+                    !(event as unknown as { shiftKey: boolean }).shiftKey
+                  ) {
+                    event.preventDefault();
+                    void submit();
+                  }
+                }}
+              />
+              {isRunning ? (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Stop response"
+                  onPress={stop}
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 22,
+                    backgroundColor: theme.primary,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Icon name="stop" size={16} color="#FFF" />
+                </Pressable>
+              ) : (
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Send message"
+                  disabled={
+                    (!text.trim() && !attachments.length) ||
+                    !!runningId ||
+                    submitting ||
+                    picking
+                  }
+                  onPress={() => void submit()}
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 22,
+                    backgroundColor: "transparent",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <View
+                    accessible={false}
+                    style={{
+                      position: "absolute",
+                      top: 2,
+                      left: 2,
+                      width: 40,
+                      height: 40,
+                      borderRadius: 20,
+                      backgroundColor:
+                        (text.trim() || attachments.length) && !runningId
+                          ? theme.primary
+                          : "#E1E1E4",
+                      ...softShadow,
+                    }}
+                  />
+                  <Icon
+                    name="arrow-up"
+                    design={
+                      (text.trim() || attachments.length) && !runningId
+                        ? "send"
+                        : undefined
+                    }
+                    size={20}
+                    color={
+                      (text.trim() || attachments.length) && !runningId
+                        ? "#FFF"
+                        : "#9AA394"
+                    }
+                  />
+                </Pressable>
+              )}
+            </View>
+            {runningId ? (
+              <Text
+                style={{ textAlign: "center", fontSize: 12, color: theme.sub }}
+              >
+                {runningId && !isRunning
+                  ? "Another conversation is responding."
+                  : isRunning
+                    ? "Working on this device. Keep the app open."
+                    : "Saved on this device. AI can make mistakes."}
+              </Text>
+            ) : null}
+          </View>
+        </KeyboardAvoidingView>
+      </BlurTargetView>
       <Modal
         visible={attachmentMenu}
         onDismiss={() => {
@@ -1036,9 +1124,33 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: theme.attachmentOverlay,
+            backgroundColor: "transparent",
           }}
         >
+          <BlurView
+            pointerEvents="none"
+            blurTarget={blurTarget}
+            blurMethod="dimezisBlurViewSdk31Plus"
+            intensity={8}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+            }}
+          />
+          <View
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: theme.attachmentOverlay,
+            }}
+          />
           <View
             accessibilityViewIsModal
             style={{
@@ -1078,6 +1190,8 @@ function Chat() {
                     fontWeight: "700",
                     letterSpacing: -0.45,
                     paddingHorizontal: 4,
+                    lineHeight: 24,
+                    marginBottom: 10,
                   },
                 ]}
               >
@@ -1085,23 +1199,41 @@ function Chat() {
               </Text>
               <Button
                 title="Photo library"
-                style={{ minHeight: 52, borderRadius: 26 }}
+                style={{
+                  minHeight: 52,
+                  borderRadius: 26,
+                  gap: 12,
+                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                }}
                 secondary
                 icon="images-outline"
+                designIcon="photos"
                 onPress={() => queueAttachment("photos")}
               />
               <Button
                 title="Take a photo"
-                style={{ minHeight: 52, borderRadius: 26 }}
+                style={{
+                  minHeight: 52,
+                  borderRadius: 26,
+                  gap: 12,
+                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                }}
                 secondary
                 icon="camera-outline"
+                designIcon="camera"
                 onPress={() => queueAttachment("camera")}
               />
               <Button
                 title="Choose files"
-                style={{ minHeight: 52, borderRadius: 26 }}
+                style={{
+                  minHeight: 52,
+                  borderRadius: 26,
+                  gap: 12,
+                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                }}
                 secondary
                 icon="document-outline"
+                designIcon="files"
                 onPress={() => queueAttachment("files")}
               />
               <Text
@@ -1110,8 +1242,10 @@ function Chat() {
                   {
                     color: theme.quiet,
                     fontSize: 12,
-                    lineHeight: 18,
-                    marginTop: 8,
+                    lineHeight: 19.5,
+                    paddingHorizontal: 12,
+                    marginTop: 6,
+                    marginBottom: 8,
                   },
                 ]}
               >
@@ -1138,11 +1272,35 @@ function Chat() {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: hasPdf
-              ? "rgba(165, 164, 162, 0.8)"
-              : theme.overlay,
+            backgroundColor: "transparent",
           }}
         >
+          {!hasPdf ? (
+            <BlurView
+              pointerEvents="none"
+              blurTarget={blurTarget}
+              blurMethod="dimezisBlurViewSdk31Plus"
+              intensity={12}
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+              }}
+            />
+          ) : null}
+          <View
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              backgroundColor: hasPdf ? "rgba(165,164,162,0.8)" : theme.overlay,
+            }}
+          />
           <Pressable
             accessible={false}
             onPress={() => setModelPicker(false)}
@@ -1199,6 +1357,7 @@ function Chat() {
               </Text>
               <IconButton
                 name="close"
+                design="close"
                 label="Close model picker"
                 onPress={() => setModelPicker(false)}
               />
@@ -1223,7 +1382,7 @@ function Chat() {
                 },
               ]}
             >
-              <Icon name="search" size={18} color={theme.sub} />
+              <Icon name="search" design="search" size={18} color={theme.sub} />
               <TextInput
                 testID="chat-model-search"
                 accessibilityLabel="Search models"
@@ -1305,7 +1464,7 @@ function Chat() {
                       >
                         Edit API format
                       </Text>
-                      <Icon name="chevron-forward" size={14} />
+                      <Icon name="chevron-forward" design="pdfEdit" size={14} />
                     </Pressable>
                   ) : null}
                 </View>
@@ -1378,6 +1537,16 @@ function Chat() {
                     },
                   ]}
                 >
+                  {hasPdf ? (
+                    <Icon
+                      name="hardware-chip-outline"
+                      design={
+                        c.protocol === "compatible"
+                          ? "pdfRobotDisabled"
+                          : "pdfRobot"
+                      }
+                    />
+                  ) : null}
                   <Text
                     style={[
                       s.text,
@@ -1398,7 +1567,9 @@ function Chat() {
                             : c.id === connection?.id &&
                                 model === connection.model
                               ? "600"
-                              : "400",
+                              : hasPdf
+                                ? "400"
+                                : "500",
                       },
                     ]}
                   >
@@ -1416,11 +1587,17 @@ function Chat() {
                           justifyContent: "center",
                         }}
                       >
-                        <Icon name="checkmark" size={16} color={theme.ink} />
+                        <Icon
+                          name="checkmark"
+                          design="pdfCheck"
+                          size={16}
+                          color={theme.ink}
+                        />
                       </View>
                     ) : (
                       <Icon
                         name="checkmark"
+                        design="modelCheck"
                         size={hasPdf ? 18 : 20}
                         color={
                           hasPdf ? "rgba(118, 118, 128, 0.5)" : theme.primary
@@ -1435,45 +1612,41 @@ function Chat() {
                   No models found. Try another search or manage your providers.
                 </Text>
               }
-              ListFooterComponent={
-                <View style={{ paddingTop: 16, gap: 12 }}>
-                  <Text
-                    style={[
-                      s.sub,
-                      {
-                        fontSize: 12,
-                        lineHeight: 18,
-                        paddingHorizontal: hasPdf ? 0 : 4,
-                      },
-                    ]}
-                  >
-                    Switching models sends nothing. Your next message includes
-                    this chat’s context.
-                  </Text>
-                  <Button
-                    title="Manage providers"
-                    style={{
-                      minHeight: hasPdf ? 46 : 52,
-                      borderRadius: hasPdf ? 23 : 26,
-                      backgroundColor: hasPdf ? theme.surface : theme.line,
-                      borderColor: hasPdf
-                        ? "rgba(198, 197, 208, 0.6)"
-                        : theme.line,
-                    }}
-                    textStyle={{
-                      color: hasPdf ? theme.ink : theme.text,
-                      fontFamily: hasPdf ? fonts.heading : fonts.body,
-                      letterSpacing: hasPdf ? 0 : 0.14,
-                    }}
-                    secondary
-                    onPress={() => {
-                      setModelPicker(false);
-                      router.push("/connection");
-                    }}
-                  />
-                </View>
-              }
             />
+            <View style={{ paddingTop: 16, gap: 12 }}>
+              <Text
+                style={[
+                  s.sub,
+                  {
+                    fontSize: 12,
+                    lineHeight: 18,
+                    paddingHorizontal: hasPdf ? 0 : 4,
+                  },
+                ]}
+              >
+                Switching models sends nothing. Your next message includes this
+                chat’s context.
+              </Text>
+              <Button
+                title="Manage providers"
+                style={{
+                  minHeight: hasPdf ? 46 : 52,
+                  borderRadius: hasPdf ? 23 : 26,
+                  backgroundColor: hasPdf ? theme.surface : theme.line,
+                  borderColor: hasPdf ? "rgba(198, 197, 208, 0.6)" : theme.line,
+                }}
+                textStyle={{
+                  color: hasPdf ? theme.ink : theme.text,
+                  fontFamily: hasPdf ? fonts.heading : fonts.body,
+                  letterSpacing: hasPdf ? 0 : 0.14,
+                }}
+                secondary
+                onPress={() => {
+                  setModelPicker(false);
+                  router.push("/connection");
+                }}
+              />
+            </View>
           </View>
         </View>
       </Modal>

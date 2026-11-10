@@ -35,7 +35,7 @@ def command(argv):
 
 def audit_bundled_fonts(app, font_dir):
     expected = sorted(path for path in font_dir.glob('*.ttf') if 'variable' not in path.name)
-    assert len(expected) == 11, 'Unexpected runtime font inventory'
+    assert len(expected) == 12, 'Unexpected runtime font inventory'
     actual = collections.Counter(hashlib.sha256(path.read_bytes()).hexdigest() for path in app.rglob('*.ttf'))
     result = []
     for path in expected:

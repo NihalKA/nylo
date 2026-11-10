@@ -48,7 +48,15 @@ function ContextPreview({ text }: { text: string }) {
             : section.slice(0, split).replace(/^Conversation: /, "");
         const body = split < 0 ? section : section.slice(split + 1);
         return (
-          <View key={index} style={{ gap: 8 }}>
+          <View
+            key={index}
+            style={{
+              gap: 8,
+              borderBottomWidth: index < sections.length - 1 ? 1 : 0,
+              borderBottomColor: "rgba(198,197,208,0.3)",
+              paddingBottom: index < sections.length - 1 ? 16 : 0,
+            }}
+          >
             <View style={[s.row, { gap: 8, alignItems: "flex-start" }]}>
               <View
                 style={{
@@ -72,7 +80,15 @@ function ContextPreview({ text }: { text: string }) {
                 Conversation · {title}
               </Text>
             </View>
-            <View style={{ paddingLeft: 16, gap: 8 }}>
+            <View
+              style={{
+                marginLeft: 2,
+                paddingLeft: 12,
+                borderLeftWidth: 2,
+                borderLeftColor: "rgba(198,197,208,0.4)",
+                gap: 8,
+              }}
+            >
               {body
                 .split(/\n(?=(?:user|assistant): )/)
                 .map((turn, turnIndex) => {
@@ -207,6 +223,7 @@ function AgentDetail() {
     <Page>
       <Header
         title="Agent"
+        backDesign="memoryBack"
         titleStyle={{
           fontSize: showContext ? 22 : 18,
           fontWeight: "700",
@@ -216,6 +233,7 @@ function AgentDetail() {
         right={
           <IconButton
             name="options-outline"
+            design="options"
             label="Edit agent"
             onPress={() =>
               router.push({ pathname: "/agent/edit", params: { id } })
@@ -225,13 +243,14 @@ function AgentDetail() {
       />
       <ScrollView
         ref={content}
+        style={{ marginHorizontal: 4 }}
         automaticallyAdjustKeyboardInsets
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{ paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
-        <View style={{ gap: 20, paddingTop: 20, paddingBottom: 24 }}>
+        <View style={{ gap: 20, paddingTop: 4, paddingBottom: 20 }}>
           <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
             <AgentAvatar
               agent={agent}
@@ -255,6 +274,7 @@ function AgentDetail() {
           <Button
             title="New conversation"
             icon="add"
+            designIcon="addWhite"
             onPress={() =>
               void action(async () => {
                 const chatId = await newChat(id);
@@ -371,7 +391,7 @@ function AgentDetail() {
                 borderRadius: 16,
                 borderColor: "#C6C5D066",
                 fontSize: 14,
-                lineHeight: 21,
+                lineHeight: 22.75,
               }}
               maxLength={1000}
               placeholder="Add a useful fact…"
@@ -389,6 +409,7 @@ function AgentDetail() {
               }}
               secondary
               icon="add"
+              designIcon={!memory.trim() ? "addMuted" : "add"}
               disabled={
                 !memory.trim() || (!editingId && agent.memories.length >= 50)
               }
@@ -433,7 +454,9 @@ function AgentDetail() {
                 }}
               />
             ) : null}
-            <Text style={[s.h2, { fontSize: 16, fontWeight: "700" }]}>
+            <Text
+              style={[s.h2, { fontSize: 16, fontWeight: "700", marginTop: 8 }]}
+            >
               Saved memories
             </Text>
             <Text style={[s.sub, { fontSize: 12, lineHeight: 18 }]}>
@@ -453,6 +476,8 @@ function AgentDetail() {
                     backgroundColor: theme.card,
                     borderRadius: 16,
                     minHeight: 92,
+                    boxShadow:
+                      "0px 4px 16px -2px rgba(30,43,88,0.04), 0px 1px 3px rgba(30,43,88,0.03)",
                     borderWidth: 1,
                     borderColor: "#C6C5D066",
                   },
@@ -477,7 +502,7 @@ function AgentDetail() {
                       s.sub,
                       {
                         fontSize: showContext ? 12 : 11,
-                        fontWeight: "600",
+                        fontWeight: showContext ? "600" : "400",
                         letterSpacing: showContext ? 0.24 : 0.33,
                         color: theme.quiet,
                         marginTop: 6,
@@ -490,6 +515,7 @@ function AgentDetail() {
                 <View style={[s.row, { gap: 4, alignSelf: "flex-end" }]}>
                   <IconButton
                     name="create-outline"
+                    design="editMemory"
                     label="Edit memory"
                     onPress={() => {
                       setMemory(m.text);
@@ -502,6 +528,7 @@ function AgentDetail() {
                   />
                   <IconButton
                     name="trash-outline"
+                    design="deleteMemory"
                     label="Forget memory"
                     onPress={() =>
                       void action(async () => {
@@ -566,6 +593,9 @@ function AgentDetail() {
                 s.h2,
                 {
                   fontSize: showContext ? 18 : 16,
+                  borderTopWidth: showContext ? 0 : 1,
+                  borderTopColor: "rgba(198,197,208,0.2)",
+                  paddingTop: showContext ? 0 : 13,
                   fontWeight: "700",
                   letterSpacing: showContext ? -0.45 : -0.4,
                 },

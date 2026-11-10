@@ -1,5 +1,11 @@
 # Delivery status
 
+## Reopened live Figma MCP audit — corrected candidate, 10 November 2026
+
+The owner identified remaining differences after Android12/iOS19 delivery. Authenticated official Figma MCP inspection of all nine current frames confirms missing original artwork, header/form geometry, sheet blur, fixed actions, attachment shelf details and report typography. The earlier delivery below remains available; its parity sign-off is superseded by this reopened [gap audit](testing/figma-mcp-gap-audit.md).
+
+The corrected source candidate bundles45 unchanged original SVG exports with node/hash provenance and a twelfth static italic font. It updates the nine supplied screens while preserving consent, report opt-in, model/protocol/key and storage behavior. New native SVG/blur modules require fresh builds. Source typecheck and83 tests, formatting, exact font/artwork guards and Expo doctor pass. Native compilation, real rendering and functional acceptance are pending; no corrected replacement is delivered yet.
+
 ## Current Figma UI — mobile builds and Drive pack delivered, 10 November 2026
 
 The nine distinct current Figma screens are implemented in product `a0afe7e` and accepted against fresh iOS Simulator and Android Emulator evidence, with documented privacy, accessibility, real-data and native-safe-area exceptions. The actual14 SVG exports confirm primary actions `#1E2B58` / white text, reading ink `#061542` and the bundled Inter, Plus Jakarta Sans, Nimbus Sans and Liberation Mono faces. Earlier product23/build6 is a historical style adaptation. See the [current design audit](testing/figma-current-parity.md). Android12 and internal TestFlight1.0.0(19) are delivered. The final review pack is delivered to the public Drive folder linked below.
