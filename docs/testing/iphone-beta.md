@@ -8,13 +8,13 @@ Earlier maximum-text fixture taps hit fixed controls/navigation; strict viewport
 
 ---
 
-# Current Figma beta delivered — 1.0.0 (19)
+# Prior Figma beta delivered — 1.0.0 (19)
 
 Available to the existing usual internal Nylo Device QA account. Signed workflow42732648140/sourcec6f333c/appa0afe7e succeeds; Apple exact build `3deddabf-72ce-4ce9-bf76-47c849d65fdc` is VALID. English notes were saved and independently read back; assignment to the usual internal group returned204. Independent group/build-state/owner-membership reads confirm the exact19 build and IN_BETA_TESTING. Existing tester state is INSTALLED for the app; installation of19 itself is not confirmed. Update through TestFlight and check1.0.0(19).
 
 The actual exported IPA audit verifies bundle/version/build/family1, strict signature, original protected certificate/team, nondebug entitlements, unexpired matching App Store profile, all11 exact runtime font files, eleven privacy manifests/required SDK/camera purpose/no microphone or tracking. IPA SHA256 `4da6178dcf2828877f446e0e4d1ff76b8300ff9dec7a8174dc9dac17d01cd401`. Artifact GitHub digest/CRC also verify. Evidence: `artifacts/signed-19-audit/export-verification.json` and `qa-assignment-verification.json`.
 
-Current native UI acceptance covers all nine supplied frames, three text/device profiles, PDF persistence and gallery copy/storage on fresha0 native, with77 inspected captures. These are synthetic Simulator checks. Physical-device, VoiceOver and new live-provider validation remain separate; maximum accessibility static intro/empty-state copy can remain dense or clipped. iOS background time is finite. Report excerpts stay off by default, PDF support depends on the model/API format, and saved connection/key/protocol/consent/storage behavior is preserved.
+Historical a0 native UI evidence covers the nine supplied frames, three text/device profiles, PDF persistence and gallery copy/storage on fresha0 native, with77 inspected captures. These are synthetic Simulator checks. Physical-device, VoiceOver and new live-provider validation remain separate; maximum accessibility static intro/empty-state copy can remain dense or clipped. iOS background time is finite. Report excerpts stay off by default, PDF support depends on the model/API format, and saved connection/key/protocol/consent/storage behavior is preserved.
 
 Initial App Store15 remains selected unchanged;19 is internal feedback, with no external19 submission or account-role changes. Android12 is separately delivered. The [final native Drive pack](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY) is delivered with all37 files; completion, public viewing and inherited sharing are verified.
 
@@ -26,7 +26,7 @@ Workflow42729756232 exported1.0.0(18), with actual family1/eleven privacy manife
 
 The failed IPA was not retained, so one replacement signed delivery run is necessary. Workflow42732648140 is confirmed as build19, sourcec6f333c/appa0afe7e. Completed native/UI evidence is retained; no new Simulator or Android compilation is dispatched. New Apple availability remains unverified and initial Store15 is untouched.
 
-Current product `a0afe7e` has accepted current native UI evidence. Signed18 workflow42729756232 stopped before upload at an audit invocation bug. Replacement signed19 workflow42732648140 is running on release headc6f333c/appa0afe7e, with unchanged strict signing/font assertions. Actual IPA audits, Apple processing and internal tester availability remain to be verified. Android12 is already delivered. Earlier76/11 evidence below is historical; no new TestFlight or Drive upload is claimed.
+At this historical pre19 checkpoint, product `a0afe7e` had a now-superseded visual sign-off and source-specific native evidence. Signed18 workflow42729756232 stopped before upload at an audit invocation bug. Replacement signed19 workflow42732648140 is running on release headc6f333c/appa0afe7e, with unchanged strict signing/font assertions. Actual IPA audits, Apple processing and internal tester availability remain to be verified. Android12 is already delivered. Earlier76/11 evidence below is historical; no new TestFlight or Drive upload is claimed.
 
 # Historical pre-distribution validation
 

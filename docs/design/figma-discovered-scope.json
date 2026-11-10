@@ -1,11 +1,41 @@
 {
   "provenance": "Baseline known scope,2026-11-10. Enumerations remain INCOMPLETE pending actual whole-file audit, not assumptions of absence.",
-  "extraNodes": [],
+  "extraNodes": [
+    {
+      "id": "0:0",
+      "name": "Document",
+      "type": "document",
+      "page": "0:0",
+      "parent": null,
+      "isScreen": false,
+      "source": "Fresh .fig export document record"
+    },
+    {
+      "id": "0:2",
+      "name": "Internal Only Canvas",
+      "type": "canvas",
+      "page": "0:2",
+      "parent": "0:0",
+      "isScreen": false,
+      "source": "Fresh .fig export hidden internal canvas, no children"
+    },
+    {
+      "id": "2:1098",
+      "name": "Vector",
+      "type": "vector",
+      "page": "0:1",
+      "parent": "2:1097",
+      "isScreen": false,
+      "source": "Fresh .fig export visible vector omitted by MCP metadata"
+    }
+  ],
   "extensionIds": [
     "chats-inbox",
     "agents-landing",
     "provider-editor",
-    "live-check"
+    "live-check",
+    "font-licenses",
+    "app-shell"
   ],
   "domains": {
     "pages": {
@@ -13,33 +43,86 @@
       "items": [
         {
           "id": "0:1",
-          "name": "Page1",
-          "provenance": "Observed normal page list plus full official MCP canvas metadata,2026-11-10."
+          "name": "Page1 (visible)"
+        },
+        {
+          "id": "0:2",
+          "name": "InternalOnlyCanvas(hidden,empty)"
         }
       ]
     },
     "hidden-layers": {
-      "enumerationComplete": false,
-      "items": []
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "0:2",
+          "name": "InternalOnlyCanvas(hidden,empty)"
+        }
+      ]
     },
     "components-variants-libraries": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "items": []
     },
     "variables-styles": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "items": []
     },
     "fonts": {
-      "enumerationComplete": false,
-      "items": []
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "Inter|Bold",
+          "name": "Inter Bold"
+        },
+        {
+          "id": "Nimbus Sans|Bold",
+          "name": "Nimbus Sans Bold"
+        },
+        {
+          "id": "Plus Jakarta Sans|SemiBold",
+          "name": "Plus Jakarta Sans SemiBold"
+        },
+        {
+          "id": "Inter|Regular",
+          "name": "Inter Regular"
+        },
+        {
+          "id": "Nimbus Sans|Regular",
+          "name": "Nimbus Sans Regular"
+        },
+        {
+          "id": "Inter|Medium",
+          "name": "Inter Medium"
+        },
+        {
+          "id": "Inter|Semi Bold",
+          "name": "Inter Semi Bold"
+        },
+        {
+          "id": "Plus Jakarta Sans|Bold",
+          "name": "Plus Jakarta Sans Bold"
+        },
+        {
+          "id": "Liberation Mono|Regular",
+          "name": "Liberation Mono Regular"
+        },
+        {
+          "id": "Inter|Italic",
+          "name": "Inter Italic"
+        },
+        {
+          "id": "Plus Jakarta Sans|Medium",
+          "name": "Plus Jakarta Sans Medium"
+        }
+      ]
     },
     "assets": {
       "enumerationComplete": false,
       "items": []
     },
     "prototypes-transitions": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "items": []
     },
     "states": {
@@ -108,14 +191,22 @@
       ]
     },
     "2:494": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "states": [
         "reference",
         "empty",
         "populated",
         "selected",
         "error",
-        "keyboard"
+        "keyboard",
+        "busy",
+        "disabled-during-send",
+        "export-confirmation",
+        "restore-confirmation",
+        "delete-confirmation",
+        "confirmation-cancel",
+        "success-notice",
+        "external-destination"
       ]
     },
     "2:617": {
@@ -248,6 +339,35 @@
         "selected",
         "error",
         "keyboard"
+      ]
+    },
+    "font-licenses": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "long-scroll",
+        "large-text"
+      ]
+    },
+    "app-shell": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "font-loading",
+        "storage-loading",
+        "font-error",
+        "storage-error",
+        "ready"
       ]
     }
   }

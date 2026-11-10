@@ -224,6 +224,11 @@ class CoverageGateTests(unittest.TestCase):
             self.evidence(platform + '-session', 'native-capture-session', gate.canonical(session))
         for obligation in self.m['releaseObligations']:
             platform = obligation['platform']
+            if obligation['mode'] == 'exception':
+                self.m['comparisons'].append(dict(obligation=obligation['id'],
+                    mode='exception', accepted=True, findings='synthetic exception fixture',
+                    rationale=obligation['rationale'], evidence=['metadata']))
+                continue
             comparison = dict(obligation=obligation['id'], captureId=obligation['id'], mode='capture', accepted=True,
                 findings='synthetic structural fixture', binary=platform, productFingerprint=fingerprint,
                 nativeEvidence='native.png', referenceEvidence='reference.png', sessionEvidence=platform+'-session',
@@ -268,6 +273,13 @@ class CoverageGateTests(unittest.TestCase):
     def test_full_synthetic_release_schema_passes(self):
         self.release_fixture()
         self.assertEqual([], self.check('release'))
+
+    def test_reviewed_exception_requires_same_release_rationale(self):
+        self.release_fixture()
+        exception = next(c for c in self.m['comparisons'] if c['mode'] == 'exception')
+        exception['rationale'] = 'different unreviewed waiver'
+        self.assertTrue(any('exception differs from independently reviewed inventory'
+                            in error for error in self.check('release')))
 
     def test_replacing_native_image_invalidates_release_review(self):
         self.release_fixture()
@@ -374,6 +386,63 @@ class CoverageGateTests(unittest.TestCase):
         data[-1] ^= 1
         self.evidence('native.png', 'native-original-png', bytes(data))
         self.assertTrue(any('PNG CRC mismatch' in x for x in self.check('release')))
+
+    def test_tracked_native_sources_and_nested_build_directory_are_product(self):
+        self.release_fixture()
+        base = gate.git(self.root, 'rev-parse', 'HEAD').decode().strip()
+        for name in ['android/app/src/main/java/example/MainActivity.kt',
+                     'ios/Nylo/Native.swift', 'src/build/runtime.ts']:
+            before = gate.product_fingerprint(self.root)
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('synthetic native/source change')
+            subprocess.run(['git', '-C', str(self.root), 'add', '-f', name], check=True)
+            self.assertNotEqual(before, gate.product_fingerprint(self.root), name)
+            self.assertTrue(gate.verify_changes(self.root, base)[0], name)
+
+    def test_ignored_generated_native_output_is_distinct_from_tracked_source(self):
+        self.release_fixture()
+        (self.root / '.gitignore').write_text('/ios/\n/android/\n')
+        before = gate.product_fingerprint(self.root)
+        path = self.root / 'ios/build/generated.txt'
+        path.parent.mkdir(parents=True)
+        path.write_text('ignored generated output')
+        self.assertEqual(before, gate.product_fingerprint(self.root))
+        subprocess.run(['git', '-C', str(self.root), 'add', '-f', 'ios/build/generated.txt'], check=True)
+        self.assertNotEqual(before, gate.product_fingerprint(self.root))
+
+    def test_state_floor_cannot_be_removed_from_discovery_and_obligations(self):
+        self.complete_synthetic_inventory()
+        self.discovery(lambda d: [scope.update(states=['reference']) for scope in d['scopes'].values()])
+        self.m['releaseObligations'] = [o for o in self.m['releaseObligations'] if o['state']=='reference']
+        self.assertTrue(any('conservative states removed' in x for x in self.check()))
+
+    def test_indexed_png_without_palette_and_invalid_idat_order_rejected(self):
+        from figma_evidence import png_size
+        def chunk(kind, payload):
+            return struct.pack('>I', len(payload)) + kind + payload + struct.pack('>I', zlib.crc32(kind + payload))
+        header = struct.pack('>IIBBBBB', 390, 884, 8, 3, 0, 0, 0)
+        data = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', header) + chunk(b'IDAT',
+            zlib.compress((b'\0' + bytes(390))*884)) + chunk(b'IEND', b'')
+        path = self.evidence('bad.png', 'native-original-png', data)
+        with self.assertRaises(ValueError):
+            png_size(path)
+        header = struct.pack('>IIBBBBB', 390, 884, 8, 2, 0, 0, 0)
+        compressed = zlib.compress((b'\0' + bytes(390*3))*884)
+        data = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', header) + chunk(b'IDAT', compressed[:3]) + \
+            chunk(b'tEXt', b'Note\0synthetic') + chunk(b'IDAT', compressed[3:]) + chunk(b'IEND', b'')
+        path.write_bytes(data)
+        with self.assertRaisesRegex(ValueError, 'IDAT order'):
+            png_size(path)
+
+    def test_unknown_critical_png_chunk_rejected(self):
+        from figma_evidence import png_size
+        data = self.png()
+        kind, payload = b'ABCD', b'unsupported'
+        extra = struct.pack('>I',len(payload))+kind+payload+struct.pack('>I',zlib.crc32(kind+payload))
+        path = self.evidence('critical.png', 'native-original-png', data[:33]+extra+data[33:])
+        with self.assertRaisesRegex(ValueError, 'unsupported PNG chunk'):
+            png_size(path)
 
 
 if __name__ == '__main__':

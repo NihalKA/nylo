@@ -3,7 +3,7 @@
 **Superseded visual acceptance:** the owner rejected Android13 after delivery.
 The historical implementation/evidence below does not establish complete layout
 parity. Follow the [reopened whole-file audit](figma-full-file-audit.md), root
-AGENTS.md and ADR0001. All1,322 nodes/14 frames and file-wide domains must be
+AGENTS.md and ADR0001. All1,325 complete-file records/14 visible frames and file-wide domains must be
 accounted for; independent Astra10/10 completeness is required before product edits.
 Signed20 succeeded but corrected QA distribution and new Drive publication are held.
 
@@ -37,7 +37,7 @@ Product `dcef4f6` compiles on both platforms. The actual bundles contain all45 o
 
 Android13's exact signed APK/AAB, original protected certificate, permissions, source/version, whole GitHub digest/ZIP CRC and actual font/artwork assets verify. Both actual navigation modes pass smoke and gallery, with57 inspected captures (including the retained launcher dialog) and33/34px actual WindowManager navigation clearance. The original device-offline attempts are preserved.
 
-The real-photo flow now passes87 commands/two conditional skips, with11 inspected native captures, exact post-restart draft/blob/orphan checks and independently parsed owned source/output JPEG metadata. The bounded extra Files Cancel branch was skipped in the successful run. Maximum-text tests now apply the role and save correctly; a Memory tap behind the fixed navigation led to strict between-header-and-navigation guards for all three selections. Targeted42796026157 remains pending on the same fresh binary. Overall acceptance is still open for that profile; no new APK/TestFlight/Drive delivery is claimed.
+The real-photo flow now passes87 commands/two conditional skips, with11 inspected native captures, exact post-restart draft/blob/orphan checks and independently parsed owned source/output JPEG metadata. The bounded extra Files Cancel branch was skipped in the successful run. Maximum-text tests now apply the role and save correctly; a Memory tap behind the fixed navigation led to strict between-header-and-navigation guards for all three selections. At that historical checkpoint, targeted42796026157 was pending on the same fresh binary. It subsequently passed as recorded below; full visual acceptance was later withdrawn after owner rejection.
 
 ## Historical sign-off — productdcef4f6 visual acceptance withdrawn
 

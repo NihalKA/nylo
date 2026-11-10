@@ -35,3 +35,50 @@ metric correction. Keep actual model identity and report payload unchanged. The
 preview heading/body remain separate type roles; owning fonts/assets does not prove
 that every line height is applied. The complete report action-cluster spacing and
 all remaining nodes/states still need full review before implementation.
+
+## Fresh complete-file reconciliation
+
+The current .fig and14 PNGs were acquired from the working signed-in browser at
+11:51–11:56UTC. The file contains1,325 records: all old1,322 plus document0:0,
+empty hidden internal canvas0:2 and visible check-vector2:1098 omitted by metadata.
+Thus the current render hierarchy has739 directly identified context nodes and92
+additional vector IDs. Three vectors are already directly identified in the739;
+there are95 current vectors in total. The older count above describes the original metadata snapshot.
+Use the fresh compressed render facts and original reference PNGs for all remaining
+reviews. This acquisition is not native acceptance or an automatic node approval.
+
+The static context extractor now includes NoSubstitutionTemplateLiteral strings,
+including the complete instructions and Save & start agent label. Its two tests
+also reject duplicate IDs and flag dynamic text rather than silently omitting it.
+
+## Complete font-role enumeration
+
+The recursive fresh-file scan includes `textData.styleOverrideTable`, not just
+top-level text styles:251 text nodes contain262 font-name occurrences and11
+distinct design faces. `docs/design/figma-font-audit.json` retains every node and
+property path, maps each face to its unchanged bundled font/hash/runtime alias,
+and records the extra twelfth runtime face (Mono Bold for app extensions).
+The actual source SFNT guard passes all12 faces. This closes used-file font-role
+enumeration; it does not approve per-node font selection/metrics or native use.
+
+Three missing original SVG variants have now been exported from the working
+browser. See `figma-artwork-state-audit.md` for exact state bindings, fractional
+painted bounds versus rounded export extents, and remaining slot review work.
+
+## Settings: explicit123-node source/reference review
+
+`docs/design/figma-settings-node-audit.json` records each individual node2:494–616,
+its actual property digest, source target and disposition. No descendants were
+approved by ancestry. This covers the two distinct description columns205.14/
+181.45, four grouped cards, all17 app vectors and mockOS exceptions. Additional
+plans record first/later separator ownership, disclosure21 versus21.13 leading,
+tab label14 leading and selected disc50.425×22.333 versus source50×24. Native
+safe-area/44pt exceptions remain confined to their actual purpose. Original
+reference properties and source observations still require new rendered proof
+after implementation. Earlier Settings1:* nodes are not silently approved.
+
+Settings' source state inventory includes provider empty/configured, selected tab,
+operation error/success/busy/disabled, each destructive/backup confirmation and
+cancellation, and external destinations. There is no direct Settings text input;
+only that direct keyboard state has a narrow exception, with downstream provider/
+editor/native transitions retained separately. Other screens/states remain open.

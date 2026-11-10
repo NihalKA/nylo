@@ -1,0 +1,1607 @@
+{
+  "scope": "Settings2:494,123 explicit per-node source/reference dispositions",
+  "sourceProduct": "dcef4f6a138f167886c7dc97ac5e59459a91259c",
+  "reference": "Fresh normal-UI .fig and original1xPNG,2026-11-10",
+  "reviewScope": "Source/reference inventory and plans; no new rendered/native acceptance. Earlier1:* counterparts remain individually unreviewed.",
+  "nodes": {
+    "2:494": {
+      "target": "app/(tabs)/settings.tsx Settings / src/ui.tsx Page",
+      "rationale": "390 logical width, F9F9F8 page and scrolling content. Reference1129.5 height and112 bottom reserve are mock-document extents; use actual viewport/insets and reachable scrolling, not a hardcoded tall phone. Section geometry is reviewed separately.",
+      "status": "mapped",
+      "referenceName": "Nylo \u2014 Settings (Warm Edition)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 1129.5
+      },
+      "referencePropertiesSHA256": "5ba5d08a71d8c368a5d1ef63555562854d805134e45518c6a7be418c847c6c2a",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:495": {
+      "target": "src/ui.tsx Page/s.shell",
+      "rationale": "20 horizontal inset and576 maximum width match source. Mock top16+status32 is replaced with native safe area; app-title8 offset below safe area must be checked in fresh equal-width captures.",
+      "status": "mapped",
+      "referenceName": "Main - Mobile Container Shell",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 1017.5
+      },
+      "referencePropertiesSHA256": "07a68fee9dedb427c2c6301db640b31d1b00c57d8dea6721a4f7644c0decdffe",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:496": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Header - Top Status Bar Simulation",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 32
+      },
+      "referencePropertiesSHA256": "60c7de235ad25bf95907e23a65d1ce3f17d5b8b96d87649270577a2862da7077",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:497": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 27.34000015258789,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "838494155117fd3e41df0a6bd138dfa0f0b0fa66c0f58e795f6cd7a5666d0109",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:498": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 27.34000015258789,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "1242e9b7f4bc6ff44ac7fafbc469c1dc66803b0720fdadedbf01389ed3c58cd6",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:499": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 46.45833206176758,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "e53db93e1b5619a96387cb8b4b774174aaa6d807a08188664bcfe6473915e51e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:500": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 10.625,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "645bfe3f7ed76b155447aa1730fee9dceb5d37ff1458443bcfcd87acc71db56c",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:501": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 10.625,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "8e647636bee97fb1ef5da47617cbe68364a73fb0056ebe94d7fec62a5bd0666a",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:502": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 17,
+        "y": 12.041666984558105
+      },
+      "referencePropertiesSHA256": "04613720b05de94da52c0302be3ee48269bcab7aa88f5b20d3c5b090818ea899",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:503": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 17,
+        "y": 12.041666984558105
+      },
+      "referencePropertiesSHA256": "646d02435bc3efcf8dbd9c1fba02a94d1feb4f5e354abea3e3fb1e7e8ea2b40e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:504": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 10.833333015441895,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "30646c9297348cb5a85b205703cf3f656d20984fb91ec2659346538e473b074f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:505": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Mock time/network/wifi/battery and their layout wrappers are replaced by actual OS status information and safe insets. Never draw9:41 or fake connectivity; native exception is confined to this specific mock element.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 10.833333015441895,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "e1e45de169474c840a4db2c15a0a73b0b269f312b10e4f384bfe4fb8305c8330",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:506": {
+      "target": "app/(tabs)/settings.tsx Settings title/FormScroll",
+      "rationale": "Title24 leading with8 top and24 trailing spacing is represented by paddingTop8/title24/FormScroll gap24; mock status height is not additional app padding.",
+      "status": "mapped",
+      "referenceName": "Section - Top Navigation / Title:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 56
+      },
+      "referencePropertiesSHA256": "04e100ea932023ddbc3fc425c763d22b4607e423c01523ee15af4a67289b5dd4",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:507": {
+      "target": "app/(tabs)/settings.tsx Settings title/FormScroll",
+      "rationale": "Title24 leading with8 top and24 trailing spacing is represented by paddingTop8/title24/FormScroll gap24; mock status height is not additional app padding.",
+      "status": "mapped",
+      "referenceName": "Section - Top Navigation / Title \u2192 Heading 1",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "98e407affbe05bd9f82dedbc4b54253e10460a48c525bb303f4a9ea8f023a01d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:508": {
+      "target": "app/(tabs)/settings.tsx Settings title",
+      "rationale": "Nimbus Bold16/24, tracking-0.4 and navy ink match s.title weight700 plus local Nimbus/16/24 override. Retain header semantics and text scaling.",
+      "status": "mapped",
+      "referenceName": "Settings",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 350,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "efcfdc63623982f188079212f5fc9929c2ab6bd4151549d71750b9c01b9e8d81",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:509": {
+      "target": "app/(tabs)/settings.tsx FormScroll",
+      "rationale": "24 section gaps match. Reference bottom88.5 inside wrapper is not current source44 scroll padding; app adds real version/licenses extensions. Explicitly validate last action/legal entry above native tabs instead of copying blank mock space.",
+      "status": "mapped",
+      "referenceName": "Content Sections Wrapper",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 913.5
+      },
+      "referencePropertiesSHA256": "82cc0a3266cf5536f5a56a0236ac2aa9771b4945d0efe1d389567e93ec029bd3",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:510": {
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Four section groups use4 vertical child gaps and24 between sections. Fixed reference group heights are derived from text/card heights; fix detail/disclosure metrics before accepting section positions.",
+      "status": "mapped",
+      "referenceName": "Section - Group 1: Your AI",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 171
+      },
+      "referencePropertiesSHA256": "b83732881fcdba979621c693f52b66d941fa1dfb249f560b052134277c22344f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:528": {
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Four section groups use4 vertical child gaps and24 between sections. Fixed reference group heights are derived from text/card heights; fix detail/disclosure metrics before accepting section positions.",
+      "status": "mapped",
+      "referenceName": "Section - Group 2: Data on this device",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 220
+      },
+      "referencePropertiesSHA256": "413345928fe656f126e8e072abbd76a10d3612811a001de527d4c7e7424bab6e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:552": {
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Four section groups use4 vertical child gaps and24 between sections. Fixed reference group heights are derived from text/card heights; fix detail/disclosure metrics before accepting section positions.",
+      "status": "mapped",
+      "referenceName": "Section - Group 3: Help & privacy",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 169
+      },
+      "referencePropertiesSHA256": "4c1d3b2b3084cb0b59f2e1e2223d3c1ba227bb5f2f3e956dcaff3603d3cb8134",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:574": {
+      "target": "app/(tabs)/settings.tsx section Views",
+      "rationale": "Four section groups use4 vertical child gaps and24 between sections. Fixed reference group heights are derived from text/card heights; fix detail/disclosure metrics before accepting section positions.",
+      "status": "mapped",
+      "referenceName": "Section - Group 4: Advanced",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 193
+      },
+      "referencePropertiesSHA256": "b1b27ad140850f87e929cea2544b26a3b47f9872275e5933bc4456fa292ca324",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:511": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Reference heading wrapper4 horizontal inset is flattened into source Text paddingLeft4. Labels are short; do not mistake absent wrapper View for a missing visible item. Preserve semantic grouping and right-safe text growth.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "bb767b608ce2dcf5b3f54fd60261904e2b70b61d44d74b56a4086d8acbe2a7fc",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:529": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Reference heading wrapper4 horizontal inset is flattened into source Text paddingLeft4. Labels are short; do not mistake absent wrapper View for a missing visible item. Preserve semantic grouping and right-safe text growth.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "bb767b608ce2dcf5b3f54fd60261904e2b70b61d44d74b56a4086d8acbe2a7fc",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:553": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Reference heading wrapper4 horizontal inset is flattened into source Text paddingLeft4. Labels are short; do not mistake absent wrapper View for a missing visible item. Preserve semantic grouping and right-safe text growth.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "bb767b608ce2dcf5b3f54fd60261904e2b70b61d44d74b56a4086d8acbe2a7fc",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:575": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Reference heading wrapper4 horizontal inset is flattened into source Text paddingLeft4. Labels are short; do not mistake absent wrapper View for a missing visible item. Preserve semantic grouping and right-safe text growth.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "bb767b608ce2dcf5b3f54fd60261904e2b70b61d44d74b56a4086d8acbe2a7fc",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:512": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Nimbus Bold12/18, tracking0.6, uppercase, secondary ink90% and4 left inset match explicit local styles. All four distinct labels are present.",
+      "status": "mapped",
+      "referenceName": "YOUR AI",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "017bab21a07e3bed6ea9a121e03842cba940de41b797c54d9bee0c2b2c1d192b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:530": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Nimbus Bold12/18, tracking0.6, uppercase, secondary ink90% and4 left inset match explicit local styles. All four distinct labels are present.",
+      "status": "mapped",
+      "referenceName": "DATA ON THIS DEVICE",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "9c8a41c296dc33168f9d2ed9a040dac2d6bfaaba2eca11ea1f182827703960a5",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:554": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Nimbus Bold12/18, tracking0.6, uppercase, secondary ink90% and4 left inset match explicit local styles. All four distinct labels are present.",
+      "status": "mapped",
+      "referenceName": "HELP & PRIVACY",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "a40fe79aef90eb864756cf915a5e92176126e230a41258777261d88e0f8e6398",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:576": {
+      "target": "app/(tabs)/settings.tsx section-heading Text",
+      "rationale": "Nimbus Bold12/18, tracking0.6, uppercase, secondary ink90% and4 left inset match explicit local styles. All four distinct labels are present.",
+      "status": "mapped",
+      "referenceName": "ADVANCED",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 18
+      },
+      "referencePropertiesSHA256": "070c8febc999f3b738759763e4db946a5324524cc8540bee4b9c9934be663f0a",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:513": {
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "White card/radius12/border1 #E7E7E5 and navy4% shadow0,2,8 match Group. Connect/Advanced heights depend on actual two-line columns. Source overflow:hidden may affect actual native shadow; retain this check for rendered review rather than asserting native equality.",
+      "status": "mapped",
+      "referenceName": "Card: Connect your AI",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 98
+      },
+      "referencePropertiesSHA256": "ad637855d4df910776720177487940d6700f80293be947de6daf6bb62e152465",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:531": {
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "White card/radius12/border1 #E7E7E5 and navy4% shadow0,2,8 match Group. Connect/Advanced heights depend on actual two-line columns. Source overflow:hidden may affect actual native shadow; retain this check for rendered review rather than asserting native equality.",
+      "status": "mapped",
+      "referenceName": "Grouped Card (2 rows)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 147
+      },
+      "referencePropertiesSHA256": "e897f71e5319ca94b828606d39cb796e9e4933155995873c29a15adb48d371fb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:555": {
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "White card/radius12/border1 #E7E7E5 and navy4% shadow0,2,8 match Group. Connect/Advanced heights depend on actual two-line columns. Source overflow:hidden may affect actual native shadow; retain this check for rendered review rather than asserting native equality.",
+      "status": "mapped",
+      "referenceName": "Grouped Card (2 rows)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 147
+      },
+      "referencePropertiesSHA256": "e897f71e5319ca94b828606d39cb796e9e4933155995873c29a15adb48d371fb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:577": {
+      "target": "app/(tabs)/settings.tsx Group",
+      "rationale": "White card/radius12/border1 #E7E7E5 and navy4% shadow0,2,8 match Group. Connect/Advanced heights depend on actual two-line columns. Source overflow:hidden may affect actual native shadow; retain this check for rendered review rather than asserting native equality.",
+      "status": "mapped",
+      "referenceName": "Grouped Card (2 rows)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 171
+      },
+      "referencePropertiesSHA256": "4a2b21359c009d487d6aed48e1effd3912d7eff350e0acd2a0dd17ddec358a4b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:514": {
+      "target": "app/(tabs)/settings.tsx SettingsRow with detail",
+      "rationale": "Reference96 row =16+64 content+16. Source padding16 is present but flex detail width can alter64 content height. Planned settings-wrap gap must retain two-line rhythm and dynamic growth; do not fix by clipping or hardcoding96 at large text.",
+      "status": "mapped",
+      "referenceName": "Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 96
+      },
+      "referencePropertiesSHA256": "b87c5221e00839744a22d61f6bc47931ce704b3e4cf0d9625922ea7851aba6f9",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:578": {
+      "target": "app/(tabs)/settings.tsx SettingsRow with detail",
+      "rationale": "Reference96 row =16+64 content+16. Source padding16 is present but flex detail width can alter64 content height. Planned settings-wrap gap must retain two-line rhythm and dynamic growth; do not fix by clipping or hardcoding96 at large text.",
+      "status": "mapped",
+      "referenceName": "Button - Row 1: Live device check",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 96
+      },
+      "referencePropertiesSHA256": "e37ad4ec36055e356dfad5ed1659c70f0be99ff47e092b485248984c8d1f1a94",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:515": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Reference content subrow includes40 icon,16 gap, measured text width and8 trailing inset before space-between chevron. Source flattens three flex children; measured text column and resulting chevron alignment need correction as settings-wrap, not mere token matching.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 269.1400146484375,
+        "y": 64
+      },
+      "referencePropertiesSHA256": "2564e55b18ae19c2c06bf92d4c1ae5311328e0692fdbd0378bc5f48521b7ffe0",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:579": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Reference content subrow includes40 icon,16 gap, measured text width and8 trailing inset before space-between chevron. Source flattens three flex children; measured text column and resulting chevron alignment need correction as settings-wrap, not mere token matching.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 245.4499969482422,
+        "y": 64
+      },
+      "referencePropertiesSHA256": "a0e31733fa01771c946dcb1b991cfa3f62a058801d228c420e8eacf96ccd9d2d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:516": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "96863c433dee31236bb37721e0a59344d83707407cbd36c76de4c8a8b568f716",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:534": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "9690fae23f40e348f2ce0006422e0727617df62d96d48677781ac803c61749e2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:543": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "9690fae23f40e348f2ce0006422e0727617df62d96d48677781ac803c61749e2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:558": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "9690fae23f40e348f2ce0006422e0727617df62d96d48677781ac803c61749e2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:567": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "9690fae23f40e348f2ce0006422e0727617df62d96d48677781ac803c61749e2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:580": {
+      "target": "app/(tabs)/settings.tsx SettingsRow icon disc",
+      "rationale": "40x40 circle #EEEEED matches source wrapper. Whole row remains accessible; decorative disc is not a separate small target.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "96863c433dee31236bb37721e0a59344d83707407cbd36c76de4c8a8b568f716",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:517": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 19.16666603088379,
+        "y": 10
+      },
+      "referencePropertiesSHA256": "1e503314940c2df1a7c0b8a3833c84d850b9877ce8ea7b8d439d860e2fbb7b17",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:535": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "aa3a08de3ed739c8f670cd0a7a1a58459b161d046bde7b6d8661bb1f2aa54fb4",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:544": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "aa3a08de3ed739c8f670cd0a7a1a58459b161d046bde7b6d8661bb1f2aa54fb4",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:559": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "278e381c30be996d4a6e2034dba18e5678ee27115bc88a19452bc15b26c07e22",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:568": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 16.66666603088379,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "cbc08966a2b04dd747d6b6b62218706e6fd2a9c5b061f1f592605abd58cd005e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:581": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 16.66666603088379,
+        "y": 17.5
+      },
+      "referencePropertiesSHA256": "ed85290f6d11be44131b6c5be510dcf56da17390cdff23b414e4f784e57269ba",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:593": {
+      "target": "src/design-icons.tsx / app/(tabs)/settings.tsx SettingsRow",
+      "rationale": "Reference icon wrapper uses the original artwork intrinsic dimensions. Source DesignIcon defines unchanged corresponding size; centring is supplied by40px disc. Whole-row hit target remains larger than44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "57dfe2f4d407a92c3d9a898b729dbcc6c63615d5e11293b47f70517d28b2fe53",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:518": {
+      "target": "assets/figma/key.svg / SettingsRow design=key",
+      "rationale": "19.1667x10 navy original SVG and fresh live vector fill match; no recolouring required. Saved-provider state changes real row copy, not artwork.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 19.16666603088379,
+        "y": 10
+      },
+      "referencePropertiesSHA256": "ec966decfed9022d95b34d6a013472b698f46b2d065984c3ef8fcdfde97c4e4c",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:519": {
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Reference205.14 width: title24 plus explicit two-line detail40. Current flex column is wider and detail has no reference newline. settings-wrap plan bounds this specific column while permitting narrow-screen wrapping and large-text growth; no ellipsis/clipped API guidance.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 205.13999938964844,
+        "y": 64
+      },
+      "referencePropertiesSHA256": "bd12a220abed9f90e60c19f1ce4207ba7288bc41b32a49db5b6d5d41b78432cb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:520": {
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Reference205.14 width: title24 plus explicit two-line detail40. Current flex column is wider and detail has no reference newline. settings-wrap plan bounds this specific column while permitting narrow-screen wrapping and large-text growth; no ellipsis/clipped API guidance.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 205.13999938964844,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "b8dae9e177b713cfdea2bc4343d34ed7ee4fe208fb7965c5b47a7e653437d698",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:522": {
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Reference205.14 width: title24 plus explicit two-line detail40. Current flex column is wider and detail has no reference newline. settings-wrap plan bounds this specific column while permitting narrow-screen wrapping and large-text growth; no ellipsis/clipped API guidance.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 205.13999938964844,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "cff5c60e21e1c37a157405156df6273327e915b905f1a217b743e41a7037bde0",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:523": {
+      "target": "app/(tabs)/settings.tsx Connect detail column",
+      "rationale": "Reference205.14 width: title24 plus explicit two-line detail40. Current flex column is wider and detail has no reference newline. settings-wrap plan bounds this specific column while permitting narrow-screen wrapping and large-text growth; no ellipsis/clipped API guidance.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 205.13999938964844,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "441cbd85fc68c9cbd948f15963430cbf7aa764f871b430a6f68d1d59f218b5cb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:521": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title with detail",
+      "rationale": "Jakarta60018/24, tracking-0.45 and navy ink match local source styles. Real provider management title replaces Connect only when providers exist; do not force mock unconfigured copy onto saved accounts.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 131.6699981689453,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "000bd7f8be1f3cfddf29dfcf07c83e897e66de022245bbc74af9f5a117d24035",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:585": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title with detail",
+      "rationale": "Jakarta60018/24, tracking-0.45 and navy ink match local source styles. Real provider management title replaces Connect only when providers exist; do not force mock unconfigured copy onto saved accounts.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 146.3000030517578,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "7aa36e772ec27ae26d23ab03da168cf2077f43ecfe35b243e25cbb7ee79a1735",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:524": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "f4b9c6a31b17d6828f0e8f3151e12a0805a6db0d204eca5a254791eea53a6168",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:539": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b8f64f88058bf84b14013298652d9ab717f461f095747abcd28d4cd7fb1fd5bd",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:548": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b7a85c4d6d8f9b023383b06fadcb561b7dc289d3683f73cd68288ffe95205b4d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:563": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b8f64f88058bf84b14013298652d9ab717f461f095747abcd28d4cd7fb1fd5bd",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:572": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b7a85c4d6d8f9b023383b06fadcb561b7dc289d3683f73cd68288ffe95205b4d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:588": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "f4b9c6a31b17d6828f0e8f3151e12a0805a6db0d204eca5a254791eea53a6168",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:597": {
+      "target": "src/design-icons.tsx chevron / SettingsRow trailing Icon",
+      "rationale": "9.8125x16.6667 wrapper and original #C6C5D0 chevron dimensions are present. Overall row grouping needs measured flex correction; icon asset availability does not approve its final x coordinate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b7a85c4d6d8f9b023383b06fadcb561b7dc289d3683f73cd68288ffe95205b4d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:525": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:540": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:549": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:564": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:573": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:589": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:598": {
+      "target": "assets/figma/chevron.svg / SettingsRow",
+      "rationale": "Fresh vector fill #C6C5D0 and9.8125x16.6667 agree with unchanged SVG viewbox/paint at each of seven explicit callsites. Row, not tiny glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "7e520c7dbcac2d08ae0eaf1e5a0a0fb9409a447087556de4fac90bf4d2cb469b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:526": {
+      "target": "app/(tabs)/settings.tsx provider/backup disclosure Text",
+      "rationale": "Reference4 horizontal/top inset with43 text height. Source paddingHorizontal4/paddingTop4 match; natural line count must use exact Nimbus13/21.13 and full honest copy, with scalable height.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 47
+      },
+      "referencePropertiesSHA256": "42c98b7b56ed7dca70b0df7a403ac689f2a353db260fce420375dc42069e171a",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:550": {
+      "target": "app/(tabs)/settings.tsx provider/backup disclosure Text",
+      "rationale": "Reference4 horizontal/top inset with43 text height. Source paddingHorizontal4/paddingTop4 match; natural line count must use exact Nimbus13/21.13 and full honest copy, with scalable height.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 350,
+        "y": 47
+      },
+      "referencePropertiesSHA256": "c30cd27cca4c5b008a699bd9191c8803aaf4e1ada64d6ce07957e9e6fdcd2866",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:527": {
+      "target": "app/(tabs)/settings.tsx provider disclosure",
+      "rationale": "Reference Nimbus Regular13/21.13, secondary80%; source uses21 rather than21.13. Planned settings-disclosure-leading corrects metric, retaining provider charge/data-policy disclosure and natural wrapping.",
+      "status": "mapped",
+      "referenceName": "Messages go to the provider you choose. Its API charges and data policies apply.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 43
+      },
+      "referencePropertiesSHA256": "5b4fc7be0c9b31a3f25e3024244b2268bd3a875b0ce045b89cf921e07907ceef",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:532": {
+      "target": "app/(tabs)/settings.tsx first plain SettingsRow",
+      "rationale": "Reference first row72=16+40+16; source first row has bottom border, yielding73. Total group height agrees but divider/row boundary is shifted1. Planned settings-divider uses top border on later row, retaining full-row touch behavior.",
+      "status": "mapped",
+      "referenceName": "Button - Row 1: Export backup",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 72
+      },
+      "referencePropertiesSHA256": "2e1f553adf28091d1569009970e741b208f49840351f3a72c9a685c4bb34f0ed",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:556": {
+      "target": "app/(tabs)/settings.tsx first plain SettingsRow",
+      "rationale": "Reference first row72=16+40+16; source first row has bottom border, yielding73. Total group height agrees but divider/row boundary is shifted1. Planned settings-divider uses top border on later row, retaining full-row touch behavior.",
+      "status": "mapped",
+      "referenceName": "Button - Row 1: Privacy policy",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 72
+      },
+      "referencePropertiesSHA256": "ea8a0420e59115e6b67a06bc3c26f159bcd13d98a71238d7ebaa91fb1e53b64e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:533": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Explicit plain-row subrow40 icon+16 text gap+8 trailing inset precedes space-between chevron. Source flattened flex children preserve icon/text gap; final trailing spacing is part of equal-width rendered check, not a hardcoded text width for localized copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 169.9199981689453,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "c28f1b475c73b66a590788e0d05f722e9292e9bbee3a083e8219af45409ac9fd",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:542": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Explicit plain-row subrow40 icon+16 text gap+8 trailing inset precedes space-between chevron. Source flattened flex children preserve icon/text gap; final trailing spacing is part of equal-width rendered check, not a hardcoded text width for localized copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 177.88999938964844,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "153f311c906a159a622b2831803c3e75390122eb5b432e3ecca89d146a769c3f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:557": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Explicit plain-row subrow40 icon+16 text gap+8 trailing inset precedes space-between chevron. Source flattened flex children preserve icon/text gap; final trailing spacing is part of equal-width rendered check, not a hardcoded text width for localized copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 165.33999633789062,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "0e3b5aa1a04f317d8ce13e6d89c3e9ebd263fc9c1ee57a17d366fa76eda29404",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:566": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Explicit plain-row subrow40 icon+16 text gap+8 trailing inset precedes space-between chevron. Source flattened flex children preserve icon/text gap; final trailing spacing is part of equal-width rendered check, not a hardcoded text width for localized copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 182.1699981689453,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "9a890ab618e581def5f876adf99d618400989baf234f4f2d6584ded1e6e9e11e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:591": {
+      "target": "app/(tabs)/settings.tsx SettingsRow content grouping",
+      "rationale": "Explicit plain-row subrow40 icon+16 text gap+8 trailing inset precedes space-between chevron. Source flattened flex children preserve icon/text gap; final trailing spacing is part of equal-width rendered check, not a hardcoded text width for localized copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 204.41000366210938,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "7624387a36760150b3df897aa2ea0ff62348a708d267038e28ab1ebf71b601a1",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:536": {
+      "target": "assets/figma/export.svg / SettingsRow design=export",
+      "rationale": "13.3333 square navy artwork/paint matches original SVG. Existing export confirmation and backup exclusion of keys remain required.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "3cb690d57fc4561d4f5ed4569256186bea2138dec30fbeb9dca4572fe4b70e76",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:537": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Reference24-high natural-width label wrapper is flattened into source flex text group. Source Inter50016/24 matches; allow translated/large text to expand rather than hardcoding measured English width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 105.91999816894531,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "6c6d45bd0f926343957fb14caea880c9e0ce444219d7a9e464da1d4fc91fcc2f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:546": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Reference24-high natural-width label wrapper is flattened into source flex text group. Source Inter50016/24 matches; allow translated/large text to expand rather than hardcoding measured English width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 113.88999938964844,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "cd54397901368733a7f4c19a5051b5dcf3af2e707c9cc2c99970a666d7cc7253",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:561": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Reference24-high natural-width label wrapper is flattened into source flex text group. Source Inter50016/24 matches; allow translated/large text to expand rather than hardcoding measured English width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 101.33999633789062,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "6f544684b7721db9084e20c9e064e86ca54550b63fbab71288e6504a57326a2c",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:570": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Reference24-high natural-width label wrapper is flattened into source flex text group. Source Inter50016/24 matches; allow translated/large text to expand rather than hardcoding measured English width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 118.16999816894531,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "0d4cc203f1e3bf50ab5a36d44417ed219d28093445636a2f97a06b64fa44dc70",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:595": {
+      "target": "app/(tabs)/settings.tsx SettingsRow title without detail",
+      "rationale": "Reference24-high natural-width label wrapper is flattened into source flex text group. Source Inter50016/24 matches; allow translated/large text to expand rather than hardcoding measured English width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 140.41000366210938,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "0d4eb276b6887520001943a93cf54ba5c75190280509af29fb1175dfc332277e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:538": {
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Inter50016/24 tracking-0.4/navy matches source. Each distinct Export/Restore/Privacy/Support action remains functional with its existing confirmation/native destination.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 105.91999816894531,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "39337559a7a73241024913d4a6b589f7fb8e7f1e7a2cef176c88952d70b4fb00",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:547": {
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Inter50016/24 tracking-0.4/navy matches source. Each distinct Export/Restore/Privacy/Support action remains functional with its existing confirmation/native destination.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 113.88999938964844,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "db77b42f32bd134221051b8b134a2bdd9a75739f800bb59e840b3c97d5822c45",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:562": {
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Inter50016/24 tracking-0.4/navy matches source. Each distinct Export/Restore/Privacy/Support action remains functional with its existing confirmation/native destination.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 101.33999633789062,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "af24801338e9d83c5e38707507d99577ae7490096627a7e4fe1c8f1ffac00c22",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:571": {
+      "target": "app/(tabs)/settings.tsx SettingsRow plain title",
+      "rationale": "Inter50016/24 tracking-0.4/navy matches source. Each distinct Export/Restore/Privacy/Support action remains functional with its existing confirmation/native destination.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 118.16999816894531,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "b3a40242d5d42145c3964195874fe14207957dbe60129146de39b17eff0ba7a2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:541": {
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Reference later row has1px top #F0F0EE separator, height73. Current source puts separator on preceding row. Planned settings-divider corrects boundary ownership without changing group total or action behavior.",
+      "status": "mapped",
+      "referenceName": "Button - Row 2: Restore backup",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 73
+      },
+      "referencePropertiesSHA256": "ee21877b992265c84b44822658d91ca8e1a8fb19485c1d8129f1922aa7c352eb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:565": {
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Reference later row has1px top #F0F0EE separator, height73. Current source puts separator on preceding row. Planned settings-divider corrects boundary ownership without changing group total or action behavior.",
+      "status": "mapped",
+      "referenceName": "Button - Row 2: Contact support",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 73
+      },
+      "referencePropertiesSHA256": "714ba42e99e21df225da0557c7a5b2f907cda6755937ece92073ac15ffe3343d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:590": {
+      "target": "app/(tabs)/settings.tsx later SettingsRow",
+      "rationale": "Reference later row has1px top #F0F0EE separator, height73. Current source puts separator on preceding row. Planned settings-divider corrects boundary ownership without changing group total or action behavior.",
+      "status": "mapped",
+      "referenceName": "Button - Row 2: Delete all local data",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 348,
+        "y": 73
+      },
+      "referencePropertiesSHA256": "79ecf4a958dc7ce5b8439980a2067585521fa447d647939914bafc1d0300a9aa",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:545": {
+      "target": "assets/figma/restore.svg / SettingsRow design=restore",
+      "rationale": "13.3333 square navy original artwork/paint matches. Existing replace-data confirmation, removed keys and reset sharing remain required.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "04038f5d5bae94c62d5530361ec8df4c19a4614cc032315f051df169b386c2a2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:551": {
+      "target": "app/(tabs)/settings.tsx backup disclosure",
+      "rationale": "Nimbus Regular13/21.13 and80% secondary match source. Honest no-cloud-sync/export-before-uninstall text is preserved; reference newline is normal English wrapping, not a forced clip.",
+      "status": "mapped",
+      "referenceName": "No automatic cloud sync. Export before uninstalling or changing devices.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 43
+      },
+      "referencePropertiesSHA256": "6e702e05e45392cdb54028936717dac8a1b216a8ae3a2a335cb9b79c20d0b078",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:560": {
+      "target": "assets/figma/privacy.svg / SettingsRow design=privacy",
+      "rationale": "13.3333x16.6667 navy original shield/paint matches. Existing published privacy URL remains destination.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "b877de781bf7f8976cc8b9958b435ab81d9c7d9e86b413ddf771fe3209a07433",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:569": {
+      "target": "assets/figma/mail.svg / SettingsRow design=mail",
+      "rationale": "16.6667x13.3333 navy original mail/paint matches. Existing support mail URL remains destination; actual email UI is platform-owned.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16.66666603088379,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "9d3d4e218f06f51be0c72effb9cf46fb164bfa06941bad0a601cc4766cc98f8b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:582": {
+      "target": "assets/figma/deviceCheck.svg / SettingsRow design=deviceCheck",
+      "rationale": "16.6667x17.5 navy original pulse/paint matches. This audit authorizes no additional live provider calls.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16.66666603088379,
+        "y": 17.5
+      },
+      "referencePropertiesSHA256": "614ec6fe19677d0786782416ea297e33413d7b4b8fada007cdff89cbd35fba59",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:583": {
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Reference181.45 width: title24 plus explicit two-line detail40. Current source reuses unbounded flex description layout. settings-wrap must account separately for this narrower column, retain full persistence copy and dynamic growth.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 181.4499969482422,
+        "y": 64
+      },
+      "referencePropertiesSHA256": "cf006a50785579e5f7c919bc41a0086e8d672fe0c9a09d8825eaeafbf6e5181c",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:584": {
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Reference181.45 width: title24 plus explicit two-line detail40. Current source reuses unbounded flex description layout. settings-wrap must account separately for this narrower column, retain full persistence copy and dynamic growth.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 181.4499969482422,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "bc1a96de21bd1a8d6de37738eadfd1f15ec2d4adef47e1fa0e1d6feca5e8a536",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:586": {
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Reference181.45 width: title24 plus explicit two-line detail40. Current source reuses unbounded flex description layout. settings-wrap must account separately for this narrower column, retain full persistence copy and dynamic growth.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 181.4499969482422,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "109c92df782af92251dc5c6d73f582f8f8f64e49c01c354fcb48c1722f30259d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:587": {
+      "target": "app/(tabs)/settings.tsx Live-check detail column",
+      "rationale": "Reference181.45 width: title24 plus explicit two-line detail40. Current source reuses unbounded flex description layout. settings-wrap must account separately for this narrower column, retain full persistence copy and dynamic growth.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 181.4499969482422,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "d36d4277d81206f3eec9ad1150a102d8af2cc9f269d7707d5f070b464c6bdbeb",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:592": {
+      "target": "app/(tabs)/settings.tsx destructive icon disc",
+      "rationale": "40 circle #FFDAD2 matches destructive source disc; this is separate from the red glyph/text and must not tint the whole row.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 40,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "236ce61d101c3e07d3ff1daf65b70e42126398176777b51582efee50acea720d",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:594": {
+      "target": "assets/figma/deleteData.svg / SettingsRow design=deleteData",
+      "rationale": "13.3333x15 original #B42907 artwork/paint matches. Preserve disabled-during-operation behavior and destructive confirmation.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "a8b8bae9eab0eb316ec7f0f4ec088c6911cbe1beb96950f1bf77c00f69900430",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:596": {
+      "target": "app/(tabs)/settings.tsx destructive title",
+      "rationale": "Inter50016/24 tracking-0.4 #B42907 matches source. Existing honest data-removal scope and original-photo/backup exclusions must remain.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 140.41000366210938,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "8425c83b8b4252670df5ef2d1112c979ea16b3b5fe034495bc88f9148a13dc1f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:599": {
+      "target": "app/(tabs)/_layout.tsx MainTabs",
+      "rationale": "Reference bottom navigation390 wide/24 horizontal inset/66.333 mock height includes16 mock bottom reserve. Actual React Navigation must use OS bottom insets and reachable tabs; compare painted item centres separately, never remove native safe area.",
+      "status": "exception",
+      "referenceName": "Nav - Context Match: Settings page active -> destination 'Settings",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 66.33333587646484
+      },
+      "referencePropertiesSHA256": "b4312eb063ca73225e971dc3c57fb97262f63828d6d003737e0fb38a2309b6d8",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:600": {
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Reference Chats44, Agents40, Settings46.333 painted item heights differ. Source uses minimum48 hits, appropriate accessibility exception; preserve actual inner glyph/label spacing and selected treatment rather than using hit-target size as painted geometry.",
+      "status": "exception",
+      "referenceName": "Link - Tab: Chats (Inactive)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 114,
+        "y": 44
+      },
+      "referencePropertiesSHA256": "7db0e20afa883cff12f5844646ec8343ec7b6583f2570811ef9777ec8d830b3e",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:605": {
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Reference Chats44, Agents40, Settings46.333 painted item heights differ. Source uses minimum48 hits, appropriate accessibility exception; preserve actual inner glyph/label spacing and selected treatment rather than using hit-target size as painted geometry.",
+      "status": "exception",
+      "referenceName": "Link - Tab: Agents (Inactive)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 114,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "a86952e1e6bcc0ab260e035a3063cee1bae4b0162a6ad0ed27c411c523b8af1f",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:610": {
+      "target": "app/(tabs)/_layout.tsx Tabs.Screen / tabBarItemStyle",
+      "rationale": "Reference Chats44, Agents40, Settings46.333 painted item heights differ. Source uses minimum48 hits, appropriate accessibility exception; preserve actual inner glyph/label spacing and selected treatment rather than using hit-target size as painted geometry.",
+      "status": "exception",
+      "referenceName": "Link - Tab: Settings (Active)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 114,
+        "y": 46.333335876464844
+      },
+      "referencePropertiesSHA256": "cf9db5c335d8f48e3e49d3d03049f02bdf1b59fa6d68b78d319db8d69cb4a60a",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:601": {
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Each original inactive Chats20x20/Agents22x16/active Settings18.425x18.3333 vector wrapper is present. Source common50x24 centring wrapper differs from reference per-item wrappers; painted bounds require precise review, not an ancestry match.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 20,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "c4b08ad52e089977e7c5c9d665524e8102a9ab30c7d8c86c7d6bbc1554d67fb4",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:606": {
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Each original inactive Chats20x20/Agents22x16/active Settings18.425x18.3333 vector wrapper is present. Source common50x24 centring wrapper differs from reference per-item wrappers; painted bounds require precise review, not an ancestry match.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 22,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "ee49a3def1a15c711cf60c4202e2dae1e49fe876f6fc29cd651d18f5cf48b0a1",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:613": {
+      "target": "app/(tabs)/_layout.tsx TabIcon / src/design-icons.tsx",
+      "rationale": "Each original inactive Chats20x20/Agents22x16/active Settings18.425x18.3333 vector wrapper is present. Source common50x24 centring wrapper differs from reference per-item wrappers; painted bounds require precise review, not an ancestry match.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 18.424999237060547,
+        "y": 18.33333396911621
+      },
+      "referencePropertiesSHA256": "adaa0138504b2af198b3f2cb14ee4f78b159566a3fc3c18d4d5253fdbc154697",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:602": {
+      "target": "assets/figma/tabChats.svg / MainTabs inactive Chats",
+      "rationale": "20x20 #767680 original glyph matches fresh reference paint; no fake selected Chats state is inferred from this Settings frame.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 20,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "abab48346880e4ef5faa521ccc9d72c5dbbdeef381d007ebf6bdc4c8c775fbd1",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:603": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Reference label wrappers have14px leading and2px upper gap for inactive tabs. Source React Navigation defaults do not explicitly specify14 leading. Planned navigation-label-metrics must measure glyph-to-label placement in actual native tabs.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.65999984741211,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "27b93df0f11762a424015d9a48911cbb1c0ae36fabded5b5d205cea5a7685b49",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:608": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Reference label wrappers have14px leading and2px upper gap for inactive tabs. Source React Navigation defaults do not explicitly specify14 leading. Planned navigation-label-metrics must measure glyph-to-label placement in actual native tabs.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 39.77000045776367,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "9c0fb9dfdcc68384eb2953f08721b1cd29264391df6a22da158c0557e5df15ff",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:615": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Reference label wrappers have14px leading and2px upper gap for inactive tabs. Source React Navigation defaults do not explicitly specify14 leading. Planned navigation-label-metrics must measure glyph-to-label placement in actual native tabs.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 46.529998779296875,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "6934a223db07c89d747e5d83a82fe25024f7203536185c1c06a3a232775dd007",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:604": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Inter60011/14, tracking0.33; quiet inactive/navy active. Source font and colours match but14 leading is implicit. Planned navigation-label-metrics makes leading explicit and validates both native tab implementations.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 32.65999984741211,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "0cb7fe42d0a8838c666bcd3f32d7ace4e7dee5a13ba0d1ea919f154af556e806",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:609": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Inter60011/14, tracking0.33; quiet inactive/navy active. Source font and colours match but14 leading is implicit. Planned navigation-label-metrics makes leading explicit and validates both native tab implementations.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 39.77000045776367,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "65eb4a7443a48a3da15a0f816ef397271091107d0454ddeabed7a29601d2f274",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:616": {
+      "target": "app/(tabs)/_layout.tsx tabBarLabelStyle",
+      "rationale": "Inter60011/14, tracking0.33; quiet inactive/navy active. Source font and colours match but14 leading is implicit. Planned navigation-label-metrics makes leading explicit and validates both native tab implementations.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 46.529998779296875,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "be50b5ec6dba6b7bdf67e158dd0bc15c7fcb1330d0f2f4e5599c95eebff6a0b8",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:607": {
+      "target": "assets/figma/tabAgents.svg / MainTabs inactive Agents",
+      "rationale": "22x16 #767680 original glyph/paint matches fresh reference. Tab remains at least44pt even though mock painted content is40px high.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 22,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "6784f233bf3be6194ef63a7d645230e4e663e9e5f7f4b906f582431c91f41927",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:611": {
+      "target": "app/(tabs)/_layout.tsx TabIcon selected Settings background",
+      "rationale": "Reference selected disc50.425x22.3333 and2px bottom margin; source hardcodes50x24. Planned navigation-selected-paint separates painted bounds from minimum48 hit region; compare reference centres at390 width before sign-off.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 50.42499923706055,
+        "y": 24.33333396911621
+      },
+      "referencePropertiesSHA256": "75929c890d73a706f0bed0ffabbb0f1ea8e64cc1efe2fa5dafa03695d2f103f4",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:612": {
+      "target": "app/(tabs)/_layout.tsx TabIcon selected Settings background",
+      "rationale": "Reference selected disc50.425x22.3333 and2px bottom margin; source hardcodes50x24. Planned navigation-selected-paint separates painted bounds from minimum48 hit region; compare reference centres at390 width before sign-off.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 50.42499923706055,
+        "y": 22.33333396911621
+      },
+      "referencePropertiesSHA256": "0d6a0fa10a9e0db22754e1976e9e3691ee3b89fdbeec47c6f0fd30c29467ab4b",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    },
+    "2:614": {
+      "target": "assets/figma/tabSettingsActive.svg / MainTabs active Settings",
+      "rationale": "18.425x18.3333 navy original glyph/paint matches fresh reference; selected lavender background is independently planned, not contained in this SVG.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 18.424999237060547,
+        "y": 18.33333396911621
+      },
+      "referencePropertiesSHA256": "b63ba162683766636719aa022f17d5613d75ed6919494eebd7799aa4ddcdbda2",
+      "evidence": ["live-file", "frame-2:494", "settings-node-audit"]
+    }
+  }
+}

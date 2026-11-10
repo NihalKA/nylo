@@ -4,7 +4,6 @@ import hashlib
 import io
 import json
 import math
-import os
 from pathlib import Path
 import re
 import struct
@@ -13,7 +12,8 @@ import tarfile
 import tempfile
 import zlib
 
-RUNTIME_DIRS = ('app/', 'src/', 'assets/', 'modules/', 'plugins/', 'fastlane/', 'scripts/android/')
+RUNTIME_DIRS = ('app/', 'src/', 'assets/', 'modules/', 'plugins/', 'android/', 'ios/',
+                'fastlane/', 'scripts/android/')
 BUILD_FILES = {'app.json', 'package-lock.json', 'Gemfile', 'Gemfile.lock',
                'tsconfig.json', 'eas.json', '.npmrc', '.nvmrc',
                'scripts/ios-simulator.sh', 'scripts/set-ios-build.mjs',
@@ -68,14 +68,18 @@ def package_runtime(package):
 def tree_fingerprint(root, fixtures=False):
     entries = []
     predicate = fixture_file if fixtures else product_file
-    for directory, dirs, files in os.walk(root):
-        dirs[:] = sorted(d for d in dirs if d not in {'node_modules', '.git', 'build',
-                         'artifacts', 'dashboard', 'output', '__pycache__'})
-        for name in sorted(files):
-            p = Path(directory) / name
-            name = p.relative_to(root).as_posix()
-            if predicate(name):
-                entries.append((name, sha(p.read_bytes())))
+    if (root / '.git').exists():
+        # Git distinguishes ignored generated native projects/dependencies from
+        # tracked native source. Never omit a tracked src/build or native file.
+        names = set(git(root, 'ls-files', '--cached', '--others', '--exclude-standard', '-z')
+                    .decode().strip('\0').split('\0'))
+    else:
+        # Archives contain committed files only; synthetic fixtures are small.
+        names = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
+    for name in sorted(names):
+        p = root / name
+        if predicate(name) and p.is_file():
+            entries.append((name, sha(p.read_bytes())))
     if not fixtures and (root / 'package.json').is_file():
         entries.append(('package-runtime', sha(canonical(package_runtime(
             json.loads((root / 'package.json').read_text()))))))
@@ -103,11 +107,14 @@ def png_size(path):
     if data[:8] != b'\x89PNG\r\n\x1a\n':
         raise ValueError('not an original PNG')
     position, width, height, bit_depth, colour = 8, 0, 0, 0, -1
+    seen, idat_ended, palette = set(), False, False
     compressed = bytearray()
     ended = False
     while position + 12 <= len(data):
         size = struct.unpack('>I', data[position:position + 4])[0]
         kind = data[position + 4:position + 8]
+        if len(kind) != 4 or any(not (65 <= b <= 90 or 97 <= b <= 122) for b in kind) or not 65 <= kind[2] <= 90:
+            raise ValueError('invalid PNG chunk type')
         payload = data[position + 8:position + 8 + size]
         end = position + size + 12
         if end > len(data):
@@ -119,17 +126,45 @@ def png_size(path):
             if position != 8 or size != 13:
                 raise ValueError('invalid PNG header')
             width, height, bit_depth, colour, method, filtering, interlace = struct.unpack('>IIBBBBB', payload)
-            allowed = {0: {1, 2, 4, 8, 16}, 2: {8, 16}, 3: {1, 2, 4, 8}, 4: {8, 16}, 6: {8, 16}}
             if (not 0 < width <= 20000 or not 0 < height <= 20000 or
-                    bit_depth not in allowed.get(colour, set()) or method or filtering or interlace):
+                    colour not in {2, 6} or bit_depth != 8 or method or filtering or interlace):
                 raise ValueError('unsupported/unsafe original PNG header')
         elif kind == b'IDAT':
+            if b'IHDR' not in seen or idat_ended:
+                raise ValueError('invalid PNG IDAT order')
             compressed.extend(payload)
         elif kind == b'IEND':
-            if size or end != len(data):
+            if size or end != len(data) or b'IDAT' not in seen:
                 raise ValueError('invalid PNG ending')
             ended = True
             break
+        elif kind == b'PLTE':
+            if palette or b'IHDR' not in seen or b'IDAT' in seen or not 0 < size <= 768 or size % 3:
+                raise ValueError('invalid PNG palette/order')
+            palette = True
+        else:
+            # Restrict to standard screenshot RGB/RGBA metadata; do not claim a
+            # general PNG/APNG decoder or silently convert evidence to pass.
+            allowed = {b'cHRM', b'gAMA', b'iCCP', b'sBIT', b'sRGB', b'pHYs',
+                       b'tEXt', b'zTXt', b'iTXt', b'tIME', b'eXIf', b'bKGD', b'tRNS'}
+            if kind not in allowed or b'IHDR' not in seen:
+                raise ValueError('unsupported PNG chunk')
+            pre_idat = {b'cHRM', b'gAMA', b'iCCP', b'sBIT', b'sRGB', b'pHYs', b'bKGD', b'tRNS'}
+            if kind in pre_idat and (kind in seen or b'IDAT' in seen):
+                raise ValueError('invalid PNG metadata order')
+            before_palette = {b'cHRM', b'gAMA', b'iCCP', b'sBIT', b'sRGB'}
+            if kind in before_palette and palette:
+                raise ValueError('invalid PNG colour-metadata order')
+            sizes = {b'cHRM': 32, b'gAMA': 4, b'sRGB': 1, b'pHYs': 9,
+                     b'tIME': 7, b'bKGD': 6, b'tRNS': 6, b'sBIT': 3 if colour == 2 else 4}
+            if kind in sizes and size != sizes[kind]:
+                raise ValueError('invalid PNG metadata size')
+            if (kind == b'tRNS' and colour == 6 or kind == b'sRGB' and (payload[0] > 3 or b'iCCP' in seen)
+                    or kind == b'iCCP' and b'sRGB' in seen):
+                raise ValueError('invalid PNG transparency/colour metadata')
+        if b'IDAT' in seen and kind != b'IDAT':
+            idat_ended = True
+        seen.add(kind)
         position = end
     if not ended or not width or not compressed:
         raise ValueError('incomplete PNG')

@@ -1,0 +1,1181 @@
+{
+  "source": "Fresh complete figma-live-node-facts.json.gz; recursive scan including textData.styleOverrideTable",
+  "textNodes": 251,
+  "fontNameOccurrences": 262,
+  "designRoles": 11,
+  "runtimeFaces": 12,
+  "additionalRuntimeFace": "LiberationMono-Bold.ttf is used by app extensions, not a saved Figma font role.",
+  "registrationSource": "src/typography.tsx and app/_layout.tsx",
+  "validation": "scripts/check-design-fonts.py passes source hashes/SFNT bounds/static weights/unique PostScript names for all12. This is source audit, not new compiled binary validation.",
+  "roles": [
+    {
+      "id": "Inter|Bold",
+      "family": "Inter",
+      "style": "Bold",
+      "sourceFont": "assets/fonts/Inter-700.ttf",
+      "sourceSHA256": "bb33bed849dddbe01498925ff105be93f25164023f097b1f2fe373d6e9d762c0",
+      "runtimeAlias": "NyloBody700",
+      "occurrences": [
+        {
+          "node": "1:6",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:171",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:498",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:663",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Nimbus Sans|Bold",
+      "family": "Nimbus Sans",
+      "style": "Bold",
+      "sourceFont": "assets/fonts/NimbusSans-Bold.ttf",
+      "sourceSHA256": "148726be75d2060a38dfd2e2637569f56c82af9f671e97131023b47add06f2cb",
+      "runtimeAlias": "NyloNimbus700",
+      "occurrences": [
+        {
+          "node": "1:16",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:20",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:38",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:62",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:84",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:508",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:512",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:530",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:554",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:576",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Plus Jakarta Sans|SemiBold",
+      "family": "Plus Jakarta Sans",
+      "style": "SemiBold",
+      "sourceFont": "assets/fonts/PlusJakartaSans-600.ttf",
+      "sourceSHA256": "7bbb1493443eeed5eb98fbf56d462562b68e1810a7b2994bb30d0849393625ad",
+      "runtimeAlias": "NyloHeading600",
+      "occurrences": [
+        {
+          "node": "1:29",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:93",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:129",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:239",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:253",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:265",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:340",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:347",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:352",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:372",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:476",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:489",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:521",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:585",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:621",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:731",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:745",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:757",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:832",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:839",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:844",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:864",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:968",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:981",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:995",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1008",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1233",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1306",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Inter|Regular",
+      "family": "Inter",
+      "style": "Regular",
+      "sourceFont": "assets/fonts/Inter-400.ttf",
+      "sourceSHA256": "277d2dff62b6e16e44544236745af2917e2e5542f42853bb678f0564ae18ae5f",
+      "runtimeAlias": "NyloBody400",
+      "occurrences": [
+        {
+          "node": "1:31",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:95",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:159",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:178",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:189",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:213",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:267",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:283",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:296",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:303",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:305",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:312",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:314",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:349",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:356",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:365",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:397",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:410",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:424",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:425",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:442",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:445",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:451",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:456",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:468",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:523",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:587",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:651",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:670",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:681",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:705",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:759",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:775",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:788",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:795",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:797",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:804",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:806",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:841",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:848",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:857",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:889",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:902",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:916",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:917",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:934",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:937",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:943",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:948",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:960",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:992",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1046",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1100",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1112",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1112",
+          "propertyPath": "/properties/textData/styleOverrideTable/1/fontName"
+        },
+        {
+          "node": "2:1115",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1118",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1120",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1120",
+          "propertyPath": "/properties/textData/styleOverrideTable/1/fontName"
+        },
+        {
+          "node": "2:1122",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1130",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1132",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:1132",
+          "propertyPath": "/properties/textData/styleOverrideTable/1/fontName"
+        },
+        {
+          "node": "2:1164",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1177",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1184",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1202",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1212",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1230",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1248",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1251",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1257",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1259",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1261",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1262",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1264",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1266",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1268",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1294",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1321",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Nimbus Sans|Regular",
+      "family": "Nimbus Sans",
+      "style": "Regular",
+      "sourceFont": "assets/fonts/NimbusSans-Regular.ttf",
+      "sourceSHA256": "df5d1ce7b86c2e74974008623612bae136123a35ba7885de8a0721b68258edbc",
+      "runtimeAlias": "NyloNimbus400",
+      "occurrences": [
+        {
+          "node": "1:35",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:59",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:420",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:527",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:551",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:912",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Inter|Medium",
+      "family": "Inter",
+      "style": "Medium",
+      "sourceFont": "assets/fonts/Inter-500.ttf",
+      "sourceSHA256": "6a7bbbf1bc01f50d14e8fc1df764d7c38dee5ffa262c9e5fa880ee567224707f",
+      "runtimeAlias": "NyloBody500",
+      "occurrences": [
+        {
+          "node": "1:46",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:55",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:70",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:79",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:104",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:208",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:349",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "1:364",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:439",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:538",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:547",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:562",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:571",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:596",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:700",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:841",
+          "propertyPath": "/properties/textData/styleOverrideTable/0/fontName"
+        },
+        {
+          "node": "2:856",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:931",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1085",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1092",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1112",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1115",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1130",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1132",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1193",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1224",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1301",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1315",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Inter|Semi Bold",
+      "family": "Inter",
+      "style": "Semi Bold",
+      "sourceFont": "assets/fonts/Inter-600.ttf",
+      "sourceSHA256": "f01baac0bb77f948039f23275419ee6a9bbe66a9e149810552fb0b0e402838ad",
+      "runtimeAlias": "NyloBody600",
+      "occurrences": [
+        {
+          "node": "1:112",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:117",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:124",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:166",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:169",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:184",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:194",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:196",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:222",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:228",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:234",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:270",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:273",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:275",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:277",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:280",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:293",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:299",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:308",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:319",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:325",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:359",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:374",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:379",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:395",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:403",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:604",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:609",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:616",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:658",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:661",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:676",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:686",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:688",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:714",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:720",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:726",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:762",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:765",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:767",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:769",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:772",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:785",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:791",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:800",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:811",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:817",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:851",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:866",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:871",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:887",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:895",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1027",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1035",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1043",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1048",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1053",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1072",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1103",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1109",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1118",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1120",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1127",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1136",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1143",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1182",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1186",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1210",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1220",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1271",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1323",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Plus Jakarta Sans|Bold",
+      "family": "Plus Jakarta Sans",
+      "style": "Bold",
+      "sourceFont": "assets/fonts/PlusJakartaSans-700.ttf",
+      "sourceSHA256": "b87aa21f05a49e298a5828f2aa7f0051ba2ab973c0cf25191769e6e1fea8935d",
+      "runtimeAlias": "NyloHeading700",
+      "occurrences": [
+        {
+          "node": "1:144",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:152",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:156",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:174",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:187",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:205",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:262",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:408",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:636",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:644",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:648",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:666",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:679",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:697",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:754",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:900",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:990",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1019",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1067",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1082",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1089",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1155",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1161",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1171",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1241",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1254",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1286",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Liberation Mono|Regular",
+      "family": "Liberation Mono",
+      "style": "Regular",
+      "sourceFont": "assets/fonts/LiberationMono-Regular.ttf",
+      "sourceSHA256": "5883330d94debd992952cd8f0571b225f478c2d797d3f36c7521b0a5c9bde0f2",
+      "runtimeAlias": "NyloMono400",
+      "occurrences": [
+        {
+          "node": "1:381",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "1:385",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:873",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:877",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Inter|Italic",
+      "family": "Inter",
+      "style": "Italic",
+      "sourceFont": "assets/fonts/Inter-400Italic.ttf",
+      "sourceSHA256": "ce932a7b5ea5d90b5925a4fdd18846ba3544c81df626d5ec5b54c20140004d3a",
+      "runtimeAlias": "NyloBody400Italic",
+      "occurrences": [
+        {
+          "node": "1:387",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:879",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    },
+    {
+      "id": "Plus Jakarta Sans|Medium",
+      "family": "Plus Jakarta Sans",
+      "style": "Medium",
+      "sourceFont": "assets/fonts/PlusJakartaSans-500.ttf",
+      "sourceSHA256": "4a0a98f4b11cf09ccbaf68b23d8b671904700d2fdb0001348fd8aa7172625aa4",
+      "runtimeAlias": "NyloHeading500",
+      "occurrences": [
+        {
+          "node": "2:1313",
+          "propertyPath": "/properties/fontName"
+        },
+        {
+          "node": "2:1319",
+          "propertyPath": "/properties/fontName"
+        }
+      ],
+      "disposition": "Font program available and registered; per-node selected weight, metrics and rendered use still require individual audit."
+    }
+  ]
+}

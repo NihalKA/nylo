@@ -12,7 +12,7 @@ This is a GitHub test prerelease. Generation remains foreground-only; no Play up
 
 ---
 
-# Current Android12 test delivery
+# Historical Android12 test delivery
 
 [Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk) · [Release and checksum](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-12).
 

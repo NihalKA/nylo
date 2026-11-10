@@ -1,0 +1,134 @@
+{
+  "fileKey": "WNCRguvh0wqYTgBUlbXZ9G",
+  "exportedAt": "2026-11-10T11:51:26.613Z",
+  "pngExportedAt": "2026-11-10T11:56:10.958Z",
+  "source": "Normal signed-in Figma UI Save local copy and Export14layersPNG1x",
+  "figSHA256": "ac4ea8a7a1b6fcb7bce03a9b5f4fbe65477a1db59c637688758970c26eb45179",
+  "figBytes": 282466,
+  "PNGZipSHA256": "2044f219d99f38420f9034a1b9b2064da349977b1d2538f286e783aba482e818",
+  "PNGZipBytes": 1622288,
+  "zipCRCsVerified": true,
+  "nodeRecords": 1325,
+  "visiblePage": "0:1",
+  "emptyInternalHiddenCanvas": "0:2",
+  "extraVisibleVector": "2:1098",
+  "originalMCPMetadataNodes": 1322,
+  "allMetadataIDsPresent": true,
+  "componentsAndInstancesStored": 0,
+  "prototypeInteractionRecordsStored": 0,
+  "namedVariableOrReusableStyleRecordsStored": 0,
+  "accountWideUnusedLibraries": "Not queried; not evidence of used components or bindings",
+  "sanitizedNodeFacts": "docs/design/figma-live-node-facts.json.gz",
+  "sanitizedNodeFactsSHA256": "6e419e2e050efa5c0f6731c95b6763c2b45ae627d540a9002b75fec753c68342",
+  "images": [
+    {
+      "node": "1:2",
+      "path": "docs/design/reference-20261110/1-2.png",
+      "sha256": "e5cc9c33b4bb6d791945de7a86bbabd707c340f06b4be8fcc830e5d1573e04ac"
+    },
+    {
+      "node": "1:125",
+      "path": "docs/design/reference-20261110/1-125.png",
+      "sha256": "a8b7f6e56ca5e0408867f8b763dd1cff912ce9929ffb3ea8e4c743019e25298e"
+    },
+    {
+      "node": "1:235",
+      "path": "docs/design/reference-20261110/1-235.png",
+      "sha256": "f2359e93c4b58e93e129a9c27ef3a41fc356ae2e0cf95ba1a4550ca6aa930fd0"
+    },
+    {
+      "node": "1:322",
+      "path": "docs/design/reference-20261110/1-322.png",
+      "sha256": "9cf025ace6d4accb3845393baddd45ef0b18d8ee3964c52e8ba6b274ddff9b12"
+    },
+    {
+      "node": "1:404",
+      "path": "docs/design/reference-20261110/1-404.png",
+      "sha256": "e3f95ae7487a21f1a2b604ab84ea5ebb830350c37b5378e46f25469847389500"
+    },
+    {
+      "node": "2:494",
+      "path": "docs/design/reference-20261110/2-494.png",
+      "sha256": "90e4bbe5e706f4093977d6dc3c4d26b09fc0e07b7c4f05a5186ba441924b7efa"
+    },
+    {
+      "node": "2:617",
+      "path": "docs/design/reference-20261110/2-617.png",
+      "sha256": "02224a5f46801b225473c6749f5a8f6b75ea954956d8cdc25b4c6bd29171a606"
+    },
+    {
+      "node": "2:727",
+      "path": "docs/design/reference-20261110/2-727.png",
+      "sha256": "f2359e93c4b58e93e129a9c27ef3a41fc356ae2e0cf95ba1a4550ca6aa930fd0"
+    },
+    {
+      "node": "2:814",
+      "path": "docs/design/reference-20261110/2-814.png",
+      "sha256": "59becaa9d1890ec9a060f275993376f21fb9c7ecd8ae3cd44b3a7105b444441a"
+    },
+    {
+      "node": "2:896",
+      "path": "docs/design/reference-20261110/2-896.png",
+      "sha256": "e3f95ae7487a21f1a2b604ab84ea5ebb830350c37b5378e46f25469847389500"
+    },
+    {
+      "node": "2:986",
+      "path": "docs/design/reference-20261110/2-986.png",
+      "sha256": "f97209a56a32003c1370e5c5afcce1617543ae8328414beb38bf0a461f90fbcb"
+    },
+    {
+      "node": "2:1050",
+      "path": "docs/design/reference-20261110/2-1050.png",
+      "sha256": "bf61d85be872b2523cb44e4719a3d3024668a7cad976cddc25b0b695c31e6dbe"
+    },
+    {
+      "node": "2:1139",
+      "path": "docs/design/reference-20261110/2-1139.png",
+      "sha256": "969e8b0e1d5cf27ca1c4ae6c18bc7e1039161f4c275caf9824b7d6c8479ac957"
+    },
+    {
+      "node": "2:1234",
+      "path": "docs/design/reference-20261110/2-1234.png",
+      "sha256": "8a02eb131cd38b298fbedfd235b870b4179e216b32a5c5285c4b8bcb73b39e57"
+    }
+  ],
+  "acceptance": "Reference acquisition only; full per-node/source/state audit and independentAstra10/10 still required.",
+  "originalSVGExports": [
+    {
+      "node": "2:1069",
+      "path": "docs/design/reference-20261110/svg/2-1069.svg",
+      "sha256": "79ac468040b0f2104193647cacf4a303c69e3953c5e647001480d9ad482c2886",
+      "bytes": 455,
+      "exportedAt": "2026-11-10T12:28:07.518Z",
+      "method": "Normal Figma Properties > Add export settings > SVG > Export Icon",
+      "originalViewBox": "0 0 17 17",
+      "originalWidth": "17",
+      "originalHeight": "17",
+      "status": "Reference only; not inserted in product"
+    },
+    {
+      "node": "2:1205",
+      "path": "docs/design/reference-20261110/svg/2-1205.svg",
+      "sha256": "0c63b4dbebcc329a9c2a1e20654e0fe6006edb36b991562bea68c14479a1a2e3",
+      "bytes": 1035,
+      "exportedAt": "2026-11-10T12:29:01.002Z",
+      "method": "Normal Figma Properties > Add export settings > SVG > Export Icon",
+      "originalViewBox": "0 0 15 15",
+      "originalWidth": "15",
+      "originalHeight": "15",
+      "status": "Reference only; not inserted in product"
+    },
+    {
+      "node": "2:1195",
+      "path": "docs/design/reference-20261110/svg/2-1195.svg",
+      "sha256": "61671caa85cd9e5290fe6867e4e11473748b8b4b1a46f987604213ca5ed384b1",
+      "bytes": 247,
+      "exportedAt": "2026-11-10T12:30:02.399Z",
+      "method": "Normal Figma Properties > Add export settings > SVG > Export Icon",
+      "originalViewBox": "0 0 14 11",
+      "originalWidth": "14",
+      "originalHeight": "11",
+      "status": "Reference only; not inserted in product"
+    }
+  ]
+}

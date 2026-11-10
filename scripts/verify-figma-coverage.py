@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import json
+import gzip
 from pathlib import Path
 import sys
 import subprocess
@@ -22,9 +23,11 @@ DOMAINS = {'pages', 'hidden-layers', 'components-variants-libraries',
            'states', 'app-extensions'}
 CHECKS = {'geometry', 'typography', 'artwork', 'colours-effects', 'content',
           'states-actions', 'responsive-accessibility'}
+STATE_FLOOR = {'reference', 'empty', 'populated', 'selected', 'error', 'keyboard'}
 AUDIT_INPUTS = ['AGENTS.md', 'docs/adr/0001-figma-coverage-before-implementation.md',
                 'docs/testing/figma-full-file-audit.md', 'scripts/verify-figma-coverage.py',
-                'scripts/figma_evidence.py', 'scripts/figma_release.py']
+                'scripts/figma_evidence.py', 'scripts/figma_release.py',
+                'tools/design/extract-context.ts']
 
 
 def sha(data):
@@ -142,6 +145,14 @@ def verify(root, phase, manifest_path=MANIFEST):
         need(p.is_file() and sha(p.read_bytes()) == item.get('sha256'),
              f'evidence missing/changed: {name}')
         need(bool(item.get('provenance')), f'evidence provenance missing: {name}')
+    if m.get('liveSource'):
+        live_record = m['liveSource']
+        entry = evidence.get(live_record.get('factsEvidence'), {})
+        need(entry.get('kind') == 'figma-sanitized-file-gzip', 'missing typed live-file facts')
+        if entry.get('kind') == 'figma-sanitized-file-gzip':
+            live = json.loads(gzip.decompress(safe_path(root, entry['path']).read_bytes()))
+            need(set(live['nodes']) == set(source), 'live-file nodes not fully reconciled with inventory')
+            need(live['source']['figSHA256'] == live_record.get('figSHA256'), 'live-file identity mismatch')
 
     def refs(entry, label):
         paths = entry.get('evidence', [])
@@ -198,7 +209,8 @@ def verify(root, phase, manifest_path=MANIFEST):
             need(bool(gap.get('resolutionEvidence')) and
                  all(x in evidence for x in gap.get('resolutionEvidence', [])),
                  f'{label}: resolution evidence missing')
-    required_extensions = {'chats-inbox', 'agents-landing', 'provider-editor', 'live-check'}
+    required_extensions = {'chats-inbox', 'agents-landing', 'provider-editor', 'live-check',
+                           'font-licenses', 'app-shell'}
     extension_ids = [entry.get('id') for entry in m.get('extensions', [])]
     need(required_extensions.issubset(discovered['extensionIds']) and
          len(extension_ids) == len(set(extension_ids)) and
@@ -217,6 +229,7 @@ def verify(root, phase, manifest_path=MANIFEST):
         states = definition.get('states', [])
         need(definition.get('enumerationComplete') is True and bool(states) and
              len(states) == len(set(states)), f'scope {scope}: states not exhaustively reviewed')
+        need(STATE_FLOOR.issubset(states), f'scope {scope}: conservative states removed without exceptions')
         for platform in ['ios', 'android']:
             for state in states:
                 required_obligations.add(f'{platform}|{scope}|{state}')
