@@ -2,8 +2,15 @@
 # Project CI test runner, never a substitute for supported interactive device tools.
 set -euo pipefail
 mkdir -p artifacts/android-ui
+# Keep the last device messages even if the emulator disconnects during a flow.
+adb logcat -v threadtime > artifacts/android-ui/logcat-live.txt 2>&1 &
+nylo_logcat_pid=$!
 collect() {
-  adb logcat -d -t 2000 > artifacts/android-ui/logcat.txt || true
+  kill "$nylo_logcat_pid" 2>/dev/null || true
+  timeout 10s adb logcat -d -t 2000 > artifacts/android-ui/logcat.txt 2>&1 || true
+  timeout 10s adb devices -l > artifacts/android-ui/adb-devices.txt 2>&1 || true
+  ps -eo pid,ppid,stat,rss,args > artifacts/android-ui/runner-processes.txt
+  dmesg > artifacts/android-ui/runner-kernel.txt 2>&1 || true
   if [ -d "$HOME/.maestro/tests" ]; then cp -R "$HOME/.maestro/tests" artifacts/android-ui/driver-diagnostics; fi
 }
 trap collect EXIT
