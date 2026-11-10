@@ -97,6 +97,8 @@ jobs:
       - uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
         with:
           api-level: 35
+          # Emulator 37.2.13 segfaults on this runner; use archived stable 36.6.11.
+          emulator-build: 15507667
           target: google_apis
           arch: x86_64
           profile: pixel_6
