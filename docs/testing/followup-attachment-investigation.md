@@ -11,7 +11,7 @@ Baseline: `86a57a8763bce39b29a8e903af972fc3371385b2`.
 `askPermission("Send attached content?", ...)` whenever any exist. Approval is not
 remembered for attachments. This explains repeated **app permission dialogs** on
 both native platforms; `src/consent.ts` uses the same native Alert implementation.
-Confirmation of whether the report refers to this dialog or an AI reply is pending.
+The owner confirmed that the repeated request is this permission dialog.
 
 The source does not discard the first message's file on the next turn.
 `prepareSend` retains conversation messages; `preflightRequest` carries their
@@ -29,18 +29,17 @@ for supported Responses/Messages protocols; images and text cover all three.
 All 14 tests in `expanded-features.test.ts` pass. No live provider request was made.
 This tests shared iOS/Android logic, not installed native apps or model behavior.
 
-## Proposed fix and blocker
+## Fix
 
-If the reported request is the permission dialog, remember approval for the exact
-attachment content and provider destination within the conversation. Ask again for
-new/changed content, changed destination or reset sharing permission. Do not let a
-backup import grant approval or suppress first-send consent. Preserve file bytes
-in subsequent requests. Add regression cases for cancel, retry, restart, provider
-switch, newly attached files, import and revoked approval before native validation.
+Updated from main `7c03642`, whose link-specific policy supersedes the historical
+universal implementation gate. Local provider consent now retains approved immutable
+attachment IDs per conversation. Approval is recorded in the durable message
+acceptance write after all prompts succeed. Follow-ups, retries and local restarts
+reuse approval; newly picked files have fresh IDs and require approval. Provider
+endpoint/protocol/credential changes and reset sharing permission require approval
+again. Backup export/import strips provider consent including attachment approvals.
+No provider request or attachment bytes are removed from follow-up history.
 
-No product source has been edited: the baseline `implementation` gate fails for
-unreviewed Figma scope and missing approval. The CI `changes` gate classifies all
-`src/` edits as product changes, including nonvisual consent logic, and requires
-approval on the pre-change checkout. The test/docs-only `changes` gate passes.
-The gate has not been weakened. Both native builds and a verified product merge
-remain pending; repository instructions prohibit a new compile for test-only work.
+Automated tests cover first approval, follow-ups, retries, local restoration, new
+files, conversation isolation, provider/credential/protocol changes, import, reset
+and malformed saved consent. Native build and runtime verification are pending.

@@ -1,3 +1,7 @@
+import {
+  pendingAttachmentApproval,
+  rememberAttachmentApproval,
+} from "./attachment-consent";
 import { prepareSend } from "./send-plan";
 import { credentialDestination, stageCredential } from "./credentials";
 import {
@@ -357,14 +361,20 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       retry,
       !!options?.deviceCheck,
     );
-    const previousAttachments = messages
-      .slice(0, retry ? messages.length : -1)
-      .flatMap((m) => m.attachments || []);
-    if (attachments.length || previousAttachments.length) {
+    const destination = credentialDestination(connection);
+    const credentialId = connection.credentialId || connection.id;
+    const requestAttachments = messages.flatMap((m) => m.attachments || []);
+    const pendingAttachments = pendingAttachmentApproval(
+      current.current,
+      conversationId,
+      connection,
+      requestAttachments,
+    );
+    if (pendingAttachments.length) {
       if (
         !(await askPermission(
           "Send attached content?",
-          `Attached content (${[...previousAttachments, ...attachments]
+          `Attached content (${pendingAttachments
             .map((a) => a.name)
             .join(", ")
             .slice(
@@ -378,8 +388,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           "Nothing was sent. Your draft and attachments are kept.",
         );
     }
-    const destination = credentialDestination(connection);
-    const credentialId = connection.credentialId || connection.id;
     if (
       !(current.current.providerConsents || []).some(
         (c) =>
@@ -482,6 +490,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         throw new Error("Return to Nylo to send. Your draft is kept.");
       await update((d) => ({
         ...d,
+        providerConsents: rememberAttachmentApproval(
+          d,
+          conversationId,
+          connection,
+          requestAttachments,
+        ),
         deviceCheck:
           options?.deviceCheck && d.deviceCheck?.streamChatId === conversationId
             ? { ...d.deviceCheck, streamEvents: undefined }

@@ -72,6 +72,7 @@ export type AppData = {
     destination: string;
     revision: 3;
     grantedAt: number;
+    attachmentApprovals?: { conversationId: string; attachmentIds: string[] }[];
   }[];
   connections: Connection[];
   defaultConnectionId: string;
