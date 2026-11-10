@@ -1,4 +1,4 @@
-Current product `a0afe7e` corrects the report preview's actual native translucent-shadow colour mismatch. Fresh iOS42722415418 / signed Android12 42722421091 are running, SourceCI42722410071 succeeds. Earlier76/11 evidence below is interim; final distribution remains held for the new candidate's verification.
+Current product `a0afe7e` has accepted current native UI evidence. Signed build18 workflow42729756232 is running on release head554b9d8; the actual exported IPA, Apple processing and internal tester availability remain to be verified. Android12 is already delivered. Earlier76/11 evidence below is historical; no new TestFlight or Drive upload is claimed.
 
 # Expanded iPhone beta check
 
