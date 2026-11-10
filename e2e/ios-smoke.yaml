@@ -174,10 +174,23 @@ appId: com.nylohq.nylo
 - assertVisible: "Create agent"
 - tapOn: "Create agent"
 - assertVisible: "Agent"
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      below: "Agent"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: "Memory"
+    below: "Agent"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element:
       id: "agent-memory-input"
@@ -218,10 +231,23 @@ appId: com.nylohq.nylo
 - waitForAnimationToEnd
 - assertVisible: "Create agent"
 - tapOn: "Open Writing partner"
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      below: "Agent"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: "Memory"
+    below: "Agent"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
@@ -233,10 +259,23 @@ appId: com.nylohq.nylo
     text: "Agents, tab, 2 of 3"
     retryTapIfNoChange: true
 - tapOn: "Open Writing partner"
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      below: "Agent"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: "Memory"
+    below: "Agent"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
