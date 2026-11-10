@@ -371,6 +371,20 @@ export function parseData(value: unknown, local = false): AppData {
               destination: c.destination,
               revision: 3 as const,
               grantedAt: c.grantedAt,
+              attachmentApprovals: Array.isArray(c.attachmentApprovals)
+                ? c.attachmentApprovals
+                    .filter(
+                      (a) =>
+                        a &&
+                        typeof a.conversationId === "string" &&
+                        Array.isArray(a.attachmentIds) &&
+                        a.attachmentIds.every((id) => typeof id === "string"),
+                    )
+                    .map((a) => ({
+                      conversationId: a.conversationId,
+                      attachmentIds: [...a.attachmentIds],
+                    }))
+                : [],
             }))
         : [],
     retiredCredentialIds:
