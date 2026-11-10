@@ -10,7 +10,7 @@ collect() {
   timeout 10s adb logcat -d -t 2000 > artifacts/android-ui/logcat.txt 2>&1 || true
   timeout 10s adb devices -l > artifacts/android-ui/adb-devices.txt 2>&1 || true
   ps -eo pid,ppid,stat,rss,args > artifacts/android-ui/runner-processes.txt
-  dmesg > artifacts/android-ui/runner-kernel.txt 2>&1 || true
+  sudo -n dmesg > artifacts/android-ui/runner-kernel.txt 2>&1 || true
   if [ -d "$HOME/.maestro/tests" ]; then cp -R "$HOME/.maestro/tests" artifacts/android-ui/driver-diagnostics; fi
 }
 trap collect EXIT

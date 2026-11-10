@@ -35,6 +35,8 @@ jobs:
       matrix:
         navigation: [gestural, threebutton]
     env:
+      # Keep the emulator and Maestro within the hosted runner memory budget.
+      JAVA_TOOL_OPTIONS: "-Xmx1024m"
       ANDROID_NAVIGATION_MODE: ${{ matrix.navigation }}
       GH_TOKEN: ${{ github.token }}
       SOURCE_RUN_ID: ${{ inputs.source_run_id || github.event.workflow_run.id }}
@@ -98,6 +100,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_6
+          ram-size: 2048
           disable-animations: true
           emulator-options: "-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none"
           script: bash scripts/android/ui-smoke.sh
