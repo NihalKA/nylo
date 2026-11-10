@@ -118,10 +118,18 @@ appId: com.nylohq.nylo
     id: "chat-message"
     text: "Explain this test policy"
 - tapOn: "Choose PDF connection"
+- scrollUntilVisible:
+    element: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
+    direction: DOWN
+    visibilityPercentage: 100
 - assertVisible:
     text: "QA Chat Completions[.] synthetic-model[.] PDFs unavailable with Chat Completions"
     enabled: false
 - takeScreenshot: gallery-09-pdf-picker
+- scrollUntilVisible:
+    element: "Offline QA provider[.] synthetic-no-network"
+    direction: UP
+    visibilityPercentage: 100
 - tapOn: "Offline QA provider[.] synthetic-no-network"
 - assertNotVisible: "Choose PDF connection"
 - assertVisible: "Remove QA policy.pdf"
