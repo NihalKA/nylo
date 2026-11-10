@@ -12,7 +12,12 @@ import {
   selectedConnection,
 } from "../src/model-library";
 import { recentAgentContext, sharedContextPrompt } from "../src/agent-context";
-import { buildRequest, runAgent } from "../src/providers";
+import { buildRequest, preflightRequest, runAgent } from "../src/providers";
+import { prepareSend } from "../src/send-plan";
+import {
+  splitAttachmentStorage,
+  hydrateAttachmentStorage,
+} from "../src/attachment-storage";
 import {
   createConversation,
   parseData,
@@ -63,6 +68,75 @@ const agent: Agent = {
   memories: [],
   createdAt: 1,
 };
+for (const protocol of ["openai", "anthropic", "compatible"] as const) {
+  test(`${protocol}: follow-ups and retries retain original file bytes after native storage restoration`, () => {
+    let data = emptyData();
+    const selected = { ...connection, protocol };
+    const files =
+      protocol === "compatible" ? [photo, text] : [photo, pdf, text];
+    data.connections = [selected];
+    data.defaultConnectionId = selected.id;
+    const chat = createConversation(selected.id);
+    chat.draftAttachments = files;
+    data.conversations = [chat];
+    for (let turn = 0; turn < 3; turn++) {
+      const plan = prepareSend(
+        data,
+        chat.id,
+        turn ? "Explain another detail" : "Review these files",
+      );
+      const wireTurns = preflightRequest(
+        plan.messages,
+        plan.instructions,
+        protocol,
+      );
+      assert.deepEqual(wireTurns[0].attachments, files);
+      assert.equal(
+        wireTurns.flatMap((m) => m.attachments || []).length,
+        files.length,
+      );
+      const body = buildRequest(
+        selected,
+        wireTurns,
+        plan.instructions,
+        false,
+      ).body;
+      const encoded = JSON.stringify(body);
+      for (const file of files)
+        assert.ok(encoded.includes(file.data), file.name);
+      const conversation = data.conversations[0];
+      conversation.draftAttachments = [];
+      conversation.messages = [
+        ...plan.messages,
+        {
+          id: `reply-${turn}`,
+          role: "assistant",
+          text: "File analysis",
+          status: "complete",
+          createdAt: turn + 1,
+        },
+      ];
+      const retry = prepareSend(data, chat.id, "", true);
+      assert.deepEqual(retry.messages, plan.messages);
+      assert.deepEqual(
+        buildRequest(
+          selected,
+          preflightRequest(retry.messages, retry.instructions, protocol),
+          retry.instructions,
+          false,
+        ).body,
+        body,
+      );
+      // Both native platforms use this metadata/blob round trip on app restart.
+      const saved = splitAttachmentStorage(data);
+      data = parseData(
+        hydrateAttachmentStorage(JSON.parse(saved.metadata), saved.blobs),
+        true,
+      );
+      assert.deepEqual(data.conversations[0].messages[0].attachments, files);
+    }
+  });
+}
 test("legacy and multi-model providers preserve a default and route one selected model", () => {
   assert.deepEqual(connectionModels({ ...connection, models: undefined }), [
     "one",

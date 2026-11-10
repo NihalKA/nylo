@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Android signed builds"]
     types: [completed]
-    branches: [main, feat/figma-ui-parity]
+    branches: [main, feat/figma-ui-parity, feat/preserve-followup-file-context]
   workflow_dispatch:
     inputs:
       source_run_id:
@@ -57,9 +57,9 @@ jobs:
           import json, os, subprocess
           from pathlib import Path
           r=json.loads(Path('artifacts/android-ui/source-run.json').read_text())
-          assert r['name']=='Android signed builds' and r['head_branch'] in ('main', 'feat/figma-ui-parity')
+          assert r['name']=='Android signed builds' and r['head_branch'] in ('main', 'feat/figma-ui-parity', 'feat/preserve-followup-file-context')
           assert r['conclusion']=='success' or (os.environ['GITHUB_EVENT_NAME']=='workflow_dispatch' and os.environ['ALLOW_FAILED_AUDIT']=='true')
-          if r['head_branch']=='feat/figma-ui-parity':
+          if r['head_branch'] in ('feat/figma-ui-parity', 'feat/preserve-followup-file-context'):
               subprocess.run(['git','diff','--exit-code',r['head_sha'],'HEAD','--','app','src','assets','modules','plugins','app.json','package.json','package-lock.json','babel.config.js','metro.config.js','scripts/android/configure-build.py','scripts/android/release.init.gradle'],check=True)
           assert r['head_repository']['full_name']==os.environ['GITHUB_REPOSITORY']
           subprocess.run(['gh','run','download',str(r['id']),'--repo',os.environ['GITHUB_REPOSITORY'],'--name',f"android-{r['run_number']}-{r['head_sha']}",'--dir','artifacts/android-build'],check=True)
