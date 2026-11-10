@@ -120,10 +120,24 @@ appId: com.nylohq.nylo
 - tapOn: "Create agent"
 - assertVisible: "Create an agent"
 - waitForAnimationToEnd
+# Large-text run 42847188364 tapped an offscreen template, leaving the
+# name empty. Keep the complete role below the header before selecting it.
 - scrollUntilVisible:
-    element: "Writing partner"
-    direction: UP
+    element:
+      text: "Writing partner"
+      below: "Create an agent"
+    direction: DOWN
+    centerElement: true
+    visibilityPercentage: 100
 - tapOn: "Writing partner"
+- scrollUntilVisible:
+    element:
+      id: "agent-name"
+    direction: DOWN
+    centerElement: true
+- assertVisible:
+    id: "agent-name"
+    text: "Writing partner"
 - runFlow:
     when:
       visible: "Dismiss keyboard"
