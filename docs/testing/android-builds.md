@@ -1,4 +1,18 @@
-# Current Android12 test delivery
+# Android13 test APK delivered — visual acceptance reopened
+
+Visual acceptance of13 is withdrawn after owner rejection. Follow [the whole-file audit](figma-full-file-audit.md): exhaustive coverage, independent Astra10/10 completeness before UI code, then new native rendered review before corrected distribution. Binary/functionality facts below do not establish complete visual parity.
+
+[Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/Nylo-test.apk) · [SHA256SUMS](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/SHA256SUMS.txt). Exact tested APK61,701,992 bytes/SHA256 `36073b00813572c4423f0c85d11ea9b4c2dc46e1fe615b1de18a10ec92c4e10e`, product `dcef4f6`. Public prerelease tag/source, asset digest/size, unauthenticated200 and checksum independently verify. Prior12/6/5 remain preserved.
+
+Signed native42774779097, smoke42776237018 and gallery42790989097 verify the exact APK. Gesture smoke106 commands/12 conditional skips; three-button110/11 including explicitly handled Pixel Launcher ANR; gallery92/2 each. All57 retained native PNGs are inspected, covering the nine supplied current states and actual33/34px WindowManager clearance. Initial device-offline failures before launch remain preserved; bounded attempt2 uses the same binaries.
+
+The full GitHub archive digest/ZIP CRC, APK+AAB identity/source/version, original protected certificate, nondebug/HTTPS/permissions, Google bundletool and12 actual font/45 original SVG asset hashes verify. AAB42,308,869 bytes/SHA256 `94d301606d0a60b40a23a0825f978c6ff679e2460e4e45161377b4bf9ba307e0` is retained locally. Evidence: `artifacts/android-delivery-13/public-download-verification.json` and `artifacts/figma-mcp-current/android-*/verification.json`.
+
+This is a GitHub test prerelease. Generation remains foreground-only; no Play upload, physical-device, TalkBack or new live-provider certification is claimed. Native bars,44pt targets, dynamic text, real data and report opt-in take precedence over illustrative mock states. Signed iPhone20 compiled successfully but corrected distribution and the new Drive pack are held for the whole-file audit; previous19/12 delivery below is historical.
+
+---
+
+# Historical Android12 test delivery
 
 [Download Nylo-test.apk](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk) · [Release and checksum](https://github.com/NihalKA/nylo/releases/tag/android-beta-1.0.0-12).
 
@@ -11,7 +25,7 @@ Product `a0afe7e6b6fdc82a5d457b2a8b8bb89213bdc55d`, signed native42722421091, Ny
 
 All56 captures were inspected; exact native APK, fixtureacf128c hashes, archive GitHub digests/CRC, JUnit and WindowManager navigation bounds reconcile. Current nine-screen comparison includes the corrected report preview flat RGB245/246/245, privacy opt-in and cold-restored files. Public prerelease asset SHA256 and57,977,294-byte unauthenticated200 response match the tested APK. Evidence: `artifacts/android-delivery-12/public-download-verification.json` and `artifacts/figma-current/android12-*/verification.json`.
 
-This is the current Android test delivery; prior6/5 releases remain preserved. No Play purchase/upload occurred. Generation remains foreground-only; physical camera, TalkBack and new live-provider checks remain separate. Internal iPhone1.0.0(19) is independently delivered. The [final Drive pack](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY) is delivered with all37 files, including this exact APK/checksum; completion, public viewing and inherited sharing are verified.
+This is the historical Android12 delivery; prior6/5 releases remain preserved. No Play purchase/upload occurred. Generation remains foreground-only; physical camera, TalkBack and new live-provider checks remain separate. Internal iPhone1.0.0(19) is independently delivered. The [final Drive pack](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY) is delivered with all37 files, including this exact APK/checksum; completion, public viewing and inherited sharing are verified.
 
 ---
 

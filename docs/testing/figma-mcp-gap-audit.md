@@ -1,5 +1,12 @@
 # Live Figma MCP audit — 10 November 2026
 
+**Superseded visual acceptance:** the owner rejected Android13 after delivery.
+The historical implementation/evidence below does not establish complete layout
+parity. Follow the [reopened whole-file audit](figma-full-file-audit.md), root
+AGENTS.md and ADR0001. All1,325 complete-file records/14 visible frames and file-wide domains must be
+accounted for; independent Astra10/10 completeness is required before product edits.
+Signed20 succeeded but corrected QA distribution and new Drive publication are held.
+
 The owner rejected the earlier full-parity claim for Android12/iOS19. This audit reopens design acceptance using the authenticated official Figma MCP, rather than treating the historical sign-off as proof.
 
 File `WNCRguvh0wqYTgBUlbXZ9G`, Page1 `0:1`, has14 frames: nine current `2:*` screens and five earlier `1:*` duplicates. All nine current frames were read with high-fidelity `get_design_context`, including their screenshots, fonts, hierarchy, dimensions and original artwork. The current file has no additional standalone inbox, provider editor, agent library or live-check frame. Their existing functional screens remain part of the app.
@@ -23,3 +30,17 @@ The mobile canvas now respects the reference576px maximum.45 original SVG export
 Native blur uses the real chat-content target; Android31+ uses the supported native blur method, with the documented non-blur fallback on older Android. The new SVG renderer and source-built image manipulator must use the compatible WebP pod0.14.6 required by the installed renderer; SDWebImage remains source-built5.21.6 with its vendor privacy resource. Dependency compatibility/idempotency is checked before compiling.
 
 This is an implementation candidate, not new native acceptance or delivery. Fresh Android and iOS builds, actual artwork rendering, header/form/sheet geometry, all three iPhone profiles, both real Android navigation modes, gallery/PDF and native storage/clipboard checks are still required. Android12/TestFlight19 and the existing Drive pack remain the previous delivered versions until a corrected candidate passes.
+
+## Fresh native evidence checkpoint
+
+Product `dcef4f6` compiles on both platforms. The actual bundles contain all45 original SVG assets and12 exact font binaries. Fresh iOS compiled privacy/linked simulator identity checks pass. Compact and large smoke each pass107 commands/13 conditional skips; gallery192/exact293-byte copy/native SQL/blob and PDF58/exact drafts/protocol/blob checks pass. All61 selected normal-size iOS captures have been inspected, covering the nine reference states. Actual report RGB fills remain245/246/245,30/43/88 and252/234/229.
+
+Android13's exact signed APK/AAB, original protected certificate, permissions, source/version, whole GitHub digest/ZIP CRC and actual font/artwork assets verify. Both actual navigation modes pass smoke and gallery, with57 inspected captures (including the retained launcher dialog) and33/34px actual WindowManager navigation clearance. The original device-offline attempts are preserved.
+
+The real-photo flow now passes87 commands/two conditional skips, with11 inspected native captures, exact post-restart draft/blob/orphan checks and independently parsed owned source/output JPEG metadata. The bounded extra Files Cancel branch was skipped in the successful run. Maximum-text tests now apply the role and save correctly; a Memory tap behind the fixed navigation led to strict between-header-and-navigation guards for all three selections. At that historical checkpoint, targeted42796026157 was pending on the same fresh binary. It subsequently passed as recorded below; full visual acceptance was later withdrawn after owner rejection.
+
+## Historical sign-off — productdcef4f6 visual acceptance withdrawn
+
+Targeted maximum-text42796026157 now passes109 commands/13 conditional skips on the same fresh native with refreshfalse. All16 captures, exact fixture Git hashes, archive digest/CRC, actual native JavaScript and AX tap bounds verify. Memory targets now sit at298–379/306–387, safely inside the content viewport; the editor483–672 is reachable. All88 iOS and57 Android selected captures are inspected. The earlier visual acceptance is withdrawn after owner rejection; these functional results retain their source-specific scope; no physical/VoiceOver/TalkBack/live-provider or maximum-text pixel-identity claim is added.
+
+The exact tested Android13 APK is publicly delivered with verified tag, digest, unauthenticated200 and checksum. Signed iPhone20 workflow42798741091 succeeded, but corrected distribution is held for the whole-file audit; its QA availability and the new Drive pack remain unverified. Proof: ignored `artifacts/figma-mcp-current/final-source-proof.json`.

@@ -1,22 +1,79 @@
 # Delivery status
 
-## Reopened live Figma MCP audit — corrected candidate, 10 November 2026
+## Owner-requested feature-branch candidate builds
+
+The owner relayed Vivek's explicit request to build `feat/figma-ui-parity` instead
+of main. Its app change at `a1950d8` reserves Android system-navigation space below
+the tab targets. Branch-only release commit `eb4942a` enables a manual Android build
+for this specific branch; signing and binary audits remain unchanged. Existing
+Android14 run42819482295 and iOS native run42819488357 are compiling this exact
+feature head. They are candidate builds, not full visual acceptance or TestFlight
+availability. The earlier branch source-check failure was the audit freeze, not
+an app compile failure. No merge or audit-gate weakening occurred.
+
+## Owner reopened visual acceptance of Android13
+
+Fresh signed-in browser access is working. Current .fig and14 original PNG exports
+were downloaded11:51–11:56UTC with verified SHA/ZIP CRC. The file, not assumptions
+about missing metadata, now supplies the audit. MCP Starter/View reads remain quota
+limited; no plan/account change was made. See the [full-file audit](testing/figma-full-file-audit.md).
+
+The owner requires a complete whole-file inventory and an independent GPT-6 Astra
+10/10 audit-completeness review **before further Android/iPhone product changes**.
+The [full-file audit](testing/figma-full-file-audit.md), root AGENTS.md, ADR0001 and
+phased verifier make this mandatory. The original1,322-node MCP inventory is now reconciled to1,325 complete-file records,
+including document/hidden-canvas organization and one additional visible vector.
+Individual source/state reviews remain pending and block the gate. No new visual
+acceptance or implementation approval is claimed. Signed20 has succeeded, but its
+corrected distribution remains held. Dashboard files remain untouched.
+
+Audit progress: Settings has123 explicit per-node source/reference dispositions;
+770 of1,325 file nodes remain unreviewed. The recursive font inventory includes
+all inline overrides, and three missing original state SVGs have been exported
+through the working browser. No product changes, new native build or completeness
+approval are implied. See the [artwork audit](testing/figma-artwork-state-audit.md).
+
+A larger structural gap is confirmed in expanded Shared Context: source keeps the
+memory editor/profile sections above the context view, while Figma starts with a
+date/action subheader and Current Goal. The retained Android/iOS images confirm
+the missing subheader; scroll position previously obscured this distinction.
+See the [hierarchy audit](testing/figma-memory-context-hierarchy-audit.md). Its
+Delete recent items action has no stored prototype/data contract and remains an
+unresolved audit item; no deletion behavior or new app build has been invented.
+
+The owner reports that the delivered build still does not match the Figma design. The build13 link and exact binary identity are verified, and the functional/native evidence below remains source-specific. The previous full visual sign-off was too broad and is reopened. All nine live frames are being rechecked for full layout geometry at comparable phone widths. One concrete Settings difference is already identified: the Figma detail column wraps into two lines while native13 can collapse it to one, changing card and section heights.
+
+Signed20 workflow42798741091 succeeded; QA distribution and new Drive publication remain held for this visual review. Existing13 bytes will not be replaced or relabeled as a correction.
+
+## Historical Android13 sign-off — visual acceptance withdrawn
+
+The previous sign-off treated nine Figma frames as accepted on product `dcef4f6`. The owner subsequently rejected its visual result; that visual acceptance is withdrawn. Documented functional evidence and specific privacy, accessibility, native-safe-area and real-data exceptions remain limited to their stated scope. Official MCP context/screenshots and original artwork informed this correction. Current proof covers88 inspected iOS captures and57 Android captures, all three iPhone profiles, both real Android navigation modes, exact293-byte clipboard, native SQL/blob and owned-photo pipeline checks. Earlier failed UI/infra attempts remain preserved; test-only viewport/Files recovery fixes did not rebuild the app. See the [MCP gap audit](testing/figma-mcp-gap-audit.md).
+
+**Android13 is delivered:** [download the exact tested APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-13/Nylo-test.apk). Version1.0.0/code13,61,701,992 bytes, SHA256 `36073b00813572c4423f0c85d11ea9b4c2dc46e1fe615b1de18a10ec92c4e10e`. Public tag targetsdcef; GitHub asset digest/size, unauthenticated200 and public checksum match the tested binary. Original certificate, permissions, APK+AAB/ZIP CRC, Google bundletool, twelve fonts/45 SVGs and33/34px actual navigation clearance verify. Prior12/6/5 releases are preserved. No Play publication occurred.
+
+**Signed iPhone20 compiled successfully; corrected distribution is held.** Workflow42798741091 used source43b30b3, with the same app inputs asdcef. A successful workflow does not establish Apple processing, QA availability or installation. No assignment as the corrected result is authorized while visual acceptance is reopened. TestFlight19 remains the previous verified available version. Initial Store15 and external17 are untouched.
+
+The new24-screen/6-sheet review pack is prepared locally with the exact13 APK and no new TestFlight claim. Final dated Drive delivery remains pending; Google Drive authentication is confirmed, with no login action needed.
+
+## Historical initial MCP correction checkpoint — 10 November 2026
 
 The owner identified remaining differences after Android12/iOS19 delivery. Authenticated official Figma MCP inspection of all nine current frames confirms missing original artwork, header/form geometry, sheet blur, fixed actions, attachment shelf details and report typography. The earlier delivery below remains available; its parity sign-off is superseded by this reopened [gap audit](testing/figma-mcp-gap-audit.md).
 
-The corrected source candidate bundles45 unchanged original SVG exports with node/hash provenance and a twelfth static italic font. It updates the nine supplied screens while preserving consent, report opt-in, model/protocol/key and storage behavior. New native SVG/blur modules require fresh builds. Source typecheck and83 tests, formatting, exact font/artwork guards and Expo doctor pass. Native compilation, real rendering and functional acceptance are pending; no corrected replacement is delivered yet.
+The corrected source candidate bundles45 unchanged original SVG exports with node/hash provenance and a twelfth static italic font. It updates the nine supplied screens while preserving consent, report opt-in, model/protocol/key and storage behavior. New native SVG/blur modules require fresh builds. Source typecheck and83 tests, formatting, exact font/artwork guards and Expo doctor pass. Fresh iOS42774779366 and signed Android13/42774779097 compile successfully; sourceCI42774779668 passes. The actual iOS archive verifies all45 SVGs, twelve exact font files, eleven privacy manifests and linked simulator identity. Compact/large iOS smoke pass107/13 each; current gallery passes192 with exact293-byte copy and native SQL/blob receipt, and PDF passes58 with exact drafts/protocol/blob persistence. All61 selected normal-size iOS captures are inspected. Android smoke passes both modes (gesture106/12; three-button110/11, including the explicitly handled Pixel Launcher dialog), gallery92/2 each, all57 captures inspected with actual33/34px navigation clearance. Original device-offline failures remain preserved.
 
-## Current Figma UI — mobile builds and Drive pack delivered, 10 November 2026
+Test-only fixture corrections keep maximum-text roles, Save and Memory selections within the actual content viewport, retaining100% visibility and all persistence assertions. Latest targeted42796026157 uses the same native binary with refreshfalse. The corrected real-photo flow42794171474 passes87 commands/two conditional skips, all11 native captures inspected; actual SQLite/blob/draft receipts and independently parsed owned JPEG/allowlisted encoder metadata verify. Its extra system-Files Cancel recovery was not needed in the successful run. At that checkpoint, maximum-text iOS functional verification remained open. Visual acceptance was subsequently withdrawn. No product rebuild or corrected release is claimed. The24-capture/6-sheet review pack is prepared and inspected locally, with the exact13 APK and no TestFlight availability claim; upload remains held for acceptance.
+
+## Prior a0 release — Android12 / iPhone19 / Drive pack delivered
 
 The nine distinct current Figma screens are implemented in product `a0afe7e` and accepted against fresh iOS Simulator and Android Emulator evidence, with documented privacy, accessibility, real-data and native-safe-area exceptions. The actual14 SVG exports confirm primary actions `#1E2B58` / white text, reading ink `#061542` and the bundled Inter, Plus Jakarta Sans, Nimbus Sans and Liberation Mono faces. Earlier product23/build6 is a historical style adaptation. See the [current design audit](testing/figma-current-parity.md). Android12 and internal TestFlight1.0.0(19) are delivered. The final review pack is delivered to the public Drive folder linked below.
 
-**Current Android delivered:** [Nylo1.0.0/code12 APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk), product `a0afe7e`. Both real navigation modes pass108 smoke and92 gallery commands each; all56 native captures, exact APK identity, original certificate/permissions/bundletool/font assets, fixture/archive hashes and actual33/34px navigation clearance are verified. Current nine-screen comparison confirms the report-fill correction in actual pixels. Public asset digest/size and unauthenticated download match the tested APK. This is a GitHub test prerelease, separate from Play or iPhone availability.
+**Prior Android12 delivery:** [Nylo1.0.0/code12 APK](https://github.com/NihalKA/nylo/releases/download/android-beta-1.0.0-12/Nylo-test.apk), product `a0afe7e`. Both real navigation modes pass108 smoke and92 gallery commands each; all56 native captures, exact APK identity, original certificate/permissions/bundletool/font assets, fixture/archive hashes and actual33/34px navigation clearance are verified. Current nine-screen comparison confirms the report-fill correction in actual pixels. Public asset digest/size and unauthenticated download match the tested APK. This is a GitHub test prerelease, separate from Play or iPhone availability.
 
-**Current iPhone delivered: 1.0.0 (19).** Signed workflow42732648140/sourcec6f333c/appa0afe7e succeeds. The actual exported IPA passes strict signature, exact protected certificate/team/app/version/build, embedded App Store profile, eleven exact runtime font hashes and compiled privacy/required-SDK/camera/no microphone or tracking checks. Apple build `3deddabf-72ce-4ce9-bf76-47c849d65fdc` is VALID; English notes were saved/read back, usual internal Nylo Device QA assignment returned204, and independent group/build-state/owner-membership reads verify IN_BETA_TESTING. This establishes availability, not installation of19 or physical-device validation. Initial Store15's exact build relationship is independently unchanged. Failed18 stopped before upload at the fixed audit invocation bug and remains recorded.
+**Prior iPhone delivery: 1.0.0 (19).** Signed workflow42732648140/sourcec6f333c/appa0afe7e succeeds. The actual exported IPA passes strict signature, exact protected certificate/team/app/version/build, embedded App Store profile, eleven exact runtime font hashes and compiled privacy/required-SDK/camera/no microphone or tracking checks. Apple build `3deddabf-72ce-4ce9-bf76-47c849d65fdc` is VALID; English notes were saved/read back, usual internal Nylo Device QA assignment returned204, and independent group/build-state/owner-membership reads verify IN_BETA_TESTING. This establishes availability, not installation of19 or physical-device validation. Initial Store15's exact build relationship is independently unchanged. Failed18 stopped before upload at the fixed audit invocation bug and remains recorded.
 
-Current native acceptance includes three iOS profiles109/109/113 completed commands (13 conditional skips each), PDF58 and corrected gallery192/exact293-byte copy/native SQL/blob checks; all77 native captures, compiled JavaScript identity, fixture hashes and archive digests/CRC verify. Android's two-mode smoke108/12 and gallery92/2 each have56 inspected captures and real33/34px clearance. All nine supplied current Figma states are reviewed with documented exceptions.
+Historical a0 native evidence includes three iOS profiles109/109/113 completed commands (13 conditional skips each), PDF58 and corrected gallery192/exact293-byte copy/native SQL/blob checks; all77 native captures, compiled JavaScript identity, fixture hashes and archive digests/CRC verify. Android's two-mode smoke108/12 and gallery92/2 each have56 inspected captures and real33/34px clearance. All nine supplied current Figma states are reviewed with documented exceptions.
 
-**Drive delivery complete:** [2026-11-10 Nylo Current UI — Android12 / iOS19](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY). All37 uploads completed:24 native PNGs, six numbered flow JPGs, functionality, provenance manifest, offline index, review ZIP/two checksums and the exact tested APK. Every filename reconciles to the local final pack. Browser reconstruction verified the APK at57,977,294 bytes/SHA256 `8623c2776bb63044d6be8e6be3ba131c51e581e10f4398c8431c4ce3e937b10b` before upload. A separate signed-out browser view lists all37 files. Inherited Anyone-with-link Viewer and Vivek Editor were independently read back; prior parent files and access remain unchanged. Android12 and internal TestFlight1.0.0(19) are delivered. The current continuation remains disabled; the separate four-hour monitor is preserved.
+**Drive delivery complete:** [2026-11-10 Nylo Current UI — Android12 / iOS19](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY). All37 uploads completed:24 native PNGs, six numbered flow JPGs, functionality, provenance manifest, offline index, review ZIP/two checksums and the exact tested APK. Every filename reconciles to the local final pack. Browser reconstruction verified the APK at57,977,294 bytes/SHA256 `8623c2776bb63044d6be8e6be3ba131c51e581e10f4398c8431c4ce3e937b10b` before upload. A separate signed-out browser view lists all37 files. Inherited Anyone-with-link Viewer and Vivek Editor were independently read back; prior parent files and access remain unchanged. Android12 and internal TestFlight1.0.0(19) are delivered. At that completed delivery checkpoint its continuation was disabled; the reopened audit continuation is active, and the separate four-hour monitor is preserved.
 
 **Verified interim candidate:** `76b80dc` applies literal per-screen weights, translucent report/picker surfaces and geometry, and the maximum-text agent-form scrolling fix. Local typecheck/82 tests, formatting, credential audit183 and eleven-font binary guard pass. SourceCI42717453044 succeeds. Fresh iOS42717459570 and signed Android11 42717464908 succeed; their actual compiled privacy/identity/font assets and Android original signing certificate/permissions are independently verified. Android automatic42719600103 passes both navigation modes (108 completed/12 conditional skips and15 inspected PNGs each), with33px actual composer clearance. Rich gallery42719642034 passes three-button92/2 with13 inspected PNGs and34px clearance. Its gesture job fails during the system-image download with Connection reset, before emulator launch or any Nylo command; the original failure is preserved and obsolete11 is not rerun. iOS42720294162 completes all3 profiles: compact109/13, large109/13 and maximum text118/11, with48 inspected native captures. Gallery42720606388 passes188 commands/exact293-byte copy/native SQL/blob assertions with19 inspected native captures; PDF42720612010 passes58 commands/exact drafts/protocol/blob checks with9 inspected native captures. All use fresh76 native with refreshfalse and verified archive/fixture hashes. Compatible-runtime iteration42714698613 verifies the scroll fix at116 commands/12 conditional skips with16 inspected PNGs; it is refreshedb162 JS on nativebe and is not final fresh-native proof. See [current property audit](testing/figma-current-parity.md). No signed iPhone18 or final current APK/Drive delivery is claimed.
 
@@ -80,7 +137,7 @@ Evidence: ignored `artifacts/app-store-preparation/submission15-verified.json`. 
 
 Updated 9 November 2026. iOS first; Android publication is deferred. The owner authorizes end-to-end development, testing, screenshots, TestFlight and App Store submission/release. Launch scope is **India and US only**, free, with automatic territory expansion and preorders disabled.
 
-## Delivered beta and current candidate
+## Historical beta15 candidate checkpoint
 
 **Delivered: 1.0.0 (15)**, app source `289fa04`, Apple build `6f7be5da-a57a-4267-a18d-015c6e57b16b`. Internal Nylo Device QA assignment returned 204; subsequent group GET verifies the exact VALID build, and buildBetaDetail is IN_BETA_TESTING. English test notes were saved/read-back verified with outstanding physical/live-native/VoiceOver/resource limits. Build14 is the previous feedback beta.
 
@@ -88,7 +145,7 @@ Updated 9 November 2026. iOS first; Android publication is deferred. The owner a
 
 Candidate 15 includes keyboard-open single-tap attachment removal, immediate durable removal and stale-error clearing, actionable PDF connection selection, and a provider-grouped model picker with compact model-primary rows. Source checks pass typecheck, **76 tests**, formatting, credential audit and Expo Doctor 20/20. Subsequent commits change fixtures/documentation only.
 
-## Current native evidence
+## Historical beta15 native evidence
 
 - Fresh native [42563645051](https://github.com/NihalKA/nylo/actions/runs/42563645051): PASS for app289. Actual simulator archive, compiled audit and launch inspected.
 - Fresh automatic matrix [42566511878](https://github.com/NihalKA/nylo/actions/runs/42566511878): large PASS, 94 commands and 14 screenshots inspected. Compact and maximum text failed before any flow command at a driver-download HTTP 504. Attempt2 compact passes96commands/11conditional skips; maximum text again fails driver download504 before execution. Targeted42568691181 using the bounded download runner then passes maximum text102commands/11conditional skips. Root inspected all14 checkpoints for each new profile, full-resolution key frames, exact fixture hashes and zero-failure records. Large remains the preserved94-command/11-skip pass. The original matrix overall state is FAILURE, but all three fresh app289 profiles now have passing executed evidence across these runs. The old app484 automatic lane was explicitly stale/skipped, not three passes.
@@ -104,7 +161,7 @@ A separately supplied review-only credential was used under an explicit eight-re
 
 Sanitized current-source evidence: `artifacts/review-preflight15/results.json`. These are source-adapter tests, not native UI, memory-tool approval, live isolation, interruption or physical-device proof. **The eight-request budget is exhausted. No further provider calls are authorized by it.** The earlier separate smoke allowance remains unchanged and is not a fallback. The owner confirms a provider-enforced1,000,000-token review-key limit, no fixed expiry, and revocation after Apple review. That newer explicit instruction supersedes the earlier expiry preference. Working access and complete reviewer walkthrough were saved only in Apple private review notes and GET-verified; contact fields were preserved. This does not authorize more automated preflight calls.
 
-## Independent quality and acceptance
+## Historical beta15 quality review
 
 Latest independent GPT-6 Astra review: **88/100 provisional** for candidate 15; no new critical/high product defect established. Accessibility 11/15 and native interaction 7/10 are below their 80% floors. The owner's 95 target is not met. The missing-profile condition for internal beta15 is now resolved by executed current native results; no new numerical points are inferred. Review 021 recommends candidate 15 only for narrow feedback/device validation after missing profile coverage is completed and exact QA assignment is verified. Do not request a friendlier score for an infrastructure retry or infer new points yourself.
 

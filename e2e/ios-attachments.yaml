@@ -86,6 +86,22 @@ appId: com.nylohq.nylo
     text: "Cancel"
     waitToSettleTimeoutMs: 1000
     retryTapIfNoChange: false
+# The actual iOS26 Files sheet retained its loaded Recents/Browse hierarchy
+# after the first native Cancel tap. Allow one further tap only while that
+# exact system picker still owns the screen; keep all app/storage assertions.
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-message"
+    commands:
+      - assertVisible: "Recents"
+      - assertVisible: "Browse"
+      - assertVisible: "Cancel"
+      - takeScreenshot: attachments-02b-system-file-picker-cancel-recovery
+      - tapOn:
+          text: "Cancel"
+          waitToSettleTimeoutMs: 1000
+          retryTapIfNoChange: false
 - assertVisible:
     id: "chat-message"
 - tapOn: "Add attachment"

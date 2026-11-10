@@ -1,3 +1,5 @@
+> Visual acceptance of productdcef/Android13 was withdrawn after the owner rejected the result. Follow the [whole-file audit](figma-full-file-audit.md) and root AGENTS.md. The required Astra10/10 completeness review has not happened. Signed20 compiled successfully but corrected distribution and new Drive delivery are held. Historical native facts below do not establish full current visual parity.
+
 > Acceptance reopened on10 November2026 at the owner's request. The authenticated live MCP audit found additional omissions in the previously delivered apps. See [the current gap audit](figma-mcp-gap-audit.md); previous native evidence below covers a0/Android12/iOS19, not the corrected candidate.
 
 # Current Figma parity audit

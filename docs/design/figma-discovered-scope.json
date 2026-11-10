@@ -1,0 +1,416 @@
+{
+  "provenance": "Baseline known scope,2026-11-10. Enumerations remain INCOMPLETE pending actual whole-file audit, not assumptions of absence.",
+  "extraNodes": [
+    {
+      "id": "0:0",
+      "name": "Document",
+      "type": "document",
+      "page": "0:0",
+      "parent": null,
+      "isScreen": false,
+      "source": "Fresh .fig export document record"
+    },
+    {
+      "id": "0:2",
+      "name": "Internal Only Canvas",
+      "type": "canvas",
+      "page": "0:2",
+      "parent": "0:0",
+      "isScreen": false,
+      "source": "Fresh .fig export hidden internal canvas, no children"
+    },
+    {
+      "id": "2:1098",
+      "name": "Vector",
+      "type": "vector",
+      "page": "0:1",
+      "parent": "2:1097",
+      "isScreen": false,
+      "source": "Fresh .fig export visible vector omitted by MCP metadata"
+    }
+  ],
+  "extensionIds": [
+    "chats-inbox",
+    "agents-landing",
+    "provider-editor",
+    "live-check",
+    "font-licenses",
+    "app-shell"
+  ],
+  "domains": {
+    "pages": {
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "0:1",
+          "name": "Page1 (visible)"
+        },
+        {
+          "id": "0:2",
+          "name": "InternalOnlyCanvas(hidden,empty)"
+        }
+      ]
+    },
+    "hidden-layers": {
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "0:2",
+          "name": "InternalOnlyCanvas(hidden,empty)"
+        }
+      ]
+    },
+    "components-variants-libraries": {
+      "enumerationComplete": true,
+      "items": []
+    },
+    "variables-styles": {
+      "enumerationComplete": true,
+      "items": []
+    },
+    "fonts": {
+      "enumerationComplete": true,
+      "items": [
+        {
+          "id": "Inter|Bold",
+          "name": "Inter Bold"
+        },
+        {
+          "id": "Nimbus Sans|Bold",
+          "name": "Nimbus Sans Bold"
+        },
+        {
+          "id": "Plus Jakarta Sans|SemiBold",
+          "name": "Plus Jakarta Sans SemiBold"
+        },
+        {
+          "id": "Inter|Regular",
+          "name": "Inter Regular"
+        },
+        {
+          "id": "Nimbus Sans|Regular",
+          "name": "Nimbus Sans Regular"
+        },
+        {
+          "id": "Inter|Medium",
+          "name": "Inter Medium"
+        },
+        {
+          "id": "Inter|Semi Bold",
+          "name": "Inter Semi Bold"
+        },
+        {
+          "id": "Plus Jakarta Sans|Bold",
+          "name": "Plus Jakarta Sans Bold"
+        },
+        {
+          "id": "Liberation Mono|Regular",
+          "name": "Liberation Mono Regular"
+        },
+        {
+          "id": "Inter|Italic",
+          "name": "Inter Italic"
+        },
+        {
+          "id": "Plus Jakarta Sans|Medium",
+          "name": "Plus Jakarta Sans Medium"
+        }
+      ]
+    },
+    "assets": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "prototypes-transitions": {
+      "enumerationComplete": true,
+      "items": []
+    },
+    "states": {
+      "enumerationComplete": false,
+      "items": []
+    },
+    "app-extensions": {
+      "enumerationComplete": false,
+      "items": []
+    }
+  },
+  "scopes": {
+    "1:2": {
+      "enumerationComplete": true,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "busy",
+        "disabled-during-send",
+        "export-confirmation",
+        "restore-confirmation",
+        "delete-confirmation",
+        "confirmation-cancel",
+        "success-notice",
+        "external-destination"
+      ]
+    },
+    "1:125": {
+      "enumerationComplete": true,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "memory-edit",
+        "memory-update",
+        "memory-edit-cancel",
+        "memory-limit",
+        "forget-confirmation",
+        "forget-cancel",
+        "context-off",
+        "context-consent",
+        "context-consent-cancel",
+        "context-review-entry",
+        "context-disabled-during-send",
+        "conversations-empty",
+        "conversations-populated",
+        "missing-agent",
+        "diagnostic-agent-guard",
+        "delete-agent-confirmation",
+        "delete-agent-cancel"
+      ]
+    },
+    "1:235": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:322": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "1:404": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:494": {
+      "enumerationComplete": true,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "busy",
+        "disabled-during-send",
+        "export-confirmation",
+        "restore-confirmation",
+        "delete-confirmation",
+        "confirmation-cancel",
+        "success-notice",
+        "external-destination"
+      ]
+    },
+    "2:617": {
+      "enumerationComplete": true,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "memory-edit",
+        "memory-update",
+        "memory-edit-cancel",
+        "memory-limit",
+        "forget-confirmation",
+        "forget-cancel",
+        "context-off",
+        "context-consent",
+        "context-consent-cancel",
+        "context-review-entry",
+        "context-disabled-during-send",
+        "conversations-empty",
+        "conversations-populated",
+        "missing-agent",
+        "diagnostic-agent-guard",
+        "delete-agent-confirmation",
+        "delete-agent-cancel"
+      ]
+    },
+    "2:727": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:814": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:896": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:986": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1050": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1139": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "2:1234": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "chats-inbox": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "agents-landing": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "provider-editor": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "live-check": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard"
+      ]
+    },
+    "font-licenses": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "long-scroll",
+        "large-text"
+      ]
+    },
+    "app-shell": {
+      "enumerationComplete": false,
+      "states": [
+        "reference",
+        "empty",
+        "populated",
+        "selected",
+        "error",
+        "keyboard",
+        "font-loading",
+        "storage-loading",
+        "font-error",
+        "storage-error",
+        "ready"
+      ]
+    }
+  }
+}

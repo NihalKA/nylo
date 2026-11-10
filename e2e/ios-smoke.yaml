@@ -120,21 +120,25 @@ appId: com.nylohq.nylo
 - tapOn: "Create agent"
 - assertVisible: "Create an agent"
 - waitForAnimationToEnd
-# Large-text run 42847188364 tapped an offscreen template, leaving the
-# name empty. Keep the complete role below the header before selecting it.
+# The fixed Save bar covers the lowest part of the scrolling viewport.
+# Center the complete role target before applying it, then verify its result.
 - scrollUntilVisible:
     element:
       text: "Writing partner"
       below: "Create an agent"
+      above: "Create agent"
     direction: DOWN
-    centerElement: true
     visibilityPercentage: 100
-- tapOn: "Writing partner"
+    centerElement: true
+- tapOn:
+    text: "Writing partner"
+    below: "Create an agent"
+    above: "Create agent"
 - scrollUntilVisible:
     element:
       id: "agent-name"
     direction: DOWN
-    centerElement: true
+    visibilityPercentage: 100
 - assertVisible:
     id: "agent-name"
     text: "Writing partner"
@@ -160,37 +164,31 @@ appId: com.nylohq.nylo
                 commands:
                   - tapOn: "Dismiss keyboard"
                   - assertNotVisible: "Dismiss keyboard"
-# The new card spacing can leave the action at y924–972 below the safe
-# viewport. Require the complete target before the same single save tap.
-# The maximum-text footer is fixed outside the scroll view (y765–910
-# in a 956pt viewport). Maestro cannot center it inside that scroll view.
-# Scroll only when it is absent; preserve the same visible/enabled save tap.
-- runFlow:
-    when:
-      notVisible: "Create agent"
-    commands:
-      - scrollUntilVisible:
-          element: "Create agent"
-          direction: DOWN
-          centerElement: true
-          visibilityPercentage: 100
-- assertVisible:
-    text: "Create agent"
-    enabled: true
+# Save is now fixed outside the scroll view. Keep the complete-target check,
+# but do not try to scroll a docked action into the centre of the screen.
+- scrollUntilVisible:
+    element: "Create agent"
+    direction: DOWN
+    centerElement: false
+    visibilityPercentage: 100
+- assertVisible: "Create agent"
 - tapOn: "Create agent"
 - assertVisible: "Agent"
-# At maximum text, Memory can overlap the fixed Agents navigation target.
-# Bring it above that bar before tapping; retain the editor/persistence checks.
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
+      below: "Agent"
       above:
         id: "detail-tab-agents"
     direction: DOWN
-    centerElement: true
     visibilityPercentage: 100
+    centerElement: true
 - tapOn:
     text: "Memory"
+    below: "Agent"
     above:
       id: "detail-tab-agents"
 - scrollUntilVisible:
@@ -233,18 +231,21 @@ appId: com.nylohq.nylo
 - waitForAnimationToEnd
 - assertVisible: "Create agent"
 - tapOn: "Open Writing partner"
-# At maximum text, Memory can overlap the fixed Agents navigation target.
-# Bring it above that bar before tapping; retain the editor/persistence checks.
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
+      below: "Agent"
       above:
         id: "detail-tab-agents"
     direction: DOWN
-    centerElement: true
     visibilityPercentage: 100
+    centerElement: true
 - tapOn:
     text: "Memory"
+    below: "Agent"
     above:
       id: "detail-tab-agents"
 - scrollUntilVisible:
@@ -258,18 +259,21 @@ appId: com.nylohq.nylo
     text: "Agents, tab, 2 of 3"
     retryTapIfNoChange: true
 - tapOn: "Open Writing partner"
-# At maximum text, Memory can overlap the fixed Agents navigation target.
-# Bring it above that bar before tapping; retain the editor/persistence checks.
+# At maximum text, AX can expose Memory behind the fixed bottom navigation
+# (observed y858–939; its centre hit Agents). Require the entire real tab
+# between the header and navigation before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
+      below: "Agent"
       above:
         id: "detail-tab-agents"
     direction: DOWN
-    centerElement: true
     visibilityPercentage: 100
+    centerElement: true
 - tapOn:
     text: "Memory"
+    below: "Agent"
     above:
       id: "detail-tab-agents"
 - scrollUntilVisible:

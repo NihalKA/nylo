@@ -1,3 +1,5 @@
+> Historical style adaptation. Current Figma work follows [the whole-file audit](figma-full-file-audit.md), root AGENTS.md and ADR0001. Prior scores/style directions do not override the reopened visual gate or Astra review before implementation/finalization.
+
 # Figma Warm Edition implementation
 
 **Superseded acceptance scope:** app23/build6 below is a style adaptation. The new owner request requires complete current parity. Live all-frame SVG inspection and the current screen inventory are recorded in [Current Figma parity audit](figma-current-parity.md). Current native acceptance and the signed-release delivery state are tracked there; the adaptation below remains historical.

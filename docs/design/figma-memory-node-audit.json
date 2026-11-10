@@ -1,0 +1,1987 @@
+{
+  "scope": "Memory2:617,110 explicit per-node source/reference dispositions",
+  "sourceProduct": "dcef4f6a138f167886c7dc97ac5e59459a91259c",
+  "reviewScope": "Source/reference inventory/plans and explicit exceptions only, no corrected native/release approval.",
+  "nodes": {
+    "2:617": {
+      "target": "app/agent/[id].tsx / src/ui.tsx Page",
+      "rationale": "390 logical F9F9F8 page; mock1018.25 height is scrolling-document extent, not a hardcoded viewport. Native top/bottom safe areas remain real.",
+      "status": "mapped",
+      "referenceName": "Nylo \u2014 Save Agent Memory",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 1018.25
+      },
+      "referencePropertiesSHA256": "a0af4c6522a6fccdeb6b77ea7ae0a4838d144a3ec077f54cd42dc34b30d824a0",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:618": {
+      "target": "app/agent/[id].tsx / src/ui.tsx Page",
+      "rationale": "390 logical F9F9F8 page; mock1018.25 height is scrolling-document extent, not a hardcoded viewport. Native top/bottom safe areas remain real.",
+      "status": "mapped",
+      "referenceName": "Mobile Frame Wrapper",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 1018.25
+      },
+      "referencePropertiesSHA256": "e5bf00b164c8edf06a65d7671cd13e16b9d36b7a55d0f4da5f51e80871b6aeea",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:619": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Header - Status Bar (iOS Emulation)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 32
+      },
+      "referencePropertiesSHA256": "680d8b780ab4b221e92a7fa3f6885301674afa29a983cd900b4dd69f2dbb5d6f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:620": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 26.40999984741211,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "6360fcebcdef664701e3ef5bcd02f381d103028709d61b63572bc5d4ca2b8990",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:621": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 26.40999984741211,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "005397b8d01154ef4d368f482b60b7ec6c321af74bab91b77ffb529d80fbbca8",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:622": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 50.33333206176758,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "8c0b26082622d8d7d7b3e136fe4d96fb34a5c254da5f386499686797abb58643",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:623": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 10,
+        "y": 10.666666984558105
+      },
+      "referencePropertiesSHA256": "9a6a587756a18a4c6dc5618ea900ca7d20f5d40a5a114cd4e31eda8be82a3cf8",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:624": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 10,
+        "y": 10.666666984558105
+      },
+      "referencePropertiesSHA256": "c835e274b291ed6974e25a7f0ba0b7e68598361b6c0f2c9269f9c67d099cf7c8",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:625": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 24,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "2ea9b951dbf49ec422bcfc970762d85130f2bf15a6a9ed00710dae2d900cda1d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:626": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "45afdd1fdc0d1a7d00a2093f089ba157b4b4405ec7936dee9fc04d0eb836b807",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:627": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 16.333332061767578,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "f1cb6774948cce3820e6c7c93efae35bf3d684c6548314e6e873ac0f6d1d6bff",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:628": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "This explicit mockOS time/network/wifi/battery element uses real OS information/insets instead of rendered fake icons/time. This exception does not approve app-header placement.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 8.333333015441895,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "641aab11e22e9a8efc469faac0ea05044bac7f02f1bd93d1552432b7aaee38a5",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:629": {
+      "target": "app/agent/[id].tsx Header / src/ui.tsx Header",
+      "rationale": "Collapsed navigation56 high; reference back hit26.79x34.33 inside30x38 margin. Source44pt back hit is retained; painted glyph/title placement must be matched separately. Reference header left24 vs source negative-margin wrapper must be measured in new390dp renders.",
+      "status": "mapped",
+      "referenceName": "Top Navigation Bar",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 56
+      },
+      "referencePropertiesSHA256": "e989290c2ead5b71073e2f024c925bd2b138a599efd68dd8f72aa63fbab965ce",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:630": {
+      "target": "app/agent/[id].tsx Header / src/ui.tsx Header",
+      "rationale": "Collapsed navigation56 high; reference back hit26.79x34.33 inside30x38 margin. Source44pt back hit is retained; painted glyph/title placement must be matched separately. Reference header left24 vs source negative-margin wrapper must be measured in new390dp renders.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 89.08000183105469,
+        "y": 38
+      },
+      "referencePropertiesSHA256": "3752bc5358c4abdf449de2a75a845f282df96dba1a0c297b0321bdbf17fb00fe",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:631": {
+      "target": "app/agent/[id].tsx Header / src/ui.tsx Header",
+      "rationale": "Collapsed navigation56 high; reference back hit26.79x34.33 inside30x38 margin. Source44pt back hit is retained; painted glyph/title placement must be matched separately. Reference header left24 vs source negative-margin wrapper must be measured in new390dp renders.",
+      "status": "mapped",
+      "referenceName": "Button - Back:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 30,
+        "y": 38
+      },
+      "referencePropertiesSHA256": "7a8c7365db26a61b5341d8549865e64d86adf84d654842d13546afb256f5b050",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:632": {
+      "target": "app/agent/[id].tsx Header / src/ui.tsx Header",
+      "rationale": "Collapsed navigation56 high; reference back hit26.79x34.33 inside30x38 margin. Source44pt back hit is retained; painted glyph/title placement must be matched separately. Reference header left24 vs source negative-margin wrapper must be measured in new390dp renders.",
+      "status": "mapped",
+      "referenceName": "Button - Back",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 26.793750762939453,
+        "y": 34.333335876464844
+      },
+      "referencePropertiesSHA256": "a42a91900d98e5e383fa4440ac39cd72d5f7240c72c40b4edb848c8086afdc65",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:633": {
+      "target": "assets/figma/memoryBack.svg / Header backDesign",
+      "rationale": "Original navy back10.79375x18.3333 matches actual vector size/paint. Source44pt hit is a separate accessible wrapper; do not infer glyph position from wrapper width.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 10.793749809265137,
+        "y": 18.33333396911621
+      },
+      "referencePropertiesSHA256": "49c18a466af0d4fc76c005938af74fc44b1f58000eab1aa69456edb778f777a2",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:634": {
+      "target": "assets/figma/memoryBack.svg / Header backDesign",
+      "rationale": "Original navy back10.79375x18.3333 matches actual vector size/paint. Source44pt hit is a separate accessible wrapper; do not infer glyph position from wrapper width.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 10.793749809265137,
+        "y": 18.33333396911621
+      },
+      "referencePropertiesSHA256": "80e22eecc47af16720464ceb099ad788abe47604c7d67f908696337853c77394",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:635": {
+      "target": "app/agent/[id].tsx Header titleStyle",
+      "rationale": "Collapsed titleJakarta70018/24 tracking-0.45. Source shared Header defaults28 leading with no collapsed override; planned state-specific leading24, retain real header semantics/scaling.",
+      "status": "mapped",
+      "referenceName": "Heading 1:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 59.08000183105469,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "8ddd1a97ad91f3bcff87c64475efd3f61997e7ce097535ea1b36d0e94774aade",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:636": {
+      "target": "app/agent/[id].tsx Header titleStyle",
+      "rationale": "Collapsed titleJakarta70018/24 tracking-0.45. Source shared Header defaults28 leading with no collapsed override; planned state-specific leading24, retain real header semantics/scaling.",
+      "status": "mapped",
+      "referenceName": "Heading 1 \u2192 Agent",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 51.08000183105469,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "fdc111a70e096780cad3bd26aa50d91c11e7b93fd615a377d33c6a191ec7f3c3",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:637": {
+      "target": "app/agent/[id].tsx Header right IconButton",
+      "rationale": "Reference options32.5 square hit is enlarged to44 in source; preserve minimum44 while centring original16.5 painted glyph.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.5,
+        "y": 32.5
+      },
+      "referencePropertiesSHA256": "063f1d56a76c5ef38f4b7f97ee7738e54378577aadffc4a96fcae983913cd89d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:638": {
+      "target": "app/agent/[id].tsx Header right IconButton",
+      "rationale": "Reference options32.5 square hit is enlarged to44 in source; preserve minimum44 while centring original16.5 painted glyph.",
+      "status": "exception",
+      "referenceName": "Button - Settings",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.5,
+        "y": 32.5
+      },
+      "referencePropertiesSHA256": "7988b9f58b4c8984571d2f659dc4650c1e3fbc4ad3573710669b2ebac1e95c9b",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:639": {
+      "target": "assets/figma/options.svg / Header right",
+      "rationale": "16.5 square navy original variant matches collapsed Memory. Expanded Context has its own grey variant and must not inherit this binding.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 16.5,
+        "y": 16.5
+      },
+      "referencePropertiesSHA256": "2226bfe061f95288b8c46b4b06b54a009d0f6ba3b4a4dd162e56097c83f22faf",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:640": {
+      "target": "assets/figma/options.svg / Header right",
+      "rationale": "16.5 square navy original variant matches collapsed Memory. Expanded Context has its own grey variant and must not inherit this binding.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16.5,
+        "y": 16.5
+      },
+      "referencePropertiesSHA256": "b14b9872222514378c2cd2ee6a6aa5982ae0c649b6881dc8f2769aad52b32bad",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:641": {
+      "target": "app/agent/[id].tsx ScrollView",
+      "rationale": "390-wide content/24 side inset correspond to source shell20 plus ScrollView margin4. Reference20 section rhythm/128 bottom reserve are explicit grouping/scroll checks, not blanket native-safe-area waiver.",
+      "status": "mapped",
+      "referenceName": "Main - Scrollable Content Canvas",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 930.25
+      },
+      "referencePropertiesSHA256": "35348caef948abc5db8b7c0e37aa74c0b5b32d49d8f74458d0451e369550c7e8",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:642": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Section - Agent Profile Summary",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 52
+      },
+      "referencePropertiesSHA256": "d5c2a7edb2ad39cd40edf5d3c2fc5b47ffd2cbbdfca03eb132b7d50e0decf6bf",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:645": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 244.55999755859375,
+        "y": 44.5
+      },
+      "referencePropertiesSHA256": "bf5950dc928053003c7a16c81cb35271125abb0baa613ee05c414e26a3b476ef",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:646": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 85
+      },
+      "referencePropertiesSHA256": "dff924d8da5cb1fd46a16de7f7a5891369f562edffcda16f2b21d74ced51aa28",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:647": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 23
+      },
+      "referencePropertiesSHA256": "a89d46d981d4b0392be2c9a80954b65db9169eecd4cc3ca4c124c7ade58c45a2",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:648": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 23
+      },
+      "referencePropertiesSHA256": "56a59ed54c2eec32f723c9d8c1da5c85ec4436a3fa884160a0df88a703a6544d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:649": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 62
+      },
+      "referencePropertiesSHA256": "3a2ebd767f6b08259fe75c7fbe3994e49f1c61524989eebe2f2ffcc37d30edfe",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:650": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 60
+      },
+      "referencePropertiesSHA256": "99985813dc8ef11674e29ea3b05231c29adb4749876a9d4175d7c980a179671f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:651": {
+      "target": "app/agent/[id].tsx profile summary",
+      "rationale": "Reference avatar-to-text gap14, name18/22.5, description14/20 and2 vertical gap; source16/implicit/21/7. Planned measured corrections. Reference125.14-wide description60 tall overflows44.5 wrapper; grow full real description rather than reproduce clipping. Real name/description replace sample.",
+      "status": "mapped",
+      "referenceName": "Find the words that sound like you.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 125.13999938964844,
+        "y": 60
+      },
+      "referencePropertiesSHA256": "4359cae425d1eb035a7ad139822f8f4127a94d2fa139b0266ac6a97b02d64f44",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:643": {
+      "target": "src/ui.tsx AgentAvatar / app/agent/[id].tsx",
+      "rationale": "48 avatar with real initial/colour; referenceJakarta70018/24 white plus inner black5% shadow0,2,4. Sourcefamily/weight/size/white match; leading/shadow missing. Keep actual initial and selected colour, not sampleW/green.",
+      "status": "mapped",
+      "referenceName": "Background+Shadow",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 48,
+        "y": 48
+      },
+      "referencePropertiesSHA256": "8a0011a9800f241013f70abf9d2a3015d239b01cf53568262ed89dd798e403a5",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:644": {
+      "target": "src/ui.tsx AgentAvatar / app/agent/[id].tsx",
+      "rationale": "48 avatar with real initial/colour; referenceJakarta70018/24 white plus inner black5% shadow0,2,4. Sourcefamily/weight/size/white match; leading/shadow missing. Keep actual initial and selected colour, not sampleW/green.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 18.3799991607666,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "7304492cbdb310d20ea7abadbc66e38a3ad468af4ce20f92cfe93352dbb198bc",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:652": {
+      "target": "app/agent/[id].tsx New conversation Button",
+      "rationale": "342-wide48-high navy pill/white text; original primary CTA shadow is available through Button. Source label leading implicit may alter height; retain actual newChat action/storage and44+hit, no fake navigation.",
+      "status": "mapped",
+      "referenceName": "Primary CTA Action Pill \u2192 Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 48
+      },
+      "referencePropertiesSHA256": "b7e97158c2b64459c13ac5fbbac91e9c349ad8d26b37508126ef44f892fe65cd",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:653": {
+      "target": "app/agent/[id].tsx New conversation Button",
+      "rationale": "342-wide48-high navy pill/white text; original primary CTA shadow is available through Button. Source label leading implicit may alter height; retain actual newChat action/storage and44+hit, no fake navigation.",
+      "status": "mapped",
+      "referenceName": "Button:shadow",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 342,
+        "y": 48
+      },
+      "referencePropertiesSHA256": "e0b346b06e2f433a64bb3741443f342dd77a1ae85e7d2d1857ae145ba238d976",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:654": {
+      "target": "assets/figma/addWhite.svg / Button designIcon=addWhite",
+      "rationale": "11.6667 white plus intrinsic geometry/paint matches original SVG and actual source binding. Whole button, not the glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 11.666666984558105,
+        "y": 11.666666984558105
+      },
+      "referencePropertiesSHA256": "285ef620c87f6bc788f8ad108391c281ffc39f492d4d8b8ea70767521317155e",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:655": {
+      "target": "assets/figma/addWhite.svg / Button designIcon=addWhite",
+      "rationale": "11.6667 white plus intrinsic geometry/paint matches original SVG and actual source binding. Whole button, not the glyph, is actionable.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 11.666666984558105,
+        "y": 11.666666984558105
+      },
+      "referencePropertiesSHA256": "4fe75a895e2277ddfc40e2a0d48f6ce0fe67ad43ca8730abbb652e119592dc58",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:656": {
+      "target": "src/ui.tsx Button label / New conversation",
+      "rationale": "Reference14/20 Inter600 and8px icon-to-label spacing. Source gap8/weight600 match,20 leading implicit; action-label-leading gap records explicit leading.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 132.4499969482422,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "ebf16b118d6be76b46fcbd3094390b701a52b2ef421fb76b312a0c6f891c68ae",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:657": {
+      "target": "src/ui.tsx Button label / New conversation",
+      "rationale": "Reference14/20 Inter600 and8px icon-to-label spacing. Source gap8/weight600 match,20 leading implicit; action-label-leading gap records explicit leading.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 124.44999694824219,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "12383cecd0c7bf2a2379e4be9782d5cc12591a5f03b5ee2674acc308495d71c2",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:658": {
+      "target": "src/ui.tsx Button label / New conversation",
+      "rationale": "Reference14/20 Inter600 and8px icon-to-label spacing. Source gap8/weight600 match,20 leading implicit; action-label-leading gap records explicit leading.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 124.44999694824219,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "b3bdd502f23f0f173324468c9aa5ddc9879b48f4f2ba1b14e43a6b336cd2eeb3",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:659": {
+      "target": "app/agent/[id].tsx segmented wrapper",
+      "rationale": "Reference outer342x48 muted/radiuspill/border30%. Source44-min tabs plus wrapper padding/border already yields48; do not increase outer height. Recheck horizontal selected paint separately.",
+      "status": "mapped",
+      "referenceName": "Segmented Pill Switcher",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 48
+      },
+      "referencePropertiesSHA256": "9187b8c90487cd5af3ff2f06c7bc952462484d2a569d8f4d430af23c5808659c",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:660": {
+      "target": "app/agent/[id].tsx Conversations segment",
+      "rationale": "Reference inactive165x36 paint,14/20 Inter600 quiet. Source44-min hit with transparent paint and matchingweight/colour; label20 leading is implicit. Keep44 target and wrapping, not mock36 hit.",
+      "status": "mapped",
+      "referenceName": "Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 165,
+        "y": 36
+      },
+      "referencePropertiesSHA256": "ecd2be341efe844c66c24740f1c6f620abee07fb8b4ccd3693b382d813111012",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:661": {
+      "target": "app/agent/[id].tsx Conversations segment",
+      "rationale": "Reference inactive165x36 paint,14/20 Inter600 quiet. Source44-min hit with transparent paint and matchingweight/colour; label20 leading is implicit. Keep44 target and wrapping, not mock36 hit.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 99.91000366210938,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "4971f4f55ed9fa3a07a2b2188a07bc9129e74d2cac6a3dea15eaa712e88f0ee7",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:662": {
+      "target": "app/agent/[id].tsx Memory selected segment",
+      "rationale": "Reference selected167x38 atx170/y5, white/border20%, shadow0,1,2black5%,14/20 Inter700. Source selected white/border/weight match but2px side inset/flex widths/implicit leading/missing shadow differ. Match paint independently of44 hit.",
+      "status": "mapped",
+      "referenceName": "Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 167,
+        "y": 38
+      },
+      "referencePropertiesSHA256": "01ed14282ed3d13b8966b6c67696aa331d6c7a9bb34ad1c349994faa9d25565b",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:663": {
+      "target": "app/agent/[id].tsx Memory selected segment",
+      "rationale": "Reference selected167x38 atx170/y5, white/border20%, shadow0,1,2black5%,14/20 Inter700. Source selected white/border/weight match but2px side inset/flex widths/implicit leading/missing shadow differ. Match paint independently of44 hit.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 57.939998626708984,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "a8e4eb0b20b4fc507c03bd629d5575167b3d5f1815dbf83fc767c69fc0df9e8c",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:664": {
+      "target": "app/agent/[id].tsx New memory Field section",
+      "rationale": "Reference4 top/8 internal gaps andJakarta70016/24 label. Source sharedField gap7/label implicit leading plus outer gap16. Group this section explicitly; retain keyboard/1000char/edit draft behavior.",
+      "status": "mapped",
+      "referenceName": "Section: New memory creation",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 200.25
+      },
+      "referencePropertiesSHA256": "c6754b51ab93875f5599ef36fe56f19e4fe82da0061fd30abeb3c78eea3a7313",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:665": {
+      "target": "app/agent/[id].tsx New memory Field section",
+      "rationale": "Reference4 top/8 internal gaps andJakarta70016/24 label. Source sharedField gap7/label implicit leading plus outer gap16. Group this section explicitly; retain keyboard/1000char/edit draft behavior.",
+      "status": "mapped",
+      "referenceName": "Label",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "a9c39ceef2136981507763653a1223cbcdc38a5ecc1932463828da7e11009531",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:666": {
+      "target": "app/agent/[id].tsx New memory Field section",
+      "rationale": "Reference4 top/8 internal gaps andJakarta70016/24 label. Source sharedField gap7/label implicit leading plus outer gap16. Group this section explicitly; retain keyboard/1000char/edit draft behavior.",
+      "status": "mapped",
+      "referenceName": "New memory",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "e14164be4b2f639d9e9149588903ab9a2cf9416acca1f2b87b580dcec5520b14",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:667": {
+      "target": "app/agent/[id].tsx memory TextInput / src/ui.tsx Field",
+      "rationale": "Reference white/radius16/borderC6C5D040%,110.25 outer height,16top/24bottom padding and0,1,2black5%shadow; Inter40014/22.75 placeholder. Source white/border/radius/font/leading match but uses13 vertical/min110 and lacks shadow. Preserve actual TextInput, multiline scaling and full typed text; ellipsis glyph versus three-dot placeholder is a documented copy-normalization detail, not missing functionality.",
+      "status": "mapped",
+      "referenceName": "Background+Border+Shadow",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 110.25
+      },
+      "referencePropertiesSHA256": "dd2e62163b8df62f40289e2be630228fa6181778f97240640e519661f9916f08",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:668": {
+      "target": "app/agent/[id].tsx memory TextInput / src/ui.tsx Field",
+      "rationale": "Reference white/radius16/borderC6C5D040%,110.25 outer height,16top/24bottom padding and0,1,2black5%shadow; Inter40014/22.75 placeholder. Source white/border/radius/font/leading match but uses13 vertical/min110 and lacks shadow. Preserve actual TextInput, multiline scaling and full typed text; ellipsis glyph versus three-dot placeholder is a documented copy-normalization detail, not missing functionality.",
+      "status": "mapped",
+      "referenceName": "Textarea",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 68.25
+      },
+      "referencePropertiesSHA256": "0eb3ab5869fc5cc8f81d3a3cbe02a21d9f68b8cc1780496f2d2ea49c7bacb55c",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:669": {
+      "target": "app/agent/[id].tsx memory TextInput / src/ui.tsx Field",
+      "rationale": "Reference white/radius16/borderC6C5D040%,110.25 outer height,16top/24bottom padding and0,1,2black5%shadow; Inter40014/22.75 placeholder. Source white/border/radius/font/leading match but uses13 vertical/min110 and lacks shadow. Preserve actual TextInput, multiline scaling and full typed text; ellipsis glyph versus three-dot placeholder is a documented copy-normalization detail, not missing functionality.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 23.75
+      },
+      "referencePropertiesSHA256": "264047027c5cf730bedd1f1c956d96098bd49ae76888636597e62425957c2918",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:670": {
+      "target": "app/agent/[id].tsx memory TextInput / src/ui.tsx Field",
+      "rationale": "Reference white/radius16/borderC6C5D040%,110.25 outer height,16top/24bottom padding and0,1,2black5%shadow; Inter40014/22.75 placeholder. Source white/border/radius/font/leading match but uses13 vertical/min110 and lacks shadow. Preserve actual TextInput, multiline scaling and full typed text; ellipsis glyph versus three-dot placeholder is a documented copy-normalization detail, not missing functionality.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 124.66999816894531,
+        "y": 23
+      },
+      "referencePropertiesSHA256": "d06e68284949203cb7fc51b8cb79946fdfd75f37acb846b33b7eb9a5d2f06d35",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:671": {
+      "target": "app/agent/[id].tsx Save memory Button",
+      "rationale": "Reference disabled muted342x46/border30%radius23; source style46/border/disabled fill matches except shared label leading. Preserve disabled-empty/50memorylimit/edit behavior, no forced disabled sample state.",
+      "status": "mapped",
+      "referenceName": "Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 46
+      },
+      "referencePropertiesSHA256": "1e8ed6bdfc3b1824b70522d0bd07ede319631b794355ffb713bfec3ee138d26d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:672": {
+      "target": "assets/figma/addMuted.svg / Save memory Button",
+      "rationale": "10.5 quiet plus matches disabled-empty original state; nonempty source uses active plus variant according to actual data.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 10.5,
+        "y": 10.5
+      },
+      "referencePropertiesSHA256": "60541b4c560f3aa0a7aec8e0a4b78df2336341a85e5fa54afc865716810a5fd1",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:673": {
+      "target": "assets/figma/addMuted.svg / Save memory Button",
+      "rationale": "10.5 quiet plus matches disabled-empty original state; nonempty source uses active plus variant according to actual data.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 10.5,
+        "y": 10.5
+      },
+      "referencePropertiesSHA256": "b8f3be09fad36e4eacaec88f7abb5ededa4a021fe87b02712f288cebd141591f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:674": {
+      "target": "src/ui.tsx Button / Save memory label",
+      "rationale": "Reference Inter60014/20 quiet disabled label and6px plus-label gap implied by margin. SharedButton gap8 differs for this disabled state; source title uses actualSave/Update. Record local disabled button gap6, retain minimum44.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 100.25,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "8c57697f364b880b1b32365c1d784f9bed901be11a55d4ba86fc9f7fe822e62f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:675": {
+      "target": "src/ui.tsx Button / Save memory label",
+      "rationale": "Reference Inter60014/20 quiet disabled label and6px plus-label gap implied by margin. SharedButton gap8 differs for this disabled state; source title uses actualSave/Update. Record local disabled button gap6, retain minimum44.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 94.25,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "d2cbfcc5cb73448350c284dd38be6443a721f4e37fe1ea4531858e608a8e685a",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:676": {
+      "target": "src/ui.tsx Button / Save memory label",
+      "rationale": "Reference Inter60014/20 quiet disabled label and6px plus-label gap implied by margin. SharedButton gap8 differs for this disabled state; source title uses actualSave/Update. Record local disabled button gap6, retain minimum44.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 94.25,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "7057a3f9521893140eba94b63b923ef7c49daefc0640eb23c4a5bb6c38e2350a",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:677": {
+      "target": "app/agent/[id].tsx Saved memories group",
+      "rationale": "Reference8 section-top/internal gaps,headingJakarta70016/24,disclosureInter40012/19.5. Source uniform16 outer gaps/headingmargin8/implicit24/disclosure18. Planned local grouping/metrics; preserve honest included-facts disclosure/full copy.",
+      "status": "mapped",
+      "referenceName": "Section: Saved memories",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 179
+      },
+      "referencePropertiesSHA256": "9003228f7a2ecb88abc539ea5c0897fde5374664783a53171b4ac169faf65b77",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:678": {
+      "target": "app/agent/[id].tsx Saved memories group",
+      "rationale": "Reference8 section-top/internal gaps,headingJakarta70016/24,disclosureInter40012/19.5. Source uniform16 outer gaps/headingmargin8/implicit24/disclosure18. Planned local grouping/metrics; preserve honest included-facts disclosure/full copy.",
+      "status": "mapped",
+      "referenceName": "Heading 3",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "c68da3833a75c7f89159b471e409563a2c193c7db5585ebe88742e52405115c9",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:679": {
+      "target": "app/agent/[id].tsx Saved memories group",
+      "rationale": "Reference8 section-top/internal gaps,headingJakarta70016/24,disclosureInter40012/19.5. Source uniform16 outer gaps/headingmargin8/implicit24/disclosure18. Planned local grouping/metrics; preserve honest included-facts disclosure/full copy.",
+      "status": "mapped",
+      "referenceName": "Saved memories",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "6c571699901584f0b38593c9d6c393b5ebdaa4f41923fb175843ca284c9616fb",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:680": {
+      "target": "app/agent/[id].tsx Saved memories group",
+      "rationale": "Reference8 section-top/internal gaps,headingJakarta70016/24,disclosureInter40012/19.5. Source uniform16 outer gaps/headingmargin8/implicit24/disclosure18. Planned local grouping/metrics; preserve honest included-facts disclosure/full copy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 39
+      },
+      "referencePropertiesSHA256": "30f31f01422a384a3d73f5f4c5bb59a77cae03a63a183e994e76457b34e264ad",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:681": {
+      "target": "app/agent/[id].tsx Saved memories group",
+      "rationale": "Reference8 section-top/internal gaps,headingJakarta70016/24,disclosureInter40012/19.5. Source uniform16 outer gaps/headingmargin8/implicit24/disclosure18. Planned local grouping/metrics; preserve honest included-facts disclosure/full copy.",
+      "status": "mapped",
+      "referenceName": "These facts are included when you message this agent. You can review, edit, or remove them at any time.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 39
+      },
+      "referencePropertiesSHA256": "9736169b9ebbf7e642a7bf36d924dec756388559f147465ac83206d0af3ac401",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:682": {
+      "target": "app/agent/[id].tsx saved memory card View",
+      "rationale": "342x92 minimum,white/radius16/borderC6C5D040%,16padding and two navy shadows match source. Reference gap12 vs source8; action hit-width reflow is explicit accessibility exception, not new content clipping.",
+      "status": "mapped",
+      "referenceName": "Article - Saved Memory Card Entry",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 92
+      },
+      "referencePropertiesSHA256": "b62529cf3bb9e23f142d4da27936e8357ea64b304e515994716478da00c05e9f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:683": {
+      "target": "app/agent/[id].tsx saved memory card View",
+      "rationale": "342x92 minimum,white/radius16/borderC6C5D040%,16padding and two navy shadows match source. Reference gap12 vs source8; action hit-width reflow is explicit accessibility exception, not new content clipping.",
+      "status": "mapped",
+      "referenceName": "Article - Saved Memory Card Entry:shadow",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 342,
+        "y": 92
+      },
+      "referencePropertiesSHA256": "d6de545ef4153926b3d5b74e40870d9d3bf85d285fe7bb855a4fd5bfc739c1c6",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:684": {
+      "target": "app/agent/[id].tsx saved memory text/date",
+      "rationale": "Reference Inter60014/20 actual fact and4px date gap; dateInter60011/14 tracking.33. Source fact typography matches, dategap6/400/implicit21 differ. Preserve real full memory/localizeddate and large-text column reflow.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 186.1699981689453,
+        "y": 58
+      },
+      "referencePropertiesSHA256": "1a639862a1d14bfc34001655942a8962a9fa328b0a441c5056a45582293c490e",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:685": {
+      "target": "app/agent/[id].tsx saved memory text/date",
+      "rationale": "Reference Inter60014/20 actual fact and4px date gap; dateInter60011/14 tracking.33. Source fact typography matches, dategap6/400/implicit21 differ. Preserve real full memory/localizeddate and large-text column reflow.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 186.1699981689453,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "4158f7cc789d4cefddafab0ed124a843700d8205fb75e4ff9c0b2757a6c24fc7",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:686": {
+      "target": "app/agent/[id].tsx saved memory text/date",
+      "rationale": "Reference Inter60014/20 actual fact and4px date gap; dateInter60011/14 tracking.33. Source fact typography matches, dategap6/400/implicit21 differ. Preserve real full memory/localizeddate and large-text column reflow.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 186.1699981689453,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "ff90192d5b7c5ad76f814ce2d5214809a16cf7ab3c875fbd8c86b70d3b4f9bac",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:687": {
+      "target": "app/agent/[id].tsx saved memory text/date",
+      "rationale": "Reference Inter60014/20 actual fact and4px date gap; dateInter60011/14 tracking.33. Source fact typography matches, dategap6/400/implicit21 differ. Preserve real full memory/localizeddate and large-text column reflow.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 186.1699981689453,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "3f5fea72b3e2c0eb176c90e12b3f177746eedc2bc4829be52199b6a7a657074b",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:688": {
+      "target": "app/agent/[id].tsx saved memory text/date",
+      "rationale": "Reference Inter60014/20 actual fact and4px date gap; dateInter60011/14 tracking.33. Source fact typography matches, dategap6/400/implicit21 differ. Preserve real full memory/localizeddate and large-text column reflow.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 55.65999984741211,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "e855c1abe77f6885e054868c7d86610b0f44a6abc82aa7de969a8581a3afa9d7",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:689": {
+      "target": "app/agent/[id].tsx memory action IconButtons",
+      "rationale": "Reference compact64.333-wide action group contains31/29.333 hits; source two44hits+4gap. Retain88+4 width and resulting text wrapping; compare painted original edit/delete glyph bounds independently. Actual edit scrolls editor into view; Forget requires existing scoped confirmation.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 64.33332824707031,
+        "y": 35
+      },
+      "referencePropertiesSHA256": "874ae9b166de4c7c07003e1e29633aea37b32f6b6a607ba9805397c83cac8789",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:690": {
+      "target": "app/agent/[id].tsx memory action IconButtons",
+      "rationale": "Reference compact64.333-wide action group contains31/29.333 hits; source two44hits+4gap. Retain88+4 width and resulting text wrapping; compare painted original edit/delete glyph bounds independently. Actual edit scrolls editor into view; Forget requires existing scoped confirmation.",
+      "status": "exception",
+      "referenceName": "Button - Edit memory",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 31,
+        "y": 33.33333206176758
+      },
+      "referencePropertiesSHA256": "7ab493bb2131b93c736cfe0b9f3ba426a96ea0af8b7ea8b7de06204213e0cfcb",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:692": {
+      "target": "app/agent/[id].tsx memory action IconButtons",
+      "rationale": "Reference compact64.333-wide action group contains31/29.333 hits; source two44hits+4gap. Retain88+4 width and resulting text wrapping; compare painted original edit/delete glyph bounds independently. Actual edit scrolls editor into view; Forget requires existing scoped confirmation.",
+      "status": "exception",
+      "referenceName": "Button - Delete memory:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 33.33333206176758,
+        "y": 35
+      },
+      "referencePropertiesSHA256": "662d5e2a7e078c8a58d9f109908b038d4bc8e0632d187735b5a34c6141df6eca",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:693": {
+      "target": "app/agent/[id].tsx memory action IconButtons",
+      "rationale": "Reference compact64.333-wide action group contains31/29.333 hits; source two44hits+4gap. Retain88+4 width and resulting text wrapping; compare painted original edit/delete glyph bounds independently. Actual edit scrolls editor into view; Forget requires existing scoped confirmation.",
+      "status": "exception",
+      "referenceName": "Button - Delete memory",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 29.333332061767578,
+        "y": 35
+      },
+      "referencePropertiesSHA256": "28ed0d76d3a848884f552d30538a9dca9dff5f4a3c388dae6426531ba2bd382c",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:691": {
+      "target": "assets/figma/editMemory.svg / Edit memory IconButton",
+      "rationale": "Live child15x13.3333 grey glyph matches original padded31x33.3333 export. Transparent padding is not a larger painted glyph; keep original bytes and44pt outer hit.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 15,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "a952be0c0b7027057e60a46ff9e3034b91e826099f778030ba412a697d5c4796",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:694": {
+      "target": "assets/figma/deleteMemory.svg / Forget memory IconButton",
+      "rationale": "Live child13.3333x15 grey glyph matches original padded29.3333x35 export. Keep original bytes/paint and existing precise forget confirmation, not destructive recolouring.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "064b4d85000698be4c6094b5eae0083b624c94b3e96162ad0977a37d98c1d79a",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:695": {
+      "target": "app/agent/[id].tsx collapsed context section",
+      "rationale": "Reference top border20% C6C5D0 plus12px top/internal gaps; headingJakarta70016/24. Source13 title padding includes1 border+12 but section gaps16 and implicit24 differ. Group boundaries/spacing explicitly.",
+      "status": "mapped",
+      "referenceName": "Section: Context between chats",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 175
+      },
+      "referencePropertiesSHA256": "09bb46bdf2b273d3b1d97ba678206ddbaf5eebf6a8d0911f8cfc06bc84a32d77",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:696": {
+      "target": "app/agent/[id].tsx collapsed context section",
+      "rationale": "Reference top border20% C6C5D0 plus12px top/internal gaps; headingJakarta70016/24. Source13 title padding includes1 border+12 but section gaps16 and implicit24 differ. Group boundaries/spacing explicitly.",
+      "status": "mapped",
+      "referenceName": "Heading 3",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "0940e1de802483c664e0c3c6c290f388ff134cf7fdc4322e50f926f7031fadfa",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:697": {
+      "target": "app/agent/[id].tsx collapsed context section",
+      "rationale": "Reference top border20% C6C5D0 plus12px top/internal gaps; headingJakarta70016/24. Source13 title padding includes1 border+12 but section gaps16 and implicit24 differ. Group boundaries/spacing explicitly.",
+      "status": "mapped",
+      "referenceName": "Context between chats",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "36773479d3c64e2c66da6d848ead95f1db89d2bdbd0bd4d4fd862b35e217d588",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:698": {
+      "target": "app/agent/[id].tsx Use recent chats row",
+      "rationale": "Reference labelInter50014/20 #1A1C1C within36-high painted row. Source14/24 inherits s.text;44 switch hit is retained. Correct leading while allowing accessible row growth, never hardcode36 hit.",
+      "status": "mapped",
+      "referenceName": "Toggle Component Row",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 36
+      },
+      "referencePropertiesSHA256": "eab469848038a481716bd6996354e208733ae0038feef32c749b306d5d68bf05",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:699": {
+      "target": "app/agent/[id].tsx Use recent chats row",
+      "rationale": "Reference labelInter50014/20 #1A1C1C within36-high painted row. Source14/24 inherits s.text;44 switch hit is retained. Correct leading while allowing accessible row growth, never hardcode36 hit.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 113.08999633789062,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "39d67182c0517738b8038ab705c17daf77636e73f5f4be36232e2f38e346f51c",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:700": {
+      "target": "app/agent/[id].tsx Use recent chats row",
+      "rationale": "Reference labelInter50014/20 #1A1C1C within36-high painted row. Source14/24 inherits s.text;44 switch hit is retained. Correct leading while allowing accessible row growth, never hardcode36 hit.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 113.08999633789062,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "66022d650e3bf6b2886d5fba3a2630038a6f08a5f882e6c4bcccf89d33562cf0",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:701": {
+      "target": "src/ui.tsx Switch collapsed variant",
+      "rationale": "48x28 track059669 with white24thumb; source matches track but thumbleft22 vsreference26/protrudes2 and lacks track inner shadow. Record specific treatment; retain realcheckedstate/consent and44hit rather than claim exact geometry.",
+      "status": "mapped",
+      "referenceName": "Label",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 48,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "5e6e1ff50f82116f7fdc16350d2258cbfa208119bfeacaab9015baa7b2c9e284",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:702": {
+      "target": "src/ui.tsx Switch collapsed variant",
+      "rationale": "48x28 track059669 with white24thumb; source matches track but thumbleft22 vsreference26/protrudes2 and lacks track inner shadow. Record specific treatment; retain realcheckedstate/consent and44hit rather than claim exact geometry.",
+      "status": "mapped",
+      "referenceName": "Background+Shadow",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 48,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "3750e6597d2bd3fc503da49fb4d9bc3766fa5616e0f5a272d91f2c5d5b501ea5",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:703": {
+      "target": "src/ui.tsx Switch collapsed variant",
+      "rationale": "48x28 track059669 with white24thumb; source matches track but thumbleft22 vsreference26/protrudes2 and lacks track inner shadow. Record specific treatment; retain realcheckedstate/consent and44hit rather than claim exact geometry.",
+      "status": "mapped",
+      "referenceName": "Background+Border",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 24,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "2464d99ce0ce2185b3d54ee07c91ec2d1b709cae12bd3264daa0c394c3877cb8",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:704": {
+      "target": "app/agent/[id].tsx context disclosure",
+      "rationale": "Reference Inter40012/19.5 and full durable-facts/limited-recall warning; source12/18. Source says original chats vs mock chat history, semantically honest disclosure preserved. Correct leading without changing context limits/consent.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 78
+      },
+      "referencePropertiesSHA256": "6cb3c5ee5e08d9bf8ba515d66e069cc5ee964bfb49701a683b63b0cf93798514",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:705": {
+      "target": "app/agent/[id].tsx context disclosure",
+      "rationale": "Reference Inter40012/19.5 and full durable-facts/limited-recall warning; source12/18. Source says original chats vs mock chat history, semantically honest disclosure preserved. Correct leading without changing context limits/consent.",
+      "status": "mapped",
+      "referenceName": "Saved memories are durable facts. Recent context helps continue earlier work; it is a limited excerpt, not perfect recall of every conversation. Deleting a memory does not erase the chat history.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 78
+      },
+      "referencePropertiesSHA256": "26435e090f1d3ea293d276cc667046fab5c6608df6d09c25551af0214a67e9b4",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:706": {
+      "target": "Mock device exterior shadow",
+      "rationale": "Reference0,25,50spread-12 black25% shadow decorates exported phone wrapper outside390 logical app content. Do not draw an outer fake phone/shadow inside actual mobile screen.",
+      "status": "exception",
+      "referenceName": "Mobile Frame Wrapper:shadow",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 390,
+        "y": 1018.25
+      },
+      "referencePropertiesSHA256": "b54135f8fc6f1e8a2ad2b91b25ee0cf6159dbc9e5f6736b0a00a20f72bd9f58d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:707": {
+      "target": "src/ui.tsx MainNavigation",
+      "rationale": "Reference docked65 mock height includes16 bottom reserve, translucent blur24 and exterior dock shadows. Source backgroundF9 opaque/no blur or dock shadows; verify actual painted surface at native safe area. Keep real bottom inset; mock height/exterior shadow cannot justify overlaying controls. Missing blur/inside-app shadow needs reviewed narrow rendering rule, not wholesale exception.",
+      "status": "mapped",
+      "referenceName": "Bottom Navigation Bar (Docked Destination Shell)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 65
+      },
+      "referencePropertiesSHA256": "f8242ba5d402ea421c0fcf5bdcfd0f2ae15ee34cc8c685c777b4947962b73c7d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:708": {
+      "target": "src/ui.tsx MainNavigation",
+      "rationale": "Reference docked65 mock height includes16 bottom reserve, translucent blur24 and exterior dock shadows. Source backgroundF9 opaque/no blur or dock shadows; verify actual painted surface at native safe area. Keep real bottom inset; mock height/exterior shadow cannot justify overlaying controls. Missing blur/inside-app shadow needs reviewed narrow rendering rule, not wholesale exception.",
+      "status": "mapped",
+      "referenceName": "Bottom Navigation Bar (Docked Destination Shell):shadow",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 390,
+        "y": 65
+      },
+      "referencePropertiesSHA256": "d65bbb5923cb3cdeade7f5bf9673efa4899a031f917b92a50b3fde109c4f4b7b",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:709": {
+      "target": "src/ui.tsx MainNavigation Pressables",
+      "rationale": "Reference per-tab painted width64.66/71.77/78.53 differs from source equal flex target cells. Preserve44min hits and real navigation; match glyph centre/label spacing at390 logical width, not mock hit boxes.",
+      "status": "exception",
+      "referenceName": "Button - Chat tab",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 64.66000366210938,
+        "y": 44
+      },
+      "referencePropertiesSHA256": "be644383a7bd8301fe3c6b5ab9fc43200e366919a24b38c8f87e0b7585d99f44",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:715": {
+      "target": "src/ui.tsx MainNavigation Pressables",
+      "rationale": "Reference per-tab painted width64.66/71.77/78.53 differs from source equal flex target cells. Preserve44min hits and real navigation; match glyph centre/label spacing at390 logical width, not mock hit boxes.",
+      "status": "exception",
+      "referenceName": "Button - Agents tab (Active)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 71.77000427246094,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "cf34f5484a556db611d91a9aec24c3fd1ea0962e5fca7ab26b8ac50afbe94b5d",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:721": {
+      "target": "src/ui.tsx MainNavigation Pressables",
+      "rationale": "Reference per-tab painted width64.66/71.77/78.53 differs from source equal flex target cells. Preserve44min hits and real navigation; match glyph centre/label spacing at390 logical width, not mock hit boxes.",
+      "status": "exception",
+      "referenceName": "Button - Settings tab",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 78.52999877929688,
+        "y": 44
+      },
+      "referencePropertiesSHA256": "cd2dbf2c8f890c52b0ed570a2c8e1b63c93ed87b8cbb41a4a8f9135f4dbe47fd",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:710": {
+      "target": "assets/figma/tabChats.svg / MainNavigation",
+      "rationale": "20x20 quiet original inactive Chats glyph matches source binding. Source50x24 centring wrapper differs from20x20 intrinsic wrapper; exactpaintcentre remains native gate.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 20,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "ca1b0aa28fe0eebb9f75cb6b269bb213aa1ab89dc8c679ecf12f35b2c8e50d4a",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:711": {
+      "target": "assets/figma/tabChats.svg / MainNavigation",
+      "rationale": "20x20 quiet original inactive Chats glyph matches source binding. Source50x24 centring wrapper differs from20x20 intrinsic wrapper; exactpaintcentre remains native gate.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 20,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "52f08c4b7ba2095b081811bac8c216f2415a5a27dc0a0c8b7aa76bba007d49b2",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:712": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.65999984741211,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "175ee4b773186468a12372cc1bd84b16358b37b3f31a0084a975ef03913aa9c0",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:713": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.65999984741211,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "0f4db096a1fd91d0af2d5de540cc1cb170f91bdec1c648d1fbfe76d18b2b29ac",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:714": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 32.65999984741211,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "fd96ad39e36096148f2839613bffe528dc696e96172d2b4e665aee6cdd19f2f1",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:718": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 39.77000045776367,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "a9089df7d834d04e04e16a0d7b9c62d370daae1f7f6c51241e584ffafdb4648f",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:719": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 39.77000045776367,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "5280394feabdb0ea8ffaea7b6c7dbb1709306755f934028b0f57f71129e3c692",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:720": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 39.77000045776367,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "f85a7855ea52086a5576d3b4cd305f19bfb93506275863bf173fd54982d44879",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:724": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 46.529998779296875,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "c2fb26e379aba95ef98d30c14d25a44cd9957e5fda5b80777fb2f170a3c459cf",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:725": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 46.529998779296875,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "ba5c54b1e68562313aae14ec68d393d785a28cce3ca836044be970eef3885772",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:726": {
+      "target": "src/ui.tsx MainNavigation labels",
+      "rationale": "Reference Inter60011/14 tracking.33 quietinactive/navyactive plus2px glyph-label gap. Source11/600/.33 andgap2 match but14leading implicit; navigation-label-metrics applies. Keep text scaling and active-tab semantics.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 46.529998779296875,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "80e5dc3925e1571421193a7f975b95f7615f9779f3862f06adf1a170ac949eac",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:716": {
+      "target": "assets/figma/tabAgentsActive.svg / MainNavigation",
+      "rationale": "22x16 navy original active Agents artwork matches reference/source. No selected lavender disc on Agents; source correctly confines that treatment to Settings.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 22,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "eddbbf67b9967bbfb6144f6e6c6c5db73339d228065da1b96dcba5c01d85031e",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:717": {
+      "target": "assets/figma/tabAgentsActive.svg / MainNavigation",
+      "rationale": "22x16 navy original active Agents artwork matches reference/source. No selected lavender disc on Agents; source correctly confines that treatment to Settings.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 22,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "733819a6956e05e423ba37c86e1f4dfbccfd6146ba8a43782dfaf5734032ca54",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:722": {
+      "target": "assets/figma/tabSettings.svg / MainNavigation",
+      "rationale": "20.1x20 quiet original inactive Settings glyph matches reference/source. Keep native safe area and44pt navigation target distinct from paint.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 20.100000381469727,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "d0605a9b2c3ed73f335df6e9c8309b37373c06db070d6f08b1cdcbb2c34cbebc",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    },
+    "2:723": {
+      "target": "assets/figma/tabSettings.svg / MainNavigation",
+      "rationale": "20.1x20 quiet original inactive Settings glyph matches reference/source. Keep native safe area and44pt navigation target distinct from paint.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 20.100000381469727,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "3ca056484178901c3a561421a5d08cf9c98ee700aa41cc5f7f470b7c00599554",
+      "evidence": [
+        "live-file",
+        "frame-2:617",
+        "memory-node-audit",
+        "memory-context-audit"
+      ]
+    }
+  }
+}
