@@ -6,7 +6,7 @@ The actual exported IPA audit verifies bundle/version/build/family1, strict sign
 
 Current native UI acceptance covers all nine supplied frames, three text/device profiles, PDF persistence and gallery copy/storage on fresha0 native, with77 inspected captures. These are synthetic Simulator checks. Physical-device, VoiceOver and new live-provider validation remain separate; maximum accessibility static intro/empty-state copy can remain dense or clipped. iOS background time is finite. Report excerpts stay off by default, PDF support depends on the model/API format, and saved connection/key/protocol/consent/storage behavior is preserved.
 
-Initial App Store15 remains selected unchanged;19 is internal feedback, with no external19 submission or account-role changes. Android12 is separately delivered. Final native review pack is ready; Drive upload still requires Google sign-in.
+Initial App Store15 remains selected unchanged;19 is internal feedback, with no external19 submission or account-role changes. Android12 is separately delivered. The [final native Drive pack](https://drive.google.com/drive/folders/1CYAzrso_z5F8X8PRb0UR4S3rF56rI2CY) is delivered with all37 files; completion, public viewing and inherited sharing are verified.
 
 ---
 
