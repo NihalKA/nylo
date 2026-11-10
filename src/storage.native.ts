@@ -10,7 +10,7 @@ import { parseData } from "./domain";
 
 const db = SQLite.openDatabaseAsync("nylo.db").then(async (database) => {
   await database.execAsync(
-    "PRAGMA journal_mode = WAL; CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY CHECK (id = 1), json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS attachment_blobs (id TEXT PRIMARY KEY NOT NULL, data TEXT NOT NULL);",
+    "PRAGMA journal_mode = WAL; CREATE TABLE IF NOT EXISTS app_state (id INTEGER PRIMARY KEY CHECK (id = 1), json TEXT NOT NULL); CREATE TABLE IF NOT EXISTS attachment_blobs (id TEXT PRIMARY KEY NOT NULL, data TEXT NOT NULL); CREATE TABLE IF NOT EXISTS preferences (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);",
   );
   return database;
 });
@@ -63,6 +63,23 @@ export async function writeData(data: AppData) {
     );
   });
   savedBlobs = blobs;
+}
+// Device display preferences (e.g. appearance). Not part of backups or AppData.
+export async function readPreference(key: string): Promise<string | null> {
+  const database = await db;
+  const row = await database.getFirstAsync<{ value: string }>(
+    "SELECT value FROM preferences WHERE key = ?",
+    key,
+  );
+  return row?.value ?? null;
+}
+export async function writePreference(key: string, value: string) {
+  const database = await db;
+  await database.runAsync(
+    "INSERT INTO preferences(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+    key,
+    value,
+  );
 }
 const keyName = (id: string) => `nylo.provider.${id}`;
 export const readKey = async (id: string, destination: string) =>

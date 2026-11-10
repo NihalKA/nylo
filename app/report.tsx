@@ -17,8 +17,10 @@ import {
   confirm,
   s,
   theme,
+  useTheme,
 } from "../src/ui";
 export default function Report() {
+  useTheme();
   const { chatId, messageId } = useLocalSearchParams<{
     chatId: string;
     messageId: string;
@@ -90,7 +92,7 @@ export default function Report() {
             paddingBottom: 32,
             fontSize: 14,
             lineHeight: 20,
-            borderColor: "rgba(198, 197, 208, 0.4)",
+            borderColor: theme.line,
           }}
           placeholderTextColor={theme.quiet}
           placeholder="Unsafe content, a privacy concern, or another issue…"
@@ -102,7 +104,7 @@ export default function Report() {
             {
               gap: 16,
               flexWrap: "wrap",
-              borderColor: "rgba(198, 197, 208, 0.3)",
+              borderColor: theme.hairline,
             },
           ]}
         >
@@ -140,7 +142,7 @@ export default function Report() {
               style={{
                 fontSize: 11,
                 fontWeight: "600",
-                color: "#8793C7",
+                color: theme.accentText,
                 letterSpacing: 0.33,
                 backgroundColor: theme.line,
                 borderRadius: 9,
@@ -157,18 +159,18 @@ export default function Report() {
               {
                 // Figma alpha composited over the page. An opaque surface keeps
                 // native elevation shadows from bleeding through the card fill.
-                backgroundColor: "#F5F6F5",
-                borderColor: "rgba(198, 197, 208, 0.4)",
+                backgroundColor: theme.surface,
+                borderColor: theme.line,
                 gap: 8,
                 padding: 16,
-                boxShadow: "0px 1px 3px rgba(30,43,88,0.04)",
+                boxShadow: theme.cardShadow,
               },
             ]}
           >
             <View
               style={{
                 borderBottomWidth: 1,
-                borderBottomColor: "rgba(198,197,208,0.3)",
+                borderBottomColor: theme.hairline,
                 paddingBottom: 9,
                 gap: 2,
               }}
@@ -220,7 +222,7 @@ export default function Report() {
                   backgroundColor: theme.card,
                   borderRadius: 8,
                   borderWidth: 1,
-                  borderColor: "#C6C5D033",
+                  borderColor: theme.hairline,
                   padding: 8,
                 }}
               >
@@ -285,7 +287,7 @@ export default function Report() {
             style={{
               minHeight: 54,
               borderRadius: 27,
-              backgroundColor: runningId ? theme.muted : "#FCEAE5",
+              backgroundColor: runningId ? theme.muted : theme.errorSurface,
             }}
             disabled={!!runningId}
             onPress={() =>

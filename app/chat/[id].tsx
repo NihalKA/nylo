@@ -17,7 +17,6 @@ import React, {
   useState,
 } from "react";
 import {
-  ActivityIndicator,
   AppState,
   Keyboard,
   Image,
@@ -43,16 +42,32 @@ import {
 import {
   AgentAvatar,
   Badge,
+  Breathe,
   Button,
+  FadeIn,
   Field,
   Header,
   Icon,
   IconButton,
   Page,
+  PopIn,
+  PulseRing,
+  Tappable,
+  TypingDots,
+  Burst,
+  StreamCaret,
+  haptic,
+  BrandMark,
+  ThinkingOrb,
+  accentGradient,
+  rgba,
   confirm,
   s,
   theme,
   softShadow,
+  useTheme,
+  LivingAvatar,
+  Press,
 } from "../../src/ui";
 
 function MessageText({ text }: { text: string }) {
@@ -125,6 +140,7 @@ export default function ChatRoute() {
 }
 
 function Chat() {
+  const { scheme } = useTheme();
   const insets = useSafeAreaInsets();
   const { fontScale } = useWindowDimensions();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
@@ -181,7 +197,25 @@ function Chat() {
   const composer = useRef<React.ComponentRef<typeof TextInput>>(null);
   const nearBottom = useRef(true);
   const isRunning = runningId === id;
+  // Feel the reply arrive: a settled double pulse, or an error feel.
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (wasRunning.current && !isRunning) {
+      const reply = conversation?.messages.at(-1);
+      if (reply?.role === "assistant") {
+        if (reply.status === "error") haptic.error();
+        else if (reply.status === "complete") haptic.landed();
+      }
+    }
+    wasRunning.current = isRunning;
+  }, [isRunning]);
   const last = conversation?.messages.at(-1);
+  const initialMessageIds = useRef(
+    new Set(conversation?.messages.map((m) => m.id) ?? []),
+  ).current;
+  const [composerFocused, setComposerFocused] = useState(false);
+  const [sentCount, setSentCount] = useState(0);
+  const canSend = !!(text.trim() || attachments.length) && !runningId;
   useEffect(() => {
     setText(prompt || conversation?.draft || "");
     setAttachments(conversation?.draftAttachments || []);
@@ -338,7 +372,7 @@ function Chat() {
     });
   };
   return (
-    <Page>
+    <Page aura={!conversation.messages.length}>
       <BlurTargetView ref={blurTarget} style={{ flex: 1 }}>
         <Header
           centerTitle={!agent && !conversation.messages.length}
@@ -372,7 +406,8 @@ function Chat() {
           }
         />
         {agent && !keyboardVisible ? (
-          <Pressable
+          <Press
+            feel="tick"
             accessibilityRole="button"
             accessibilityLabel={`View ${agent.name} memory. ${agent.memories.length} saved facts shared across this agent’s conversations.`}
             onPress={() =>
@@ -399,7 +434,7 @@ function Chat() {
               </Text>
             </View>
             <Icon name="chevron-forward" color={theme.sub} size={12} />
-          </Pressable>
+          </Press>
         ) : null}
         <KeyboardAvoidingView
           style={{ flex: 1 }}
@@ -419,7 +454,9 @@ function Chat() {
             keyboardDismissMode={
               Platform.OS === "ios" ? "interactive" : "on-drag"
             }
+            style={{ marginHorizontal: -20 }}
             contentContainerStyle={{
+              paddingHorizontal: 20,
               paddingTop: 12,
               paddingBottom: 28,
               gap: 24,
@@ -459,7 +496,11 @@ function Chat() {
                   paddingVertical: 28,
                 }}
               >
-                {agent ? <AgentAvatar agent={agent} /> : null}
+                {agent ? (
+                  <LivingAvatar agent={agent} size={68} />
+                ) : (
+                  <BrandMark height={56} float />
+                )}
                 <Text
                   style={[
                     s.h2,
@@ -495,38 +536,66 @@ function Chat() {
                     onPress={() => router.push("/connection")}
                   />
                 ) : text.length === 0 && !attachments.length ? (
-                  <View style={{ gap: 4, marginTop: 8 }}>
-                    {["Help me write", "Think it through"].map((label) => (
-                      <Pressable
-                        key={label}
-                        accessibilityRole="button"
-                        onPress={() => {
-                          setText((current) =>
-                            starterDraft(
-                              current,
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                      gap: 10,
+                      marginTop: 8,
+                    }}
+                  >
+                    {["Help me write", "Think it through"].map((label, i) => (
+                      <FadeIn key={label} delay={120 + i * 80}>
+                        <Tappable
+                          accessibilityRole="button"
+                          onPress={() => {
+                            setText((current) =>
+                              starterDraft(
+                                current,
+                                label === "Help me write"
+                                  ? "Help me write "
+                                  : "Help me think through ",
+                              ),
+                            );
+                            haptic.select();
+                            composer.current?.focus();
+                          }}
+                          scaleTo={0.94}
+                          style={[
+                            s.row,
+                            {
+                              gap: 8,
+                              minHeight: 44,
+                              paddingHorizontal: 16,
+                              borderRadius: 22,
+                              backgroundColor: theme.card,
+                              borderWidth: 1,
+                              borderColor: theme.hairline,
+                              boxShadow: theme.cardShadow,
+                            },
+                          ]}
+                        >
+                          <Icon
+                            name={
                               label === "Help me write"
-                                ? "Help me write "
-                                : "Help me think through ",
-                            ),
-                          );
-                          composer.current?.focus();
-                        }}
-                        style={[
-                          s.row,
-                          { gap: 10, minHeight: 44, paddingHorizontal: 16 },
-                        ]}
-                      >
-                        <Icon
-                          name={
-                            label === "Help me write"
-                              ? "create-outline"
-                              : "bulb-outline"
-                          }
-                          size={17}
-                          color={theme.sub}
-                        />
-                        <Text style={s.sub}>{label}</Text>
-                      </Pressable>
+                                ? "create-outline"
+                                : "bulb-outline"
+                            }
+                            size={16}
+                            color={theme.accentText}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 14,
+                              fontWeight: "600",
+                              color: theme.ink,
+                            }}
+                          >
+                            {label}
+                          </Text>
+                        </Tappable>
+                      </FadeIn>
                     ))}
                   </View>
                 ) : null}
@@ -534,8 +603,10 @@ function Chat() {
             ) : (
               <>
                 {conversation.messages.map((message, index) => (
-                  <View
+                  <FadeIn
                     key={message.id}
+                    enabled={!initialMessageIds.has(message.id)}
+                    distance={message.role === "user" ? 14 : 8}
                     style={{
                       gap: 10,
                       alignItems:
@@ -545,10 +616,11 @@ function Chat() {
                     {message.role === "user" ? (
                       <View
                         style={{
-                          backgroundColor: theme.surface,
+                          backgroundColor: theme.pale,
                           paddingVertical: 12,
                           paddingHorizontal: 16,
                           borderRadius: 22,
+                          borderBottomRightRadius: 6,
                           maxWidth: "90%",
                         }}
                       >
@@ -617,11 +689,8 @@ function Chat() {
                             >
                               {agent?.name || "Nylo"}
                             </Text>
-                            {message.status === "streaming" ? (
-                              <ActivityIndicator
-                                size="small"
-                                color={theme.sub}
-                              />
+                            {message.status === "streaming" && message.text ? (
+                              <TypingDots color={theme.accentText} size={5} />
                             ) : null}
                           </View>
                         ) : null}
@@ -638,9 +707,42 @@ function Chat() {
                           </View>
                         ))}
                         {message.text ? (
-                          <MessageText text={message.text} />
+                          <>
+                            <MessageText text={message.text} />
+                            {message.status === "streaming" ? (
+                              <StreamCaret />
+                            ) : null}
+                          </>
                         ) : message.status === "streaming" ? (
-                          <Text style={s.sub}>Thinking…</Text>
+                          <FadeIn distance={6} duration={200}>
+                            <View
+                              accessible
+                              accessibilityLabel="Thinking"
+                              accessibilityLiveRegion="polite"
+                              style={[
+                                s.row,
+                                {
+                                  alignSelf: "flex-start",
+                                  gap: 10,
+                                  paddingHorizontal: 14,
+                                  paddingVertical: 10,
+                                  borderRadius: 18,
+                                  borderTopLeftRadius: 6,
+                                  backgroundColor: theme.card,
+                                  borderWidth: 1,
+                                  borderColor: theme.hairline,
+                                  boxShadow: theme.cardShadow,
+                                },
+                              ]}
+                            >
+                              <ThinkingOrb size={20} />
+                              <Breathe>
+                                <Text style={[s.sub, { fontSize: 13 }]}>
+                                  Thinking…
+                                </Text>
+                              </Breathe>
+                            </View>
+                          </FadeIn>
                         ) : null}
                         {message.error ? (
                           <View
@@ -672,21 +774,31 @@ function Chat() {
                         ) : null}
                         {message.text && message.status !== "streaming" ? (
                           <View style={[s.row, { gap: 3 }]}>
-                            <IconButton
-                              name={
-                                copied === message.id
-                                  ? "checkmark"
-                                  : "copy-outline"
-                              }
-                              label="Copy response"
-                              onPress={() =>
-                                void action(async () => {
-                                  await Clipboard.setStringAsync(message.text);
-                                  setCopied(message.id);
-                                  setTimeout(() => setCopied(null), 1500);
-                                })
-                              }
-                            />
+                            <PopIn trigger={copied === message.id}>
+                              <IconButton
+                                name={
+                                  copied === message.id
+                                    ? "checkmark-circle"
+                                    : "copy-outline"
+                                }
+                                color={
+                                  copied === message.id
+                                    ? theme.green
+                                    : undefined
+                                }
+                                label="Copy response"
+                                onPress={() =>
+                                  void action(async () => {
+                                    await Clipboard.setStringAsync(
+                                      message.text,
+                                    );
+                                    haptic.success();
+                                    setCopied(message.id);
+                                    setTimeout(() => setCopied(null), 1500);
+                                  })
+                                }
+                              />
+                            </PopIn>
                             <IconButton
                               name="flag-outline"
                               label="Report response"
@@ -723,7 +835,7 @@ function Chat() {
                         ) : null}
                       </View>
                     )}
-                  </View>
+                  </FadeIn>
                 ))}
               </>
             )}
@@ -739,7 +851,7 @@ function Chat() {
                     ? "This chat’s PDF needs a supported API format."
                     : "This API format doesn’t support PDFs."}
                 </Text>
-                <Pressable
+                <Press
                   accessibilityRole="button"
                   accessibilityLabel="Choose PDF connection"
                   onPress={openModelPicker}
@@ -752,7 +864,7 @@ function Chat() {
                     Choose PDF connection
                   </Text>
                   <Icon name="chevron-forward" size={16} />
-                </Pressable>
+                </Press>
               </View>
             ) : error ? (
               <Text accessibilityRole="alert" style={s.error}>
@@ -778,8 +890,7 @@ function Chat() {
                       style={{
                         padding: image ? 10 : 12,
                         gap: 8,
-                        boxShadow:
-                          "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
+                        boxShadow: theme.cardShadow,
                         width: image ? 144 : 176,
                         minHeight: image ? 165 : 134,
                         borderRadius: 12,
@@ -818,12 +929,12 @@ function Chat() {
                             width: 36,
                             height: 36,
                             borderRadius: 8,
-                            backgroundColor: "#E8E8E799",
+                            backgroundColor: theme.muted,
                             alignItems: "center",
                             justifyContent: "center",
                             marginBottom: 18,
                             borderWidth: 1,
-                            borderColor: "rgba(198,197,208,0.3)",
+                            borderColor: theme.hairline,
                           }}
                         >
                           <Icon
@@ -878,7 +989,7 @@ function Chat() {
                   );
                 })}
                 {attachments.length < 4 ? (
-                  <Pressable
+                  <Press
                     accessibilityRole="button"
                     accessibilityLabel="Add file"
                     disabled={picking || submitting || !!runningId}
@@ -893,8 +1004,8 @@ function Chat() {
                       borderRadius: 12,
                       borderWidth: 1,
                       borderStyle: "dashed",
-                      borderColor: "#D8D5CD",
-                      backgroundColor: "rgba(249,249,248,0.6)",
+                      borderColor: theme.lineStrong,
+                      backgroundColor: theme.surface,
                       alignItems: "center",
                       justifyContent: "center",
                       gap: 8,
@@ -916,7 +1027,7 @@ function Chat() {
                     >
                       Add file
                     </Text>
-                  </Pressable>
+                  </Press>
                 ) : null}
               </ScrollView>
             ) : null}
@@ -936,7 +1047,8 @@ function Chat() {
               </Text>
             ) : null}
             <View style={s.between}>
-              <Pressable
+              <Press
+                feel="tick"
                 accessibilityRole="button"
                 accessibilityLabel={`Choose model connection${connection ? `. ${connection.name}, ${connection.model}` : ""}`}
                 onPress={openModelPicker}
@@ -965,7 +1077,7 @@ function Chat() {
                   size={12}
                   color={theme.sub}
                 />
-              </Pressable>
+              </Press>
             </View>
             <View
               style={[
@@ -974,11 +1086,12 @@ function Chat() {
                   alignItems: "flex-end",
                   gap: 10,
                   padding: 4,
-                  boxShadow:
-                    "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
+                  boxShadow: composerFocused
+                    ? `0px 0px 0px 4px ${rgba(theme.primary, 0.14)}, 0px 8px 24px -8px ${rgba(theme.accent2, 0.35)}`
+                    : theme.cardShadow,
                   borderRadius: 27,
                   borderWidth: 1,
-                  borderColor: theme.fileLine,
+                  borderColor: composerFocused ? theme.primary : theme.fileLine,
                   backgroundColor: theme.file,
                 },
               ]}
@@ -1003,7 +1116,9 @@ function Chat() {
                 maxLength={20000}
                 multiline
                 placeholder={agent ? `Message ${agent.name}…` : "Message Nylo…"}
-                placeholderTextColor={theme.sub}
+                placeholderTextColor={theme.quiet}
+                onFocus={() => setComposerFocused(true)}
+                onBlur={() => setComposerFocused(false)}
                 style={{
                   flex: 1,
                   fontSize: 14,
@@ -1026,74 +1141,95 @@ function Chat() {
                   }
                 }}
               />
-              {isRunning ? (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Stop response"
-                  onPress={stop}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 22,
-                    backgroundColor: theme.primary,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Icon name="stop" size={16} color="#FFF" />
-                </Pressable>
-              ) : (
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Send message"
-                  disabled={
-                    (!text.trim() && !attachments.length) ||
-                    !!runningId ||
-                    submitting ||
-                    picking
-                  }
-                  onPress={() => void submit()}
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 22,
-                    backgroundColor: "transparent",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+              <View
+                style={{
+                  width: 44,
+                  height: 44,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Burst count={sentCount} color={theme.accent2} size={40} />
+                {isRunning ? (
                   <View
-                    accessible={false}
                     style={{
-                      position: "absolute",
-                      top: 2,
-                      left: 2,
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      backgroundColor:
-                        (text.trim() || attachments.length) && !runningId
-                          ? theme.primary
-                          : "#E1E1E4",
-                      ...softShadow,
+                      width: 44,
+                      height: 44,
+                      alignItems: "center",
+                      justifyContent: "center",
                     }}
-                  />
-                  <Icon
-                    name="arrow-up"
-                    design={
-                      (text.trim() || attachments.length) && !runningId
-                        ? "send"
-                        : undefined
+                  >
+                    <PulseRing color={theme.primary} size={44} />
+                    <Tappable
+                      accessibilityRole="button"
+                      accessibilityLabel="Stop response"
+                      onPress={() => {
+                        haptic.stop();
+                        stop();
+                      }}
+                      scaleTo={0.86}
+                      style={{
+                        width: 44,
+                        height: 44,
+                        borderRadius: 22,
+                        ...accentGradient(),
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Icon name="stop" size={16} color={theme.onPrimary} />
+                    </Tappable>
+                  </View>
+                ) : (
+                  <Tappable
+                    accessibilityRole="button"
+                    accessibilityLabel="Send message"
+                    scaleTo={0.82}
+                    disabled={
+                      (!text.trim() && !attachments.length) ||
+                      !!runningId ||
+                      submitting ||
+                      picking
                     }
-                    size={20}
-                    color={
-                      (text.trim() || attachments.length) && !runningId
-                        ? "#FFF"
-                        : "#9AA394"
-                    }
-                  />
-                </Pressable>
-              )}
+                    onPress={() => {
+                      haptic.send();
+                      setSentCount((n) => n + 1);
+                      void submit();
+                    }}
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: 22,
+                      backgroundColor: "transparent",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <PopIn
+                      trigger={canSend}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: 20,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        backgroundColor: canSend
+                          ? theme.primary
+                          : theme.disabled,
+                        ...(canSend ? accentGradient() : {}),
+                        ...(canSend ? { boxShadow: theme.raisedShadow } : {}),
+                      }}
+                    >
+                      <Icon
+                        name="arrow-up"
+                        design={canSend ? "send" : undefined}
+                        size={20}
+                        color={canSend ? theme.onPrimary : theme.disabledText}
+                      />
+                    </PopIn>
+                  </Tappable>
+                )}
+              </View>
             </View>
             {runningId ? (
               <Text
@@ -1172,7 +1308,7 @@ function Chat() {
                 width: 40,
                 height: 4,
                 borderRadius: 2,
-                backgroundColor: "#E2E2E2",
+                backgroundColor: theme.line,
                 marginTop: -4,
                 marginBottom: 4,
               }}
@@ -1203,7 +1339,7 @@ function Chat() {
                   minHeight: 52,
                   borderRadius: 26,
                   gap: 12,
-                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                  boxShadow: theme.cardShadow,
                 }}
                 secondary
                 icon="images-outline"
@@ -1216,7 +1352,7 @@ function Chat() {
                   minHeight: 52,
                   borderRadius: 26,
                   gap: 12,
-                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                  boxShadow: theme.cardShadow,
                 }}
                 secondary
                 icon="camera-outline"
@@ -1229,7 +1365,7 @@ function Chat() {
                   minHeight: 52,
                   borderRadius: 26,
                   gap: 12,
-                  boxShadow: "0px 2px 6px -1px rgba(6,21,66,0.04)",
+                  boxShadow: theme.cardShadow,
                 }}
                 secondary
                 icon="document-outline"
@@ -1298,10 +1434,15 @@ function Chat() {
               bottom: 0,
               left: 0,
               right: 0,
-              backgroundColor: hasPdf ? "rgba(165,164,162,0.8)" : theme.overlay,
+              backgroundColor: hasPdf
+                ? scheme === "dark"
+                  ? theme.overlay
+                  : "rgba(165,164,162,0.8)"
+                : theme.overlay,
             }}
           />
-          <Pressable
+          <Press
+            feel="none"
             accessible={false}
             onPress={() => setModelPicker(false)}
             style={{
@@ -1323,7 +1464,7 @@ function Chat() {
               borderTopLeftRadius: hasPdf ? 32 : 28,
               borderTopRightRadius: hasPdf ? 32 : 28,
               borderTopWidth: 1,
-              borderColor: hasPdf ? "rgba(255, 255, 255, 0.6)" : theme.line,
+              borderColor: hasPdf ? theme.hairline : theme.line,
             }}
           >
             <View
@@ -1333,9 +1474,7 @@ function Chat() {
                 width: 40,
                 height: 4,
                 borderRadius: 2,
-                backgroundColor: hasPdf
-                  ? "rgba(198, 197, 208, 0.6)"
-                  : "#E2E2E2",
+                backgroundColor: hasPdf ? theme.lineStrong : theme.line,
                 marginTop: hasPdf ? -8 : -14,
               }}
             />
@@ -1376,7 +1515,7 @@ function Chat() {
                   paddingHorizontal: 12,
                   borderRadius: hasPdf ? 22 : 12,
                   borderWidth: 1,
-                  borderColor: hasPdf ? "rgba(198, 197, 208, 0.5)" : theme.line,
+                  borderColor: hasPdf ? theme.line : theme.line,
                   backgroundColor: theme.surface,
                   marginHorizontal: hasPdf ? 0 : -4,
                 },
@@ -1446,7 +1585,7 @@ function Chat() {
                     </Text>
                   ) : null}
                   {hasPdf && c.protocol === "compatible" ? (
-                    <Pressable
+                    <Press
                       accessibilityRole="button"
                       accessibilityLabel={`Edit API format for ${c.name}`}
                       disabled={!!runningId}
@@ -1465,7 +1604,7 @@ function Chat() {
                         Edit API format
                       </Text>
                       <Icon name="chevron-forward" design="pdfEdit" size={14} />
-                    </Pressable>
+                    </Press>
                   ) : null}
                 </View>
               )}
@@ -1473,7 +1612,7 @@ function Chat() {
                 item: { id: choiceId, model },
                 section: { connection: c },
               }) => (
-                <Pressable
+                <Press
                   key={choiceId}
                   accessibilityRole="radio"
                   accessibilityLabel={`${c.name}. ${model}${hasPdf && c.protocol === "compatible" ? ". PDFs unavailable with Chat Completions" : ""}`}
@@ -1515,16 +1654,16 @@ function Chat() {
                       borderWidth: 1,
                       borderColor:
                         hasPdf && c.protocol === "compatible"
-                          ? "rgba(198, 197, 208, 0.3)"
+                          ? theme.hairline
                           : c.id === connection?.id &&
                               model === connection.model
                             ? hasPdf
-                              ? "rgba(198, 197, 208, 0.7)"
+                              ? theme.lineStrong
                               : theme.line
                             : "transparent",
                       backgroundColor:
                         hasPdf && c.protocol === "compatible"
-                          ? "rgba(238, 238, 237, 0.4)"
+                          ? theme.muted
                           : c.id === connection?.id &&
                               model === connection.model
                             ? hasPdf
@@ -1582,7 +1721,7 @@ function Chat() {
                           width: 24,
                           height: 24,
                           borderRadius: 12,
-                          backgroundColor: "rgba(6, 21, 66, 0.1)",
+                          backgroundColor: theme.selected,
                           alignItems: "center",
                           justifyContent: "center",
                         }}
@@ -1605,7 +1744,7 @@ function Chat() {
                       />
                     )
                   ) : null}
-                </Pressable>
+                </Press>
               )}
               ListEmptyComponent={
                 <Text style={[s.sub, { paddingVertical: 20 }]}>
@@ -1633,7 +1772,7 @@ function Chat() {
                   minHeight: hasPdf ? 46 : 52,
                   borderRadius: hasPdf ? 23 : 26,
                   backgroundColor: hasPdf ? theme.surface : theme.line,
-                  borderColor: hasPdf ? "rgba(198, 197, 208, 0.6)" : theme.line,
+                  borderColor: hasPdf ? theme.lineStrong : theme.line,
                 }}
                 textStyle={{
                   color: hasPdf ? theme.ink : theme.text,

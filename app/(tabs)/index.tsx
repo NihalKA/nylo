@@ -1,21 +1,37 @@
 import { Text, TextInput } from "../../src/typography";
-import React, { useMemo, useState } from "react";
-import { FlatList, Pressable, View, useWindowDimensions } from "react-native";
+import React, { useMemo, useRef, useState } from "react";
+import { Animated, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
 import { useStore } from "../../src/store";
+import { scrollTicker } from "../../src/haptics";
 import { isDeviceCheckConversation } from "../../src/domain";
 import {
   Button,
   ConversationRow,
+  FabButton,
+  FadeIn,
   Icon,
-  IconButton,
+  GlowIcon,
+  IconBubble,
+  dayMood,
+  BrandMark,
   Page,
+  Tappable,
   s,
   theme,
+  useTheme,
 } from "../../src/ui";
 export default function Chats() {
+  useTheme();
   const { fontScale } = useWindowDimensions();
-  const { data, newChat } = useStore();
+  // Cards cascade in only on first arrival, not while scrolling or filtering.
+  const mountedAt = useRef(Date.now()).current;
+  const [searchFocused, setSearchFocused] = useState(false);
+  const { data, newChat, runningId } = useStore();
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const tick = useRef(scrollTicker()).current;
+  const onScrollTick = (e: { nativeEvent: { contentOffset: { y: number } } }) =>
+    tick(e.nativeEvent.contentOffset.y);
   const [query, setQuery] = useState("");
   const [error, setError] = useState("");
   const chats = useMemo(
@@ -51,49 +67,65 @@ export default function Chats() {
     }
   };
   return (
-    <Page>
+    <Page aura scrollY={scrollY}>
       <View style={[s.between, { paddingTop: 12, paddingBottom: 18, gap: 16 }]}>
-        <Text
-          accessibilityRole="header"
-          maxFontSizeMultiplier={1.6}
-          style={s.title}
-        >
-          Chats
-        </Text>
-        <View style={{ borderRadius: 22, backgroundColor: theme.primary }}>
-          <IconButton
-            name="create-outline"
-            label="New chat"
-            color="#FFFFFF"
-            onPress={() => void start()}
-          />
+        <View style={{ flex: 1, gap: 2 }}>
+          <View style={[s.row, { gap: 8 }]}>
+            <BrandMark height={14} />
+            <Text
+              maxFontSizeMultiplier={1.6}
+              style={{ fontSize: 14, fontWeight: "600", color: theme.sub }}
+            >
+              {dayMood().greeting}
+            </Text>
+          </View>
+          <Text
+            accessibilityRole="header"
+            maxFontSizeMultiplier={1.6}
+            style={s.title}
+          >
+            Chats
+          </Text>
         </View>
+        <FabButton
+          name="create-outline"
+          label="New chat"
+          onPress={() => void start()}
+        />
       </View>
       <View
         style={[
           s.row,
           {
-            backgroundColor: theme.surface,
-            borderRadius: 22,
-            paddingHorizontal: 12,
+            backgroundColor: theme.card,
+            borderRadius: 16,
+            borderWidth: 1,
+            borderColor: searchFocused ? theme.primary : theme.line,
+            paddingHorizontal: 14,
             gap: 8,
-            marginBottom: 16,
+            marginBottom: 12,
           },
         ]}
       >
-        <Icon name="search-outline" color={theme.sub} size={20} />
+        <Icon
+          name="search-outline"
+          color={searchFocused ? theme.accentText : theme.quiet}
+          size={19}
+        />
         <TextInput
           accessibilityLabel="Search chats"
-          placeholder="Search"
-          placeholderTextColor={theme.sub}
+          placeholder="Search chats"
+          placeholderTextColor={theme.quiet}
           value={query}
           onChangeText={setQuery}
+          onFocus={() => setSearchFocused(true)}
+          onBlur={() => setSearchFocused(false)}
           clearButtonMode="while-editing"
           returnKeyType="search"
           style={{
             flex: 1,
             minHeight: 46,
-            fontSize: 17,
+            fontSize: 16,
             color: theme.ink,
             paddingVertical: 10,
           }}
@@ -104,51 +136,91 @@ export default function Chats() {
           {error}
         </Text>
       ) : undefined}
-      <FlatList
+      {/* A hairline that appears once content scrolls beneath the header. */}
+      <Animated.View
+        pointerEvents="none"
+        style={{
+          height: 1,
+          marginHorizontal: -20,
+          backgroundColor: theme.line,
+          opacity: scrollY.interpolate({
+            inputRange: [0, 24],
+            outputRange: [0, 1],
+            extrapolate: "clamp",
+          }),
+        }}
+      />
+      <Animated.FlatList
         data={chats}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+          { useNativeDriver: true, listener: onScrollTick },
+        )}
+        scrollEventThrottle={16}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: 16 }}
+        style={{ marginHorizontal: -20 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingHorizontal: 20,
+          paddingTop: 4,
+          paddingBottom: 16,
+        }}
         ListHeaderComponent={
           !data.connections.length && chats.length ? (
-            <Pressable
+            <Tappable
               accessibilityRole="button"
               onPress={() => router.push("/connection")}
+              feel="card"
+              scaleTo={0.98}
               style={[
                 s.row,
                 {
-                  gap: 12,
+                  gap: 14,
                   backgroundColor: theme.pale,
-                  borderRadius: 16,
+                  borderRadius: 20,
                   padding: 16,
-                  marginBottom: 4,
+                  marginBottom: 12,
                 },
               ]}
             >
-              <Icon name="key-outline" color={theme.ink} />
+              <IconBubble
+                name="key-outline"
+                size={42}
+                background={theme.card}
+              />
               <View style={{ flex: 1 }}>
                 <Text style={[s.text, { fontWeight: "600" }]}>
                   Connect an AI provider
                 </Text>
                 <Text style={s.sub}>Use your own API key to get replies.</Text>
               </View>
-              <Icon name="chevron-forward" color={theme.green} size={16} />
-            </Pressable>
+              <Icon name="chevron-forward" color={theme.accentText} size={16} />
+            </Tappable>
           ) : undefined
         }
-        renderItem={({ item }) => (
-          <ConversationRow
-            conversation={item}
-            agent={data.agents.find((a) => a.id === item.agentId)}
-            onPress={() =>
-              router.push({ pathname: "/chat/[id]", params: { id: item.id } })
-            }
-          />
+        renderItem={({ item, index }) => (
+          <FadeIn
+            delay={Math.min(index, 6) * 45}
+            enabled={index < 8 && Date.now() - mountedAt < 800}
+          >
+            <ConversationRow
+              live={runningId === item.id}
+              conversation={item}
+              agent={data.agents.find((a) => a.id === item.agentId)}
+              onPress={() =>
+                router.push({
+                  pathname: "/chat/[id]",
+                  params: { id: item.id },
+                })
+              }
+            />
+          </FadeIn>
         )}
         ListEmptyComponent={
-          <View
+          <FadeIn
             style={{
               flexGrow: 1,
               justifyContent: fontScale > 1.6 ? "flex-start" : "center",
@@ -157,6 +229,13 @@ export default function Chats() {
               paddingTop: 32,
             }}
           >
+            {fontScale <= 1.6 ? (
+              <View style={{ marginBottom: 18 }}>
+                <GlowIcon
+                  name={query ? "search-outline" : "chatbubbles-outline"}
+                />
+              </View>
+            ) : null}
             <Text
               style={[
                 s.h2,
@@ -188,7 +267,11 @@ export default function Chats() {
               </Text>
             ) : null}
             {!query ? (
-              <Button title="New chat" onPress={() => void start()} />
+              <Button
+                title="New chat"
+                icon="create-outline"
+                onPress={() => void start()}
+              />
             ) : (
               <Button
                 title="Clear search"
@@ -207,7 +290,7 @@ export default function Chats() {
                 charges apply.
               </Text>
             ) : null}
-          </View>
+          </FadeIn>
         }
       />
     </Page>

@@ -29,6 +29,8 @@ import {
   confirm,
   s,
   theme,
+  useTheme,
+  Press,
 } from "../src/ui";
 
 const providerPresets = [
@@ -82,6 +84,7 @@ const draftConnection = (protocol: Protocol = "openai"): Connection => ({
   model: "",
 });
 export default function Settings() {
+  useTheme();
   const { id, purpose } = useLocalSearchParams<{
     id?: string;
     purpose?: string;
@@ -175,7 +178,7 @@ function ProviderSettings({
             { id: "anthropic", label: "Messages" },
           ] as const
         ).map((format) => (
-          <Pressable
+          <Press
             key={format.id}
             accessibilityRole="radio"
             accessibilityState={{
@@ -198,7 +201,7 @@ function ProviderSettings({
             <Text style={{ fontSize: 14, color: theme.ink }}>
               {format.label}
             </Text>
-          </Pressable>
+          </Press>
         ))}
       </View>
       <Text style={s.sub}>
@@ -289,7 +292,7 @@ function ProviderSettings({
             automaticallyAdjustKeyboardInsets
             contentContainerStyle={{ paddingBottom: 24 }}
             renderItem={({ item: model }) => (
-              <Pressable
+              <Press
                 accessibilityRole="checkbox"
                 accessibilityLabel={model}
                 accessibilityState={{
@@ -326,7 +329,7 @@ function ProviderSettings({
                 {connectionModels(draft).includes(model) ? (
                   <Icon name="checkmark-circle" color={theme.green} />
                 ) : null}
-              </Pressable>
+              </Press>
             )}
             ListEmptyComponent={
               <Text style={s.sub}>No matching model. Try another search.</Text>
@@ -425,7 +428,7 @@ function ProviderSettings({
                 }
               />
             </View>
-            <Pressable
+            <Press
               accessibilityRole="radio"
               accessibilityState={{
                 checked: data.defaultConnectionId === c.id,
@@ -447,7 +450,7 @@ function ProviderSettings({
                 color={theme.green}
               />
               <Text style={s.sub}>Default for new chats</Text>
-            </Pressable>
+            </Press>
             {(data.providerConsents || []).some(
               (grant) => grant.credentialId === (c.credentialId || c.id),
             ) ? (
@@ -498,7 +501,7 @@ function ProviderSettings({
             {!pdfSetup ? (
               <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
                 {providerPresets.map((preset) => (
-                  <Pressable
+                  <Press
                     key={preset.id}
                     accessibilityRole="radio"
                     accessibilityLabel={preset.label}
@@ -552,7 +555,7 @@ function ProviderSettings({
                     >
                       {preset.label}
                     </Text>
-                  </Pressable>
+                  </Press>
                 ))}
               </View>
             ) : null}
@@ -676,7 +679,8 @@ function ProviderSettings({
               placeholder="Paste a model ID from your provider"
               help="Select several models above, or type a default model ID. It is included in your saved models. Switch between them in any chat."
             />
-            <Pressable
+            <Press
+              feel="tick"
               accessibilityRole="button"
               accessibilityLabel={
                 advanced ? "Hide advanced settings" : "Advanced settings"
@@ -694,7 +698,7 @@ function ProviderSettings({
                 size={14}
                 color={theme.ink}
               />
-            </Pressable>
+            </Press>
             {!pdfSetup && advanced && connectionProvider(draft) === "custom"
               ? apiFormat
               : null}

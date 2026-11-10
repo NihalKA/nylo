@@ -3,7 +3,11 @@ import React, { useRef, useState } from "react";
 import { Pressable, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
-import { colors, isDeviceCheckConversation } from "../../src/domain";
+import {
+  agentColors,
+  colors,
+  isDeviceCheckConversation,
+} from "../../src/domain";
 import {
   AgentAvatar,
   Badge,
@@ -17,6 +21,11 @@ import {
   s,
   theme,
   confirm,
+  useTheme,
+  LivingAvatar,
+  AuraPicker,
+  rgba,
+  Press,
 } from "../../src/ui";
 
 const templates = [
@@ -51,6 +60,7 @@ export default function AgentEditRoute() {
 }
 
 function AgentEdit() {
+  useTheme();
   const { id, fromChat, template } = useLocalSearchParams<{
     id?: string;
     fromChat?: string;
@@ -58,7 +68,8 @@ function AgentEdit() {
   }>();
   const { data, saveAgent } = useStore();
   const original = data.agents.find((a) => a.id === id);
-  const initial = original || templates.find((t) => t.name === template);
+  const chosenTemplate = templates.find((t) => t.name === template);
+  const initial = original || chosenTemplate;
   const source = data.conversations.find((c) => c.id === fromChat);
   const [name, setName] = useState(initial?.name || "");
   const [description, setDescription] = useState(
@@ -178,20 +189,18 @@ function AgentEdit() {
             s.card,
             s.row,
             {
-              gap: 16,
-              padding: 16,
-              minHeight: 91,
-              boxShadow:
-                "0px 4px 16px -2px rgba(30,43,88,0.06), 0px 1px 3px rgba(30,43,88,0.04)",
-              backgroundColor: theme.surface,
+              gap: 18,
+              padding: 20,
+              minHeight: 96,
+              boxShadow: theme.cardShadow,
+              backgroundColor: theme.card,
+              // the card picks up a whisper of the chosen aura
+              backgroundImage: `radial-gradient(circle at 0% 50%, ${rgba(color, 0.16)} 0%, ${rgba(color, 0)} 60%)`,
+              overflow: "visible",
             },
           ]}
         >
-          <AgentAvatar
-            agent={{ name, color }}
-            size={48}
-            textStyle={{ fontWeight: "700", letterSpacing: -0.33 }}
-          />
+          <LivingAvatar agent={{ name, color }} size={56} />
           <View style={{ flex: 1 }}>
             <Text style={[s.h2, { letterSpacing: -0.18, lineHeight: 22.5 }]}>
               {name || "Your agent"}
@@ -201,14 +210,18 @@ function AgentEdit() {
             </Text>
           </View>
         </View>
-        {!original && !source ? (
+        {/* Role chips only on a blank "Create agent": opening from a template
+            (Writing partner, Thinking partner, Project guide) has already
+            chosen the role. */}
+        {!original && !source && !chosenTemplate ? (
           <View style={{ gap: 8 }}>
             <Text style={s.eyebrow}>Start with a role</Text>
             <View
               style={[s.row, { columnGap: 8, rowGap: 0, flexWrap: "wrap" }]}
             >
               {templates.map((t) => (
-                <Pressable
+                <Press
+                  feel="select"
                   accessibilityRole="button"
                   key={t.name}
                   accessibilityState={{
@@ -263,7 +276,7 @@ function AgentEdit() {
                       borderColor:
                         name === t.name && instructions === t.instructions
                           ? theme.primary
-                          : "#C6C5D099",
+                          : theme.line,
                       backgroundColor:
                         name === t.name && instructions === t.instructions
                           ? theme.primary
@@ -284,7 +297,7 @@ function AgentEdit() {
                   >
                     {t.name}
                   </Text>
-                </Pressable>
+                </Press>
               ))}
             </View>
           </View>
@@ -302,35 +315,13 @@ function AgentEdit() {
           maxLength={50}
           style={{ letterSpacing: -0.08 }}
         />
-        <View style={[s.row, { gap: 6, marginTop: -16 }]}>
-          {colors.map((c) => (
-            <Pressable
-              accessibilityRole="radio"
-              accessibilityLabel={`Agent color ${c}`}
-              accessibilityState={{ checked: color === c }}
-              key={c}
-              onPress={() => setColor(c)}
-              style={{
-                width: 44,
-                height: 44,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 12,
-                  backgroundColor: c,
-                  boxShadow:
-                    color === c
-                      ? "0px 0px 0px 2px #F9F9F8, 0px 0px 0px 4px #061542"
-                      : undefined,
-                }}
-              />
-            </Pressable>
-          ))}
+        <View style={{ marginTop: -8 }}>
+          <AuraPicker
+            value={color}
+            onChange={setColor}
+            name={name || "Agent"}
+            options={agentColors}
+          />
         </View>
         <Field
           label="Its purpose"
@@ -436,7 +427,7 @@ function AgentEdit() {
               </Text>
               {data.connections.length ? (
                 data.connections.map((c) => (
-                  <Pressable
+                  <Press
                     accessibilityRole="radio"
                     accessibilityState={{ checked: connectionId === c.id }}
                     key={c.id}
@@ -448,14 +439,14 @@ function AgentEdit() {
                         borderColor:
                           connectionId === c.id ? theme.green : theme.line,
                         backgroundColor:
-                          connectionId === c.id ? theme.pale : "#FFF",
+                          connectionId === c.id ? theme.pale : theme.card,
                       },
                     ]}
                   >
                     <Text style={s.text}>
                       {c.name} · {c.model}
                     </Text>
-                  </Pressable>
+                  </Press>
                 ))
               ) : (
                 <Text style={s.sub}>
@@ -482,7 +473,7 @@ function AgentEdit() {
           paddingTop: 12,
           paddingBottom: 12,
           borderTopWidth: 1,
-          borderTopColor: "rgba(232,232,231,0.6)",
+          borderTopColor: theme.hairline,
           backgroundColor: theme.bg,
         }}
       >

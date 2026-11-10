@@ -21,6 +21,9 @@ import {
   confirm,
   s,
   theme,
+  useTheme,
+  LivingAvatar,
+  Press,
 } from "../../src/ui";
 
 function ContextPreview({ text }: { text: string }) {
@@ -53,7 +56,7 @@ function ContextPreview({ text }: { text: string }) {
             style={{
               gap: 8,
               borderBottomWidth: index < sections.length - 1 ? 1 : 0,
-              borderBottomColor: "rgba(198,197,208,0.3)",
+              borderBottomColor: theme.hairline,
               paddingBottom: index < sections.length - 1 ? 16 : 0,
             }}
           >
@@ -85,7 +88,7 @@ function ContextPreview({ text }: { text: string }) {
                 marginLeft: 2,
                 paddingLeft: 12,
                 borderLeftWidth: 2,
-                borderLeftColor: "rgba(198,197,208,0.4)",
+                borderLeftColor: theme.line,
                 gap: 8,
               }}
             >
@@ -106,7 +109,7 @@ function ContextPreview({ text }: { text: string }) {
                               style={
                                 callout
                                   ? {
-                                      backgroundColor: "#F3F4F3B3",
+                                      backgroundColor: theme.surface,
                                       borderRadius: 8,
                                       padding: 10,
                                     }
@@ -156,6 +159,7 @@ export default function AgentRoute() {
 }
 
 function AgentDetail() {
+  useTheme();
   const { fontScale } = useWindowDimensions();
   const { id, section, draftMemory } = useLocalSearchParams<{
     id: string;
@@ -243,20 +247,18 @@ function AgentDetail() {
       />
       <ScrollView
         ref={content}
-        style={{ marginHorizontal: 4 }}
         automaticallyAdjustKeyboardInsets
         keyboardDismissMode="interactive"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={{ paddingBottom: 40 }}
+        // Full-bleed so shadows and the avatar halo are not clipped; the
+        // inner 24 pt inset matches the previous 4 pt margin + 20 pt gutter.
+        style={{ marginHorizontal: -20 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingBottom: 40 }}
         showsVerticalScrollIndicator={false}
       >
         <View style={{ gap: 20, paddingTop: 4, paddingBottom: 20 }}>
           <View style={[s.row, { alignItems: "flex-start", gap: 16 }]}>
-            <AgentAvatar
-              agent={agent}
-              size={48}
-              textStyle={{ fontSize: 18, fontWeight: "700", letterSpacing: 0 }}
-            />
+            <LivingAvatar agent={agent} size={52} />
             <View style={{ flex: 1, gap: 7 }}>
               <Text
                 style={[
@@ -291,14 +293,14 @@ function AgentDetail() {
               borderRadius: 24,
               padding: 1,
               borderWidth: 1,
-              borderColor: "rgba(198, 197, 208, 0.3)",
+              borderColor: theme.hairline,
               gap: 0,
               flexWrap: "wrap",
             },
           ]}
         >
           {(["conversations", "memory"] as const).map((t) => (
-            <Pressable
+            <Press
               accessibilityRole="tab"
               accessibilityState={{ selected: tab === t }}
               key={t}
@@ -328,7 +330,7 @@ function AgentDetail() {
                     right: 2,
                     borderRadius: 19,
                     borderWidth: 1,
-                    borderColor: "rgba(198, 197, 208, 0.2)",
+                    borderColor: theme.hairline,
                     backgroundColor: theme.card,
                   }}
                 />
@@ -345,7 +347,7 @@ function AgentDetail() {
               >
                 {t === "conversations" ? "Conversations" : "Memory"}
               </Text>
-            </Pressable>
+            </Press>
           ))}
         </View>
         {tab === "conversations" ? (
@@ -389,7 +391,7 @@ function AgentDetail() {
                 backgroundColor: theme.card,
                 minHeight: 110,
                 borderRadius: 16,
-                borderColor: "#C6C5D066",
+                borderColor: theme.line,
                 fontSize: 14,
                 lineHeight: 22.75,
               }}
@@ -403,9 +405,7 @@ function AgentDetail() {
                 borderRadius: 23,
                 borderWidth: 1,
                 borderColor:
-                  !memory.trim() || runningId
-                    ? "rgba(198, 197, 208, 0.3)"
-                    : theme.primary,
+                  !memory.trim() || runningId ? theme.hairline : theme.primary,
               }}
               secondary
               icon="add"
@@ -476,10 +476,9 @@ function AgentDetail() {
                     backgroundColor: theme.card,
                     borderRadius: 16,
                     minHeight: 92,
-                    boxShadow:
-                      "0px 4px 16px -2px rgba(30,43,88,0.04), 0px 1px 3px rgba(30,43,88,0.03)",
+                    boxShadow: theme.cardShadow,
                     borderWidth: 1,
-                    borderColor: "#C6C5D066",
+                    borderColor: theme.line,
                   },
                 ]}
               >
@@ -576,7 +575,7 @@ function AgentDetail() {
                       fontWeight: "500",
                       color: theme.text,
                       backgroundColor: theme.surface,
-                      borderColor: "#E2E2E2",
+                      borderColor: theme.line,
                       borderWidth: 1,
                       borderRadius: 12,
                       minHeight: 54,
@@ -594,7 +593,7 @@ function AgentDetail() {
                 {
                   fontSize: showContext ? 18 : 16,
                   borderTopWidth: showContext ? 0 : 1,
-                  borderTopColor: "rgba(198,197,208,0.2)",
+                  borderTopColor: theme.hairline,
                   paddingTop: showContext ? 0 : 13,
                   fontWeight: "700",
                   letterSpacing: showContext ? -0.45 : -0.4,
@@ -662,7 +661,7 @@ function AgentDetail() {
                   style={{
                     minHeight: 46,
                     borderRadius: 23,
-                    borderColor: "#E2E2E2",
+                    borderColor: theme.line,
                   }}
                   onPress={() => setShowContext(!showContext)}
                 />
