@@ -162,12 +162,21 @@ appId: com.nylohq.nylo
                   - assertNotVisible: "Dismiss keyboard"
 # The new card spacing can leave the action at y924–972 below the safe
 # viewport. Require the complete target before the same single save tap.
-- scrollUntilVisible:
-    element: "Create agent"
-    direction: DOWN
-    centerElement: true
-    visibilityPercentage: 100
-- assertVisible: "Create agent"
+# The maximum-text footer is fixed outside the scroll view (y765–910
+# in a 956pt viewport). Maestro cannot center it inside that scroll view.
+# Scroll only when it is absent; preserve the same visible/enabled save tap.
+- runFlow:
+    when:
+      notVisible: "Create agent"
+    commands:
+      - scrollUntilVisible:
+          element: "Create agent"
+          direction: DOWN
+          centerElement: true
+          visibilityPercentage: 100
+- assertVisible:
+    text: "Create agent"
+    enabled: true
 - tapOn: "Create agent"
 - assertVisible: "Agent"
 - scrollUntilVisible:
