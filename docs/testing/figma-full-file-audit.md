@@ -1,9 +1,11 @@
 # Whole-file Figma coverage — reopened audit
 
-Status: **incomplete; implementation and corrected delivery blocked**. Product
-`dcef4f6` / public Android13 remains available as the prior candidate. Signed20
-workflow42798741091 succeeded, but it is held from corrected QA distribution.
-The owner's visual rejection supersedes historical acceptance elsewhere in docs.
+Status: **historical file-specific audit; coverage remains incomplete**. The
+owner accepted the feature candidate and merged PR #2, then replaced the universal
+freeze with the link-specific adoption policy in `AGENTS.md`. The findings and
+phase requirements below describe this earlier audit, not a global merge gate.
+They are retained honestly; no complete visual-parity review is claimed. Builds
+20 and 21 are now available to the existing internal TestFlight group.
 
 Reference: https://www.figma.com/design/WNCRguvh0wqYTgBUlbXZ9G/Untitled
 
