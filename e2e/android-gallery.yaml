@@ -19,6 +19,21 @@ appId: com.nylohq.nylo
 - tapOn: "Settings"
 - waitForAnimationToEnd
 - takeScreenshot: gallery-01-settings
+- runFlow:
+    when:
+      true: ${UI_BUILD_MARKER != ""}
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: "ui-build-marker"
+          direction: DOWN
+      - assertVisible:
+          id: "ui-build-marker"
+          text: ${UI_BUILD_MARKER}
+      - takeScreenshot: gallery-01b-build-marker
+      - scrollUntilVisible:
+          element: ".*Restore backup.*"
+          direction: UP
 - scrollUntilVisible:
     element: ".*Restore backup.*"
     direction: DOWN
