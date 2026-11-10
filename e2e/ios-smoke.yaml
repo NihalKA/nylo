@@ -17,8 +17,13 @@ appId: com.nylohq.nylo
     element: ".*Connect your AI.*"
     direction: DOWN
     timeout: 120000
-    speed: 80
+    speed: 40
     waitToSettleTimeoutMs: 500
+    # At maximum accessibility text this combined title/detail button is taller
+    # than the usable viewport. Center its visible portion before the tap;
+    # the next assertion still requires the actual provider screen to open.
+    visibilityPercentage: 25
+    centerElement: true
 - takeScreenshot: 03-settings
 - tapOn: ".*Connect your AI.*"
 - assertVisible: "AI providers"
