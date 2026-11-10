@@ -120,10 +120,28 @@ appId: com.nylohq.nylo
 - tapOn: "Create agent"
 - assertVisible: "Create an agent"
 - waitForAnimationToEnd
+# The fixed Save bar covers the lowest part of the scrolling viewport.
+# Center the complete role target before applying it, then verify its result.
 - scrollUntilVisible:
-    element: "Writing partner"
-    direction: UP
-- tapOn: "Writing partner"
+    element:
+      text: "Writing partner"
+      below: "Create an agent"
+      above: "Create agent"
+    direction: DOWN
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: "Writing partner"
+    below: "Create an agent"
+    above: "Create agent"
+- scrollUntilVisible:
+    element:
+      id: "agent-name"
+    direction: DOWN
+    visibilityPercentage: 100
+- assertVisible:
+    id: "agent-name"
+    text: "Writing partner"
 - runFlow:
     when:
       visible: "Dismiss keyboard"
