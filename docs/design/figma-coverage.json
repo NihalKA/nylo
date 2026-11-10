@@ -15,7 +15,7 @@
     },
     "audit": {
       "path": "docs/testing/figma-full-file-audit.md",
-      "sha256": "6c09771af5de47ecbda259c9e22f95e94728784d8debbf17d1307152f94fcab9",
+      "sha256": "0ca6c57933f9c40b47e27c9e86497cca7ab0f67f7767b37adc7f8d57ff4435b2",
       "provenance": "Owner-reopened audit findings, 2026-11-10; pending full review.",
       "kind": "audit-record"
     },

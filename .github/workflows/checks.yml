@@ -17,10 +17,6 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
-      - name: Enforce pre-change Figma authorization for product changes
-        env:
-          NYLO_BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python3 scripts/verify-figma-coverage.py changes --base-ref "$NYLO_BASE_REF"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .nvmrc
@@ -29,7 +25,7 @@ jobs:
       - run: node scripts/security-check.mjs
       - run: python3 scripts/check-design-fonts.py
       - run: python3 scripts/check-design-assets.py
-      # Tests the gate; it does not assert that incomplete visual coverage passes.
+      # Regression checks for the retained historical audit verifier, not a global UI gate.
       - run: python3 -m unittest discover -s tests -p 'test_figma_coverage.py'
       - run: npm run format:check
       - run: npm run check

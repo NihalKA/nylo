@@ -1,6 +1,18 @@
 # ADR 0001: complete design coverage before implementation and release
 
-Date: 2026-11-10. Status: adopted process; audit and visual acceptance remain open.
+Date: 2026-11-10. Status: superseded as a repository-wide policy by the owner's
+link-specific instructions in `AGENTS.md`.
+
+## Superseding owner decision
+
+After accepting and merging PR #2, the owner clarified that the fixed audit gate
+was for that particular Figma file. Future supplied links require complete design
+adoption and verification, without imposing the old file's inventory or scored
+review receipts on every product change. Source CI no longer runs that legacy
+pre-change authorization check. Normal source and functional checks remain.
+
+The original decision and findings below are retained as historical evidence, not
+current universal merge requirements. No incomplete audit is relabeled complete.
 
 ## Context and mistakes
 
