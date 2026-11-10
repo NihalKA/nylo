@@ -53,9 +53,9 @@ source_sha="$(python3 - artifacts/e2e/native-source-run.json "$GITHUB_REPOSITORY
 import json, re, sys
 run=json.load(open(sys.argv[1]))
 if (run.get("name") != "iOS native validation" or run.get("conclusion") != "success" or
-    run.get("head_branch") != "main" or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
+    run.get("head_branch") not in ("main", "feat/figma-ui-parity") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
     not re.fullmatch(r"[0-9a-f]{40}", run.get("head_sha", ""))):
-    raise SystemExit("Use a successful native validation run from this repository's main branch.")
+    raise SystemExit("Use a successful native validation run from this repository's main or feat/figma-ui-parity branch.")
 print(run["head_sha"])
 PYRUN
 )"
@@ -92,6 +92,15 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
     --entry-file node_modules/expo-router/entry.js \
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
     --assets-dest "$RUNNER_TEMP/nylo-app/Nylo.app" --max-workers 2
+fi
+export MAESTRO_UI_BUILD_MARKER=""
+if [ -f artifacts/native/ios-build-identity.json ]; then
+  mkdir -p artifacts
+  cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
+  git fetch --no-tags origin "$source_sha" --depth=1
+  git diff --exit-code "$source_sha" HEAD -- app src assets modules plugins config app.json 'app.config.*' 'package*.json' tsconfig.json 'babel.config.*' 'metro.config.*'
+  python3 scripts/ios-build-identity.py verify "$RUNNER_TEMP/nylo-app/Nylo.app"
+  export MAESTRO_UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/ios-build-identity.json"))["marker"])')"
 fi
 mark_phase discover-simulator
 xcrun simctl list -j > artifacts/e2e/simulator-inventory.json

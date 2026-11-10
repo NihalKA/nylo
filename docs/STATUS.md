@@ -1,5 +1,21 @@
 # Delivery status
 
+## Current owner decision
+
+PR #2 was accepted and merged at `b0e74c2`; its feature branch was deleted.
+TestFlight 1.0.0 builds 20 and 21 are available to the existing internal QA group.
+Build 21 contains feature source `685a3be2dc91`; maximum-text validation remains
+separate from distribution and full visual-parity acceptance.
+
+The owner replaced the earlier file-specific global audit freeze with the
+link-specific Figma adoption policy in `AGENTS.md`. Every newly supplied design
+requires complete inspection, implementation coverage and actual rendered
+verification. The old fixed inventory and review receipts no longer block every
+product change. Historical findings below remain evidence, not current release
+holds or universal approval requirements.
+
+## Historical checkpoints (superseded where noted above)
+
 ## Owner-requested feature-branch candidate builds
 
 The owner relayed Vivek's explicit request to build `feat/figma-ui-parity` instead

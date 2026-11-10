@@ -1,6 +1,11 @@
 name: iOS signed beta
 on:
   workflow_dispatch:
+    inputs:
+      build_stamp:
+        description: Shared UTC identity timestamp for signed and simulator candidates
+        required: false
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -8,26 +13,38 @@ concurrency:
   cancel-in-progress: false
 jobs:
   beta:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/figma-ui-parity')
     runs-on: macos-26
     environment: apple-release
     timeout-minutes: 60
     env:
       CI: '1'
+      NYLO_BUILD_STAMP: ${{ inputs.build_stamp }}
       EXPO_NO_TELEMETRY: '1'
       FASTLANE_SKIP_UPDATE_CHECK: '1'
       FASTLANE_HIDE_CHANGELOG: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Verify exact source and clear generated caches
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git ls-files ios android)"
+          rm -rf .expo dist node_modules/.cache ios artifacts
+          echo "npm_config_cache=$RUNNER_TEMP/nylo-ios-npm/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .nvmrc
-          cache: npm
       - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199
         with:
           ruby-version: '3.3.13'
       - run: npm ci --no-audit --no-fund
       - run: npm run check
+      - run: python3 scripts/check-design-fonts.py
+      - run: python3 scripts/check-design-assets.py
+      - name: Record iOS source marker
+        run: python3 scripts/ios-build-identity.py prepare
       - run: node scripts/security-check.mjs
       - run: bundle install
       - name: Build and upload to TestFlight
@@ -51,5 +68,7 @@ jobs:
             Gemfile.lock
             artifacts/native-privacy-audit.log
             artifacts/ipa-signing-audit.json
+            artifacts/ios-build-identity.json
+            artifacts/ios-bundle-verification.json
           if-no-files-found: ignore
           retention-days: 7

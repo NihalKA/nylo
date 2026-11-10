@@ -1,52 +1,52 @@
-# Nylo: required design and release review
+# Nylo: complete adoption of supplied Figma designs
 
-Read `docs/STATUS.md`, `docs/testing/figma-full-file-audit.md`, and
-`docs/adr/0001-figma-coverage-before-implementation.md` before UI work. The owner's
-current Figma instructions supersede historical visual acceptance and the older
-large-title/jade direction in `docs/QUALITY.md`.
+## Whenever the owner provides a Figma link
 
-## Before changing Android or iPhone product UI
+The current link and the owner's requested scope are authoritative. Apply this
+process to every supplied Figma file; never hardcode a previous file key, node
+list, screen count, audit score or review receipt as a prerequisite for unrelated
+work. A new link requires fresh inspection, not reuse of an old file's approval.
 
-1. Inspect the entire linked Figma file: every page, frame, descendant, duplicate,
+1. Inspect the entire linked file: every page, frame, descendant, duplicate,
    component/variant, hidden layer, variable/style, asset/font, state and prototype
-   interaction. Record provenance and unknowns. A metadata inventory is not a
-   completed visual audit. Never mark descendants reviewed solely by ancestry.
-2. Maintain `docs/design/figma-coverage.json`: each node needs an explicit review,
-   implementation target or reasoned exception, and evidence. Account for screens
-   absent from Figma as design-system extensions; never claim an absent reference
-   matches exactly. Record every missing requirement and its implementation plan.
-3. Run `python3 scripts/verify-figma-coverage.py inventory`. Unknown/unreviewed
-   scope blocks this gate. Then obtain an independent **GPT-6 Astra** review of
-   the complete audit. The owner requires an honest **10/10 audit-completeness**
-   score before implementation. Preserve the report and its digest-bound receipt;
-   run the `implementation` phase before editing product code. Do not invent a
-   review receipt, coach a score, or seek a higher score without substantive work.
+   interaction. Record the URL, file/node IDs and reference version or capture
+   time. A node-specific link is an entry point, not permission to ignore the rest
+   of the file, unless the owner explicitly narrows scope.
+2. Keep a coverage record for that reference under `docs/design/`. Map every
+   design requirement to its implementation and verification evidence, or an
+   explicit reasoned exception. Review duplicates individually before declaring
+   them equivalent. Identify screens absent from Figma as design-system extensions.
+   Preserve earlier references and findings separately; do not overwrite history
+   or carry their unfinished checklists into a new task as a global merge block.
+3. Adopt all in-scope layouts, typography, colors, original assets/fonts,
+   components, variants, content and interaction states. Inspect visual references
+   as well as metadata. Do not substitute approximations or omit difficult parts
+   silently. Record gaps and resolve them before claiming complete adoption.
+4. Verify the actual running app against the reference at equal logical viewport
+   widths on the requested platforms. Check spacing, wrapping, painted bounds,
+   fixed controls, effects, safe areas, keyboard and accessibility sizes, and
+   empty/populated/selected/error states. Preserve original captures and identify
+   their source/build. Functional tests and asset hashes do not prove visual parity.
+5. If reference access or behavior is unclear, record the specific unknown and
+   seek clarification while continuing independent work. Never infer destructive
+   actions, privacy changes or consent from appearance alone. Report unverified
+   scope honestly; the owner's explicit acceptance or exceptions apply to the
+   stated task, not to future Figma links.
 
-Audit/docs/verifier corrections may proceed while these gates are blocked.
-Do not weaken gates to accommodate incomplete evidence. No new native compile
-for a test-only change; inspect existing runs before any build/retry.
-Source CI runs `changes --base-ref <pre-change SHA>`: product changes require an
-approved inventory on that earlier checkout. A review added alongside product code
-does not authorize it retroactively. Audit-only changes remain allowed. This is a
-CI check, not a claim that repository branch protection or authorship is configured.
+## Scope of historical audits and release checks
 
-## Before finalizing or distributing
+`docs/testing/figma-full-file-audit.md`, its coverage manifest and ADR0001 retain
+findings for the earlier Figma reference. Its fixed inventory, GPT-6 Astra 10/10
+receipt and pre-change authorization gate are historical requirements, superseded
+by this owner-requested link-specific policy. They are not universal requirements
+for every UI edit, PR or release. The legacy verifier remains available to inspect
+that historical evidence; it must not be presented as a generic new-file audit.
 
-- Resolve every implementation gap; review all Figma states against **actual
-  new native renders at equal logical viewport widths** on both platforms.
-  Record image hashes, density, viewport, font scale, real insets, source and
-  binary hashes. Keep original PNGs. Do not silently resize or stitch evidence.
-- Check artwork, typography/weights, line breaks, spacing, painted bounds,
-  fixed controls, shadows/blur, empty/populated/selected/error/keyboard states,
-  accessibility text sizes, safe areas and behavior. Retain all three iOS profiles,
-  both actual Android navigation modes, gallery/PDF/photo/storage/copy assertions.
-- Require a fresh independent rendered-UI review, separate from the inventory
-  score. Run `python3 scripts/verify-figma-coverage.py release` and record actual
-  evidence/limits. Tests, asset/font hashes, successful builds and a review score
-  each prove only their stated scope; none alone proves full visual parity.
-- Owner rejection reopens visual acceptance immediately. Preserve old releases,
-  narrow prior claims, and hold distribution as a corrected result until reviewed.
-  Build/upload/Apple processing/QA availability/installation are distinct facts.
+Keep normal source, security, asset/font and functional checks. Use existing native
+builds for test-only changes; do not recompile unchanged native inputs. For builds
+being distributed, verify source/binary identity and report build, upload, Apple
+processing, tester availability and installation as separate facts. Do not call a
+candidate a complete Figma implementation while known scope remains unresolved.
 
 ## Workspace and behavior boundaries
 

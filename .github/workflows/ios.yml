@@ -4,6 +4,11 @@ on:
     branches: [main]
     paths: ['app/**', 'src/**', 'assets/**', 'modules/**', 'plugins/**', 'app.json', 'package*.json', 'scripts/ios-simulator.sh', '.github/workflows/ios.yml']
   workflow_dispatch:
+    inputs:
+      build_stamp:
+        description: Shared UTC identity timestamp for signed and simulator candidates
+        required: false
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -15,16 +20,28 @@ jobs:
     timeout-minutes: 60
     env:
       CI: '1'
+      NYLO_BUILD_STAMP: ${{ inputs.build_stamp }}
       EXPO_NO_TELEMETRY: '1'
       RCT_NO_LAUNCH_PACKAGER: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Verify exact source and clear generated caches
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test -z "$(git ls-files ios android)"
+          rm -rf .expo dist node_modules/.cache ios artifacts
+          echo "npm_config_cache=$RUNNER_TEMP/nylo-ios-npm/$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT" >> "$GITHUB_ENV"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: .nvmrc
-          cache: npm
       - run: npm ci --no-audit --no-fund
       - run: npm run check
+      - run: python3 scripts/check-design-fonts.py
+      - run: python3 scripts/check-design-assets.py
+      - name: Record iOS source marker
+        run: python3 scripts/ios-build-identity.py prepare
       - run: xcodebuild -version
       - run: bash scripts/ios-simulator.sh
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -35,6 +52,8 @@ jobs:
             artifacts/*.png
             artifacts/*.zip
             artifacts/*.log
+            artifacts/ios-build-identity.json
+            artifacts/ios-bundle-verification.json
           if-no-files-found: ignore
           retention-days: 7
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
