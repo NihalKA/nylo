@@ -1,5 +1,6 @@
 """Audit an exported App Store IPA without recording signing material."""
 import argparse
+import collections
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -27,6 +28,18 @@ def command(argv):
     if result.returncode:
         raise SystemExit(f'Exported IPA audit failed: {Path(argv[0]).name} exited {result.returncode}')
     return result.stdout
+
+
+def audit_bundled_fonts(app, font_dir):
+    expected = sorted(path for path in font_dir.glob('*.ttf') if 'variable' not in path.name)
+    assert len(expected) == 11, 'Unexpected runtime font inventory'
+    actual = collections.Counter(hashlib.sha256(path.read_bytes()).hexdigest() for path in app.rglob('*.ttf'))
+    result = []
+    for path in expected:
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual[digest] == 1, f'Exported runtime font missing, modified or duplicated: {path.name}'
+        result.append(dict(file=path.name, sha256=digest))
+    return result
 
 
 with zipfile.ZipFile(args.ipa) as archive:
@@ -64,13 +77,15 @@ with tempfile.TemporaryDirectory(prefix='nylo-export-audit-') as directory:
     assert not profile['Entitlements'].get('get-task-allow', False)
     assert not profile.get('ProvisionedDevices') and not profile.get('ProvisionsAllDevices'), 'Export is not App Store distribution'
     assert signer in {hashlib.sha256(blob).hexdigest() for blob in profile['DeveloperCertificates']}
+    fonts = audit_bundled_fonts(app, Path(__file__).resolve().parents[1] / 'assets/fonts')
     summary = dict(scope='Actual exported IPA signature, entitlements and embedded App Store profile; not Apple processing/tester availability.',
                    bundleIdentifier=info['CFBundleIdentifier'], version=info['CFBundleShortVersionString'],
                    build=info['CFBundleVersion'], deviceFamilies=info['UIDeviceFamily'],
                    ipaSHA256=hashlib.sha256(args.ipa.read_bytes()).hexdigest(), zipCRCVerified=True,
                    strictSignatureVerified=True, exactDistributionCertificateMatched=True,
                    exactTeamAndApplicationMatched=True, debuggingAllowed=False,
-                   embeddedAppStoreProfileVerified=True)
+                   embeddedAppStoreProfileVerified=True,
+                   matchingRuntimeFontFaces=len(fonts), bundledRuntimeFonts=fonts)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(summary, indent=2) + '\n')
 print('Actual exported IPA signature, protected signer, app/team identity, build and App Store profile verified.')
