@@ -12,6 +12,9 @@ collect() {
   ps -eo pid,ppid,stat,rss,args > artifacts/android-ui/runner-processes.txt
   sudo -n dmesg > artifacts/android-ui/runner-kernel.txt 2>&1 || true
   timeout 10s sudo -n coredumpctl --no-pager info > artifacts/android-ui/runner-coredump.txt 2>&1 || true
+  if grep -q 'Signal: 11' artifacts/android-ui/runner-coredump.txt; then
+    timeout 90s sudo -n coredumpctl debug --debugger-arguments='-batch -ex "thread apply all bt 5" -ex "info registers"' > artifacts/android-ui/emulator-backtrace.txt 2>&1 || true
+  fi
   find /tmp/android-* -maxdepth 4 -type f -printf '%p %s bytes\n' > artifacts/android-ui/emulator-crash-files.txt 2>/dev/null || true
   if [ -d "$HOME/.maestro/tests" ]; then cp -R "$HOME/.maestro/tests" artifacts/android-ui/driver-diagnostics; fi
 }
