@@ -23,3 +23,11 @@ The mobile canvas now respects the reference576px maximum.45 original SVG export
 Native blur uses the real chat-content target; Android31+ uses the supported native blur method, with the documented non-blur fallback on older Android. The new SVG renderer and source-built image manipulator must use the compatible WebP pod0.14.6 required by the installed renderer; SDWebImage remains source-built5.21.6 with its vendor privacy resource. Dependency compatibility/idempotency is checked before compiling.
 
 This is an implementation candidate, not new native acceptance or delivery. Fresh Android and iOS builds, actual artwork rendering, header/form/sheet geometry, all three iPhone profiles, both real Android navigation modes, gallery/PDF and native storage/clipboard checks are still required. Android12/TestFlight19 and the existing Drive pack remain the previous delivered versions until a corrected candidate passes.
+
+## Fresh native evidence checkpoint
+
+Product `dcef4f6` compiles on both platforms. The actual bundles contain all45 original SVG assets and12 exact font binaries. Fresh iOS compiled privacy/linked simulator identity checks pass. Compact and large smoke each pass107 commands/13 conditional skips; gallery192/exact293-byte copy/native SQL/blob and PDF58/exact drafts/protocol/blob checks pass. All61 selected normal-size iOS captures have been inspected, covering the nine reference states. Actual report RGB fills remain245/246/245,30/43/88 and252/234/229.
+
+Android13's exact signed APK/AAB, original protected certificate, permissions, source/version, whole GitHub digest/ZIP CRC and actual font/artwork assets verify. Both actual navigation modes pass smoke and gallery, with57 inspected captures (including the retained launcher dialog) and33/34px actual WindowManager navigation clearance. The original device-offline attempts are preserved.
+
+Overall acceptance remains open for the maximum-text test's fixed-Save centring correction and the real photo-import scenario's later composer assertion. These failures require actual fixture/product diagnosis; normal-size parity alone is not a complete acceptance claim. No new APK/TestFlight/Drive delivery is claimed at this checkpoint.
