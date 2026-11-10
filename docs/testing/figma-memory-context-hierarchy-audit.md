@@ -3,7 +3,7 @@
 Audit in progress, product `dcef4f6` unchanged. Compared fresh original reference
 PNGs2:617/2:1050, complete exported node properties and `app/agent/[id].tsx` /
 `src/ui.tsx` / `src/agent-context.ts`. This is a source/reference audit, not a
-corrected native result. Individual node dispositions remain to be completed.
+corrected native result. The110 Memory and89 Context node records now retain individual source/reference dispositions; five Context date/action contract records remain unreviewed.
 
 ## Structural gap in expanded Shared Context
 
@@ -72,3 +72,8 @@ incorrect ordering, borders, section spacing or distinct state typography.
 
 No new source/UI build is authorized yet. Full-node and state audit, action-scope
 resolution and independent Astra completeness review remain outstanding.
+
+The timeline dots also need state-aware vertical alignment: the first28px-high
+wrapped label centres its6px dot at11px, while the later14px label uses4px.
+Source pins both to5px. Match the actual wrapped label height, not fake two-line
+copy or a fixed offset that only works for one title.

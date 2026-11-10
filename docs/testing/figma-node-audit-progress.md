@@ -99,3 +99,35 @@ states are retained as explicit duplicate exceptions tied to the corresponding
 mandatory currentSettings obligations; no state is silently removed. This closes
 identity reconciliation, not source review of the remaining screens or native
 visual acceptance.
+
+## Memory: explicit110-node source/reference review
+
+`docs/design/figma-memory-node-audit.json` records every node2:617–726 with
+actual property digest and a source target/exception/plan. Local field/section
+grouping, leading, disabled plus-label gap6, avatar/textarea/segment shadows,
+selected paint, date gap4, switch thumb and docked surface are recorded separately.
+The profile's clipped mock description is an explicit measured exception; full real
+text and44pt memory actions remain required. Native rendered correction is pending.
+
+The matching110 earlierMemory pairs are now individually marked duplicate only
+after their current target's source review. Earlier/current raster differences stay
+retained; states are explicit duplicate obligations tied to mandatory current proof.
+Memory's23 source states include creation/edit/cancel/limit/forget, context consent/
+review/disabled, both conversation-list states, missing/diagnostic-agent guards and
+delete confirmation/cancel. No new provider requests or data mutations occurred.
+
+Current count:853 unreviewed,234 reviewed duplicate pairs,201 source-mapped nodes
+and37 narrow exceptions. Context and other screen node/state reviews remain open.
+
+## Expanded Context:89 records, five contracts explicitly unresolved
+
+`docs/design/figma-context-node-audit.json` accounts for all89 nodes2:1050–1138.
+Source/paint/metric plans or narrowOS exceptions now cover84; date nodes1071/1072
+and Delete recent items nodes1076/1077/1078 remain unreviewed because the file
+stores no binding/behavior contract. No sample date or destructive behavior is
+invented. The distinct expanded hierarchy, dedicated header/subheader, nested
+preview roles/borders/shadows and timeline-dot alignment are retained findings.
+The five unresolved records continue to block completeness.
+
+Current count:770 unreviewed,234 duplicate,272 source-mapped and49 narrow
+exceptions. No product change or corrected native acceptance is inferred.

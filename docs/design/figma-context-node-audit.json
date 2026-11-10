@@ -1,0 +1,1698 @@
+{
+  "scope": "ExpandedContext2:1050,89 individual source/reference records",
+  "sourceProduct": "dcef4f6a138f167886c7dc97ac5e59459a91259c",
+  "reviewScope": "Design/source plans only. Five nodes retain unreviewed date/destructiveaction contracts; no completeness/nativeapproval.",
+  "nodes": {
+    "2:1050": {
+      "target": "app/agent/[id].tsx expanded context presentation (planned)",
+      "rationale": "Distinct390-wide reference presentation. Source showContext retains profile/newchat/tabs/memoryeditor/savedlist before goal; missing subheader. expanded-context-hierarchy plan separates presentation while preserving same data/drafts/consent and clean return. No current parity approval.",
+      "status": "mapped",
+      "referenceName": "Nylo \u2014 Control Shared Context (Warm Edition)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 1101
+      },
+      "referencePropertiesSHA256": "df300cc0b6031bfe6000c67edcb195f67fa5932380147ed80a2b3b42f1692886",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1051": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Status Bar Simulation",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 36
+      },
+      "referencePropertiesSHA256": "6137586273b24961070d619b44270079bf7cc70d1bc1b442abf12b73f972c0c1",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1052": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 24.190000534057617,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "70153cec523706180ddee5b1bea128d49abd3884030f8874bbff2a21799f9f1d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1053": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 24.190000534057617,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "ccc4a17f28ddaf3ff53c3ac29b14b18f5c432698fbee08c421ef8ac468bafd9a",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1054": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 48.83333206176758,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "622f7b99f748e23ac83a84015c53c9693855e304149dfad16b492499943314c1",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1055": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "7fa0ac5aae0cc69a41da7a6ea3d61398c5f3ad640c21eefc0e6f887248d6a5fc",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1056": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "cb7c53e45b61c91b37e3047fa5434cb7c6d56f3686d2e7982d652c12467d5b84",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1057": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 22,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "85a4c5014c1c36afd451ef4a1758d8f56928d6b28080a06fd463f711bde314b3",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1058": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16,
+        "y": 11.333333015441895
+      },
+      "referencePropertiesSHA256": "ab786835e52ecc2bec6c8a50ee25c39d2c48a7cd3b05465d86ea579e81cd1f94",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1059": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 13.5,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "77079349b0860af03d760f5af1a3f8bf18742cf008f14df5797b58ea037259a1",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1060": {
+      "target": "Native status bar / SafeAreaView",
+      "rationale": "Explicit mock36-highOSbar/time/network/wifi/battery element is replaced by real nativeOS information/insets; not a waiver for app navigation/subheader geometry.",
+      "status": "exception",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 7.5,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "5261683818321fbb7bdab370b5c75697fdeab4b82f7b65157e6a1b1bec8557b9",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1061": {
+      "target": "app/agent/[id].tsx expanded Header / src/ui.tsx",
+      "rationale": "Reference56 header,16 outer side inset, back painted9.8125x16.667 within25.8125x36.667 hit and28x40 margin. Source44 hit retained; match painted centres/title gap separately, not mocksmall touchregion.",
+      "status": "mapped",
+      "referenceName": "Navigation Header",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 56
+      },
+      "referencePropertiesSHA256": "6ae9fc0f8cd1533916132713d4da3229a0990706a6caed2226f481a20bbfdf4d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1062": {
+      "target": "app/agent/[id].tsx expanded Header / src/ui.tsx",
+      "rationale": "Reference56 header,16 outer side inset, back painted9.8125x16.667 within25.8125x36.667 hit and28x40 margin. Source44 hit retained; match painted centres/title gap separately, not mocksmall touchregion.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 98.41999816894531,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "eb26500d28cf384f9b199b06c9988553421b8fb7e50ba65d89d2bcf95a151b55",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1063": {
+      "target": "app/agent/[id].tsx expanded Header / src/ui.tsx",
+      "rationale": "Reference56 header,16 outer side inset, back painted9.8125x16.667 within25.8125x36.667 hit and28x40 margin. Source44 hit retained; match painted centres/title gap separately, not mocksmall touchregion.",
+      "status": "mapped",
+      "referenceName": "Button - Go back:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 28,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "e4a822356ca4fc204d1235804db16da5834f3be38d291293017952361e56f75f",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1064": {
+      "target": "app/agent/[id].tsx expanded Header / src/ui.tsx",
+      "rationale": "Reference56 header,16 outer side inset, back painted9.8125x16.667 within25.8125x36.667 hit and28x40 margin. Source44 hit retained; match painted centres/title gap separately, not mocksmall touchregion.",
+      "status": "mapped",
+      "referenceName": "Button - Go back",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 25.8125,
+        "y": 36.666664123535156
+      },
+      "referencePropertiesSHA256": "9e57bbfa8b7ebfc451492a49e5dcffa1147efa7915e4f10aee98745009f12fbe",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1065": {
+      "target": "src/design-icons.tsx / expanded context back (planned reportBack variant)",
+      "rationale": "Reference9.8125x16.667 #1A1C1C; source alwayslargernavy memoryBack. OriginalreportBack paintedglyphmatches but includes transparent exportpadding. Planned statebinding matches painted centre/bounds without recolouring.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 9.8125,
+        "y": 16.66666603088379
+      },
+      "referencePropertiesSHA256": "2ec3e2795cf8e9fc6d28b487ca5edf8e80828110d0bc7c9a35c7b8ba4352cdc6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1066": {
+      "target": "app/agent/[id].tsx expanded Header title",
+      "rationale": "Jakarta70022/28 tracking-0.55/navy; source showContext title already22/28/700/-0.55. Fullheadergeometry/statehierarchy still differs; heading matches do not approve entire screen.",
+      "status": "mapped",
+      "referenceName": "Heading 1:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 70.41999816894531,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "7e8a72f5a28bb0c658c5cc48bf39cea4b904261625ed34a4a322b4c96dc66f9a",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1067": {
+      "target": "app/agent/[id].tsx expanded Header title",
+      "rationale": "Jakarta70022/28 tracking-0.55/navy; source showContext title already22/28/700/-0.55. Fullheadergeometry/statehierarchy still differs; heading matches do not approve entire screen.",
+      "status": "mapped",
+      "referenceName": "Heading 1 \u2192 Agent",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 62.41999816894531,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "72866521ba2c649649b0e1d102d750701c8349df2a915de5b031a87e9a3332a4",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1068": {
+      "target": "app/agent/[id].tsx expanded Header options / freshSVG2:1069",
+      "rationale": "Reference16.5greyoptionsglyph in32.5x35.13hit; source navysvg in44hit. OriginalgreySVGexport acquired17x17viewbox with16.5paint, not inserted yet. Retain44hit and existing honest Editagent destination; no invented filter subsystem from mock affordance.",
+      "status": "mapped",
+      "referenceName": "Button - Settings and filters",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 32.5,
+        "y": 35.130001068115234
+      },
+      "referencePropertiesSHA256": "9fc8792b3449d8912be7dd21c6189e163e459ace63e0bc973c02ddb9753efdb5",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1069": {
+      "target": "app/agent/[id].tsx expanded Header options / freshSVG2:1069",
+      "rationale": "Reference16.5greyoptionsglyph in32.5x35.13hit; source navysvg in44hit. OriginalgreySVGexport acquired17x17viewbox with16.5paint, not inserted yet. Retain44hit and existing honest Editagent destination; no invented filter subsystem from mock affordance.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 16.5,
+        "y": 16.5
+      },
+      "referencePropertiesSHA256": "040bb0077ac192fc62cdc99bd899c6373ce925ca790c1a2b1bb425588a1cc483",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1070": {
+      "target": "app/agent/[id].tsx expanded date/action subheader (planned)",
+      "rationale": "Reference390x52 beneathheader,24sides,4top/16bottom,bottomE8E8E7border. Source row absent. Add measured separate subheader only after complete audit/action/date semantics resolved; do not fake a nativeOS substitute.",
+      "status": "mapped",
+      "referenceName": "Subheader with date & contextual actions",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 52
+      },
+      "referencePropertiesSHA256": "ebde204a459b6d25d864ff2b71200b762ee1a40660c98c5b5efbbce8a07dcec0",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1071": {
+      "target": "Unresolved expanded subheader date contract",
+      "rationale": "Reference Inter60012/16 date11/8/2026 exists; no prototype or semantic binding says whether agent creation, context update or item date. Source Agent.createdAt exists but assigning it here is not yet established. Explicit unresolved design/data-binding item; never hardcode the sample.",
+      "status": "unreviewed",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 59.63999938964844,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "6ee4b7483d9d6b09bdc21d3466ef91c4c9493fb490c172e7975c5ba04bbe9f06",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1072": {
+      "target": "Unresolved expanded subheader date contract",
+      "rationale": "Reference Inter60012/16 date11/8/2026 exists; no prototype or semantic binding says whether agent creation, context update or item date. Source Agent.createdAt exists but assigning it here is not yet established. Explicit unresolved design/data-binding item; never hardcode the sample.",
+      "status": "unreviewed",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 59.63999938964844,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "ba05f8b97b8eee2f28e023f8eab5975363954d946c8d6c14c4ac57b57122e89c",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1073": {
+      "target": "app/agent/[id].tsx expanded contextual-actions row (planned)",
+      "rationale": "Reference64.333x31 compactpaintedgroup. Retain44+hitregions and space actions at390logicalwidth; exact destructive action contract remains unresolved, not a no-op or substituteagentdelete.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 64.33332824707031,
+        "y": 31
+      },
+      "referencePropertiesSHA256": "5fcb356ab2408fc6f0c8dee918b4a5dd1181b1febf98d58c16503b4ef965d281",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1074": {
+      "target": "app/agent/[id].tsx expanded Edit agent info action (planned)",
+      "rationale": "Reference edit15x13.3333grey glyph inside27x29.333 hit. Existing unchanged editMemory paddedSVG supplies matchingpaint; use44hit and existing /agent/edit destination with actualagentid, preserving unsaved memory draft on return.",
+      "status": "mapped",
+      "referenceName": "Button - Edit agent info",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 27,
+        "y": 29.333332061767578
+      },
+      "referencePropertiesSHA256": "3ec8dd0b92831b101f20028394d6f66cf799bc96513c6415fbe00e9a807d66a6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1075": {
+      "target": "app/agent/[id].tsx expanded Edit agent info action (planned)",
+      "rationale": "Reference edit15x13.3333grey glyph inside27x29.333 hit. Existing unchanged editMemory paddedSVG supplies matchingpaint; use44hit and existing /agent/edit destination with actualagentid, preserving unsaved memory draft on return.",
+      "status": "mapped",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 15,
+        "y": 13.333333015441895
+      },
+      "referencePropertiesSHA256": "e8617699fcab2f7ef615593e2dbc7c8dbca0b52c4eef02b39e9972e42ca5cdc6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1076": {
+      "target": "Unresolved Delete recent items action scope",
+      "rationale": "Reference names Delete recent items with13.3333x15grey trashglyph/25.3333x31hit. No stored prototype/data deletion contract; source has no equivalent action here. Do not silently deleteagent/allchats/memories, change recentcontext semantics or insert no-op. Actual behavior or reviewed narrow exception must be resolved before implementation.",
+      "status": "unreviewed",
+      "referenceName": "Button - Delete recent items:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 37.33333206176758,
+        "y": 31
+      },
+      "referencePropertiesSHA256": "13fca08694fc9d66e197062c43393e4c4248aaedb4564aa8412e13101ac1539e",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1077": {
+      "target": "Unresolved Delete recent items action scope",
+      "rationale": "Reference names Delete recent items with13.3333x15grey trashglyph/25.3333x31hit. No stored prototype/data deletion contract; source has no equivalent action here. Do not silently deleteagent/allchats/memories, change recentcontext semantics or insert no-op. Actual behavior or reviewed narrow exception must be resolved before implementation.",
+      "status": "unreviewed",
+      "referenceName": "Button - Delete recent items",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 25.333332061767578,
+        "y": 31
+      },
+      "referencePropertiesSHA256": "2b1c7fc85cbc1cdcbdbb98a174b7677189765c8628f022e99d0d843be5a6cbdb",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1078": {
+      "target": "Unresolved Delete recent items action scope",
+      "rationale": "Reference names Delete recent items with13.3333x15grey trashglyph/25.3333x31hit. No stored prototype/data deletion contract; source has no equivalent action here. Do not silently deleteagent/allchats/memories, change recentcontext semantics or insert no-op. Actual behavior or reviewed narrow exception must be resolved before implementation.",
+      "status": "unreviewed",
+      "referenceName": "Icon",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.333333015441895,
+        "y": 15
+      },
+      "referencePropertiesSHA256": "5506c963191e79deab3877fdfa3f62764ccd59aeb4ed875adedb92f08da6a144",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1079": {
+      "target": "app/agent/[id].tsx expanded scroll content (planned)",
+      "rationale": "Reference24sides/20top/20bottom, startsGoal aftersubheader. Source existing sharedMemoryScrollView has many presections and no expandedtop20 rule. Distinctpresentation must preserve fulltext/keyboard/realnativeinsets.",
+      "status": "mapped",
+      "referenceName": "Scrollable Main Content",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 873
+      },
+      "referencePropertiesSHA256": "69a1804ce008a25e5b65cdb69650aa90465b2a5b53348414cab5e12434b8aa05",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1080": {
+      "target": "app/agent/[id].tsx Current goal group",
+      "rationale": "Jakarta70018/24/navy heading with8px gap tofield. Sourceheading18/implicit leading andgap6 differ. Realgoal remainsoptional; no syntheticgoal injected tolooklikeFigma. Add nativeheaderrole alongside explicitmetrics.",
+      "status": "mapped",
+      "referenceName": "Current Goal Section",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 86
+      },
+      "referencePropertiesSHA256": "499abae6432f65332ec3efdfa557468737785cc486d7457712db270d150d395d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1081": {
+      "target": "app/agent/[id].tsx Current goal group",
+      "rationale": "Jakarta70018/24/navy heading with8px gap tofield. Sourceheading18/implicit leading andgap6 differ. Realgoal remainsoptional; no syntheticgoal injected tolooklikeFigma. Add nativeheaderrole alongside explicitmetrics.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "52eb360359c687510d9c2e34021fc56190ed1743b56cc4dc859262c348072565",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1082": {
+      "target": "app/agent/[id].tsx Current goal group",
+      "rationale": "Jakarta70018/24/navy heading with8px gap tofield. Sourceheading18/implicit leading andgap6 differ. Realgoal remainsoptional; no syntheticgoal injected tolooklikeFigma. Add nativeheaderrole alongside explicitmetrics.",
+      "status": "mapped",
+      "referenceName": "Current goal",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "0979fb239c495f1ad2a51898abbaaff62f8cda153aa8359cc4c85edf29802ac0",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1083": {
+      "target": "app/agent/[id].tsx current goal value",
+      "rationale": "Reference54-min field/16padding/radius12/borderE2E2E2/backgroundF3F4F3/shadow0,1,2black5%, Inter50014/20. Sourcemin54/padding16/radius12/colourmatch butbodyinherits24andshadowabsent. Growfullrealgoal forlarge/narrowtext instead ofclipping.",
+      "status": "mapped",
+      "referenceName": "Background+Border+Shadow",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 54
+      },
+      "referencePropertiesSHA256": "874ef50fff07b8cedcf4588b87497cae8d0d3b47b0d98db145c197270f5318ef",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1084": {
+      "target": "app/agent/[id].tsx current goal value",
+      "rationale": "Reference54-min field/16padding/radius12/borderE2E2E2/backgroundF3F4F3/shadow0,1,2black5%, Inter50014/20. Sourcemin54/padding16/radius12/colourmatch butbodyinherits24andshadowabsent. Growfullrealgoal forlarge/narrowtext instead ofclipping.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "89e1096df75ada7a1a89465fb039f5952c88212dc70d51f6affd2cc2b2f1f9c6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1085": {
+      "target": "app/agent/[id].tsx current goal value",
+      "rationale": "Reference54-min field/16padding/radius12/borderE2E2E2/backgroundF3F4F3/shadow0,1,2black5%, Inter50014/20. Sourcemin54/padding16/radius12/colourmatch butbodyinherits24andshadowabsent. Growfullrealgoal forlarge/narrowtext instead ofclipping.",
+      "status": "mapped",
+      "referenceName": "Keep the project moving",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 308,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "a9e618b0ea2a50e73291f3d6cf6233c8a812bc22bc1672aa346dc5fa73abecf9",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1086": {
+      "target": "app/agent/[id].tsx expanded Context section (planned)",
+      "rationale": "Reference28px separation afterGoal then16px localgaps. Sourceuniform16outercolumn lacks this dedicatedsectiongroup. Preserve optionalGoal/noGoal flow andactualcontextentries.",
+      "status": "mapped",
+      "referenceName": "Context Between Chats Section:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 643
+      },
+      "referencePropertiesSHA256": "ed458fcf6ec7840739f12a5395b12e963411e940e674ee198ee57898a9e39bac",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1087": {
+      "target": "app/agent/[id].tsx expanded Context section (planned)",
+      "rationale": "Reference28px separation afterGoal then16px localgaps. Sourceuniform16outercolumn lacks this dedicatedsectiongroup. Preserve optionalGoal/noGoal flow andactualcontextentries.",
+      "status": "mapped",
+      "referenceName": "Context Between Chats Section",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 615
+      },
+      "referencePropertiesSHA256": "c6d40eac05bd47483d878116a9ab6d076d3311ece14796212aeda6b3ff20f8f2",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1088": {
+      "target": "app/agent/[id].tsx expanded Context heading",
+      "rationale": "Jakarta70018/24 tracking-0.45. Source18/700/-0.45 butimplicit leading; expandedstatecorrectlyremovescollapsedtopborder. Need explicit24/nativeheading role, no copychange.",
+      "status": "mapped",
+      "referenceName": "Heading 2",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "52eb360359c687510d9c2e34021fc56190ed1743b56cc4dc859262c348072565",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1089": {
+      "target": "app/agent/[id].tsx expanded Context heading",
+      "rationale": "Jakarta70018/24 tracking-0.45. Source18/700/-0.45 butimplicit leading; expandedstatecorrectlyremovescollapsedtopborder. Need explicit24/nativeheading role, no copychange.",
+      "status": "mapped",
+      "referenceName": "Context between chats",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "630e5324cebda36cadc3fddcafa38c25affdc66f181070026002a75310a1a43f",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1090": {
+      "target": "app/agent/[id].tsx expanded Use recent chats row",
+      "rationale": "Reference36-high paintedrow,labelInter50016/24neutral; source16/24/500neutral matches. Source44switchhitgrowsrow narrowlyforaccessibility, not arbitrarysectionspacing exemption.",
+      "status": "mapped",
+      "referenceName": "Switch Row",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 36
+      },
+      "referencePropertiesSHA256": "931554d0a8af84e11d98b6c585e40a70824ba900163426ab33f9411670ce6846",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1091": {
+      "target": "app/agent/[id].tsx expanded Use recent chats row",
+      "rationale": "Reference36-high paintedrow,labelInter50016/24neutral; source16/24/500neutral matches. Source44switchhitgrowsrow narrowlyforaccessibility, not arbitrarysectionspacing exemption.",
+      "status": "mapped",
+      "referenceName": "Label",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 127.97000122070312,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "715cd3e8cf5afd0927b6e742239be3fb714bb4867adef86f1adf6bd0524dd429",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1092": {
+      "target": "app/agent/[id].tsx expanded Use recent chats row",
+      "rationale": "Reference36-high paintedrow,labelInter50016/24neutral; source16/24/500neutral matches. Source44switchhitgrowsrow narrowlyforaccessibility, not arbitrarysectionspacing exemption.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 127.97000122070312,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "4b18a8a0447f8d3af5ce732aab22aeb10058b08903ba2221c989a21fee4b6541",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1093": {
+      "target": "src/ui.tsx expanded Switch wrapper/track",
+      "rationale": "Reference48x28green22C55E,4pxtrailingmargin; source48x28greenwhenexpanded. Retain44+hit/sourcecheckedstate/defaultOFF/disabledwhileanswering andexplicitsharingconsent. ReferenceONdoesnotauthorizeautomaticenable.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 52,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "d8a51d4caca85d6e8c6577a2c5bb1bf43addb16eb96995986de16cc2f9ae1acf",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1094": {
+      "target": "src/ui.tsx expanded Switch wrapper/track",
+      "rationale": "Reference48x28green22C55E,4pxtrailingmargin; source48x28greenwhenexpanded. Retain44+hit/sourcecheckedstate/defaultOFF/disabledwhileanswering andexplicitsharingconsent. ReferenceONdoesnotauthorizeautomaticenable.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 48,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "94adc19b12100cd699cc8ef83ec12f080257f18ee54256f2ed3f2d4b5bbd50c1",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1095": {
+      "target": "src/ui.tsx expanded Switch wrapper/track",
+      "rationale": "Reference48x28green22C55E,4pxtrailingmargin; source48x28greenwhenexpanded. Retain44+hit/sourcecheckedstate/defaultOFF/disabledwhileanswering andexplicitsharingconsent. ReferenceONdoesnotauthorizeautomaticenable.",
+      "status": "mapped",
+      "referenceName": "Label",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 48,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "1a3514d88403ace0e3247ffbf6599f335506eb3291c62f280a46f4c511f9cb9e",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1096": {
+      "target": "src/ui.tsx expanded checked knob",
+      "rationale": "Reference28x28blue2563EB atx20,shadow0,1,2black5%; source28right0blue matchesgeometry/paint but lacks specificknobshadow. Whitecollapsedthumbbeneathmustnotleak, verifyactualrender.",
+      "status": "mapped",
+      "referenceName": "Input",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 28,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "ff85289d83032ada83f15fa2fc006b52fc78c8907ec988daa0811a0f3e364c4a",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1097": {
+      "target": "assets/figma/checkedThumb.svg / src/ui.tsx Switch",
+      "rationale": "Original24x24exportcontainswhite13.48125x10.49936checkglyph; sourceusesoriginal24svgcentredin28blueknob. Extra2:1098wasomittedbyMCPmetadata butpresentincompletefile; explicitlycounted. Keeporiginalbytes/paint.",
+      "status": "mapped",
+      "referenceName": "image",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 24,
+        "y": 24
+      },
+      "referencePropertiesSHA256": "63cca10f11b0ed5f1af1baf334b7a9877de6b9e80ae4892af4ed6cc5e1ab366d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1098": {
+      "target": "assets/figma/checkedThumb.svg / src/ui.tsx Switch",
+      "rationale": "Original24x24exportcontainswhite13.48125x10.49936checkglyph; sourceusesoriginal24svgcentredin28blueknob. Extra2:1098wasomittedbyMCPmetadata butpresentincompletefile; explicitlycounted. Keeporiginalbytes/paint.",
+      "status": "mapped",
+      "referenceName": "Vector",
+      "referenceType": "VECTOR",
+      "referenceSize": {
+        "x": 13.481246948242188,
+        "y": 10.499359130859375
+      },
+      "referencePropertiesSHA256": "25b25d78e349c0a03346bf8747bd25caf2ff552cbd100f8d3cc3433b4f48d58d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1099": {
+      "target": "app/agent/[id].tsx context disclosure",
+      "rationale": "ReferenceInter40012/19.5secondary/fulllimitedrecallanddeletionwarning; source12/18. Correctleadingonly, preserveexactboundedcontext/consenttruthfulness andfullrealcopy.",
+      "status": "mapped",
+      "referenceName": "Descriptive Subtext",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 78
+      },
+      "referencePropertiesSHA256": "862344f21b2971a2b2965f4e3ce17dd8cd16fefa870d37491851a33eea44515e",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1100": {
+      "target": "app/agent/[id].tsx context disclosure",
+      "rationale": "ReferenceInter40012/19.5secondary/fulllimitedrecallanddeletionwarning; source12/18. Correctleadingonly, preserveexactboundedcontext/consenttruthfulness andfullrealcopy.",
+      "status": "mapped",
+      "referenceName": "Saved memories are durable facts. Recent context helps continue earlier work; it is a limited excerpt, not perfect recall of every conversation. Deleting a memory does not erase the original chats.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 342,
+        "y": 78
+      },
+      "referencePropertiesSHA256": "2a2bd868668bfa934fbd499809ae06db1cd03a149127fa1d7706e1948ceab44c",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1101": {
+      "target": "app/agent/[id].tsx Hide recent context Button",
+      "rationale": "Reference342x46/radiuspill,F3F4F3/borderE2E2E2,Inter60014/20/navy. Sourcelocal46/radius23/bordermatch butButton20leadingimplicit. Preserve actualHide/Review and cleanreturntorelevantmemorysection, notlostdraft/route.",
+      "status": "mapped",
+      "referenceName": "Tactile Pill Action Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 46
+      },
+      "referencePropertiesSHA256": "d2e9b7323b59e8486c08824f02997c3cb84ce2df9b0ba9ca05d8b9043b7e6696",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1102": {
+      "target": "app/agent/[id].tsx Hide recent context Button",
+      "rationale": "Reference342x46/radiuspill,F3F4F3/borderE2E2E2,Inter60014/20/navy. Sourcelocal46/radius23/bordermatch butButton20leadingimplicit. Preserve actualHide/Review and cleanreturntorelevantmemorysection, notlostdraft/route.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 135.47999572753906,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "7cf5a0ad9832fd1a9eab8cac2719254cd53c112c0865587bbba940c07977c58c",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1103": {
+      "target": "app/agent/[id].tsx Hide recent context Button",
+      "rationale": "Reference342x46/radiuspill,F3F4F3/borderE2E2E2,Inter60014/20/navy. Sourcelocal46/radius23/bordermatch butButton20leadingimplicit. Preserve actualHide/Review and cleanreturntorelevantmemorysection, notlostdraft/route.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 135.47999572753906,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "6b6c6ad1636266b1b483ab57ce242a310a5bb1726526734ef2fbb99bb5ab072d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1104": {
+      "target": "app/agent/[id].tsx ContextPreview card",
+      "rationale": "Referencewhite/radius12/borderE8E8E7,16padding,shadow0,1,2black5%. Source s.card usesnavy0,2,6/5%+elevation1; dedicatedpreviewshadowrequired. Do not treatallwhitecardsshadowasinterchangeable.",
+      "status": "mapped",
+      "referenceName": "Context Preview / Memory Trace Stream Card",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 367
+      },
+      "referencePropertiesSHA256": "bc02c12c841c5e1b9a0d712295b2d8165118b5aec5340ff204485a077e56d395",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1105": {
+      "target": "app/agent/[id].tsx ContextPreview first conversation",
+      "rationale": "Referencefirstgroup6pxheader-to-body,8pxroleturngap; sourceuniform8headergap. Preserve actualconversationtitle/order andboundedrealtext; no fixedsampletitles/turns inserted.",
+      "status": "mapped",
+      "referenceName": "Turn 1: Project Update Prompt",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 220
+      },
+      "referencePropertiesSHA256": "37843dd3c18dab9cf550945e29d625dea983466254da9be42aabd4efab5259ce",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1106": {
+      "target": "app/agent/[id].tsx ContextPreview conversation label",
+      "rationale": "Inter60011/14,tracking.55uppercasequiet,8pxdot-labelgap. Source11/600/.55/quietuppercasematch butleading14implicit. Real longtitleswrapfully; mock2-lineexampleisnotuniversalheight.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "0c2082ef57a7f1babfef68306be7eabca423721a7d93454eb90566d74025b52f",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1108": {
+      "target": "app/agent/[id].tsx ContextPreview conversation label",
+      "rationale": "Inter60011/14,tracking.55uppercasequiet,8pxdot-labelgap. Source11/600/.55/quietuppercasematch butleading14implicit. Real longtitleswrapfully; mock2-lineexampleisnotuniversalheight.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 302.6300048828125,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "1898ba94c74276457287def644d794a77fde937e8f49fbfc1a79c8a3acd09fbf",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1109": {
+      "target": "app/agent/[id].tsx ContextPreview conversation label",
+      "rationale": "Inter60011/14,tracking.55uppercasequiet,8pxdot-labelgap. Source11/600/.55/quietuppercasematch butleading14implicit. Real longtitleswrapfully; mock2-lineexampleisnotuniversalheight.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 278.260009765625,
+        "y": 28
+      },
+      "referencePropertiesSHA256": "a0016fb54e74af8cae01f01375bd9373d2f285185713efa35e279c81d2842972",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1107": {
+      "target": "app/agent/[id].tsx ContextPreview first timeline dot",
+      "rationale": "Reference5.38x6 #FE5D39 firstdot; source5.38x6orangefirstindexmatches. Rolecolourfollowsactualindex/order, notforcedredforparticularmockconversation.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 5.380000114440918,
+        "y": 6
+      },
+      "referencePropertiesSHA256": "97a065d9dc553191de27a9463ed9edcbf696c6efb12e86630a8d86078cde9ffb",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1110": {
+      "target": "app/agent/[id].tsx ContextPreview first vertical timeline border",
+      "rationale": "Reference2pxE8E8E7leftborder+14pxcontentpadding,8pxturngap. SourcemarginLeft2/paddingLeft12/C6C5D040% differs; correctspecificindent/paintwithoutchangingserializedcontexttext.",
+      "status": "mapped",
+      "referenceName": "VerticalBorder",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 186
+      },
+      "referencePropertiesSHA256": "ee836f2fdfbf3a25226c65be80130eec20244ecc2cd69d032646bd04d0631380",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1111": {
+      "target": "app/agent/[id].tsx ContextPreview user turn",
+      "rationale": "Reference14/20 roleInter500navy/bodyInter400neutral viaactualinlineoverrides; sourcefirstparagraph14/20 with500role and400bodymatches. Keep selectablefullactualturntext/semantics; mock40heightisnaturalwrap.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "ef0de0d838e6b7b4fed7b48d6e1cdf938f52b7c6a20c1fdde9feadfa46f4cf82",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1112": {
+      "target": "app/agent/[id].tsx ContextPreview user turn",
+      "rationale": "Reference14/20 roleInter500navy/bodyInter400neutral viaactualinlineoverrides; sourcefirstparagraph14/20 with500role and400bodymatches. Keep selectablefullactualturntext/semantics; mock40heightisnaturalwrap.",
+      "status": "mapped",
+      "referenceName": "user: Help me send a concise project update.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 292,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "32536e0337ac28d86f448fdd9dd3375912a3f94d025fd9dad7ac4b0322051d16",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1113": {
+      "target": "app/agent/[id].tsx ContextPreview assistant turn",
+      "rationale": "Reference14/20 Mediumrole/Regularneutralbody,6pxbetweenassistantblocks. Sourcefirstparagraphrole/bodymetricmatchesbutuniform8paragraphgap differs. Preserve actualroleprefix/emphasis/text ratherthanhardcodedmockcopy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 138
+      },
+      "referencePropertiesSHA256": "1723a4fe06c9eb474db655d0ef8a4409daff7bff260116de4fecd7196d2c349f",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1114": {
+      "target": "app/agent/[id].tsx ContextPreview assistant turn",
+      "rationale": "Reference14/20 Mediumrole/Regularneutralbody,6pxbetweenassistantblocks. Sourcefirstparagraphrole/bodymetricmatchesbutuniform8paragraphgap differs. Preserve actualroleprefix/emphasis/text ratherthanhardcodedmockcopy.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "4a6d15cfa9d7ed156f3a8f8e98257ef2c529a8d1c403fdebaac14797da5c806b",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1115": {
+      "target": "app/agent/[id].tsx ContextPreview assistant turn",
+      "rationale": "Reference14/20 Mediumrole/Regularneutralbody,6pxbetweenassistantblocks. Sourcefirstparagraphrole/bodymetricmatchesbutuniform8paragraphgap differs. Preserve actualroleprefix/emphasis/text ratherthanhardcodedmockcopy.",
+      "status": "mapped",
+      "referenceName": "assistant: Hi team \u2014 the first draft is ready.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 292,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "a08ed0edf90f8190f93d0865373c8b74fff4993ac89b5bfe0ef429476b895569",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1116": {
+      "target": "app/agent/[id].tsx ContextPreview callout",
+      "rationale": "ReferenceF3F4F3at70%/radius8/padding10,4pxbetweenDone/Nextblocks,12/16; boldleadInter600navy/body400secondary viaoverrides. Sourcepadding/background/radiusmatchbut18leading/uniform8nestedspacingandfirstparagraphbodyneutral differ. Preserveactualmarkdownemphasis/excerpt; do notinventDone/Nextcontentforordinarymessages.",
+      "status": "mapped",
+      "referenceName": "Overlay",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 72
+      },
+      "referencePropertiesSHA256": "afe27b2ef26d0a1f598c3292069424226d4ede941cedbe9415a57d51b40c3d3a",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1117": {
+      "target": "app/agent/[id].tsx ContextPreview callout",
+      "rationale": "ReferenceF3F4F3at70%/radius8/padding10,4pxbetweenDone/Nextblocks,12/16; boldleadInter600navy/body400secondary viaoverrides. Sourcepadding/background/radiusmatchbut18leading/uniform8nestedspacingandfirstparagraphbodyneutral differ. Preserveactualmarkdownemphasis/excerpt; do notinventDone/Nextcontentforordinarymessages.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 272,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "b61f6db7c8603e05f8a1f561a6638b78d249e8defece62cd0c0eb85d902eeb29",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1118": {
+      "target": "app/agent/[id].tsx ContextPreview callout",
+      "rationale": "ReferenceF3F4F3at70%/radius8/padding10,4pxbetweenDone/Nextblocks,12/16; boldleadInter600navy/body400secondary viaoverrides. Sourcepadding/background/radiusmatchbut18leading/uniform8nestedspacingandfirstparagraphbodyneutral differ. Preserveactualmarkdownemphasis/excerpt; do notinventDone/Nextcontentforordinarymessages.",
+      "status": "mapped",
+      "referenceName": "Done: the main flow and initial review.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 272,
+        "y": 16
+      },
+      "referencePropertiesSHA256": "a5e9c1e261b00328a6a63b19df905305e5d2c8e7f98ace7e1de0654d11a9ce76",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1119": {
+      "target": "app/agent/[id].tsx ContextPreview callout",
+      "rationale": "ReferenceF3F4F3at70%/radius8/padding10,4pxbetweenDone/Nextblocks,12/16; boldleadInter600navy/body400secondary viaoverrides. Sourcepadding/background/radiusmatchbut18leading/uniform8nestedspacingandfirstparagraphbodyneutral differ. Preserveactualmarkdownemphasis/excerpt; do notinventDone/Nextcontentforordinarymessages.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 272,
+        "y": 32
+      },
+      "referencePropertiesSHA256": "8c0bc64a9ff6afef71ffcc316de83db3481391220104b5da569243f9bfcf0b67",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1120": {
+      "target": "app/agent/[id].tsx ContextPreview callout",
+      "rationale": "ReferenceF3F4F3at70%/radius8/padding10,4pxbetweenDone/Nextblocks,12/16; boldleadInter600navy/body400secondary viaoverrides. Sourcepadding/background/radiusmatchbut18leading/uniform8nestedspacingandfirstparagraphbodyneutral differ. Preserveactualmarkdownemphasis/excerpt; do notinventDone/Nextcontentforordinarymessages.",
+      "status": "mapped",
+      "referenceName": "Next: check the small-screen layout and address feedback.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 272,
+        "y": 32
+      },
+      "referencePropertiesSHA256": "cc056e8512715b951186b37f1c0deea9fa620283b5b988176db53199269839b3",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1121": {
+      "target": "app/agent/[id].tsx ContextPreview secondary paragraph",
+      "rationale": "ReferenceInter40012/16secondarywith2pxtopinset; source12/18withnoexplicit2inset. Matchparagraphrolewithouttruncatingactualtext orassumingalllaterparagraphsfitmock32height.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 34
+      },
+      "referencePropertiesSHA256": "0564aab461b4b865c081a01935e6d1566424d2782e8e32523ce772a23584c8e3",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1122": {
+      "target": "app/agent/[id].tsx ContextPreview secondary paragraph",
+      "rationale": "ReferenceInter40012/16secondarywith2pxtopinset; source12/18withnoexplicit2inset. Matchparagraphrolewithouttruncatingactualtext orassumingalllaterparagraphsfitmock32height.",
+      "status": "mapped",
+      "referenceName": "Please send any comments by Thursday so I can include them in the next version.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 292,
+        "y": 32
+      },
+      "referencePropertiesSHA256": "ca5c79c82d6d5458e1bbcbf1be5ff802f3b6d43c3485ed2debc93fd688660d8d",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1123": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent conversation divider",
+      "rationale": "Reference1pxE8E8E7topdivider+12pxtopspace,6pxlabel/bodygap; sourceprecedinggroupbottomC6C5D030%/16bottompadding anduniform8. Groupborderownership/paint/rhythmneedslocalcorrection; retainrealconversationorder.",
+      "status": "mapped",
+      "referenceName": "HorizontalBorder",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 97
+      },
+      "referencePropertiesSHA256": "c044e23a4936f70391c2e051f9b0a8684b61d306faa7dd901ffbbe0282fb9c9a",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1124": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent conversation label",
+      "rationale": "Inter60011/14/.55uppercasequiet,8dot-labelgap; sourcefont/colour/trackingmatchbut14leadingimplicit. Real titlewidth/scaling remainsflexible.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "3f79ef69094e7e50922bcee1c1715a9d09ccfc4217c82f69ca21c507d1b42d69",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1126": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent conversation label",
+      "rationale": "Inter60011/14/.55uppercasequiet,8dot-labelgap; sourcefont/colour/trackingmatchbut14leadingimplicit. Real titlewidth/scaling remainsflexible.",
+      "status": "mapped",
+      "referenceName": "Margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292.9100036621094,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "7bd591bdeff090d0fa3f30bf8e9680da898a090d58bc08c7e76617c1fffa98b3",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1127": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent conversation label",
+      "rationale": "Inter60011/14/.55uppercasequiet,8dot-labelgap; sourcefont/colour/trackingmatchbut14leadingimplicit. Real titlewidth/scaling remainsflexible.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 284.9100036621094,
+        "y": 14
+      },
+      "referencePropertiesSHA256": "9d70d70ae45340bed0bc4259f37759cedb61efb697ae5ff0b7cfd3ec624ad600",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1125": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent timeline dot",
+      "rationale": "Reference6square navy1E2B58 dot; sourceindex>0navy6matches. Retainactualdataorder, notsampletitle-dependentcolour.",
+      "status": "mapped",
+      "referenceName": "Background",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 6,
+        "y": 6
+      },
+      "referencePropertiesSHA256": "bdcf729794bfc8892861d73ebb44e13c899088988cb7b5b41eff8c205e8c740e",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1128": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent vertical timeline border",
+      "rationale": "Reference2pxE8E8E7border+14padding and4pxturngap; sourceleftmargin2/padding12/40%border/8gap differ. Explicitsubsequentgroupstyleroleneeded; no changes tosharedcontextserialization.",
+      "status": "mapped",
+      "referenceName": "VerticalBorder",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 308,
+        "y": 64
+      },
+      "referencePropertiesSHA256": "d285386cf430d264afd0959c4f845b4352334537b4deb15c05068b62505a3065",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1129": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent role turns",
+      "rationale": "Reference14/20 roleMedium/bodyRegular overrides andnatural20/40wrap; sourcefirstparagraphmetricsmatch,subsequentturn4vs8gapneedsplan. Keep realboundedturntext/roleprefixes/selectability.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "e63d0f6e04e0c3f43c390dc2e72d1709b37ddbfc8afc89e421fa24925bab7739",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1130": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent role turns",
+      "rationale": "Reference14/20 roleMedium/bodyRegular overrides andnatural20/40wrap; sourcefirstparagraphmetricsmatch,subsequentturn4vs8gapneedsplan. Keep realboundedturntext/roleprefixes/selectability.",
+      "status": "mapped",
+      "referenceName": "user: Our launch date is Friday.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 292,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "3c7fd1cbc5eadde16bb753b49f90c2c696606b75b2ead7c482a9ff92a4df9ca6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1131": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent role turns",
+      "rationale": "Reference14/20 roleMedium/bodyRegular overrides andnatural20/40wrap; sourcefirstparagraphmetricsmatch,subsequentturn4vs8gapneedsplan. Keep realboundedturntext/roleprefixes/selectability.",
+      "status": "mapped",
+      "referenceName": "Container",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 292,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "84f5f13a22c3c0ab768add0c4043ee924f47a3347c2cd360cde8b4c680a5a9af",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1132": {
+      "target": "app/agent/[id].tsx ContextPreview subsequent role turns",
+      "rationale": "Reference14/20 roleMedium/bodyRegular overrides andnatural20/40wrap; sourcefirstparagraphmetricsmatch,subsequentturn4vs8gapneedsplan. Keep realboundedturntext/roleprefixes/selectability.",
+      "status": "mapped",
+      "referenceName": "assistant: We will use Friday as the launch date.",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 292,
+        "y": 40
+      },
+      "referencePropertiesSHA256": "45a4ec022b362b841b38e439a7343fb5dd4f40de29daed1635bad5228a2c5527",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1133": {
+      "target": "app/agent/[id].tsx expanded Delete agent dangerzone",
+      "rationale": "Reference28margin+24top/16bottom,centredpaintedaction; source40margin/fullwidthButton. Correctlocalpaintedspacingwhilekeeping44+hit andfullactualdeleteconfirmation. DistinctfromunresolvedDeleteRecentItems.",
+      "status": "mapped",
+      "referenceName": "Destructive Action / Danger Zone:margin",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 104
+      },
+      "referencePropertiesSHA256": "76ad6c242925026bc116275654092c56a1d1a1a9dfebcdd088de8b6e825312b0",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1134": {
+      "target": "app/agent/[id].tsx expanded Delete agent dangerzone",
+      "rationale": "Reference28margin+24top/16bottom,centredpaintedaction; source40margin/fullwidthButton. Correctlocalpaintedspacingwhilekeeping44+hit andfullactualdeleteconfirmation. DistinctfromunresolvedDeleteRecentItems.",
+      "status": "mapped",
+      "referenceName": "Destructive Action / Danger Zone",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 342,
+        "y": 76
+      },
+      "referencePropertiesSHA256": "ac077b4e49514f339a00c4439806a4ad5b3fc2ebc719ee3e1c0ed6afc1fde920",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1135": {
+      "target": "app/agent/[id].tsx Delete agent Button",
+      "rationale": "Reference119.22x36paintedpill,Inter60014/20redB42907. Sourcefullwidth48+transparentredbutton; retain44hitandrunningdisabled/exactscopedagent+itschatdelete. Matchpaintedlabel/sectionplacementseparately, no newdeletioncontract.",
+      "status": "mapped",
+      "referenceName": "Button",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 119.22000122070312,
+        "y": 36
+      },
+      "referencePropertiesSHA256": "8ebaf1e25fbf6e0202dc99cbe2ce8c78306e2fd0e66fa543a0a7d3e993bd9e71",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1136": {
+      "target": "app/agent/[id].tsx Delete agent Button",
+      "rationale": "Reference119.22x36paintedpill,Inter60014/20redB42907. Sourcefullwidth48+transparentredbutton; retain44hitandrunningdisabled/exactscopedagent+itschatdelete. Matchpaintedlabel/sectionplacementseparately, no newdeletioncontract.",
+      "status": "mapped",
+      "referenceName": "Text",
+      "referenceType": "TEXT",
+      "referenceSize": {
+        "x": 87.22000122070312,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "60266f39b281509e39afaaf48f5f3e1cb9972b592968bd1b16ee7520ac2012e6",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1137": {
+      "target": "Native home indicator / SafeAreaView bottom",
+      "rationale": "Reference20mockhomebar/128x4greyindicatorreplacedbyactualnativeOSindicatorandsafearea. NeverdrawfakehomebarorplaceDeletebehindrealnavigation.",
+      "status": "exception",
+      "referenceName": "Home Indicator (iOS spec)",
+      "referenceType": "FRAME",
+      "referenceSize": {
+        "x": 390,
+        "y": 20
+      },
+      "referencePropertiesSHA256": "3eb3a8683518f1349c5328d468139cec4f24953c10b3611067880d6c22db58ef",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    },
+    "2:1138": {
+      "target": "Native home indicator / SafeAreaView bottom",
+      "rationale": "Reference20mockhomebar/128x4greyindicatorreplacedbyactualnativeOSindicatorandsafearea. NeverdrawfakehomebarorplaceDeletebehindrealnavigation.",
+      "status": "exception",
+      "referenceName": "Background",
+      "referenceType": "ROUNDED_RECTANGLE",
+      "referenceSize": {
+        "x": 128,
+        "y": 4
+      },
+      "referencePropertiesSHA256": "c46210940320fe413776819cead28b1131cc571a8f855add45afa236c99bf8c1",
+      "evidence": [
+        "live-file",
+        "frame-2:1050",
+        "context-node-audit",
+        "memory-context-audit",
+        "artwork-state-audit"
+      ]
+    }
+  }
+}

@@ -155,14 +155,31 @@
       ]
     },
     "1:125": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "states": [
         "reference",
         "empty",
         "populated",
         "selected",
         "error",
-        "keyboard"
+        "keyboard",
+        "memory-edit",
+        "memory-update",
+        "memory-edit-cancel",
+        "memory-limit",
+        "forget-confirmation",
+        "forget-cancel",
+        "context-off",
+        "context-consent",
+        "context-consent-cancel",
+        "context-review-entry",
+        "context-disabled-during-send",
+        "conversations-empty",
+        "conversations-populated",
+        "missing-agent",
+        "diagnostic-agent-guard",
+        "delete-agent-confirmation",
+        "delete-agent-cancel"
       ]
     },
     "1:235": {
@@ -218,14 +235,31 @@
       ]
     },
     "2:617": {
-      "enumerationComplete": false,
+      "enumerationComplete": true,
       "states": [
         "reference",
         "empty",
         "populated",
         "selected",
         "error",
-        "keyboard"
+        "keyboard",
+        "memory-edit",
+        "memory-update",
+        "memory-edit-cancel",
+        "memory-limit",
+        "forget-confirmation",
+        "forget-cancel",
+        "context-off",
+        "context-consent",
+        "context-consent-cancel",
+        "context-review-entry",
+        "context-disabled-during-send",
+        "conversations-empty",
+        "conversations-populated",
+        "missing-agent",
+        "diagnostic-agent-guard",
+        "delete-agent-confirmation",
+        "delete-agent-cancel"
       ]
     },
     "2:727": {

@@ -1,5 +1,16 @@
 # Delivery status
 
+## Owner-requested feature-branch candidate builds
+
+The owner relayed Vivek's explicit request to build `feat/figma-ui-parity` instead
+of main. Its app change at `a1950d8` reserves Android system-navigation space below
+the tab targets. Branch-only release commit `eb4942a` enables a manual Android build
+for this specific branch; signing and binary audits remain unchanged. Existing
+Android14 run42819482295 and iOS native run42819488357 are compiling this exact
+feature head. They are candidate builds, not full visual acceptance or TestFlight
+availability. The earlier branch source-check failure was the audit freeze, not
+an app compile failure. No merge or audit-gate weakening occurred.
+
 ## Owner reopened visual acceptance of Android13
 
 Fresh signed-in browser access is working. Current .fig and14 original PNG exports
@@ -17,7 +28,7 @@ acceptance or implementation approval is claimed. Signed20 has succeeded, but it
 corrected distribution remains held. Dashboard files remain untouched.
 
 Audit progress: Settings has123 explicit per-node source/reference dispositions;
-1,073 of1,325 file nodes remain unreviewed. The recursive font inventory includes
+770 of1,325 file nodes remain unreviewed. The recursive font inventory includes
 all inline overrides, and three missing original state SVGs have been exported
 through the working browser. No product changes, new native build or completeness
 approval are implied. See the [artwork audit](testing/figma-artwork-state-audit.md).
