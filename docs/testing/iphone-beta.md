@@ -1,4 +1,10 @@
-Current product `a0afe7e` has accepted current native UI evidence. Signed build18 workflow42729756232 is running on release head554b9d8; the actual exported IPA, Apple processing and internal tester availability remain to be verified. Android12 is already delivered. Earlier76/11 evidence below is historical; no new TestFlight or Drive upload is claimed.
+## Signed release recovery — 18 not uploaded, 19 queued
+
+Workflow42729756232 exported1.0.0(18), with actual family1/eleven privacy manifests/required SDK/camera/no microphone or tracking verified. It failed before upload at `codesign` in the signing audit; no successful signing report was emitted. Apple still lists17/16/15. An existing signed system binary reproduces the audit bug: `--extract-certificates PREFIX APP` treats PREFIX as an input file, while `--extract-certificates=PREFIX APP` extracts the leaf correctly. The fix preserves all strict signature, exact certificate/team/app/profile and font assertions and adds bounded path-redacted failure diagnostics.
+
+The failed IPA was not retained, so one replacement signed delivery run is necessary. Workflow42732648140 is confirmed as build19, sourcec6f333c/appa0afe7e. Completed native/UI evidence is retained; no new Simulator or Android compilation is dispatched. New Apple availability remains unverified and initial Store15 is untouched.
+
+Current product `a0afe7e` has accepted current native UI evidence. Signed18 workflow42729756232 stopped before upload at an audit invocation bug. Replacement signed19 workflow42732648140 is queued on release headc6f333c/appa0afe7e, with unchanged strict signing/font assertions. Actual IPA audits, Apple processing and internal tester availability remain to be verified. Android12 is already delivered. Earlier76/11 evidence below is historical; no new TestFlight or Drive upload is claimed.
 
 # Expanded iPhone beta check
 
