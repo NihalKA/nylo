@@ -147,15 +147,32 @@ appId: com.nylohq.nylo
     id: "agent-name"
 - inputText: "Keep this role draft"
 - tapOn: "Dismiss keyboard"
+# The keyboard can leave the role chip behind the fixed header (actual y85–129
+# versus scroll viewport top118). Move content down before the same exact tap.
+- swipe:
+    start: 50%, 35%
+    end: 50%, 65%
+    duration: 400
 - scrollUntilVisible:
-    element: "Writing partner"
+    element:
+      text: "Writing partner"
+      below: "Create an agent"
     direction: UP
-- tapOn: "Writing partner"
+    visibilityPercentage: 100
+    centerElement: true
+- tapOn:
+    text: "Writing partner"
+    below: "Create an agent"
+- assertVisible: "Replace this setup[?]"
+- takeScreenshot: gallery-09a-role-replacement-confirmation
 - tapOn: "Cancel"
 - assertVisible:
     id: "agent-name"
     text: "Keep this role draft"
-- tapOn: "Writing partner"
+- tapOn:
+    text: "Writing partner"
+    below: "Create an agent"
+- assertVisible: "Replace this setup[?]"
 - tapOn: "Use role"
 - assertVisible:
     id: "agent-name"
