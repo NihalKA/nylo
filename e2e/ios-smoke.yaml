@@ -179,10 +179,20 @@ appId: com.nylohq.nylo
     enabled: true
 - tapOn: "Create agent"
 - assertVisible: "Agent"
+# At maximum text, Memory can overlap the fixed Agents navigation target.
+# Bring it above that bar before tapping; retain the editor/persistence checks.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    centerElement: true
+    visibilityPercentage: 100
+- tapOn:
+    text: "Memory"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element:
       id: "agent-memory-input"
@@ -223,10 +233,20 @@ appId: com.nylohq.nylo
 - waitForAnimationToEnd
 - assertVisible: "Create agent"
 - tapOn: "Open Writing partner"
+# At maximum text, Memory can overlap the fixed Agents navigation target.
+# Bring it above that bar before tapping; retain the editor/persistence checks.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    centerElement: true
+    visibilityPercentage: 100
+- tapOn:
+    text: "Memory"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
@@ -238,10 +258,20 @@ appId: com.nylohq.nylo
     text: "Agents, tab, 2 of 3"
     retryTapIfNoChange: true
 - tapOn: "Open Writing partner"
+# At maximum text, Memory can overlap the fixed Agents navigation target.
+# Bring it above that bar before tapping; retain the editor/persistence checks.
 - scrollUntilVisible:
-    element: "Memory"
+    element:
+      text: "Memory"
+      above:
+        id: "detail-tab-agents"
     direction: DOWN
-- tapOn: "Memory"
+    centerElement: true
+    visibilityPercentage: 100
+- tapOn:
+    text: "Memory"
+    above:
+      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
