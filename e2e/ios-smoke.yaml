@@ -89,12 +89,20 @@ appId: com.nylohq.nylo
           start: "50%, 65%"
           end: "50%, 35%"
           duration: 500
-- scrollUntilVisible:
-    element:
-      text: "(?s)Open New conversation.*"
-    direction: DOWN
-    visibilityPercentage: 100
-    centerElement: false
+# The exact row can be fully visible in retained AX while scrollUntilVisible
+# still rejects its visibility calculation. Do not scroll an already visible row;
+# the tap and exact draft-content assertions below still verify restoration.
+- runFlow:
+    when:
+      notVisible:
+        text: "(?s)Open New conversation.*"
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: "(?s)Open New conversation.*"
+          direction: DOWN
+          visibilityPercentage: 100
+          centerElement: false
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible:
     id: "chat-message"
@@ -116,12 +124,20 @@ appId: com.nylohq.nylo
           start: "50%, 65%"
           end: "50%, 35%"
           duration: 500
-- scrollUntilVisible:
-    element:
-      text: "(?s)Open New conversation.*"
-    direction: DOWN
-    visibilityPercentage: 100
-    centerElement: false
+# The exact row can be fully visible in retained AX while scrollUntilVisible
+# still rejects its visibility calculation. Do not scroll an already visible row;
+# the tap and exact draft-content assertions below still verify restoration.
+- runFlow:
+    when:
+      notVisible:
+        text: "(?s)Open New conversation.*"
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: "(?s)Open New conversation.*"
+          direction: DOWN
+          visibilityPercentage: 100
+          centerElement: false
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible:
     id: "chat-message"
