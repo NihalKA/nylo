@@ -4,8 +4,8 @@ import * as Print from "expo-print";
 import { Attachment } from "./types";
 export async function shareGeneratedFile(attachment: Attachment) {
   const file = new File(Paths.cache, `nylo-${attachment.id}.png`);
-  file.write(attachment.data, { encoding: "base64" });
   try {
+    await file.write(attachment.data, { encoding: "base64" });
     await Sharing.shareAsync(file.uri, {
       mimeType: attachment.mimeType,
       dialogTitle: "Save or share your image",
@@ -29,7 +29,7 @@ async function prepareResponseFile(text: string, format: "txt" | "pdf") {
     file = new File(result.uri);
   } else {
     file = new File(Paths.cache, `Nylo-response-${Date.now()}.txt`);
-    file.write(text);
+    await file.write(text);
   }
   return file;
 }

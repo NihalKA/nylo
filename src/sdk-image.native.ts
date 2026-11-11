@@ -39,8 +39,8 @@ export function sdkImageModel(
           );
           files.push(file);
           if (typeof input.data === "string")
-            file.write(input.data, { encoding: "base64" });
-          else file.write(input.data);
+            await file.write(input.data, { encoding: "base64" });
+          else await file.write(input.data);
           body.append("image", {
             uri: file.uri,
             name: file.name,

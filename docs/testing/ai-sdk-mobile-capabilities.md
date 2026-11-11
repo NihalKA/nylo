@@ -96,3 +96,19 @@ wrapper otherwise describes arguments without validating them. Empty, missing,
 non-string or oversized prompts and invalid image IDs are rejected before the
 image API. The added regression checks that these cases make no image request;
 all 105 source tests pass.
+
+## Final candidate correction after Android 26
+
+The corrected iOS SDK flow `43108878086` passed; its three captures show a
+rendered synthetic image, successful local exports and restoration after cold
+reopen. Standard compact and large smoke each passed, with all 30 captures
+inspected. The maximum-text test's offscreen AX row is moved into the tappable
+viewport by its profile-specific test navigation; exact content assertions remain.
+
+Android 26 SDK run `43113374744` reached the image result, then failed reading
+its exported text file with FileNotFoundException. Expo 58 declares File.write()
+as asynchronous. Export/share, multipart image edits and backup export now await
+writes before reading, uploading or sharing. Image/backup cleanup also encloses
+the write. This corrects a concrete race; native 26 is superseded and remains
+unassigned to QA. All 105 source tests and both-platform Hermes exports pass;
+fresh native 27 verification and distribution are pending.
