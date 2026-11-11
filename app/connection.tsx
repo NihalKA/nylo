@@ -1,3 +1,4 @@
+import { connectionCapabilities } from "../src/capabilities";
 import { Text } from "../src/typography";
 import { modelCatalogReducer } from "../src/model-catalog";
 import { connectionModels } from "../src/model-library";
@@ -517,6 +518,10 @@ function ProviderSettings({
                         baseUrl: preset.baseUrl,
                         model: "",
                         models: [],
+                        imageModel: undefined,
+                        webSearch: undefined,
+                        imagesVerifiedAt: undefined,
+                        searchVerifiedAt: undefined,
                       });
                       setKey("");
                       dispatchCatalog({
@@ -564,7 +569,16 @@ function ProviderSettings({
               <Field
                 label="API base URL"
                 value={draft.baseUrl}
-                onChangeText={(baseUrl) => setDraft({ ...draft, baseUrl })}
+                onChangeText={(baseUrl) =>
+                  setDraft({
+                    ...draft,
+                    baseUrl,
+                    imageModel: "",
+                    webSearch: false,
+                    imagesVerifiedAt: undefined,
+                    searchVerifiedAt: undefined,
+                  })
+                }
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="url"
@@ -597,6 +611,64 @@ function ProviderSettings({
                   : "Encrypted in this phone’s secure storage. Keys are excluded from backups."
               }
             />
+            <View style={{ gap: 10 }}>
+              <Text style={s.h2}>Images and search</Text>
+              <Field
+                label="Image model"
+                value={connectionCapabilities(draft).imageModel}
+                onChangeText={(imageModel) =>
+                  setDraft({
+                    ...draft,
+                    imageModel,
+                    imagesVerifiedAt: undefined,
+                  })
+                }
+                placeholder="Image model ID, or leave empty to disable"
+                autoCapitalize="none"
+                autoCorrect={false}
+                maxLength={200}
+                help="Uses this connection and saved key. Enable only if your provider supports the Images API. Generating an image may incur charges."
+              />
+              {draft.protocol === "openai" ? (
+                <Press
+                  accessibilityRole="switch"
+                  accessibilityLabel="Enable web search"
+                  accessibilityState={{
+                    checked: connectionCapabilities(draft).webSearch,
+                  }}
+                  onPress={() =>
+                    setDraft({
+                      ...draft,
+                      webSearch: !connectionCapabilities(draft).webSearch,
+                      searchVerifiedAt: undefined,
+                    })
+                  }
+                  style={[s.between, { minHeight: 48 }]}
+                >
+                  <Text style={s.text}>Web search</Text>
+                  <Icon
+                    name={
+                      connectionCapabilities(draft).webSearch
+                        ? "toggle"
+                        : "toggle-outline"
+                    }
+                    color={theme.accentText}
+                  />
+                </Press>
+              ) : null}
+              <Text style={s.sub}>
+                Image access:{" "}
+                {draft.imagesVerifiedAt
+                  ? "verified by a successful request"
+                  : "not yet verified"}
+                . Search:{" "}
+                {draft.searchVerifiedAt
+                  ? "verified by a returned source"
+                  : "not yet verified"}
+                . No automatic test requests are sent. Provider support and
+                quota can change.
+              </Text>
+            </View>
             <Text style={s.sub}>
               Get an API key from your provider’s developer dashboard. An
               ordinary chat subscription may use separate billing.

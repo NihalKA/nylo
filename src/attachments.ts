@@ -3,7 +3,11 @@ import { Attachment, Protocol } from "./types";
 export const MAX_ATTACHMENT_BYTES = 2 * 1024 * 1024;
 export const MAX_MESSAGE_BYTES = 4 * 1024 * 1024;
 export const MAX_ATTACHMENTS = 4;
-export function validateAttachments(value: unknown): Attachment[] {
+export function validateAttachments(
+  value: unknown,
+  generated = false,
+): Attachment[] {
+  const maxBytes = generated ? 8 * 1024 * 1024 : MAX_ATTACHMENT_BYTES;
   if (value === undefined) return [];
   if (!Array.isArray(value) || value.length > MAX_ATTACHMENTS)
     throw new Error("Attach up to four files at a time.");
@@ -23,7 +27,7 @@ export function validateAttachments(value: unknown): Attachment[] {
       ) ||
       !Number.isInteger(a.size) ||
       a.size <= 0 ||
-      a.size > MAX_ATTACHMENT_BYTES ||
+      a.size > maxBytes ||
       typeof a.data !== "string"
     )
       throw new Error(
@@ -41,7 +45,7 @@ export function validateAttachments(value: unknown): Attachment[] {
         );
     } else {
       if (
-        a.data.length > Math.ceil(MAX_ATTACHMENT_BYTES / 3) * 4 ||
+        a.data.length > Math.ceil(maxBytes / 3) * 4 ||
         !/^[A-Za-z0-9+/]+={0,2}$/.test(a.data) ||
         a.data.length % 4 !== 0
       )
@@ -59,7 +63,7 @@ export function validateAttachments(value: unknown): Attachment[] {
         throw new Error("File content does not match its type.");
     }
     total += a.size;
-    if (total > MAX_MESSAGE_BYTES)
+    if (total > (generated ? 16 * 1024 * 1024 : MAX_MESSAGE_BYTES))
       throw new Error("Keep the combined attachments under 4 MB.");
     return {
       id: a.id,
@@ -98,3 +102,10 @@ export function attachmentText(text: string, attachments: Attachment[]) {
 export function attachmentUri(attachment: Attachment) {
   return `data:${attachment.mimeType};base64,${attachment.data}`;
 }
+
+export const validateGeneratedFiles = (value: unknown) => {
+  const files = validateAttachments(value, true);
+  if (files.some((f) => !f.mimeType.startsWith("image/")))
+    throw new Error("Invalid generated image.");
+  return files;
+};

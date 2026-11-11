@@ -1,3 +1,4 @@
+import { shareGeneratedFile, exportResponse } from "../../src/file-export";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { Text, TextInput, fonts } from "../../src/typography";
 import { attachmentFlowReducer } from "../../src/attachment-flow";
@@ -18,6 +19,7 @@ import React, {
 } from "react";
 import {
   AppState,
+  Linking,
   Keyboard,
   Image,
   useWindowDimensions,
@@ -697,15 +699,78 @@ function Chat() {
                         {message.actions?.map((label, i) => (
                           <View key={i} style={[s.row, { gap: 5 }]}>
                             <Icon
-                              name="checkmark-circle-outline"
+                              name={
+                                label.includes("failed")
+                                  ? "alert-circle-outline"
+                                  : label.endsWith("…")
+                                    ? "time-outline"
+                                    : "checkmark-circle-outline"
+                              }
                               size={13}
-                              color={theme.green}
+                              color={
+                                label.includes("failed")
+                                  ? theme.error
+                                  : label.endsWith("…")
+                                    ? theme.sub
+                                    : theme.green
+                              }
                             />
-                            <Text style={{ fontSize: 11, color: theme.green }}>
+                            <Text style={{ fontSize: 11, color: theme.sub }}>
                               {label}
                             </Text>
                           </View>
                         ))}
+                        {message.generatedFiles?.map((file) => (
+                          <View key={file.id} style={{ gap: 8 }}>
+                            <Image
+                              source={{ uri: attachmentUri(file) }}
+                              accessibilityLabel={`Generated image: ${file.name}`}
+                              style={{
+                                width: "100%",
+                                height: 280,
+                                borderRadius: 16,
+                                backgroundColor: theme.card,
+                              }}
+                              resizeMode="contain"
+                            />
+                            <Button
+                              title="Save or share image"
+                              secondary
+                              icon="share-outline"
+                              onPress={() =>
+                                void action(() => shareGeneratedFile(file))
+                              }
+                            />
+                          </View>
+                        ))}
+                        {message.sources?.length ? (
+                          <View style={{ gap: 6 }}>
+                            <Text style={s.sub}>Sources</Text>
+                            {message.sources.map((source) => (
+                              <Press
+                                key={source.url}
+                                accessibilityRole="link"
+                                accessibilityLabel={`Open source: ${source.title}`}
+                                onPress={() =>
+                                  void action(() => Linking.openURL(source.url))
+                                }
+                                style={{
+                                  minHeight: 44,
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    color: theme.accentText,
+                                    fontSize: 13,
+                                  }}
+                                >
+                                  {source.title}
+                                </Text>
+                              </Press>
+                            ))}
+                          </View>
+                        ) : null}
                         {message.text ? (
                           <>
                             <MessageText text={message.text} />
@@ -799,6 +864,24 @@ function Chat() {
                                 }
                               />
                             </PopIn>
+                            <IconButton
+                              name="document-text-outline"
+                              label="Save response as text"
+                              onPress={() =>
+                                void action(() =>
+                                  exportResponse(message.text, "txt"),
+                                )
+                              }
+                            />
+                            <IconButton
+                              name="document-outline"
+                              label="Save response as PDF"
+                              onPress={() =>
+                                void action(() =>
+                                  exportResponse(message.text, "pdf"),
+                                )
+                              }
+                            />
                             <IconButton
                               name="flag-outline"
                               label="Report response"

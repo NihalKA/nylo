@@ -47,6 +47,7 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 scenario="${ANDROID_UI_SCENARIO:-smoke}"
 case "$scenario" in
   smoke) flow=e2e/android-smoke.yaml ;;
+  sdk) flow=e2e/android-sdk.yaml ;;
   gallery)
     flow=e2e/android-gallery.yaml
     adb shell wm size 1170x2532

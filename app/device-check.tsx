@@ -1,3 +1,6 @@
+import { checkLocalExports } from "../src/file-export";
+import { Attachment } from "../src/types";
+import { checkSDKOnDevice } from "../src/sdk-check";
 import { Text } from "../src/typography";
 import React, { useRef, useState } from "react";
 import { Pressable, View } from "react-native";
@@ -33,6 +36,8 @@ export default function DeviceCheck() {
   const locked = useRef(false);
   const [error, setError] = useState("");
   const [events, setEvents] = useState(0);
+  const [sdkResult, setSDKResult] = useState("");
+  const [sdkFile, setSDKFile] = useState<Attachment>();
   const [restartResult, setRestartResult] = useState("");
   const check = data.deviceCheck;
   const connection = data.connections.find(
@@ -154,6 +159,87 @@ export default function DeviceCheck() {
           {Constants.nativeBuildVersion || "Development"}. Results stay on this
           device; this screen does not share them with support or this chat.
         </Text>
+        <View style={s.card}>
+          <Text style={s.h2}>Offline AI engine check</Text>
+          <Text style={s.sub}>
+            Checks streaming, image tools and local text/PDF exports on this
+            device using synthetic data. No provider, credentials or
+            conversations are contacted.
+          </Text>
+          <Button
+            title="Check AI engine offline"
+            secondary
+            disabled={disabled}
+            onPress={() =>
+              void action(async () => {
+                setSDKResult("");
+                setSDKFile(await checkSDKOnDevice());
+                await checkLocalExports();
+                setSDKResult(
+                  "Passed: SDK tools, images and local file exports.",
+                );
+              })
+            }
+          />
+          {sdkResult ? (
+            <Text accessibilityLabel={sdkResult} style={s.text}>
+              {sdkResult}
+            </Text>
+          ) : null}
+          {sdkFile ? (
+            <Button
+              title="Open offline sample"
+              secondary
+              disabled={disabled}
+              onPress={() =>
+                void action(async () => {
+                  const connectionId =
+                    data.defaultConnectionId || "sdk-offline-provider";
+                  const chat = createConversation(connectionId);
+                  await update((d) => ({
+                    ...d,
+                    connections: d.connections.some(
+                      (c) => c.id === connectionId,
+                    )
+                      ? d.connections
+                      : [
+                          ...d.connections,
+                          {
+                            id: connectionId,
+                            name: "Offline SDK example",
+                            provider: "custom",
+                            protocol: "openai",
+                            baseUrl: "https://example.invalid/v1",
+                            model: "synthetic-no-network",
+                          },
+                        ],
+                    conversations: [
+                      ...d.conversations,
+                      {
+                        ...chat,
+                        title: "Example: SDK image",
+                        messages: [
+                          {
+                            id: uid(),
+                            role: "assistant",
+                            text: "Synthetic offline SDK example. The green tile is test data, not a live generated picture.",
+                            status: "complete",
+                            createdAt: Date.now(),
+                            generatedFiles: [sdkFile],
+                          },
+                        ],
+                      },
+                    ],
+                  }));
+                  router.push({
+                    pathname: "/chat/[id]",
+                    params: { id: chat.id },
+                  });
+                })
+              }
+            />
+          ) : null}
+        </View>
         {!check ? (
           <>
             <Text style={s.eyebrow}>CHOOSE A SAVED PROVIDER</Text>

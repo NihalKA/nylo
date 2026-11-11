@@ -1,0 +1,30 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: "Settings, tab, 3 of 3"
+    point: "50%, 25%"
+    retryTapIfNoChange: true
+- scrollUntilVisible:
+    element: "Live device check"
+    direction: DOWN
+    timeout: 60000
+- tapOn: "Live device check"
+- scrollUntilVisible:
+    element: "Check AI engine offline"
+    direction: DOWN
+- tapOn: "Check AI engine offline"
+- extendedWaitUntil:
+    visible: "Passed: SDK tools, images and local file exports."
+    timeout: 30000
+- takeScreenshot: sdk-native-passed
+
+- tapOn: "Open offline sample"
+- assertVisible: "Save or share image"
+- takeScreenshot: sdk-image-result
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: SDK image.*"
+- assertVisible: "Save or share image"
+- takeScreenshot: sdk-image-restored

@@ -23,6 +23,7 @@ export function splitAttachmentStorage(data: AppData) {
       messages: c.messages.map((m) => ({
         ...m,
         attachments: encode(m.attachments),
+        generatedFiles: encode(m.generatedFiles),
       })),
     })),
   });
@@ -60,7 +61,11 @@ export function hydrateAttachmentStorage(
       ...c,
       draftAttachments: decode(c?.draftAttachments),
       messages: Array.isArray(c?.messages)
-        ? c.messages.map((m) => ({ ...m, attachments: decode(m?.attachments) }))
+        ? c.messages.map((m) => ({
+            ...m,
+            attachments: decode(m?.attachments),
+            generatedFiles: decode(m?.generatedFiles),
+          }))
         : c?.messages,
     })),
   };

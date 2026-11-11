@@ -41,3 +41,11 @@ Before submitting final declarations:
 - Complete accurate purpose/linkage/tracking answers in App Store Connect. Provider-authenticated text content and identifiers require explicit consideration; no tracking implementation is present.
 - Update public privacy copy for remembered cross-chat approval and its reset control. Explain that resetting approval stops future transmission until renewed and cannot erase provider-held information.
 - Confirm exact release network behavior and the final age/content safeguards before submission.
+
+## Feature candidate: AI SDK Core and generated outputs
+
+The feature branch runs AI SDK Core inside the mobile app; it adds no Nylo server or gateway account. Explicit provider instances use the saved connection URL and secure key. Exported telemetry is disabled and automatic request retries are disabled. Only supplied tools run; the existing provider and attachment consent and memory approval boundaries remain.
+
+User-requested image prompts go to the selected connection's image service. Generated images are stored as local SQLite blobs and included in user-requested readable backups; they are not automatically resent to the chat model. Editing an image requires an explicit send approval. Supported web search sends the query/context through the selected provider and returns source links; opening a source is a separate user action. Provider/upstream retention is not established by the client.
+
+Text/PDF response export runs locally and invokes the OS share sheet; temporary export files are removed afterward. The optional offline engine diagnostic uses only synthetic in-memory requests and no network or saved credentials. This feature candidate does not alter the existing store submission or account declarations.

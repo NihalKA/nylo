@@ -9,6 +9,10 @@ export type Connection = {
   baseUrl: string;
   model: string;
   models?: string[];
+  imageModel?: string;
+  webSearch?: boolean;
+  imagesVerifiedAt?: number;
+  searchVerifiedAt?: number;
 };
 export type Attachment = {
   id: string;
@@ -40,6 +44,8 @@ export type Message = {
   error?: string;
   actions?: string[];
   attachments?: Attachment[];
+  generatedFiles?: Attachment[];
+  sources?: { title: string; url: string }[];
   model?: string;
 };
 export type Conversation = {

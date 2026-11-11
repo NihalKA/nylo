@@ -33,7 +33,8 @@ import {
   reusableConversation,
 } from "./domain";
 import { readData, readKey, removeKey, writeData, writeKey } from "./storage";
-import { runAgent, safeError } from "./providers";
+import { safeError } from "./providers";
+import { runSDKAgent } from "./sdk-engine";
 import { streamingFetch } from "./transport";
 import { beginBackgroundResponse } from "./background-response";
 
@@ -530,12 +531,65 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       }));
       accepted = true;
       onAccepted?.();
-      await runAgent({
+      await runSDKAgent({
         connection,
         key,
         messages,
         instructions,
         useTools: !!agent && options?.tools !== false,
+        allowCapabilities: options?.tools !== false,
+        onFiles: async (files) => {
+          if (controller.signal.aborted) throw new Error("Response stopped.");
+          await patch((m) => ({
+            generatedFiles: [...(m.generatedFiles || []), ...files],
+          }));
+        },
+        onSource: (source) => {
+          checkpoints.track(
+            patch((m) => ({
+              sources: [
+                ...(m.sources || []).filter((s) => s.url !== source.url),
+                source,
+              ].slice(0, 30),
+            })),
+          );
+        },
+        onVerified: (capability) => {
+          checkpoints.track(
+            update((d) => ({
+              ...d,
+              connections: d.connections.map((c) =>
+                c.id === connection.id
+                  ? {
+                      ...c,
+                      ...(capability === "images"
+                        ? { imagesVerifiedAt: Date.now() }
+                        : { searchVerifiedAt: Date.now() }),
+                    }
+                  : c,
+              ),
+            })),
+          );
+        },
+        approveImageEdit: async (image) => {
+          if (AppState.currentState !== "active" || controller.signal.aborted)
+            return false;
+          if (active.current) active.current.reviewingMemory = true;
+          try {
+            return (
+              (await askPermission(
+                "Send this image for editing?",
+                `${image.name} will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Image generation charges may apply.`,
+                "Edit image",
+              )) &&
+              !controller.signal.aborted &&
+              AppState.currentState === "active"
+            );
+          } finally {
+            if (active.current?.controller === controller)
+              active.current.reviewingMemory = false;
+          }
+        },
         maxOutputTokens: options?.maxOutputTokens,
         signal: controller.signal,
         fetcher: streamingFetch,

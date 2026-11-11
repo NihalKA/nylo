@@ -6,7 +6,7 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments|store|pdf|background) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store|pdf|background|sdk) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
   echo 'Store captures require the large profile and the original native JS bundle.'
   exit 1
@@ -53,7 +53,7 @@ source_sha="$(python3 - artifacts/e2e/native-source-run.json "$GITHUB_REPOSITORY
 import json, re, sys
 run=json.load(open(sys.argv[1]))
 if (run.get("name") != "iOS native validation" or run.get("conclusion") != "success" or
-    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
+    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context", "feat/ai-sdk-mobile-capabilities") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
     not re.fullmatch(r"[0-9a-f]{40}", run.get("head_sha", ""))):
     raise SystemExit("Use a successful native validation run from this repository's approved main or feature candidate branch.")
 print(run["head_sha"])
