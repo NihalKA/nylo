@@ -35,6 +35,8 @@ export type SDKOptions = {
   onAction: (label: string) => void;
   executeTool: (call: ToolCall) => Promise<string>;
   onFiles?: (files: Attachment[]) => Promise<void>;
+  // Used only by the explicit synthetic offline diagnostic.
+  onToolDiagnostic?: (error: unknown) => void;
   onSource?: (source: { title: string; url: string }) => void;
   onVerified?: (capability: "images" | "search") => void;
   approveImageEdit?: (image: Attachment) => Promise<boolean>;
@@ -335,6 +337,7 @@ export async function runSDKAgent(options: SDKOptions) {
           };
         } catch (error) {
           if (signal.aborted) throw new Error("Response stopped.");
+          options.onToolDiagnostic?.(error);
           onAction("Image request failed");
           return {
             error:

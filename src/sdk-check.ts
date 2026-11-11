@@ -10,6 +10,7 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
     images = 0;
   let file: Attachment | undefined;
   let text = "";
+  const failures: string[] = [];
   const fetcher: typeof fetch = async (url, init) => {
     if (
       String(url) === "https://sdk-check.invalid/v1/images/generations" ||
@@ -113,6 +114,9 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
       text += delta;
     },
     onAction: () => {},
+    onToolDiagnostic: (error) => {
+      failures.push(error instanceof Error ? error.message : String(error));
+    },
     executeTool: async () => {
       throw new Error("Unexpected tool.");
     },
@@ -128,6 +132,8 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
     !file ||
     file.data !== png
   )
-    throw new Error("The offline SDK check did not complete.");
+    throw new Error(
+      `Offline SDK check: ${chats} chat steps, ${images} image calls, ${file ? "file received" : "no file"}, ${text === "SDK_CHECK_OK" ? "text passed" : "text mismatch"}. ${failures.join("; ")}`,
+    );
   return file;
 }
