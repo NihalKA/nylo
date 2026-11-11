@@ -7,10 +7,10 @@ appId: com.nylohq.nylo
     point: "50%, 25%"
     retryTapIfNoChange: true
 - scrollUntilVisible:
-    element: "Live device check"
+    element: "(?s).*Live device check.*"
     direction: DOWN
     timeout: 60000
-- tapOn: "Live device check"
+- tapOn: "(?s).*Live device check.*"
 - scrollUntilVisible:
     element: "Check AI engine offline"
     direction: DOWN

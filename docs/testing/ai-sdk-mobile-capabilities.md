@@ -48,3 +48,32 @@ The streaming wrapper preserves the native Expo Response instead of constructing
 a React Native Response from a ReadableStream. A regression test runs the offline
 SDK diagnostic with a constructor that rejects stream bodies. Both-platform
 Hermes exports pass after this correction; native runtime verification is pending.
+
+## Native candidate 25 (not distributed)
+
+Binary source `9c587ff6fef51cf6989441c0e16597d475db28e4` built successfully:
+
+- Android signed run `43099563202`, versionCode 25. Packaged source/assets,
+  release certificate, APK/AAB signatures and permission audit pass. Downloaded
+  APK SHA-256 matches the audit:
+  `7ff1565849d06e9213094954c4848b485caa749b782ce408727e7d5278e999f4`.
+- iOS simulator run `43099557616` passed. Signed run `43099570443` produced
+  version 1.0.0 (25); actual IPA source/assets/signing/privacy audits passed and
+  App Store Connect upload was confirmed. Apple processing is VALID. QA availability and installation remain pending.
+- Android smoke run `43101735327` passed both navigation modes on its single
+  retry. The first attempt lost emulator connections; it did not establish an app
+  failure. All 30 captures from the exact retry artifact IDs were inspected; draft,
+  multiline keyboard, memory restoration and both navigation modes are visible.
+- Android SDK run `43101729889` reached the offline diagnostic in three-button
+  mode, but its final consistency check failed. The screenshot was inspected.
+  This is unresolved native evidence; the candidate is not ready to distribute.
+
+Diagnostic JS commit `1b7580a` adds failure counts and synthetic-only tool error
+reporting. Runner commit `fc174a0` corrects JS-refresh provenance: audit the seed,
+retain its receipt, embed a distinct JS marker, and audit the tested bundle.
+Native dependencies still must match; an unrefreshed run still requires exact app
+source. Native and refreshed JS identity are recorded separately. iOS SDK run
+`43103570577` stopped before the diagnostic because Settings rows expose a
+combined title/detail accessibility label. The SDK flow now matches that label.
+Smoke run `43103576504` uses the same diagnostic JS with the existing simulator
+binary. Refreshed runs do not certify the signed candidate as a whole.
