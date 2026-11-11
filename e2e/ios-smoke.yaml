@@ -2,6 +2,11 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
+# A loaded CI runner may expose the first accessibility tree after launch returns.
+# Wait for the exact initial state, then retain the same assertion below.
+- extendedWaitUntil:
+    visible: "No chats yet"
+    timeout: 120000
 - assertVisible: "No chats yet"
 - takeScreenshot: 01-chats-empty
 - tapOn:
