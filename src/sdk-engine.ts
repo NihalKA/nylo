@@ -1,3 +1,4 @@
+import { withStreamingBody } from "./sdk-response";
 import {
   streamText,
   generateImage,
@@ -127,10 +128,7 @@ export function connectionFetch(
           await reader.cancel(reason);
         },
       });
-      return new Response(body, {
-        status: response.status,
-        headers: response.headers,
-      });
+      return withStreamingBody(response, body);
     }
     return response;
   };

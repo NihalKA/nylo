@@ -42,4 +42,9 @@ Computer integration verification: one synthetic user request ran through the ac
 SDK and configured NyloHQ connection, producing one visually inspected image.
 The only requests were Responses -> image generation -> Responses. This used
 the existing member credential without exposing it; it does not establish native
-device success. Source verification currently has 103 passing tests.
+device success. Source verification currently has 104 passing tests.
+
+The streaming wrapper preserves the native Expo Response instead of constructing
+a React Native Response from a ReadableStream. A regression test runs the offline
+SDK diagnostic with a constructor that rejects stream bodies. Both-platform
+Hermes exports pass after this correction; native runtime verification is pending.

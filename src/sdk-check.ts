@@ -1,3 +1,4 @@
+import { syntheticStreamResponse } from "./sdk-response";
 import { runSDKAgent } from "./sdk-engine";
 import { Attachment } from "./types";
 
@@ -72,7 +73,7 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
       events.map((e) => `data: ${JSON.stringify(e)}\n\n`).join(""),
     );
     let position = 0;
-    return new Response(
+    return syntheticStreamResponse(
       new ReadableStream({
         pull(controller) {
           if (position >= bytes.length) controller.close();
