@@ -75,34 +75,16 @@ appId: com.nylohq.nylo
 - assertVisible:
     id: "chat-message"
 - tapOn: "Go back"
-# Maximum-text inbox row was y859–1123 while the tab bar began at877.
-# When its center is below that bar, move the content before the same row tap.
-# Retained AX shows the row fully visible at y559–845 above tabs at y877.
-# Use full visibility without centering: at the end of this list the row
-# cannot move to screen centre, and Maestro otherwise scrolls until timeout.
+# Maximum-text AX reports the row visible even at y895–1181 below tabs at877.
+# Move it into the actual viewport before tapping; preserve exact draft checks.
 - runFlow:
     when:
-      notVisible:
-        text: "(?s)Open New conversation.*"
+      true: ${MAESTRO_UI_PROFILE == 'large-text'}
     commands:
       - swipe:
-          start: "50%, 65%"
+          start: "50%, 75%"
           end: "50%, 35%"
           duration: 500
-# The exact row can be fully visible in retained AX while scrollUntilVisible
-# still rejects its visibility calculation. Do not scroll an already visible row;
-# the tap and exact draft-content assertions below still verify restoration.
-- runFlow:
-    when:
-      notVisible:
-        text: "(?s)Open New conversation.*"
-    commands:
-      - scrollUntilVisible:
-          element:
-            text: "(?s)Open New conversation.*"
-          direction: DOWN
-          visibilityPercentage: 100
-          centerElement: false
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible:
     id: "chat-message"
@@ -110,34 +92,16 @@ appId: com.nylohq.nylo
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-# Maximum-text inbox row was y859–1123 while the tab bar began at877.
-# When its center is below that bar, move the content before the same row tap.
-# Retained AX shows the row fully visible at y559–845 above tabs at y877.
-# Use full visibility without centering: at the end of this list the row
-# cannot move to screen centre, and Maestro otherwise scrolls until timeout.
+# Maximum-text AX reports the row visible even at y895–1181 below tabs at877.
+# Move it into the actual viewport before tapping; preserve exact draft checks.
 - runFlow:
     when:
-      notVisible:
-        text: "(?s)Open New conversation.*"
+      true: ${MAESTRO_UI_PROFILE == 'large-text'}
     commands:
       - swipe:
-          start: "50%, 65%"
+          start: "50%, 75%"
           end: "50%, 35%"
           duration: 500
-# The exact row can be fully visible in retained AX while scrollUntilVisible
-# still rejects its visibility calculation. Do not scroll an already visible row;
-# the tap and exact draft-content assertions below still verify restoration.
-- runFlow:
-    when:
-      notVisible:
-        text: "(?s)Open New conversation.*"
-    commands:
-      - scrollUntilVisible:
-          element:
-            text: "(?s)Open New conversation.*"
-          direction: DOWN
-          visibilityPercentage: 100
-          centerElement: false
 - tapOn: "(?s)Open New conversation.*"
 - assertVisible:
     id: "chat-message"

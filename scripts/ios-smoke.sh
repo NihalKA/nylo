@@ -226,6 +226,7 @@ mark_phase install-driver
 curl -fsSL --retry 3 --retry-all-errors --retry-delay 3 --retry-max-time 120 --connect-timeout 15 --max-time 60 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
+export MAESTRO_UI_PROFILE="$profile"
 export MAESTRO_CLI_NO_ANALYTICS=1
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
