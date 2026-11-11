@@ -428,3 +428,29 @@ test("mobile Responses need not expose body streams or construct from streams", 
     globalThis.Response = OriginalResponse;
   }
 });
+
+test("malformed image arguments never reach the image endpoint", async () => {
+  for (const args of [
+    {},
+    { prompt: "   " },
+    { prompt: 7 },
+    { prompt: "x".repeat(6001) },
+    { prompt: "a cat", imageId: 9 },
+  ]) {
+    let chats = 0;
+    const o = options(async (url) => {
+      assert.ok(
+        String(url).endsWith("/responses"),
+        "No image API call is permitted",
+      );
+      return ++chats === 1
+        ? stream(undefined, "generate_image", args)
+        : stream("The image arguments were invalid.");
+    });
+    o.onFiles = async () => {
+      assert.fail("No file may be created");
+    };
+    await runSDKAgent(o);
+    assert.equal(chats, 2);
+  }
+});

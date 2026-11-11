@@ -42,7 +42,7 @@ Computer integration verification: one synthetic user request ran through the ac
 SDK and configured NyloHQ connection, producing one visually inspected image.
 The only requests were Responses -> image generation -> Responses. This used
 the existing member credential without exposing it; it does not establish native
-device success. Source verification currently has 104 passing tests.
+device success. Source verification currently has 105 passing tests.
 
 The streaming wrapper preserves the native Expo Response instead of constructing
 a React Native Response from a ReadableStream. A regression test runs the offline
@@ -90,3 +90,9 @@ of the corrected fixture remains pending; no image-success claim follows yet.
 Compact iOS smoke passed and its 15 captures were inspected. Standard large
 smoke also passed; its capture review remains pending. Maximum-text navigation
 is being retested with conditional scrolling; exact restoration assertions remain.
+
+Image arguments are also checked at execution time: the SDK's JSON-schema
+wrapper otherwise describes arguments without validating them. Empty, missing,
+non-string or oversized prompts and invalid image IDs are rejected before the
+image API. The added regression checks that these cases make no image request;
+all 105 source tests pass.

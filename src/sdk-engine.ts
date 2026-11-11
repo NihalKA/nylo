@@ -278,6 +278,17 @@ export async function runSDKAgent(options: SDKOptions) {
       }),
       execute: async ({ prompt, imageId }) => {
         await ensureComplete();
+        if (
+          typeof prompt !== "string" ||
+          !prompt.trim() ||
+          prompt.length > 6000 ||
+          (imageId !== undefined &&
+            (typeof imageId !== "string" || !imageId || imageId.length > 200))
+        )
+          return {
+            error:
+              "The image tool received invalid arguments. No image request was sent.",
+          };
         if (++generated > 2)
           return {
             error:
