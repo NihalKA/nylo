@@ -1,4 +1,4 @@
-import { syntheticStreamResponse } from "./sdk-response";
+import { syntheticJSONResponse, syntheticStreamResponse } from "./sdk-response";
 import { runSDKAgent } from "./sdk-engine";
 import { Attachment } from "./types";
 
@@ -17,10 +17,7 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
       String(url) === "https://sdk-check.invalid/v1/images/edits"
     ) {
       images++;
-      return new Response(
-        JSON.stringify({ created: 1, data: [{ b64_json: png }] }),
-        { headers: { "content-type": "application/json" } },
-      );
+      return syntheticJSONResponse({ created: 1, data: [{ b64_json: png }] });
     }
     if (String(url) !== "https://sdk-check.invalid/v1/responses")
       throw new Error("Unexpected diagnostic destination.");

@@ -22,3 +22,19 @@ export function syntheticStreamResponse(
   const response = new Response(null, init);
   return withStreamingBody(response, body);
 }
+
+// RN's string Response supports text()/json() but has no readable body. The
+// SDK reads JSON through body.getReader(), so synthetic responses need both.
+export function syntheticJSONResponse(value: unknown): Response {
+  const text = JSON.stringify(value);
+  const bytes = new TextEncoder().encode(text);
+  return withStreamingBody(
+    new Response(text, { headers: { "content-type": "application/json" } }),
+    new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(bytes);
+        controller.close();
+      },
+    }),
+  );
+}

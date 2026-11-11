@@ -77,3 +77,16 @@ source. Native and refreshed JS identity are recorded separately. iOS SDK run
 combined title/detail accessibility label. The SDK flow now matches that label.
 Smoke run `43103576504` uses the same diagnostic JS with the existing simulator
 binary. Refreshed runs do not certify the signed candidate as a whole.
+
+The subsequent iOS SDK diagnostic `43106535673` reached the check and reported
+three chat steps, two image calls, no file, correct final text, and two invalid
+JSON responses. The captured screenshot/AX and SDK source identify a fixture
+issue: React Native's constructed string Response exposes text()/json() but no
+readable body, while AI SDK reads JSON through body.getReader(). Real requests
+use Expo fetch responses. The synthetic JSON fixture now supplies both readers;
+the source regression models an absent body stream as well as an unsupported
+stream constructor. All 104 source tests and typecheck pass. Native revalidation
+of the corrected fixture remains pending; no image-success claim follows yet.
+Compact iOS smoke passed and its 15 captures were inspected. Standard large
+smoke also passed; its capture review remains pending. Maximum-text navigation
+is being retested with conditional scrolling; exact restoration assertions remain.

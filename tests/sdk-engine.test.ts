@@ -407,9 +407,12 @@ test("an incomplete tool response cannot execute memory or trigger another reque
   assert.equal(calls, 1);
 });
 
-test("mobile Response constructors need not support ReadableStream bodies", async () => {
+test("mobile Responses need not expose body streams or construct from streams", async () => {
   const OriginalResponse = globalThis.Response;
   class MobileResponse extends OriginalResponse {
+    get body(): Response["body"] {
+      return null;
+    }
     constructor(body?: BodyInit | null, init?: ResponseInit) {
       if (body instanceof ReadableStream)
         throw new Error("Native Response cannot construct from a stream");
