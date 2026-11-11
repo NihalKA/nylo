@@ -88,6 +88,22 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
   # This path supplies UI iteration evidence, never a signed release candidate.
   git diff --exit-code "$source_sha" HEAD -- package.json package-lock.json app.json \
     'app.config.*' assets modules plugins config ios android
+  # Audit the seed before replacing JS, then give the refreshed bundle its own
+  # identity. Keep both receipts; a refresh never represents a signed binary.
+  cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
+  python3 scripts/ios-build-identity.py verify "$RUNNER_TEMP/nylo-app/Nylo.app"
+  cp artifacts/ios-bundle-verification.json artifacts/e2e/native-bundle-verification.json
+  python3 - "$js_source_sha" <<'PYIDENTITY'
+import json, sys
+from pathlib import Path
+p=Path('artifacts/ios-build-identity.json')
+identity=json.loads(p.read_text())
+identity['nativeSource']=identity['source']
+identity['source']=sys.argv[1]
+identity['marker']=f"UI: figma-parity {sys.argv[1][:12]} {identity['candidateTimeUTC']}"
+p.write_text(json.dumps(identity,indent=2)+'\n')
+PYIDENTITY
+  export EXPO_PUBLIC_UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/ios-build-identity.json"))["marker"])')"
   npx expo export:embed --platform ios --dev false --bytecode \
     --entry-file node_modules/expo-router/entry.js \
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
@@ -96,10 +112,14 @@ fi
 export MAESTRO_UI_BUILD_MARKER=""
 if [ -f artifacts/native/ios-build-identity.json ]; then
   mkdir -p artifacts
-  cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
-  git fetch --no-tags origin "$source_sha" --depth=1
-  git diff --exit-code "$source_sha" HEAD -- app src assets modules plugins config app.json 'app.config.*' 'package*.json' tsconfig.json 'babel.config.*' 'metro.config.*'
+  if [ "${REFRESH_JS_BUNDLE:-false}" != true ]; then
+    cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
+    git fetch --no-tags origin "$source_sha" --depth=1
+    git diff --exit-code "$source_sha" HEAD -- app src assets modules plugins config app.json 'app.config.*' 'package*.json' tsconfig.json 'babel.config.*' 'metro.config.*'
+  fi
   python3 scripts/ios-build-identity.py verify "$RUNNER_TEMP/nylo-app/Nylo.app"
+  cp artifacts/ios-bundle-verification.json artifacts/e2e/tested-bundle-verification.json
+  cp artifacts/ios-build-identity.json artifacts/e2e/tested-build-identity.json
   export MAESTRO_UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/ios-build-identity.json"))["marker"])')"
 fi
 mark_phase discover-simulator
