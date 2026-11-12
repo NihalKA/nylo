@@ -385,6 +385,13 @@ export function parseData(value: unknown, local = false): AppData {
               destination: c.destination,
               revision: 3 as const,
               grantedAt: c.grantedAt,
+              generatedImageEditChats: Array.isArray(c.generatedImageEditChats)
+                ? c.generatedImageEditChats.filter(
+                    (id): id is string =>
+                      typeof id === "string" &&
+                      d.conversations.some((chat) => chat.id === id),
+                  )
+                : [],
               attachmentApprovals: Array.isArray(c.attachmentApprovals)
                 ? c.attachmentApprovals
                     .filter(

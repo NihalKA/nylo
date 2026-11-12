@@ -273,13 +273,19 @@ assert chats['background-memory']['messages'][-1]['status']=='interrupted'
 assert chats['background-stop']['messages'][-1]['status']=='interrupted'
 assert not data['agents'][0]['memories']
 records=[json.loads(line) for line in Path('artifacts/e2e/background-server.jsonl').read_text().splitlines()]
-assert sorted(x['model'] for x in records if x['event']=='request')==sorted(['qa-background','qa-memory','qa-stop','qa-owned-image','qa-image-retry','qa-image-retry','qa-image-retry'])
+assert sorted(x['model'] for x in records if x['event']=='request')==sorted(['qa-background','qa-memory','qa-stop','qa-owned-image','qa-image-retry','qa-image-retry','qa-image-retry','qa-edit-consent','qa-edit-consent','qa-owned-image','qa-owned-image'])
 retry=chats['background-image-retry']['messages']
 assert len(retry)==3 and retry[-1]['status']=='complete' and retry[-1]['text']=='Reply retried; saved image kept.'
 assert len(retry[1]['generatedFiles'])==1 and retry[1]['status']=='error'
 assert 'PRIVATE_FIXTURE_DETAIL' not in json.dumps(retry)
 with sqlite3.connect(Path(sys.argv[1]).as_uri()+'?mode=ro',uri=True) as db:
     assert db.execute('SELECT data FROM attachment_blobs WHERE id=?',(retry[1]['generatedFiles'][0]['blobId'],)).fetchone()[0].startswith('iVBORw0KGgo')
+assert sum(x['event']=='image_generation' for x in records)==1, 'Reply retry must not regenerate'
+assert sum(x['event']=='image_edit_upload' for x in records)==2
+edit=chats['background-edit-consent']
+assert len(edit['messages'])==6 and sum(len(m.get('generatedFiles',[])) for m in edit['messages'])==3
+assert all(m['status']=='complete' for m in edit['messages'])
+assert any('background-edit-consent' in c.get('generatedImageEditChats',[]) for c in data['providerConsents'])
 assert sorted(x['kind'] for x in records if x['event']=='durable_while_home')==['background','memory']
 for kind in ['background','memory']:
     entered=next(x['time'] for x in records if x['event']=='home_gate_entered' and x['kind']==kind)

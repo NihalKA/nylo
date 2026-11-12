@@ -78,6 +78,7 @@ export type AppData = {
     destination: string;
     revision: 3;
     grantedAt: number;
+    generatedImageEditChats?: string[];
     attachmentApprovals?: { conversationId: string; attachmentIds: string[] }[];
   }[];
   connections: Connection[];

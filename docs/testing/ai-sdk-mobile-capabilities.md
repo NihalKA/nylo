@@ -134,3 +134,18 @@ findings with no high/critical findings. Earlier receipts and intermediate
 failures are preserved in [the development record](ai-sdk-mobile-capabilities-development.md).
 Private Apple receipts, handoff, logs, databases and credentials are excluded from
 source/public releases.
+
+## Approved follow-up: chat activity and document previews (not released yet)
+
+The owner approved remembered permission for generated-image edits in the same
+chat/provider, compact activity and source presentation with proper Markdown and
+citations, and local PDF/TXT previews. Personal uploads still require approval;
+provider/credential/destination changes and Reset sharing approval revoke the
+remembered scope. Imports do not restore it.
+
+The implementation uses local native PDF preview and a TXT reader while retaining
+Save/Share. Android preview stays in the existing React activity so opening a file
+does not itself background the chat. Source HTML and remote images are not
+executed/loaded by the text renderer. No model, provider storage, theme, memory,
+report or background architecture change. Build 30 remains the delivered release;
+new native verification and delivery are pending. Source checks now cover 128 tests.

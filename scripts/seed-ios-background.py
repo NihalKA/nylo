@@ -11,13 +11,18 @@ if os.environ.get('GITHUB_ACTIONS') != 'true' or not {'CoreSimulator', 'Devices'
 p = container / 'Documents/SQLite/nylo.db'
 assert p.is_file()
 stamp = 1794200000000
-connection = dict(id='background-provider', name='Owned localhost QA', provider='custom', protocol='openai', baseUrl='https://localhost:8765/v1', model='qa-background', models=['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry'], imageModel='qa-owned-image')
+connection = dict(id='background-provider', name='Owned localhost QA', provider='custom', protocol='openai', baseUrl='https://localhost:8765/v1', model='qa-background', models=['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry', 'qa-edit-consent'], imageModel='qa-owned-image')
 agent = dict(connectionId=connection['id'], id='background-agent', name='QA background agent', description='Owned local memory fixture', instructions='No real provider or user data.', color='#246B58', createdAt=stamp, memories=[])
 chats = []
-for kind in ['background', 'memory', 'stop', 'image-retry']:
+for kind in ['background', 'memory', 'stop', 'image-retry', 'edit-consent']:
     chat = dict(id='background-'+kind, title='Example: '+kind+' stream', connectionId=connection['id'], model='qa-'+kind, draft='Owned QA '+kind, messages=[], createdAt=stamp, updatedAt=stamp)
     if kind == 'memory': chat['agentId'] = agent['id']
     if kind == 'image-retry': chat['draft'] = 'Owned QA file retry: create a synthetic image.'
+    if kind == 'edit-consent':
+        import base64
+        png = 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAKklEQVR4nGNQyY6gKWIYtWDUglELRi0YtWDUglELRi0YtWDUglELRi0YtWDUglELhooFAERenC4hY24CAAAAAElFTkSuQmCC'
+        image = dict(id='owned-edit-image',name='Owned edit consent.png',mimeType='image/png',size=len(base64.b64decode(png)),data=png)
+        chat['messages'] = [dict(id='owned-edit-user',role='user',text='Create owned synthetic fixture',status='complete',createdAt=stamp),dict(id='owned-edit-reply',role='assistant',text='Owned seed image',generatedFiles=[image],status='complete',createdAt=stamp)]
     chats.append(chat)
 data = dict(version=1, connections=[connection], defaultConnectionId=connection['id'], agents=[agent], conversations=chats)
 with sqlite3.connect(p) as db:

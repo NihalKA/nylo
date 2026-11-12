@@ -132,3 +132,34 @@ appId: com.nylohq.nylo
     element: "Save or share image"
     direction: UP
 - takeScreenshot: background-08-file-cold-restored
+
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: edit-consent stream.*"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "Allow edits in this chat"
+    timeout: 60000
+- takeScreenshot: background-09-edit-permission
+- tapOn: "Allow edits in this chat"
+- extendedWaitUntil:
+    visible: "Image edited"
+    timeout: 60000
+- extendedWaitUntil:
+    notVisible: "Stop response"
+    timeout: 60000
+- takeScreenshot: background-10-first-edit
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Owned QA edit-consent.*"
+- tapOn:
+    id: "chat-message"
+- inputText: "Edit this generated image again"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "Image edited"
+    timeout: 60000
+- assertNotVisible: "Send this image for editing?"
+- extendedWaitUntil:
+    notVisible: "Stop response"
+    timeout: 60000
+- takeScreenshot: background-11-remembered-edit

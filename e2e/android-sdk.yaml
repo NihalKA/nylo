@@ -31,6 +31,37 @@ appId: com.nylohq.nylo
     direction: DOWN
 - assertVisible: "Offline SDK text.txt"
 - takeScreenshot: sdk-document-results
+- scrollUntilVisible:
+    element: "Open Offline SDK report.pdf"
+    direction: UP
+- tapOn: "Open Offline SDK report.pdf"
+- extendedWaitUntil:
+    visible: "(?s).*Offline SDK report.*"
+    timeout: 30000
+- takeScreenshot: sdk-pdf-preview
+- assertVisible: "Zoom in"
+- tapOn: "Zoom in"
+- takeScreenshot: sdk-pdf-zoomed
+- tapOn: "Zoom out"
+- tapOn: "Close document preview"
+- scrollUntilVisible:
+    element: "Open Offline SDK text.txt"
+    direction: DOWN
+- tapOn: "Open Offline SDK text.txt"
+- assertVisible: "(?s).*Weather overview.*7 x 12 = 84.*"
+- takeScreenshot: sdk-text-preview
+- tapOn: "Close document preview"
+- scrollUntilVisible:
+    element: "Sources, 2"
+    direction: DOWN
+- assertVisible: "Offline sample overview"
+- tapOn: "Sources, 2"
+- assertVisible: "Sources"
+- assertVisible: "Open source 1: Synthetic reference"
+- assertVisible: "Open source 2: Offline diagnostic notes"
+- takeScreenshot: sdk-sources-sheet
+- tapOn: "Close sources"
+- takeScreenshot: sdk-formatted-answer
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Example: SDK image.*"

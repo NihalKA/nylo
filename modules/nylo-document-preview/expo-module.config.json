@@ -1,0 +1,7 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": { "modules": ["NyloDocumentPreviewModule"] },
+  "android": {
+    "modules": ["expo.modules.nylodocumentpreview.NyloDocumentPreviewModule"]
+  }
+}

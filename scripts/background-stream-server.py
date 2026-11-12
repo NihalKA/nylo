@@ -20,17 +20,30 @@ def record(event, **facts):
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *_): pass
     def do_POST(self):
-        if self.server.server_port != 8765 or self.path not in ['/v1/responses', '/v1/images/generations']:
+        if self.server.server_port != 8765 or self.path not in ['/v1/responses', '/v1/images/generations', '/v1/images/edits']:
             self.send_error(404); return
         n = int(self.headers.get('Content-Length', '0'))
         if n > 100000: self.send_error(413); return
-        body = json.loads(self.rfile.read(n));model = body.get('model')
-        if model not in ['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry', 'qa-owned-image'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
+        raw = self.rfile.read(n)
+        if self.path == '/v1/images/edits':
+            from email.parser import BytesParser
+            from email.policy import default
+            form = BytesParser(policy=default).parsebytes(('Content-Type: '+self.headers.get('Content-Type','')+'\r\n\r\n').encode()+raw)
+            fields = {p.get_param('name',header='content-disposition'):p.get_payload(decode=True) for p in form.iter_parts()}
+            assert any(k.startswith('image') and v.startswith(b'\x89PNG\r\n\x1a\n') for k,v in fields.items()), 'Actual multipart image bytes required'
+            body = dict(model=fields.get('model',b'').decode())
+            record('image_edit_upload')
+        else: body = json.loads(raw)
+        model = body.get('model')
+        if model not in ['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry', 'qa-owned-image', 'qa-edit-consent'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
             self.send_error(403); return
         with lock: counts[model] = counts.get(model, 0)+1
         record('request', model=model)
-        if self.path == '/v1/images/generations':
-            assert model == 'qa-owned-image' and counts[model] == 1, 'Unexpected image regeneration'
+        if self.path in ['/v1/images/generations', '/v1/images/edits']:
+            assert model == 'qa-owned-image'
+            if self.path == '/v1/images/generations':
+                assert counts[model] == 1, 'Unexpected image regeneration'
+                record('image_generation')
             payload = json.dumps(dict(created=1, data=[dict(b64_json=png)])).encode()
             self.send_response(200);self.send_header('Content-Type','application/json');self.end_headers();self.wfile.write(payload);return
         assert model != 'qa-owned-image'
@@ -38,6 +51,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
         def event(value):
             self.wfile.write(('data: '+json.dumps(value)+'\n\n').encode());self.wfile.flush()
         try:
+            if model == 'qa-edit-consent':
+                assert counts[model] <= 2, 'Unexpected edit model roundtrip'
+                event(dict(type='response.created', response=dict(id='resp_edit',created_at=1,model=model)))
+                item=dict(type='function_call',id='fc_edit',status='completed',call_id='call_edit',name='generate_image',arguments=json.dumps(dict(prompt='edit synthetic owned tile',imageId='owned-edit-image',finishAfter=True)))
+                event(dict(type='response.output_item.added',output_index=0,item=item))
+                event(dict(type='response.output_item.done',output_index=0,item=item))
+                event(dict(type='response.completed',response=dict(usage=dict(input_tokens=1,output_tokens=1,total_tokens=2))))
+                return
             if model == 'qa-image-retry':
                 turn = counts[model]
                 assert turn <= 3, 'Unexpected retry request'

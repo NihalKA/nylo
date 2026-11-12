@@ -526,6 +526,8 @@ export async function runSDKAgent(options: SDKOptions) {
     for await (const part of result.fullStream) {
       if (signal.aborted) throw new Error("Response stopped.");
       options.onActivity?.();
+      if (part.type === "tool-call" && part.toolName === "web_search")
+        onAction("Searching the web…");
       if (part.type === "text-delta") {
         stage("reply");
         text += part.text;

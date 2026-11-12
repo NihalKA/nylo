@@ -16,7 +16,12 @@ import {
   createDurableUpdater,
   createSerialExecutor,
 } from "./persistence";
-import { askPermission } from "./consent";
+import { askPermission, askImageEditPermission } from "./consent";
+import {
+  generatedEditApproved,
+  isGeneratedImage,
+  rememberGeneratedEdits,
+} from "./generated-edit-consent";
 import React, {
   createContext,
   useContext,
@@ -616,16 +621,38 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         approveImageEdit: async (image) => {
           if (AppState.currentState !== "active" || controller.signal.aborted)
             return false;
+          if (
+            generatedEditApproved(
+              current.current,
+              conversationId,
+              connection,
+              image,
+            )
+          )
+            return true;
           if (active.current) active.current.reviewingMemory = true;
           try {
+            const choice = await askImageEditPermission(
+              `${image.name} will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Image generation charges may apply.`,
+              isGeneratedImage(current.current, conversationId, image),
+            );
+            if (
+              choice === "cancel" ||
+              controller.signal.aborted ||
+              AppState.currentState !== "active"
+            )
+              return false;
+            if (choice === "chat")
+              await update((d) => ({
+                ...d,
+                providerConsents: rememberGeneratedEdits(
+                  d,
+                  conversationId,
+                  connection,
+                ),
+              }));
             return (
-              (await askPermission(
-                "Send this image for editing?",
-                `${image.name} will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Image generation charges may apply.`,
-                "Edit image",
-              )) &&
-              !controller.signal.aborted &&
-              AppState.currentState === "active"
+              !controller.signal.aborted && AppState.currentState === "active"
             );
           } finally {
             if (active.current?.controller === controller)

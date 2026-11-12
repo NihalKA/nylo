@@ -1,3 +1,7 @@
+import { MessageContent } from "../../src/message-content";
+import { MessageActivity, MessageSources } from "../../src/message-activity";
+import { DocumentPreviewModal } from "../../src/document-preview-modal";
+import { openPdfPreview } from "../../src/document-preview";
 import { stageLabels } from "../../src/response-progress";
 import { shareGeneratedFile, exportResponse } from "../../src/file-export";
 import { BlurTargetView, BlurView } from "expo-blur";
@@ -73,70 +77,6 @@ import {
   Press,
 } from "../../src/ui";
 
-function MessageText({ text }: { text: string }) {
-  const blocks = text.split(/(```[\s\S]*?```)/g);
-  return (
-    <View style={{ gap: 10 }}>
-      {blocks.map((block, index) =>
-        block.startsWith("```") ? (
-          <View
-            key={index}
-            style={{
-              backgroundColor: theme.surface,
-              padding: 14,
-              borderRadius: 12,
-            }}
-          >
-            <Text
-              selectable
-              style={{
-                fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                fontSize: 12,
-                lineHeight: 20,
-                color: theme.ink,
-              }}
-            >
-              {block.replace(/^```[^\n]*\n?/, "").replace(/```$/, "")}
-            </Text>
-          </View>
-        ) : (
-          <View key={index} style={{ gap: 16 }}>
-            {block.split(/\n{2,}/g).map((paragraph, paragraphIndex) => {
-              const heading = /^\*\*[^*\n]+\*\*$/.test(paragraph);
-              return (
-                <Text
-                  key={paragraphIndex}
-                  selectable
-                  style={
-                    heading
-                      ? [s.h2, { fontWeight: "700" }]
-                      : { fontSize: 14, lineHeight: 22, color: theme.sub }
-                  }
-                >
-                  {heading
-                    ? paragraph.slice(2, -2)
-                    : paragraph.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
-                        <Text
-                          key={i}
-                          style={
-                            part.startsWith("**")
-                              ? { fontWeight: "600", color: theme.ink }
-                              : undefined
-                          }
-                        >
-                          {part.startsWith("**") ? part.slice(2, -2) : part}
-                        </Text>
-                      ))}
-                </Text>
-              );
-            })}
-          </View>
-        ),
-      )}
-    </View>
-  );
-}
-
 export default function ChatRoute() {
   const params = useLocalSearchParams<{ id: string }>();
   return <Chat key={params.id} />;
@@ -191,6 +131,7 @@ function Chat() {
   const blurTarget = useRef<React.ComponentRef<typeof View>>(null);
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
+  const [previewFile, setPreviewFile] = useState<Attachment | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [menu, setMenu] = useState(false);
   const [modelPicker, setModelPicker] = useState(false);
@@ -710,39 +651,11 @@ function Chat() {
                             ) : null}
                           </View>
                         ) : null}
-                        {message.actions?.map((label, i) => (
-                          <View key={i} style={[s.row, { gap: 5 }]}>
-                            <Icon
-                              name={
-                                label.includes("failed")
-                                  ? "alert-circle-outline"
-                                  : label.endsWith("…")
-                                    ? "time-outline"
-                                    : "checkmark-circle-outline"
-                              }
-                              size={13}
-                              color={
-                                label.includes("failed")
-                                  ? theme.error
-                                  : label.endsWith("…")
-                                    ? theme.sub
-                                    : theme.green
-                              }
-                            />
-                            <Text
-                              style={{
-                                fontSize: 11,
-                                color: label.includes("failed")
-                                  ? theme.error
-                                  : label.endsWith("…")
-                                    ? theme.sub
-                                    : theme.green,
-                              }}
-                            >
-                              {label}
-                            </Text>
-                          </View>
-                        ))}
+                        <MessageActivity
+                          actions={message.actions}
+                          active={message.status === "streaming"}
+                          progress={progressLabel}
+                        />
                         {message.generatedFiles?.map((file) => (
                           <View key={file.id} style={{ gap: 8 }}>
                             {file.mimeType.startsWith("image/") ? (
@@ -758,7 +671,20 @@ function Chat() {
                                 resizeMode="contain"
                               />
                             ) : (
-                              <View style={[s.card, { gap: 6 }]}>
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open ${file.name}`}
+                                accessibilityHint="Opens a local document preview"
+                                onPress={() => {
+                                  if (
+                                    file.mimeType === "application/pdf" &&
+                                    Platform.OS === "ios"
+                                  )
+                                    void action(() => openPdfPreview(file));
+                                  else setPreviewFile(file);
+                                }}
+                                style={[s.card, { gap: 6 }]}
+                              >
                                 <Text style={[s.text, { fontWeight: "600" }]}>
                                   {file.name}
                                 </Text>
@@ -767,9 +693,9 @@ function Chat() {
                                     ? "PDF document"
                                     : "Text document"}{" "}
                                   · {Math.max(1, Math.ceil(file.size / 1024))}{" "}
-                                  KB
+                                  KB · Tap to open
                                 </Text>
-                              </View>
+                              </Press>
                             )}
                             <Button
                               title={
@@ -787,37 +713,12 @@ function Chat() {
                             />
                           </View>
                         ))}
-                        {message.sources?.length ? (
-                          <View style={{ gap: 6 }}>
-                            <Text style={s.sub}>Sources</Text>
-                            {message.sources.map((source) => (
-                              <Press
-                                key={source.url}
-                                accessibilityRole="link"
-                                accessibilityLabel={`Open source: ${source.title}`}
-                                onPress={() =>
-                                  void action(() => Linking.openURL(source.url))
-                                }
-                                style={{
-                                  minHeight: 44,
-                                  justifyContent: "center",
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    color: theme.accentText,
-                                    fontSize: 13,
-                                  }}
-                                >
-                                  {source.title}
-                                </Text>
-                              </Press>
-                            ))}
-                          </View>
-                        ) : null}
                         {message.text ? (
                           <>
-                            <MessageText text={message.text} />
+                            <MessageContent
+                              text={message.text}
+                              sources={message.sources}
+                            />
                             {message.status === "streaming" ? (
                               <StreamCaret />
                             ) : null}
@@ -852,6 +753,9 @@ function Chat() {
                               </Breathe>
                             </View>
                           </FadeIn>
+                        ) : null}
+                        {message.sources?.length ? (
+                          <MessageSources sources={message.sources} />
                         ) : null}
                         {message.error ? (
                           <View
@@ -1376,6 +1280,15 @@ function Chat() {
           </View>
         </KeyboardAvoidingView>
       </BlurTargetView>
+      <DocumentPreviewModal
+        file={previewFile}
+        onClose={() => setPreviewFile(null)}
+        onError={(e) =>
+          setError(
+            e instanceof Error ? e.message : "Could not share this file.",
+          )
+        }
+      />
       <Modal
         visible={attachmentMenu}
         onDismiss={() => {
