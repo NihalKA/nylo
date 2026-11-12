@@ -14,7 +14,8 @@ concurrency:
 jobs:
   beta:
     if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
-    runs-on: macos-26
+    # Standard Intel runner avoids the macOS arm64 capacity shortage.
+    runs-on: macos-26-intel
     environment: apple-release
     timeout-minutes: 60
     env:
