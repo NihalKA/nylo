@@ -21,6 +21,9 @@ appId: com.nylohq.nylo
 - takeScreenshot: sdk-native-passed
 
 - tapOn: "Open offline sample"
+- scrollUntilVisible:
+    element: "Open image: .*"
+    direction: UP
 - assertVisible: "Save or share image"
 - takeScreenshot: sdk-image-result
 - tapOn: "Open image: .*"
