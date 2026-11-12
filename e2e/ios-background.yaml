@@ -42,6 +42,9 @@ appId: com.nylohq.nylo
 - tapOn: "(?s)Open Example: background stream.*"
 - tapOn: "Send message"
 - tapOn: "Allow & send"
+- extendedWaitUntil:
+    visible: "Phase one.*"
+    timeout: 120000
 - assertVisible: "Phase one.*"
 - assertVisible: "(?s)Receiving reply.*"
 - takeScreenshot: background-00-active-reply

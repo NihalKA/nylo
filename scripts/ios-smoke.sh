@@ -13,6 +13,7 @@ if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDL
 fi
 simulator_id=""
 background_server_pid=""
+background_trust_pid=""
 phase="resolve-native-source"
 mark_phase() {
   phase="$1"
@@ -27,6 +28,7 @@ collect_diagnostics() {
   fi
   if [ -n "$background_server_pid" ]; then
     kill "$background_server_pid" || true
+    if [ -n "$background_trust_pid" ]; then kill "$background_trust_pid" || true; fi
     xcrun simctl spawn "$simulator_id" log show --last 15m --style compact --predicate 'process == "Nylo" AND eventMessage CONTAINS "[NyloBackgroundResponse]"' > artifacts/e2e/background-native.log 2>&1 || true
   fi
   if [ "$scenario" = background ]; then
@@ -220,6 +222,21 @@ CERT
   xcrun simctl keychain "$simulator_id" add-root-cert "$RUNNER_TEMP/background-tls.crt"
   python3 scripts/background-stream-server.py "$RUNNER_TEMP/background-tls.crt" "$RUNNER_TEMP/background-tls.key" "$app_container/Documents/SQLite/nylo.db" artifacts/e2e/background-server.jsonl > artifacts/e2e/background-server.log 2>&1 &
   background_server_pid=$!
+  # Fail before UI navigation if our owned TLS fixture is not actually ready.
+  # This checks host TLS only; simulator trust is verified by the real app flow.
+  python3 - "$RUNNER_TEMP/background-tls.crt" <<'PREFLIGHT'
+import json, pathlib, ssl, sys, time, urllib.request
+p = pathlib.Path('artifacts/e2e/background-server.jsonl')
+for _ in range(100):
+    if p.exists() and any(json.loads(x)['event']=='server_ready' for x in p.read_text().splitlines()): break
+    time.sleep(.1)
+else: raise SystemExit('Owned fixture did not become ready')
+with urllib.request.urlopen('https://localhost:8765/health', context=ssl.create_default_context(cafile=sys.argv[1]), timeout=10) as response:
+    assert response.status==200 and response.read()==b'owned-fixture-ready'
+pathlib.Path('artifacts/e2e/background-tls-preflight.txt').write_text('PASS: owned host TLS endpoint and certificate verified; simulator trust still requires native app response.\n')
+PREFLIGHT
+  xcrun simctl spawn "$simulator_id" log stream --style compact --level debug --predicate 'process == "trustd" OR process == "securityd" OR (process == "Nylo" AND (subsystem == "com.apple.CFNetwork" OR subsystem == "com.apple.securityd"))' > artifacts/e2e/background-trust.log 2>&1 &
+  background_trust_pid=$!
   echo 'Owned localhost synthetic SSE only; no real provider, user data or credentials. SQL completion is checked while the driver keeps Nylo on Home.' > artifacts/e2e/background-disclosure.txt
 fi
 mark_phase install-driver

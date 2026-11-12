@@ -79,6 +79,9 @@ class Handler(http.server.BaseHTTPRequestHandler):
             event(dict(type='response.completed', response=dict(usage=dict(input_tokens=1, output_tokens=1, total_tokens=2))));record('stream_finished', model=model)
         except (BrokenPipeError,ConnectionResetError,ssl.SSLError): record('client_stopped',model=model)
     def do_GET(self):
+        if self.server.server_port == 8765 and self.path == '/health':
+            payload = b'owned-fixture-ready'
+            self.send_response(200);self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload);return
         if self.server.server_port != 8766 or self.path not in ['/complete','/memory']:
             self.send_error(404);return
         kind = 'background' if self.path == '/complete' else 'memory'
@@ -105,4 +108,5 @@ server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),Handler)
 context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.load_cert_chain(cert,key);server.socket=context.wrap_socket(server.socket,server_side=True)
 control=http.server.ThreadingHTTPServer(('127.0.0.1',8766),Handler)
 threading.Thread(target=server.serve_forever,daemon=True).start()
+record('server_ready')
 control.serve_forever()
