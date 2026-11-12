@@ -1,9 +1,9 @@
 import React from "react";
-import { Image, Modal, ScrollView, View } from "react-native";
+import { Modal, ScrollView, View } from "react-native";
 import { Attachment } from "./types";
 import { Text } from "./typography";
 import { Button, IconButton, Page, s, theme } from "./ui";
-import { attachmentUri } from "./attachments";
+import { ImagePreviewModal } from "./image-preview-modal";
 import { PDFContent } from "./pdf-content";
 import { shareGeneratedFile } from "./file-export";
 
@@ -16,6 +16,15 @@ export function DocumentPreviewModal({
   onClose: () => void;
   onError: (e: unknown) => void;
 }) {
+  if (file?.mimeType.startsWith("image/"))
+    return (
+      <ImagePreviewModal
+        key={file.id}
+        file={file}
+        onClose={onClose}
+        onError={onError}
+      />
+    );
   return (
     <Modal
       visible={!!file}
@@ -31,22 +40,11 @@ export function DocumentPreviewModal({
             </Text>
             <IconButton
               name="close"
-              label={
-                file.mimeType.startsWith("image/")
-                  ? "Close image preview"
-                  : "Close document preview"
-              }
+              label="Close document preview"
               onPress={onClose}
             />
           </View>
-          {file.mimeType.startsWith("image/") ? (
-            <Image
-              source={{ uri: attachmentUri(file) }}
-              accessibilityLabel={`Image preview: ${file.name}`}
-              resizeMode="contain"
-              style={{ flex: 1, width: "100%", minHeight: 160 }}
-            />
-          ) : file.mimeType === "application/pdf" ? (
+          {file.mimeType === "application/pdf" ? (
             <PDFContent file={file} />
           ) : (
             <ScrollView contentContainerStyle={{ paddingVertical: 16 }}>
