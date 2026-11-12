@@ -18,6 +18,16 @@ appId: com.nylohq.nylo
     element: "Save connection"
     direction: DOWN
 - tapOn: "Save connection"
+- waitForAnimationToEnd
+# The retained native diagnostic shows the password prompt can appear before
+# Done becomes accessible, as well as after the first Done tap below.
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - takeScreenshot: background-00-password-before-done
+      - tapOn: "Not Now"
+      - waitForAnimationToEnd
 - assertVisible: "Done"
 - tapOn: "Done"
 - waitForAnimationToEnd
