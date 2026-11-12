@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/preserve-followup-file-context' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/preserve-followup-file-context' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities' || github.ref == 'refs/heads/feat/chat-archive-delete'))
     runs-on: ubuntu-24.04
     environment: android-release
     timeout-minutes: 60
