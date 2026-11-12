@@ -30,7 +30,9 @@ appId: com.nylohq.nylo
 - assertVisible: "Image preview: .*"
 - assertVisible: "Save or share"
 - takeScreenshot: sdk-image-preview
-- doubleTapOn: "Image preview: .*"
+- doubleTapOn:
+    text: "Image preview: .*"
+    delay: 0
 - assertVisible: "Image zoom 250 percent"
 - takeScreenshot: sdk-image-zoomed
 - swipe:
@@ -39,7 +41,9 @@ appId: com.nylohq.nylo
     duration: 500
 - assertVisible: "Image zoom 250 percent"
 - takeScreenshot: sdk-image-panned
-- doubleTapOn: "Image preview: .*"
+- doubleTapOn:
+    text: "Image preview: .*"
+    delay: 0
 - assertVisible: "Image zoom 100 percent"
 - takeScreenshot: sdk-image-reset
 - tapOn: "Close image preview"

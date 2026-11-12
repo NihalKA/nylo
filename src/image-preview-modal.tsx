@@ -19,6 +19,9 @@ import {
   constrainImagePose,
   fitImage,
   ImagePose,
+  ImageTap,
+  isImageTap,
+  isImageDoubleTap,
   initialImagePose,
   Point,
   Size,
@@ -26,6 +29,7 @@ import {
 } from "./image-view-geometry";
 
 type Gesture = {
+  startedAt: number;
   points: Point[];
   pose: ImagePose;
   moved: boolean;
@@ -57,7 +61,7 @@ export function ImagePreviewModal({
   dimensions.current = fitted;
   const pose = useRef<ImagePose>({ ...initialImagePose });
   const gesture = useRef<Gesture | null>(null);
-  const lastTap = useRef<{ time: number; point: Point } | null>(null);
+  const lastTap = useRef<ImageTap | null>(null);
   const [zoom, setZoom] = useState(100);
   const [loadFailed, setLoadFailed] = useState(false);
   const values = useRef({
@@ -100,6 +104,7 @@ export function ImagePreviewModal({
     if (!touches.length) return;
     const previous = gesture.current;
     gesture.current = {
+      startedAt: rebase && previous ? previous.startedAt : Date.now(),
       points: touches,
       pose: { ...pose.current },
       moved: rebase ? previous?.moved || false : false,
@@ -164,15 +169,18 @@ export function ImagePreviewModal({
             lastTap.current = null;
             return;
           }
-          const previous = lastTap.current;
-          const now = Date.now();
-          if (
-            previous &&
-            now - previous.time < 350 &&
-            distance(previous.point, current.last) < 36
-          ) {
+          const tap: ImageTap = {
+            startedAt: current.startedAt,
+            endedAt: Date.now(),
+            point: current.last,
+          };
+          if (!isImageTap(tap)) {
+            lastTap.current = null;
+            return;
+          }
+          if (isImageDoubleTap(lastTap.current, tap)) {
             zoomTo(pose.current.scale > 1 ? 1 : 2.5, current.last);
-          } else lastTap.current = { time: now, point: current.last };
+          } else lastTap.current = tap;
         },
         onPanResponderTerminationRequest: () => false,
         onPanResponderTerminate: () => {

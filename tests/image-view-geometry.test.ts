@@ -5,6 +5,7 @@ import {
   constrainImagePose,
   initialImagePose,
   transformImagePose,
+  isImageDoubleTap,
 } from "../src/image-view-geometry";
 
 test("portrait and landscape images fit completely without cropping", () => {
@@ -97,4 +98,16 @@ test("rebasing a pinch to one-finger pan preserves its current pose", () => {
     x: pinched.x + 15,
     y: pinched.y - 5,
   });
+});
+
+test("double tap uses the second touch-down, not its later release", () => {
+  const first = { startedAt: 0, endedAt: 100, point: { x: 0, y: 0 } };
+  const second = { startedAt: 430, endedAt: 700, point: { x: 4, y: 3 } };
+  assert.equal(isImageDoubleTap(first, second), true);
+  assert.equal(isImageDoubleTap(first, { ...second, startedAt: 451 }), false);
+  assert.equal(isImageDoubleTap(first, { ...second, endedAt: 1000 }), false);
+  assert.equal(
+    isImageDoubleTap(first, { ...second, point: { x: 80, y: 0 } }),
+    false,
+  );
 });

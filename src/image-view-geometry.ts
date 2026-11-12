@@ -49,3 +49,24 @@ export function transformImagePose(
     fitted,
   );
 }
+
+export type ImageTap = { startedAt: number; endedAt: number; point: Point };
+export function isImageTap(tap: ImageTap): boolean {
+  const duration = tap.endedAt - tap.startedAt;
+  return duration >= 0 && duration < 500;
+}
+export function isImageDoubleTap(
+  previous: ImageTap | null,
+  next: ImageTap,
+): boolean {
+  if (!previous || !isImageTap(previous) || !isImageTap(next)) return false;
+  const gap = next.startedAt - previous.endedAt;
+  return (
+    gap >= 0 &&
+    gap < 350 &&
+    Math.hypot(
+      next.point.x - previous.point.x,
+      next.point.y - previous.point.y,
+    ) < 36
+  );
+}
