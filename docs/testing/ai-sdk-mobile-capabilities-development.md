@@ -524,3 +524,45 @@ Prior releases unchanged,31 never published. Only temporary policy66438039
 removed; original two policy objects unchanged. Existing delivery task disabled
 with no next run; separate four-hour monitor untouched. Final delivery details
 are in the main testing document; private receipts/logs/databases remain ignored.
+
+## Image tap previews: delivered beta 33
+
+The owner reported that images did not open when tapped, requested the same
+preview as PDF/TXT, and explicitly approved proceeding after the what/why/how
+explanation. Source `1565c0cb20021e6473b9fe5edc8b637e88ee5e9e` adds tap handlers
+for generated images, sent photos and draft photo thumbnails. They dismiss the
+keyboard and open the existing local preview modal with contained image pixels,
+filename, Close and Save/Share. No new image zoom, permission grant, provider
+request, storage record, dependency or native module was added. Separate native
+personal-photo/draft cases remain unverified; native SDK checks use the generated
+synthetic image. Previous build32 remains available.
+
+All native33 builds pass: simulator43218610664, Android43218616369 and signed
+upload43218623144, with actual source/signature/profile/privacy/version/hash
+receipts reviewed. SourceCI43218473752 passes128 checks and both Hermes exports
+pass. The first AndroidSDK43222023732 passes gestural mode, all11 captures and
+actual PDF/TXT reviewed; three-button stops at the initial image Save/Share
+assertion before tapping because its actual screenshot/AX viewport starts below
+the image at the PDF card. After explanation, test-only4c58fb2 adds semantic
+UP scroll to the image before the original assertion and tap in both SDK flows.
+All assertions remain intact, app inputs are unchanged and no rebuild was used.
+TestCI43223768537 passes.
+
+Final exact-bundle SDK checks iOS43223840243 (large, refreshfalse) and
+Android43223846414 (both navigation modes) pass. All33 final captures are reviewed,
+including actual image preview pixels/open/close/SaveShare and existing PDF/TXT,
+zoom, formatting, Sources and cold-restored files. All three actual PDF/TXT samples
+were rendered, text-checked and visually inspected; iOS minimum text coordinates
+remain48.64pt/36.22pt. Prior32 background and earlier main-UI smoke are explicit
+unchanged-implementation baselines, not rerun results. No paid/live provider probe.
+
+TestFlight1.0.0(33) is VALID/IN_BETA_TESTING in existing internal Nylo Device QA;
+independent notes/group/build-state reads preserve all prior selected builds and
+all-build access false, with28/31 unassigned. Installation unobserved. New public
+Android33 prerelease targets exact1565 source; unauthenticated APK67752546bytes
+and checksum match SHA-256
+f7d8fdbbe972b6deab2ed6da6babfb2b63de0ba862102699c1c445ec42d7fec5.
+Only owned temporary policy66449512 was removed, preserving all other objects.
+Delivery continuation disabled/no next run; four-hour monitor and other release
+roles/testers/Store15/external17 untouched. Original ZIPs/captures/private receipts
+remain retained and ignored; no raw logs/database/Apple JSON is public.

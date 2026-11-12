@@ -1,27 +1,35 @@
-# AI SDK mobile capabilities: delivered beta 32
+# AI SDK mobile capabilities: delivered beta 33
 
-App source: `cd9bd299de696b0a808f147c92158e6bcfff4770` on
+App source: `1565c0cb20021e6473b9fe5edc8b637e88ee5e9e` on
 `feat/ai-sdk-mobile-capabilities`. Test-only changes through
-`2b486de550f979c1d7e7e672a2030c4fd07748c4` and later documentation leave app
+`4c58fb2f052f88c8482e562e2a232664b4d4fb45` and later documentation leave app
 inputs unchanged. [PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and
 unmerged. The branch includes main `19c3c44`.
 
 ## Delivery
 
-- iOS **1.0.0 (32)** built and uploaded successfully. Apple processing is **VALID**.
+- iOS **1.0.0 (33)** built and uploaded successfully. Apple processing is **VALID**.
   Only this new build was added to existing internal **Nylo Device QA**. Independent
   group, build-beta-detail and notes reads confirm **IN_BETA_TESTING**, exact
   English notes and all-build access false. Prior selected builds, including
-  30/29/27, remain available. Builds 28 and 31 remain unassigned. Installation is
+  32/30/29/27, remain available. Builds 28 and 31 remain unassigned. Installation is
   unverified.
-- Android **1.0.0 / versionCode 32** is a new public feature prerelease:
-  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-32/Nylo-test.apk)
-  · [checksum](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-32/SHA256SUMS.txt).
+- Android **1.0.0 / versionCode 33** is a new public feature prerelease:
+  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-33/Nylo-test.apk)
+  · [checksum](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-33/SHA256SUMS.txt).
   Unauthenticated public APK and checksum downloads match the audited binary.
   The release tag targets the exact app source. Earlier releases remain intact;
   candidate 31 was never published. No Play upload.
 
 ## Approved chat and file improvements
+
+**Image previews:** tap generated images, sent photos or selected photos before
+sending to open the existing local preview modal. The image fits without cropping,
+with filename, Close and Save/Share. The keyboard dismisses when opening from the
+composer. Viewing uses the existing stored attachment URI, sends no provider
+request and creates no new consent grant or storage record. No image zoom behavior
+is added in this pass. Native SDK checks cover generated synthetic image taps;
+separate native sent/draft personal-photo cases remain unverified.
 
 **Generated-image editing:** choose **Allow edits in this chat** once to remember
 permission for assistant-generated images in that chat and provider. **Edit once**
@@ -87,52 +95,53 @@ live endpoint behavior. No paid/live provider probe was made.
 
 ## Verification
 
-| Check                                        | Actual result                                                                                 |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Source CI `43209621982`                      | Pass: 128 tests, typecheck, format, security, fonts/assets and Expo Doctor                    |
-| Test-only CI `43212349779`                   | Pass; app inputs unchanged                                                                    |
-| Both-platform Hermes exports                 | Pass                                                                                          |
-| iOS simulator `43209826681`                  | Pass; exact source and 2026-11-12T11:31:04Z marker, bundle/executable/assets/privacy verified |
-| Signed iOS/upload `43209837140`              | Pass, build 32; actual signature, exact certificate/team/profile/source/hash verified         |
-| iOS privacy                                  | 12 manifests; required declarations present, no microphone/tracking, exempt encryption        |
-| iOS SDK `43213191199`                        | Pass, original bundle/refresh false; all 9 scenario captures plus launch reviewed             |
-| iOS background/edit permission `43213196823` | Pass, original bundle/refresh false; all 13 scenario/setup captures plus launch reviewed      |
-| Android signed `43209832262`                 | Pass, code 32; actual source/bundle/assets/ZIP/signature/permissions/native PDF/hash verified |
-| Android SDK `43212391282`                    | Both modes pass; all 20 captures reviewed, actual zoom and restored files verified            |
-| Unchanged main UI baseline                   | iOS31 smoke `43206932619` and Android31 smoke `43206939702` pass; all 46 captures reviewed    |
-| Actual native PDF/TXT                        | All three final platform/navigation samples rendered, text-checked and visually inspected     |
+| Check                           | Actual result                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Source CI `43218473752`         | Pass: 128 tests, typecheck, format, security, fonts/assets and Expo Doctor                                         |
+| Test-only CI `43223768537`      | Pass; app inputs unchanged from `1565c0c`                                                                          |
+| Both-platform Hermes exports    | Pass                                                                                                               |
+| iOS simulator `43218610664`     | Pass; source `1565c0c`, marker 2026-11-12T12:30:48Z; actual bundle/executable/assets/privacy verified              |
+| Signed iOS/upload `43218623144` | Pass, build 33; actual signature, exact certificate/team/profile/source/hash verified                              |
+| iOS privacy                     | 12 manifests, required declarations present, no microphone/tracking, exempt encryption                             |
+| iOS SDK `43223840243`           | Pass, original bundle/refresh false; all 10 scenario captures plus launch reviewed                                 |
+| Android signed `43218616369`    | Pass, versionCode 33; actual source/bundle/assets/ZIP/signature/permissions/hash verified; signer unchanged from32 |
+| Android SDK `43223846414`       | Both navigation modes pass; all 22 captures reviewed                                                               |
+| Unchanged background baseline   | Build 32 `43213196823` passes; all 14 captures reviewed; no background/protocol/memory implementation changes in33 |
+| Unchanged main UI baseline      | iOS 31 `43206932619` and Android 31 `43206939702` pass; all 46 captures reviewed                                   |
+| Actual native PDF/TXT           | All three final platform/navigation samples rendered, text-checked and visually inspected                          |
 
-All **44 final candidate32 captures** were inspected, separately from the 46
-unchanged-main-UI baseline captures. Actual PDFs are readable and unclipped, one
-page A4; iOS minimum text X is 48.64 pt and Y is 36.22 pt. Android page pixels and
-measured accessibility zoom both change at 200 percent and restore to 100 percent.
-TXT contents match across platforms. Export is restricted to known synthetic
-samples; no raw database is published.
+All **33 final candidate33 captures** were reviewed, separately from earlier
+baseline captures. They show actual image pixels in the local preview, filename,
+Close and Save/Share, return to the chat, PDF/TXT previews, proper Markdown and
+Sources sheet, and retained files after cold restart. Android PDF zoom changes
+actual page geometry and measured 200/100-percent accessibility states. Actual
+PDFs are readable and unclipped, one page A4; iOS minimum text X 48.64 pt/Y 36.22 pt.
+TXT contents match across platforms. Only known synthetic samples are exported;
+no raw database is published.
 
-SDK scenarios exercise actual Hermes, Expo multipart encoding, local writers,
-preview modules and persisted files with synthetic fetch. The owned localhost
-TLS background scenario uses real native requests. It verifies durable completion
-while on Home, no background memory approval, explicit Stop, file-preserving
-text retry, redacted error detail and cold restoration. Exactly one synthetic
-image is generated for the retry case, with three model calls and no regeneration.
-The separate edit-permission case grants once, cold-restarts, then edits again
-without another popup. Exact request counts include two edit-model calls and two
-real multipart edit uploads; the stored chat grant is independently asserted.
+The first Android run `43222023732` passed gestural mode, with all 11 captures and
+PDF/TXT reviewed. Three-button mode stopped at the initial Save/share image
+assertion before tapping: its screenshot/AX showed the chat scrolled below the
+image, starting at the PDF card. Test-only `4c58fb2` adds a semantic upward scroll
+to the image before the original assertion and tap on both platforms. Assertions
+remain intact and app inputs are unchanged; the existing binaries were reused.
+No app image-opening failure or pass is inferred from that failed initial case.
+The final corrected run passes both modes without another retry.
 
-Android gestural needed one bounded failed-job retry after initial-launch ADB
-transport failure at 4.364 seconds, before SDK checks or app captures. The retry
-passed. An intermediate iOS Quick Look test expected Done although its actual AX
-record exposed the native close identifier and full document text. The corrected
-test waits for actual PDF contents and targets that identifier; its original early
-transition screenshot is not counted as successful visual evidence. Strict
-functional assertions were retained, and test-only changes reused native builds.
+SDK scenarios use actual Hermes, Expo encoding, local writers, preview modules
+and persisted files with synthetic fetch. They do not prove live-provider
+behavior. Build 32's explicitly retained owned-localhost TLS baseline verifies
+Home completion, foreground-only memory approval, Stop, file-preserving text-only
+retry without image regeneration or private error-detail storage, cold restoration,
+and remembered generated-image edit permission after restart. Those implementations
+are unchanged by the image preview wrappers; the case was not rerun blindly.
 
 ## Hashes and boundaries
 
-- APK SHA-256: `1d775d9ce61571c127123f4f098b8b592a90a4fd8be068f6f50539460b370201`.
-- IPA SHA-256: `747553f786087e5777ddc01443449613e40b8a4add8dd83874f64ccfc28a0d54`.
+- APK SHA-256: `f7d8fdbbe972b6deab2ed6da6babfb2b63de0ba862102699c1c445ec42d7fec5`.
+- IPA SHA-256: `ccb8f2d30a4860542540fad6d1092eea2881341b9894c51c1241983c330bd0fa`.
 
-Only this pass's temporary signing policy 66438039 was removed; independent
+Only this pass's temporary signing policy 66449512 was removed; independent
 readback preserves the original two policy objects. The delivery continuation is
 disabled with no next run. The separate four-hour App Review monitor, Store15,
 external17, unrelated roles/testers and signing are untouched.
@@ -144,16 +153,3 @@ installation/expiry, live provider use, VoiceOver and OS Save/Share are unverifi
 Production npm audit retains three moderate Expo transitive findings and no
 high/critical findings. Private handoff, Apple receipts, credentials, SQL/databases
 and logs remain excluded from source and public releases.
-
-## Approved follow-up: image tap previews (pending new beta)
-
-The owner reported that tapping images did not open them and approved the same
-local preview pattern as PDF/TXT. Sent photos, generated images and selected
-photos before sending now open the existing preview modal, with a contained image,
-Close and the existing Save/Share action. Keyboard dismissal makes the viewer
-usable from the composer. Viewing uses the stored attachment URI without a provider
-request, new permission grant or storage change. No zoom behavior is added in this
-pass. Build32 remains the delivered beta until new native checks and delivery.
-SDK flows now assert image open/content/Close and retained chat controls, with an
-actual preview capture on both platforms. Local128 tests/typecheck and both
-Hermes exports pass; native visual verification is pending.
