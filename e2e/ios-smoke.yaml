@@ -81,6 +81,7 @@ appId: com.nylohq.nylo
     id: "chat-message"
 - tapOn: "Go back"
 # AX can expose the restored row at y895–1181 below the tabs at y877.
+# Use the middle tab: Maestro above selectors also require centre alignment.
 # Wait for the loaded list and require the full row above navigation before tap.
 - runFlow:
     when:
@@ -92,14 +93,14 @@ appId: com.nylohq.nylo
       - scrollUntilVisible:
           element:
             text: "(?s)Open New conversation.*"
-            above: "Chats, tab, 1 of 3"
+            above: "Agents, tab, 2 of 3"
           direction: DOWN
           visibilityPercentage: 100
           centerElement: true
           timeout: 60000
 - tapOn:
     text: "(?s)Open New conversation.*"
-    above: "Chats, tab, 1 of 3"
+    above: "Agents, tab, 2 of 3"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
@@ -107,6 +108,7 @@ appId: com.nylohq.nylo
 - stopApp
 - launchApp
 # AX can expose the restored row at y895–1181 below the tabs at y877.
+# Use the middle tab: Maestro above selectors also require centre alignment.
 # Wait for the loaded list and require the full row above navigation before tap.
 - runFlow:
     when:
@@ -118,14 +120,14 @@ appId: com.nylohq.nylo
       - scrollUntilVisible:
           element:
             text: "(?s)Open New conversation.*"
-            above: "Chats, tab, 1 of 3"
+            above: "Agents, tab, 2 of 3"
           direction: DOWN
           visibilityPercentage: 100
           centerElement: true
           timeout: 60000
 - tapOn:
     text: "(?s)Open New conversation.*"
-    above: "Chats, tab, 1 of 3"
+    above: "Agents, tab, 2 of 3"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
