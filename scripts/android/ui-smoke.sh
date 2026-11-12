@@ -5,7 +5,9 @@ mkdir -p artifacts/android-ui
 # Keep the last device messages even if the emulator disconnects during a flow.
 adb logcat -v threadtime > artifacts/android-ui/logcat-live.txt 2>&1 &
 nylo_logcat_pid=$!
+nylo_gesture_pid=""
 collect() {
+  if [ -n "$nylo_gesture_pid" ]; then kill "$nylo_gesture_pid" 2>/dev/null || true; fi
   kill "$nylo_logcat_pid" 2>/dev/null || true
   timeout 10s adb logcat -d -t 2000 > artifacts/android-ui/logcat.txt 2>&1 || true
   timeout 10s adb devices -l > artifacts/android-ui/adb-devices.txt 2>&1 || true
@@ -62,6 +64,22 @@ case "$scenario" in
   *) echo "Unknown Android UI scenario" >&2; exit 1 ;;
 esac
 printf 'Scenario: %s\n' "$scenario" >> artifacts/android-ui/provenance.txt
+if [ "$scenario" = sdk ]; then
+  bash scripts/android/prepare-gesture-input.sh
+  python3 -u scripts/android/gesture-input-server.py > artifacts/android-ui/native-gesture-input.log 2>&1 &
+  nylo_gesture_pid=$!
+  python3 - <<'READY'
+import socket, time
+for _ in range(50):
+    try:
+        with socket.create_connection(('127.0.0.1', 8766), timeout=1):
+            break
+    except OSError:
+        time.sleep(.1)
+else:
+    raise SystemExit('Native input test bridge did not start')
+READY
+fi
 export UI_BUILD_MARKER=""
 if [ -f artifacts/android-build/build-identity.json ]; then
   export UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/android-build/build-identity.json"))["marker"])')"

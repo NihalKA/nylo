@@ -188,3 +188,21 @@ Pixel comparisons confirm zoom/pan changes and exact fit/reset image-region matc
 This is diagnostic evidence, not an exact new distribution binary. Temporary
 numeric event traces were removed from the production source. Final native builds
 and full capture verification are still pending.
+
+Fresh candidate builds are now compiled from `fc10ebd`: iOS native run
+`43274267681`, signed iOS35 run `43274280162`, and Android36 run `43274273631`.
+Packaged source/assets, signatures, permissions/privacy and hashes pass. Apple
+processed35 as VALID; it remains unassigned pending final native verification.
+The first exact-binary iOS SDK run stopped before Settings navigation after a
+slow cold launch; its screenshot and accessibility tree show the original tab.
+The fixture now explicitly waits for that tab, retaining its original selector.
+
+The first Android gestural job lost ADB during launch before any capture. Its
+three-button job opened the full-screen viewer, but the automated double-tap did
+not produce250 percent. The test runner now injects both taps in one native
+sequence, with recorded timing and bounded tap duration/gap, instead of two
+separate driver requests. A disposable shell-UID Java input helper and localhost
+test bridge run only in the CI emulator, with no change to Nylo's APK, keys,
+dependencies or gesture recognition. All250/100-percent, pan, preview, source and
+cold-reopen assertions remain. New results and visual review are pending; no
+native Android pinch result or new delivery is claimed.

@@ -2,6 +2,9 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
+- extendedWaitUntil:
+    visible: "Settings, tab, 3 of 3"
+    timeout: 90000
 - tapOn:
     text: "Settings, tab, 3 of 3"
     point: "50%, 25%"
