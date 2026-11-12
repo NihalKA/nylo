@@ -85,8 +85,38 @@ appId: com.nylohq.nylo
 - assertVisible: "(?s)You stopped this response[.].*"
 - assertNotVisible: "Stop response"
 - takeScreenshot: background-04-stop
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: image-retry stream.*"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "(?s).*server_error.*"
+    timeout: 60000
+- assertVisible: "Save or share image"
+- assertNotVisible: "PRIVATE_FIXTURE_DETAIL"
+- assertNotVisible: "Stop response"
+- takeScreenshot: background-06-file-before-retry
+- scrollUntilVisible:
+    element: "Retry text reply (keep files)"
+    direction: DOWN
+- tapOn: "Retry text reply (keep files)"
+- extendedWaitUntil:
+    visible: "Reply retried; saved image kept."
+    timeout: 60000
+- assertNotVisible: "Stop response"
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
+- takeScreenshot: background-07-file-after-retry
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Owned QA background.*"
 - assertVisible: "Phase one[.] Completed in background[.]"
 - takeScreenshot: background-05-cold-restored
+
+- tapOn: "Go back"
+- tapOn: "(?s)Open Owned QA file retry.*"
+- assertVisible: "Reply retried; saved image kept."
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
+- takeScreenshot: background-08-file-cold-restored

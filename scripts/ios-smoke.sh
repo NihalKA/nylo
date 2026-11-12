@@ -252,14 +252,20 @@ assert chats['background-memory']['messages'][-1]['status']=='interrupted'
 assert chats['background-stop']['messages'][-1]['status']=='interrupted'
 assert not data['agents'][0]['memories']
 records=[json.loads(line) for line in Path('artifacts/e2e/background-server.jsonl').read_text().splitlines()]
-assert sorted(x['model'] for x in records if x['event']=='request')==['qa-background','qa-memory','qa-stop']
+assert sorted(x['model'] for x in records if x['event']=='request')==sorted(['qa-background','qa-memory','qa-stop','qa-owned-image','qa-image-retry','qa-image-retry','qa-image-retry'])
+retry=chats['background-image-retry']['messages']
+assert len(retry)==3 and retry[-1]['status']=='complete' and retry[-1]['text']=='Reply retried; saved image kept.'
+assert len(retry[1]['generatedFiles'])==1 and retry[1]['status']=='error'
+assert 'PRIVATE_FIXTURE_DETAIL' not in json.dumps(retry)
+with sqlite3.connect(Path(sys.argv[1]).as_uri()+'?mode=ro',uri=True) as db:
+    assert db.execute('SELECT data FROM attachment_blobs WHERE id=?',(retry[1]['generatedFiles'][0]['blobId'],)).fetchone()[0].startswith('iVBORw0KGgo')
 assert sorted(x['kind'] for x in records if x['event']=='durable_while_home')==['background','memory']
 for kind in ['background','memory']:
     entered=next(x['time'] for x in records if x['event']=='home_gate_entered' and x['kind']==kind)
     finished=next(x['time'] for x in records if x['event']=='final_output_sent' and x['model']=='qa-'+kind)
     persisted=next(x['time'] for x in records if x['event']=='durable_while_home' and x['kind']==kind)
     assert entered < finished <= persisted, 'Output must be produced and persisted after Home, before foreground return'
-Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact, one request each. Simulator only; no physical expiration guarantee.\n')
+Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact; reply retry retained one image with no regeneration and redacted error detail. Simulator only; no physical expiration guarantee.\n')
 BGVERIFY
 fi
 if [ "$scenario" = pdf ]; then

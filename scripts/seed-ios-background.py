@@ -11,12 +11,13 @@ if os.environ.get('GITHUB_ACTIONS') != 'true' or not {'CoreSimulator', 'Devices'
 p = container / 'Documents/SQLite/nylo.db'
 assert p.is_file()
 stamp = 1794200000000
-connection = dict(id='background-provider', name='Owned localhost QA', provider='custom', protocol='openai', baseUrl='https://localhost:8765/v1', model='qa-background', models=['qa-background', 'qa-memory', 'qa-stop'])
+connection = dict(id='background-provider', name='Owned localhost QA', provider='custom', protocol='openai', baseUrl='https://localhost:8765/v1', model='qa-background', models=['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry'], imageModel='qa-owned-image')
 agent = dict(connectionId=connection['id'], id='background-agent', name='QA background agent', description='Owned local memory fixture', instructions='No real provider or user data.', color='#246B58', createdAt=stamp, memories=[])
 chats = []
-for kind in ['background', 'memory', 'stop']:
+for kind in ['background', 'memory', 'stop', 'image-retry']:
     chat = dict(id='background-'+kind, title='Example: '+kind+' stream', connectionId=connection['id'], model='qa-'+kind, draft='Owned QA '+kind, messages=[], createdAt=stamp, updatedAt=stamp)
     if kind == 'memory': chat['agentId'] = agent['id']
+    if kind == 'image-retry': chat['draft'] = 'Owned QA file retry: create a synthetic image.'
     chats.append(chat)
 data = dict(version=1, connections=[connection], defaultConnectionId=connection['id'], agents=[agent], conversations=chats)
 with sqlite3.connect(p) as db:

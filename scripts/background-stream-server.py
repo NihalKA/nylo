@@ -11,6 +11,7 @@ import time
 cert, key, db_path, evidence = map(Path, sys.argv[1:])
 lock = threading.Lock()
 counts = {}
+png = 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAKklEQVR4nGNQyY6gKWIYtWDUglELRi0YtWDUglELRi0YtWDUglELRi0YtWDUglELhooFAERenC4hY24CAAAAAElFTkSuQmCC'
 home = {kind: threading.Event() for kind in ["background", "memory"]}
 def record(event, **facts):
     with lock:
@@ -18,19 +19,41 @@ def record(event, **facts):
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *_): pass
     def do_POST(self):
-        if self.server.server_port != 8765 or self.path != '/v1/responses':
+        if self.server.server_port != 8765 or self.path not in ['/v1/responses', '/v1/images/generations']:
             self.send_error(404); return
         n = int(self.headers.get('Content-Length', '0'))
         if n > 100000: self.send_error(413); return
         body = json.loads(self.rfile.read(n));model = body.get('model')
-        if model not in ['qa-background', 'qa-memory', 'qa-stop'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
+        if model not in ['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry', 'qa-owned-image'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
             self.send_error(403); return
         with lock: counts[model] = counts.get(model, 0)+1
         record('request', model=model)
+        if self.path == '/v1/images/generations':
+            assert model == 'qa-owned-image' and counts[model] == 1, 'Unexpected image regeneration'
+            payload = json.dumps(dict(created=1, data=[dict(b64_json=png)])).encode()
+            self.send_response(200);self.send_header('Content-Type','application/json');self.end_headers();self.wfile.write(payload);return
+        assert model != 'qa-owned-image'
         self.send_response(200);self.send_header('Content-Type','text/event-stream');self.end_headers()
         def event(value):
             self.wfile.write(('data: '+json.dumps(value)+'\n\n').encode());self.wfile.flush()
         try:
+            if model == 'qa-image-retry':
+                turn = counts[model]
+                assert turn <= 3, 'Unexpected retry request'
+                if turn == 2:
+                    event(dict(type='error', sequence_number=1, code='server_error', message='PRIVATE_FIXTURE_DETAIL'))
+                    return
+                event(dict(type='response.created', response=dict(id='resp_retry', created_at=1, model=model)))
+                if turn == 1:
+                    item = dict(type='function_call', id='fc_retry', status='completed', call_id='call_retry', name='generate_image', arguments=json.dumps(dict(prompt='synthetic owned tile')))
+                else:
+                    assert not any(t.get('name') in ['generate_image','create_document'] or t.get('type') == 'web_search' for t in body.get('tools', [])), 'File retry must be text-only'
+                    item = dict(type='message', id='msg_retry', status='completed', role='assistant', content=[])
+                event(dict(type='response.output_item.added', output_index=0, item=item))
+                if turn == 3: event(dict(type='response.output_text.delta', item_id='msg_retry', delta='Reply retried; saved image kept.'))
+                event(dict(type='response.output_item.done', output_index=0, item=item))
+                event(dict(type='response.completed', response=dict(usage=dict(input_tokens=1,output_tokens=1,total_tokens=2))))
+                return
             event(dict(type='response.created', response=dict(id='resp_owned', created_at=1, model=model)))
             message = dict(type='message', id='msg_owned', role='assistant', status='completed', content=[])
             event(dict(type='response.output_item.added', output_index=0, item=message))
