@@ -18,12 +18,22 @@ appId: com.nylohq.nylo
     element: "Save connection"
     direction: DOWN
 - tapOn: "Save connection"
+- waitForAnimationToEnd
+# The retained native diagnostic shows the password prompt can appear before
+# Done becomes accessible, as well as after the first Done tap below.
+- runFlow:
+    when:
+      visible: "Not Now"
+    commands:
+      - takeScreenshot: background-00-password-before-done
+      - tapOn: "Not Now"
+      - waitForAnimationToEnd
 - assertVisible: "Done"
 - tapOn: "Done"
 - waitForAnimationToEnd
-# The owned-key run showed the iOS Save Password sheet after Done. Never
-# save the fixture token to Passwords. Some iOS26 sheets expose no AX children;
-# that retained PNG grounds the large-profile Not Now point at (33%,61%).
+# iOS may show Save Password after saving the disposable fixture key. Dismiss
+# it without saving, then close the provider sheet if the first Done tap was
+# intercepted by that system prompt. Retained native capture/AX confirms this.
 - runFlow:
     when:
       visible: "Not Now"
@@ -32,18 +42,22 @@ appId: com.nylohq.nylo
       - waitForAnimationToEnd
 - runFlow:
     when:
-      notVisible: "Chats, tab, 1 of 3"
+      visible: "AI providers"
     commands:
-      - takeScreenshot: background-00-system-password-prompt
-      - tapOn:
-          point: "33%,61%"
+      - takeScreenshot: background-00-provider-sheet-after-password
+      - tapOn: "Done"
       - waitForAnimationToEnd
 - assertVisible: "Chats, tab, 1 of 3"
 - tapOn: "Chats, tab, 1 of 3"
 - tapOn: "(?s)Open Example: background stream.*"
 - tapOn: "Send message"
 - tapOn: "Allow & send"
+- extendedWaitUntil:
+    visible: "Phase one.*"
+    timeout: 120000
 - assertVisible: "Phase one.*"
+- assertVisible: "(?s)Receiving reply.*"
+- takeScreenshot: background-00-active-reply
 - pressKey: Home
 - takeScreenshot: background-01-home
 - runScript:
@@ -72,7 +86,7 @@ appId: com.nylohq.nylo
 # the separate explicit stopApp/cold launch at the end still tests restart.
 - launchApp:
     stopApp: false
-- assertVisible: "(?s)Response paused.*"
+- assertVisible: "(?s)Nylo could not continue after the app moved to the background[.].*"
 - assertNotVisible: "Save memory"
 - takeScreenshot: background-03-memory-interrupted
 - tapOn: "Go back"
@@ -80,11 +94,72 @@ appId: com.nylohq.nylo
 - tapOn: "Send message"
 - assertVisible: "Phase one.*"
 - tapOn: "Stop response"
-- assertVisible: "(?s)Response paused.*"
+- assertVisible: "(?s)You stopped this response[.].*"
 - assertNotVisible: "Stop response"
 - takeScreenshot: background-04-stop
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: image-retry stream.*"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "(?s).*server_error.*"
+    timeout: 60000
+- assertVisible: "Save or share image"
+- assertNotVisible: "PRIVATE_FIXTURE_DETAIL"
+- assertNotVisible: "Stop response"
+- takeScreenshot: background-06-file-before-retry
+- scrollUntilVisible:
+    element: 'Retry text reply \(keep files\)'
+    direction: DOWN
+- tapOn: 'Retry text reply \(keep files\)'
+- extendedWaitUntil:
+    visible: "Reply retried; saved image kept."
+    timeout: 60000
+- assertNotVisible: "Stop response"
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
+- takeScreenshot: background-07-file-after-retry
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Owned QA background.*"
 - assertVisible: "Phase one[.] Completed in background[.]"
 - takeScreenshot: background-05-cold-restored
+
+- tapOn: "Go back"
+- tapOn: "(?s)Open Owned QA file retry.*"
+- assertVisible: "Reply retried; saved image kept."
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
+- takeScreenshot: background-08-file-cold-restored
+
+- tapOn: "Go back"
+- tapOn: "(?s)Open Example: edit-consent stream.*"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "Allow edits in this chat"
+    timeout: 60000
+- takeScreenshot: background-09-edit-permission
+- tapOn: "Allow edits in this chat"
+- extendedWaitUntil:
+    visible: "Image edited"
+    timeout: 60000
+- extendedWaitUntil:
+    notVisible: "Stop response"
+    timeout: 60000
+- takeScreenshot: background-10-first-edit
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: edit-consent stream.*"
+- tapOn:
+    id: "chat-message"
+- inputText: "Edit this generated image again"
+- tapOn: "Send message"
+- extendedWaitUntil:
+    visible: "Image edited"
+    timeout: 60000
+- assertNotVisible: "Send this image for editing?"
+- extendedWaitUntil:
+    notVisible: "Stop response"
+    timeout: 60000
+- takeScreenshot: background-11-remembered-edit

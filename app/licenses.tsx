@@ -2,13 +2,15 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "../src/typography";
 import { FormScroll, Header, Page, s, useTheme } from "../src/ui";
-import notices from "../assets/fonts/notices.json";
+import fontNotices from "../assets/fonts/notices.json";
+import softwareNotices from "../assets/legal/software-notices.json";
+const notices = [...fontNotices, ...softwareNotices];
 
 export default function Licenses() {
   useTheme();
   return (
     <Page>
-      <Header title="Font licenses" />
+      <Header title="Licenses" />
       <FormScroll>
         {notices.map((notice) => (
           <View key={notice.name} style={{ gap: 12 }}>

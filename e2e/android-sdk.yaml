@@ -1,0 +1,95 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    text: "Settings"
+    retryTapIfNoChange: true
+- scrollUntilVisible:
+    element: "Live device check"
+    direction: DOWN
+    timeout: 60000
+- tapOn: "Live device check"
+- scrollUntilVisible:
+    element: "Check AI engine offline"
+    direction: DOWN
+- tapOn: "Check AI engine offline"
+- extendedWaitUntil:
+    visible: "Passed: SDK tools, images and local file exports."
+    timeout: 30000
+- takeScreenshot: sdk-native-passed
+
+- tapOn: "Open offline sample"
+- scrollUntilVisible:
+    element: "Open image: .*"
+    direction: UP
+- assertVisible: "Save or share image"
+- takeScreenshot: sdk-image-result
+- tapOn: "Open image: .*"
+- assertVisible: "Image preview: .*"
+- assertVisible: "Save or share"
+- takeScreenshot: sdk-image-preview
+- tapOn: "Close image preview"
+- assertVisible: "Save or share image"
+- scrollUntilVisible:
+    element: "Save or share PDF"
+    direction: DOWN
+- assertVisible: "Offline SDK report.pdf"
+- scrollUntilVisible:
+    element: "Save or share text file"
+    direction: DOWN
+- assertVisible: "Offline SDK text.txt"
+- takeScreenshot: sdk-document-results
+- scrollUntilVisible:
+    element: "Open Offline SDK report.pdf"
+    direction: UP
+- tapOn: "Open Offline SDK report.pdf"
+- extendedWaitUntil:
+    visible: "(?s).*Offline SDK report.*"
+    timeout: 30000
+- takeScreenshot: sdk-pdf-preview
+- assertVisible: "Zoom in"
+- tapOn: "Zoom in"
+- extendedWaitUntil:
+    visible: "PDF document, 1 page, zoom 200 percent"
+    timeout: 10000
+- takeScreenshot: sdk-pdf-zoomed
+- tapOn: "Zoom out"
+- assertVisible: "PDF document, 1 page, zoom 100 percent"
+- tapOn: "Close document preview"
+- scrollUntilVisible:
+    element: "Open Offline SDK text.txt"
+    direction: DOWN
+- tapOn: "Open Offline SDK text.txt"
+- assertVisible: "(?s).*Weather overview.*7 x 12 = 84.*"
+- takeScreenshot: sdk-text-preview
+- tapOn: "Close document preview"
+- scrollUntilVisible:
+    element: "Sources, 2"
+    direction: DOWN
+- assertVisible: "Offline sample overview"
+- tapOn: "Sources, 2"
+- assertVisible: "Sources"
+- assertVisible: "Open source 1: Synthetic reference"
+- assertVisible: "Open source 2: Offline diagnostic notes"
+- takeScreenshot: sdk-sources-sheet
+- tapOn: "Close sources"
+- takeScreenshot: sdk-formatted-answer
+- stopApp
+- launchApp
+- tapOn: "(?s)Open Example: SDK image.*"
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
+- assertVisible: "Save or share image"
+- takeScreenshot: sdk-image-restored
+
+- scrollUntilVisible:
+    element: "Save or share PDF"
+    direction: DOWN
+- assertVisible: "Offline SDK report.pdf"
+- scrollUntilVisible:
+    element: "Save or share text file"
+    direction: DOWN
+- assertVisible: "Offline SDK text.txt"
+- takeScreenshot: sdk-documents-restored

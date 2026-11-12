@@ -11,8 +11,8 @@ export async function exportBackup(data: AppData) {
   );
   const content = JSON.stringify(parseData(data), null, 2);
   assertBackupSize(utf8Size(content));
-  file.write(content);
   try {
+    await file.write(content);
     await Sharing.shareAsync(file.uri, {
       mimeType: "application/json",
       dialogTitle: "Save your Nylo backup",

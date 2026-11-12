@@ -1,4 +1,5 @@
 """Local synthetic SSE, never a provider proxy. No request content/key logging."""
+print('Owned fixture process started', flush=True)
 import http.server
 import json
 from pathlib import Path
@@ -11,6 +12,7 @@ import time
 cert, key, db_path, evidence = map(Path, sys.argv[1:])
 lock = threading.Lock()
 counts = {}
+png = 'iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAKklEQVR4nGNQyY6gKWIYtWDUglELRi0YtWDUglELRi0YtWDUglELRi0YtWDUglELhooFAERenC4hY24CAAAAAElFTkSuQmCC'
 home = {kind: threading.Event() for kind in ["background", "memory"]}
 def record(event, **facts):
     with lock:
@@ -18,20 +20,79 @@ def record(event, **facts):
 class Handler(http.server.BaseHTTPRequestHandler):
     def log_message(self, *_): pass
     def do_POST(self):
-        if self.server.server_port != 8765 or self.path != '/v1/responses':
+        if self.server.server_port != 8765 or self.path not in ['/v1/responses', '/v1/images/generations', '/v1/images/edits']:
             self.send_error(404); return
         n = int(self.headers.get('Content-Length', '0'))
         if n > 100000: self.send_error(413); return
-        body = json.loads(self.rfile.read(n));model = body.get('model')
-        if model not in ['qa-background', 'qa-memory', 'qa-stop'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
+        if self.headers.get('Transfer-Encoding', '').lower() == 'chunked':
+            chunks = []
+            total = 0
+            while True:
+                size = int(self.rfile.readline(1024).strip().split(b';')[0], 16)
+                assert 0 <= size <= 100000 and total + size <= 100000
+                if size == 0:
+                    for _ in range(16):
+                        if self.rfile.readline(1024) in [b'\r\n', b'\n']: break
+                    break
+                chunks.append(self.rfile.read(size));total += size
+                assert self.rfile.read(2) == b'\r\n'
+            raw = b''.join(chunks)
+        else: raw = self.rfile.read(n)
+        if self.path == '/v1/images/edits':
+            from email.parser import BytesParser
+            from email.policy import default
+            form = BytesParser(policy=default).parsebytes(('Content-Type: '+self.headers.get('Content-Type','')+'\r\n\r\n').encode()+raw)
+            fields = {p.get_param('name',header='content-disposition'):p.get_payload(decode=True) for p in form.iter_parts()}
+            assert any(k.startswith('image') and v.startswith(b'\x89PNG\r\n\x1a\n') for k,v in fields.items()), 'Actual multipart image bytes required'
+            body = dict(model=fields.get('model',b'').decode())
+            record('image_edit_upload')
+        else: body = json.loads(raw)
+        model = body.get('model')
+        if model not in ['qa-background', 'qa-memory', 'qa-stop', 'qa-image-retry', 'qa-owned-image', 'qa-edit-consent'] or self.headers.get('Authorization') != 'Bearer nylo-ci-placeholder':
             self.send_error(403); return
         with lock: counts[model] = counts.get(model, 0)+1
         record('request', model=model)
+        if self.path in ['/v1/images/generations', '/v1/images/edits']:
+            assert model == 'qa-owned-image'
+            if self.path == '/v1/images/generations':
+                assert counts[model] == 1, 'Unexpected image regeneration'
+                record('image_generation')
+            payload = json.dumps(dict(created=1, data=[dict(b64_json=png)])).encode()
+            self.send_response(200);self.send_header('Content-Type','application/json');self.end_headers();self.wfile.write(payload);return
+        assert model != 'qa-owned-image'
         self.send_response(200);self.send_header('Content-Type','text/event-stream');self.end_headers()
         def event(value):
             self.wfile.write(('data: '+json.dumps(value)+'\n\n').encode());self.wfile.flush()
         try:
-            event(dict(type='response.output_text.delta', delta='Phase one. '))
+            if model == 'qa-edit-consent':
+                assert counts[model] <= 2, 'Unexpected edit model roundtrip'
+                event(dict(type='response.created', response=dict(id='resp_edit',created_at=1,model=model)))
+                item=dict(type='function_call',id='fc_edit',status='completed',call_id='call_edit',name='generate_image',arguments=json.dumps(dict(prompt='edit synthetic owned tile',imageId='owned-edit-image',finishAfter=True)))
+                event(dict(type='response.output_item.added',output_index=0,item=item))
+                event(dict(type='response.output_item.done',output_index=0,item=item))
+                event(dict(type='response.completed',response=dict(usage=dict(input_tokens=1,output_tokens=1,total_tokens=2))))
+                return
+            if model == 'qa-image-retry':
+                turn = counts[model]
+                assert turn <= 3, 'Unexpected retry request'
+                if turn == 2:
+                    event(dict(type='error', sequence_number=1, code='server_error', message='PRIVATE_FIXTURE_DETAIL'))
+                    return
+                event(dict(type='response.created', response=dict(id='resp_retry', created_at=1, model=model)))
+                if turn == 1:
+                    item = dict(type='function_call', id='fc_retry', status='completed', call_id='call_retry', name='generate_image', arguments=json.dumps(dict(prompt='synthetic owned tile')))
+                else:
+                    assert not any(t.get('name') in ['generate_image','create_document'] or t.get('type') == 'web_search' for t in body.get('tools', [])), 'File retry must be text-only'
+                    item = dict(type='message', id='msg_retry', status='completed', role='assistant', content=[])
+                event(dict(type='response.output_item.added', output_index=0, item=item))
+                if turn == 3: event(dict(type='response.output_text.delta', item_id='msg_retry', delta='Reply retried; saved image kept.'))
+                event(dict(type='response.output_item.done', output_index=0, item=item))
+                event(dict(type='response.completed', response=dict(usage=dict(input_tokens=1,output_tokens=1,total_tokens=2))))
+                return
+            event(dict(type='response.created', response=dict(id='resp_owned', created_at=1, model=model)))
+            message = dict(type='message', id='msg_owned', role='assistant', status='completed', content=[])
+            event(dict(type='response.output_item.added', output_index=0, item=message))
+            event(dict(type='response.output_text.delta', item_id='msg_owned', delta='Phase one. '))
             if model == 'qa-stop':
                 time.sleep(30)
             else:
@@ -42,13 +103,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     return
                 time.sleep(.5)
             if model == 'qa-memory':
-                event(dict(type='response.output_item.done',output_index=0,item=dict(type='function_call',call_id='owned-call',name='remember_fact',arguments=json.dumps(dict(text='Owned QA memory must not save in background')))))
+                event(dict(type='response.output_item.done', output_index=0, item=message))
+                call = dict(type='function_call', id='fc_owned', status='completed', call_id='owned-call', name='remember_fact', arguments=json.dumps(dict(text='Owned QA memory must not save in background')))
+                event(dict(type='response.output_item.added', output_index=1, item=call))
+                event(dict(type='response.output_item.done', output_index=1, item=call))
             else:
-                event(dict(type='response.output_text.delta',delta='Completed in background.'))
+                event(dict(type='response.output_text.delta',item_id='msg_owned',delta='Completed in background.'))
+                event(dict(type='response.output_item.done', output_index=0, item=message))
             record('final_output_sent', model=model)
-            event(dict(type='response.completed'));record('stream_finished', model=model)
+            event(dict(type='response.completed', response=dict(usage=dict(input_tokens=1, output_tokens=1, total_tokens=2))));record('stream_finished', model=model)
         except (BrokenPipeError,ConnectionResetError,ssl.SSLError): record('client_stopped',model=model)
     def do_GET(self):
+        if self.server.server_port == 8765 and self.path == '/health':
+            payload = b'owned-fixture-ready'
+            self.send_response(200);self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload);return
         if self.server.server_port != 8766 or self.path not in ['/complete','/memory']:
             self.send_error(404);return
         kind = 'background' if self.path == '/complete' else 'memory'
@@ -71,8 +139,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except (sqlite3.Error,StopIteration): pass
             time.sleep(.5)
         payload=json.dumps(dict(ready=ready)).encode();self.send_response(200);self.send_header('Content-Type','application/json');self.end_headers();self.wfile.write(payload)
+print('Owned fixture imports complete; binding TLS and control', flush=True)
 server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),Handler)
 context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.load_cert_chain(cert,key);server.socket=context.wrap_socket(server.socket,server_side=True)
 control=http.server.ThreadingHTTPServer(('127.0.0.1',8766),Handler)
 threading.Thread(target=server.serve_forever,daemon=True).start()
+record('server_ready')
 control.serve_forever()

@@ -1,3 +1,9 @@
+import { MessageContent } from "../../src/message-content";
+import { MessageActivity, MessageSources } from "../../src/message-activity";
+import { DocumentPreviewModal } from "../../src/document-preview-modal";
+import { openPdfPreview } from "../../src/document-preview";
+import { stageLabels } from "../../src/response-progress";
+import { shareGeneratedFile, exportResponse } from "../../src/file-export";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { Text, TextInput, fonts } from "../../src/typography";
 import { attachmentFlowReducer } from "../../src/attachment-flow";
@@ -18,6 +24,7 @@ import React, {
 } from "react";
 import {
   AppState,
+  Linking,
   Keyboard,
   Image,
   useWindowDimensions,
@@ -70,70 +77,6 @@ import {
   Press,
 } from "../../src/ui";
 
-function MessageText({ text }: { text: string }) {
-  const blocks = text.split(/(```[\s\S]*?```)/g);
-  return (
-    <View style={{ gap: 10 }}>
-      {blocks.map((block, index) =>
-        block.startsWith("```") ? (
-          <View
-            key={index}
-            style={{
-              backgroundColor: theme.surface,
-              padding: 14,
-              borderRadius: 12,
-            }}
-          >
-            <Text
-              selectable
-              style={{
-                fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
-                fontSize: 12,
-                lineHeight: 20,
-                color: theme.ink,
-              }}
-            >
-              {block.replace(/^```[^\n]*\n?/, "").replace(/```$/, "")}
-            </Text>
-          </View>
-        ) : (
-          <View key={index} style={{ gap: 16 }}>
-            {block.split(/\n{2,}/g).map((paragraph, paragraphIndex) => {
-              const heading = /^\*\*[^*\n]+\*\*$/.test(paragraph);
-              return (
-                <Text
-                  key={paragraphIndex}
-                  selectable
-                  style={
-                    heading
-                      ? [s.h2, { fontWeight: "700" }]
-                      : { fontSize: 14, lineHeight: 22, color: theme.sub }
-                  }
-                >
-                  {heading
-                    ? paragraph.slice(2, -2)
-                    : paragraph.split(/(\*\*[^*]+\*\*)/g).map((part, i) => (
-                        <Text
-                          key={i}
-                          style={
-                            part.startsWith("**")
-                              ? { fontWeight: "600", color: theme.ink }
-                              : undefined
-                          }
-                        >
-                          {part.startsWith("**") ? part.slice(2, -2) : part}
-                        </Text>
-                      ))}
-                </Text>
-              );
-            })}
-          </View>
-        ),
-      )}
-    </View>
-  );
-}
-
 export default function ChatRoute() {
   const params = useLocalSearchParams<{ id: string }>();
   return <Chat key={params.id} />;
@@ -160,7 +103,7 @@ function Chat() {
     id: string;
     prompt?: string;
   }>();
-  const { data, update, send, runningId, stop } = useStore();
+  const { data, update, send, runningId, responseProgress, stop } = useStore();
   const conversation = data.conversations.find((c) => c.id === id);
   const agent = data.agents.find((a) => a.id === conversation?.agentId);
   const savedConnection = data.connections.find(
@@ -188,6 +131,7 @@ function Chat() {
   const blurTarget = useRef<React.ComponentRef<typeof View>>(null);
   const [text, setText] = useState(prompt || conversation?.draft || "");
   const [error, setError] = useState("");
+  const [previewFile, setPreviewFile] = useState<Attachment | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [menu, setMenu] = useState(false);
   const [modelPicker, setModelPicker] = useState(false);
@@ -197,6 +141,19 @@ function Chat() {
   const composer = useRef<React.ComponentRef<typeof TextInput>>(null);
   const nearBottom = useRef(true);
   const isRunning = runningId === id;
+  const [progressNow, setProgressNow] = useState(Date.now());
+  useEffect(() => {
+    if (!isRunning) return;
+    const timer = setInterval(() => setProgressNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [isRunning]);
+  const progressLabel = responseProgress
+    ? `${stageLabels[responseProgress.stage]} · ${Math.max(0, Math.floor((progressNow - responseProgress.startedAt) / 1000))}s`
+    : "Waiting for the model";
+  const hasSavedFilesInTurn = conversation?.messages
+    .slice(conversation.messages.findLastIndex((m) => m.role === "user") + 1)
+    .some((m) => m.generatedFiles?.length);
+
   // Feel the reply arrive: a settled double pulse, or an error feel.
   const wasRunning = useRef(false);
   useEffect(() => {
@@ -630,17 +587,27 @@ function Chat() {
                             style={{ gap: 6, marginBottom: 8 }}
                           >
                             {file.mimeType.startsWith("image/") ? (
-                              <Image
-                                source={{ uri: attachmentUri(file) }}
-                                accessibilityLabel={`Attached photo: ${file.name}`}
-                                style={{
-                                  width: 180,
-                                  height: 140,
-                                  borderRadius: 12,
-                                  maxWidth: "100%",
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open image: ${file.name}`}
+                                accessibilityHint="Opens a local image preview"
+                                onPress={() => {
+                                  Keyboard.dismiss();
+                                  setPreviewFile(file);
                                 }}
-                                resizeMode="contain"
-                              />
+                              >
+                                <Image
+                                  source={{ uri: attachmentUri(file) }}
+                                  accessibilityLabel={`Attached photo: ${file.name}`}
+                                  style={{
+                                    width: 180,
+                                    height: 140,
+                                    borderRadius: 12,
+                                    maxWidth: "100%",
+                                  }}
+                                  resizeMode="contain"
+                                />
+                              </Press>
                             ) : null}
                             <Text style={s.sub}>
                               {file.name} · {Math.ceil(file.size / 1024)} KB
@@ -694,21 +661,84 @@ function Chat() {
                             ) : null}
                           </View>
                         ) : null}
-                        {message.actions?.map((label, i) => (
-                          <View key={i} style={[s.row, { gap: 5 }]}>
-                            <Icon
-                              name="checkmark-circle-outline"
-                              size={13}
-                              color={theme.green}
+                        <MessageActivity
+                          actions={message.actions}
+                          active={message.status === "streaming"}
+                          progress={progressLabel}
+                        />
+                        {message.generatedFiles?.map((file) => (
+                          <View key={file.id} style={{ gap: 8 }}>
+                            {file.mimeType.startsWith("image/") ? (
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open image: ${file.name}`}
+                                accessibilityHint="Opens a local image preview"
+                                onPress={() => {
+                                  Keyboard.dismiss();
+                                  setPreviewFile(file);
+                                }}
+                              >
+                                <Image
+                                  source={{ uri: attachmentUri(file) }}
+                                  accessibilityLabel={`Generated image: ${file.name}`}
+                                  style={{
+                                    width: "100%",
+                                    height: 280,
+                                    borderRadius: 16,
+                                    backgroundColor: theme.card,
+                                  }}
+                                  resizeMode="contain"
+                                />
+                              </Press>
+                            ) : (
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open ${file.name}`}
+                                accessibilityHint="Opens a local document preview"
+                                onPress={() => {
+                                  if (
+                                    file.mimeType === "application/pdf" &&
+                                    Platform.OS === "ios"
+                                  )
+                                    void action(() => openPdfPreview(file));
+                                  else setPreviewFile(file);
+                                }}
+                                style={[s.card, { gap: 6 }]}
+                              >
+                                <Text style={[s.text, { fontWeight: "600" }]}>
+                                  {file.name}
+                                </Text>
+                                <Text style={s.sub}>
+                                  {file.mimeType === "application/pdf"
+                                    ? "PDF document"
+                                    : "Text document"}{" "}
+                                  · {Math.max(1, Math.ceil(file.size / 1024))}{" "}
+                                  KB · Tap to open
+                                </Text>
+                              </Press>
+                            )}
+                            <Button
+                              title={
+                                file.mimeType.startsWith("image/")
+                                  ? "Save or share image"
+                                  : file.mimeType === "application/pdf"
+                                    ? "Save or share PDF"
+                                    : "Save or share text file"
+                              }
+                              secondary
+                              icon="share-outline"
+                              onPress={() =>
+                                void action(() => shareGeneratedFile(file))
+                              }
                             />
-                            <Text style={{ fontSize: 11, color: theme.green }}>
-                              {label}
-                            </Text>
                           </View>
                         ))}
                         {message.text ? (
                           <>
-                            <MessageText text={message.text} />
+                            <MessageContent
+                              text={message.text}
+                              sources={message.sources}
+                            />
                             {message.status === "streaming" ? (
                               <StreamCaret />
                             ) : null}
@@ -717,7 +747,7 @@ function Chat() {
                           <FadeIn distance={6} duration={200}>
                             <View
                               accessible
-                              accessibilityLabel="Thinking"
+                              accessibilityLabel={progressLabel}
                               accessibilityLiveRegion="polite"
                               style={[
                                 s.row,
@@ -738,11 +768,14 @@ function Chat() {
                               <ThinkingOrb size={20} />
                               <Breathe>
                                 <Text style={[s.sub, { fontSize: 13 }]}>
-                                  Thinking…
+                                  {progressLabel}
                                 </Text>
                               </Breathe>
                             </View>
                           </FadeIn>
+                        ) : null}
+                        {message.sources?.length ? (
+                          <MessageSources sources={message.sources} />
                         ) : null}
                         {message.error ? (
                           <View
@@ -756,7 +789,11 @@ function Chat() {
                             <Text style={s.error}>{message.error}</Text>
                             {index === conversation.messages.length - 1 ? (
                               <Button
-                                title="Retry response"
+                                title={
+                                  hasSavedFilesInTurn
+                                    ? "Retry text reply (keep files)"
+                                    : "Retry response"
+                                }
                                 secondary
                                 disabled={!!runningId}
                                 icon="refresh-outline"
@@ -799,6 +836,24 @@ function Chat() {
                                 }
                               />
                             </PopIn>
+                            <IconButton
+                              name="document-text-outline"
+                              label="Save response as text"
+                              onPress={() =>
+                                void action(() =>
+                                  exportResponse(message.text, "txt"),
+                                )
+                              }
+                            />
+                            <IconButton
+                              name="document-outline"
+                              label="Save response as PDF"
+                              onPress={() =>
+                                void action(() =>
+                                  exportResponse(message.text, "pdf"),
+                                )
+                              }
+                            />
                             <IconButton
                               name="flag-outline"
                               label="Report response"
@@ -900,7 +955,15 @@ function Chat() {
                       }}
                     >
                       {image ? (
-                        <View>
+                        <Press
+                          accessibilityRole="button"
+                          accessibilityLabel={`Preview ${file.name}`}
+                          accessibilityHint="Opens a local image preview"
+                          onPress={() => {
+                            Keyboard.dismiss();
+                            setPreviewFile(file);
+                          }}
+                        >
                           <Image
                             source={{ uri: attachmentUri(file) }}
                             accessibilityLabel={`Preview ${file.name}`}
@@ -922,7 +985,7 @@ function Chat() {
                           >
                             {file.mimeType.split("/")[1]?.toUpperCase()}
                           </Text>
-                        </View>
+                        </Press>
                       ) : (
                         <View
                           style={{
@@ -1238,13 +1301,22 @@ function Chat() {
                 {runningId && !isRunning
                   ? "Another conversation is responding."
                   : isRunning
-                    ? "Working on this device. Keep the app open."
+                    ? `${progressLabel}. ${responseProgress?.backgroundAllowed ? "Can continue briefly in background; iOS may pause it." : "Keep Nylo open for this request."}`
                     : "Saved on this device. AI can make mistakes."}
               </Text>
             ) : null}
           </View>
         </KeyboardAvoidingView>
       </BlurTargetView>
+      <DocumentPreviewModal
+        file={previewFile}
+        onClose={() => setPreviewFile(null)}
+        onError={(e) =>
+          setError(
+            e instanceof Error ? e.message : "Could not share this file.",
+          )
+        }
+      />
       <Modal
         visible={attachmentMenu}
         onDismiss={() => {

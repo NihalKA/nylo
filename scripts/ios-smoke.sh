@@ -6,13 +6,14 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments|store|pdf|background) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store|pdf|background|sdk) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
   echo 'Store captures require the large profile and the original native JS bundle.'
   exit 1
 fi
 simulator_id=""
 background_server_pid=""
+background_trust_pid=""
 phase="resolve-native-source"
 mark_phase() {
   phase="$1"
@@ -27,6 +28,7 @@ collect_diagnostics() {
   fi
   if [ -n "$background_server_pid" ]; then
     kill "$background_server_pid" || true
+    if [ -n "$background_trust_pid" ]; then kill "$background_trust_pid" || true; fi
     xcrun simctl spawn "$simulator_id" log show --last 15m --style compact --predicate 'process == "Nylo" AND eventMessage CONTAINS "[NyloBackgroundResponse]"' > artifacts/e2e/background-native.log 2>&1 || true
   fi
   if [ "$scenario" = background ]; then
@@ -53,7 +55,7 @@ source_sha="$(python3 - artifacts/e2e/native-source-run.json "$GITHUB_REPOSITORY
 import json, re, sys
 run=json.load(open(sys.argv[1]))
 if (run.get("name") != "iOS native validation" or run.get("conclusion") != "success" or
-    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
+    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context", "feat/ai-sdk-mobile-capabilities") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
     not re.fullmatch(r"[0-9a-f]{40}", run.get("head_sha", ""))):
     raise SystemExit("Use a successful native validation run from this repository's approved main or feature candidate branch.")
 print(run["head_sha"])
@@ -88,6 +90,22 @@ if [ "${REFRESH_JS_BUNDLE:-false}" = true ]; then
   # This path supplies UI iteration evidence, never a signed release candidate.
   git diff --exit-code "$source_sha" HEAD -- package.json package-lock.json app.json \
     'app.config.*' assets modules plugins config ios android
+  # Audit the seed before replacing JS, then give the refreshed bundle its own
+  # identity. Keep both receipts; a refresh never represents a signed binary.
+  cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
+  python3 scripts/ios-build-identity.py verify "$RUNNER_TEMP/nylo-app/Nylo.app"
+  cp artifacts/ios-bundle-verification.json artifacts/e2e/native-bundle-verification.json
+  python3 - "$js_source_sha" <<'PYIDENTITY'
+import json, sys
+from pathlib import Path
+p=Path('artifacts/ios-build-identity.json')
+identity=json.loads(p.read_text())
+identity['nativeSource']=identity['source']
+identity['source']=sys.argv[1]
+identity['marker']=f"UI: figma-parity {sys.argv[1][:12]} {identity['candidateTimeUTC']}"
+p.write_text(json.dumps(identity,indent=2)+'\n')
+PYIDENTITY
+  export EXPO_PUBLIC_UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/ios-build-identity.json"))["marker"])')"
   npx expo export:embed --platform ios --dev false --bytecode \
     --entry-file node_modules/expo-router/entry.js \
     --bundle-output "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" \
@@ -96,10 +114,14 @@ fi
 export MAESTRO_UI_BUILD_MARKER=""
 if [ -f artifacts/native/ios-build-identity.json ]; then
   mkdir -p artifacts
-  cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
-  git fetch --no-tags origin "$source_sha" --depth=1
-  git diff --exit-code "$source_sha" HEAD -- app src assets modules plugins config app.json 'app.config.*' 'package*.json' tsconfig.json 'babel.config.*' 'metro.config.*'
+  if [ "${REFRESH_JS_BUNDLE:-false}" != true ]; then
+    cp artifacts/native/ios-build-identity.json artifacts/ios-build-identity.json
+    git fetch --no-tags origin "$source_sha" --depth=1
+    git diff --exit-code "$source_sha" HEAD -- app src assets modules plugins config app.json 'app.config.*' 'package*.json' tsconfig.json 'babel.config.*' 'metro.config.*'
+  fi
   python3 scripts/ios-build-identity.py verify "$RUNNER_TEMP/nylo-app/Nylo.app"
+  cp artifacts/ios-bundle-verification.json artifacts/e2e/tested-bundle-verification.json
+  cp artifacts/ios-build-identity.json artifacts/e2e/tested-build-identity.json
   export MAESTRO_UI_BUILD_MARKER="$(python3 -c 'import json; print(json.load(open("artifacts/ios-build-identity.json"))["marker"])')"
 fi
 mark_phase discover-simulator
@@ -198,19 +220,45 @@ extendedKeyUsage = serverAuth
 CERT
   openssl req -x509 -newkey rsa:2048 -nodes -days 1 -config "$RUNNER_TEMP/background-tls.cnf" -keyout "$RUNNER_TEMP/background-tls.key" -out "$RUNNER_TEMP/background-tls.crt" > /dev/null 2>&1
   xcrun simctl keychain "$simulator_id" add-root-cert "$RUNNER_TEMP/background-tls.crt"
+  mark_phase background-fixture-startup
   python3 scripts/background-stream-server.py "$RUNNER_TEMP/background-tls.crt" "$RUNNER_TEMP/background-tls.key" "$app_container/Documents/SQLite/nylo.db" artifacts/e2e/background-server.jsonl > artifacts/e2e/background-server.log 2>&1 &
   background_server_pid=$!
+  # Fail before UI navigation if our owned TLS fixture is not actually ready.
+  # This checks host TLS only; simulator trust is verified by the real app flow.
+  python3 - "$RUNNER_TEMP/background-tls.crt" "$background_server_pid" <<'PREFLIGHT'
+import json, os, pathlib, ssl, sys, time, urllib.request
+p = pathlib.Path('artifacts/e2e/background-server.jsonl')
+deadline = time.monotonic()+60
+while time.monotonic() < deadline:
+    try: os.kill(int(sys.argv[2]), 0)
+    except ProcessLookupError: raise SystemExit('Owned fixture exited before readiness; inspect startup log')
+    if p.exists() and any(json.loads(x)['event']=='server_ready' for x in p.read_text().splitlines()): break
+    time.sleep(.1)
+else: raise SystemExit('Owned fixture did not become ready')
+with urllib.request.urlopen('https://localhost:8765/health', context=ssl.create_default_context(cafile=sys.argv[1]), timeout=10) as response:
+    assert response.status==200 and response.read()==b'owned-fixture-ready'
+pathlib.Path('artifacts/e2e/background-tls-preflight.txt').write_text('PASS: owned host TLS endpoint and certificate verified; simulator trust still requires native app response.\n')
+PREFLIGHT
+  xcrun simctl spawn "$simulator_id" log stream --style compact --level debug --predicate 'process == "trustd" OR process == "securityd" OR (process == "Nylo" AND (subsystem == "com.apple.CFNetwork" OR subsystem == "com.apple.securityd"))' > artifacts/e2e/background-trust.log 2>&1 &
+  background_trust_pid=$!
   echo 'Owned localhost synthetic SSE only; no real provider, user data or credentials. SQL completion is checked while the driver keeps Nylo on Home.' > artifacts/e2e/background-disclosure.txt
 fi
 mark_phase install-driver
 curl -fsSL --retry 3 --retry-all-errors --retry-delay 3 --retry-max-time 120 --connect-timeout 15 --max-time 60 'https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.12.1/maestro.zip' -o "$RUNNER_TEMP/maestro.zip"
 echo '54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7  '"$RUNNER_TEMP/maestro.zip" | shasum -a 256 -c -
 unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
+export MAESTRO_UI_PROFILE="$profile"
 export MAESTRO_CLI_NO_ANALYTICS=1
 export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
 mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = sdk ]; then
+  mark_phase sdk-document-verification
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo || true
+  python3 scripts/export-sdk-documents.py "$app_container/Documents/SQLite/nylo.db" artifacts/e2e
+fi
 if [ "$scenario" = background ]; then
   mark_phase background-storage-verification
   python3 - "$app_container/Documents/SQLite/nylo.db" <<'BGVERIFY'
@@ -225,14 +273,26 @@ assert chats['background-memory']['messages'][-1]['status']=='interrupted'
 assert chats['background-stop']['messages'][-1]['status']=='interrupted'
 assert not data['agents'][0]['memories']
 records=[json.loads(line) for line in Path('artifacts/e2e/background-server.jsonl').read_text().splitlines()]
-assert sorted(x['model'] for x in records if x['event']=='request')==['qa-background','qa-memory','qa-stop']
+assert sorted(x['model'] for x in records if x['event']=='request')==sorted(['qa-background','qa-memory','qa-stop','qa-owned-image','qa-image-retry','qa-image-retry','qa-image-retry','qa-edit-consent','qa-edit-consent','qa-owned-image','qa-owned-image'])
+retry=chats['background-image-retry']['messages']
+assert len(retry)==3 and retry[-1]['status']=='complete' and retry[-1]['text']=='Reply retried; saved image kept.'
+assert len(retry[1]['generatedFiles'])==1 and retry[1]['status']=='error'
+assert 'PRIVATE_FIXTURE_DETAIL' not in json.dumps(retry)
+with sqlite3.connect(Path(sys.argv[1]).as_uri()+'?mode=ro',uri=True) as db:
+    assert db.execute('SELECT data FROM attachment_blobs WHERE id=?',(retry[1]['generatedFiles'][0]['blobId'],)).fetchone()[0].startswith('iVBORw0KGgo')
+assert sum(x['event']=='image_generation' for x in records)==1, 'Reply retry must not regenerate'
+assert sum(x['event']=='image_edit_upload' for x in records)==2
+edit=chats['background-edit-consent']
+assert len(edit['messages'])==6 and sum(len(m.get('generatedFiles',[])) for m in edit['messages'])==3
+assert all(m['status']=='complete' for m in edit['messages'])
+assert any('background-edit-consent' in c.get('generatedImageEditChats',[]) for c in data['providerConsents'])
 assert sorted(x['kind'] for x in records if x['event']=='durable_while_home')==['background','memory']
 for kind in ['background','memory']:
     entered=next(x['time'] for x in records if x['event']=='home_gate_entered' and x['kind']==kind)
     finished=next(x['time'] for x in records if x['event']=='final_output_sent' and x['model']=='qa-'+kind)
     persisted=next(x['time'] for x in records if x['event']=='durable_while_home' and x['kind']==kind)
     assert entered < finished <= persisted, 'Output must be produced and persisted after Home, before foreground return'
-Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact, one request each. Simulator only; no physical expiration guarantee.\n')
+Path('artifacts/e2e/background-storage-check.txt').write_text('PASS: owned response durably completed while Home, background memory stayed unapproved/interrupted, foreground Stop persisted, cold restoration exact; reply retry retained one image with no regeneration and redacted error detail. Simulator only; no physical expiration guarantee.\n')
 BGVERIFY
 fi
 if [ "$scenario" = pdf ]; then

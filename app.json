@@ -60,7 +60,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#05081A"
         }
-      ]
+      ],
+      "expo-status-bar"
     ],
     "scheme": "nylo"
   }
