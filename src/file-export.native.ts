@@ -1,30 +1,46 @@
-import { File, Paths } from "expo-file-system";
+import { Directory, File, Paths } from "expo-file-system";
+import { uid } from "./domain";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
 import { Attachment } from "./types";
+import { documentHtml } from "./document-content";
 export async function shareGeneratedFile(attachment: Attachment) {
-  const file = new File(Paths.cache, `nylo-${attachment.id}.png`);
+  const extension =
+    attachment.mimeType === "application/pdf"
+      ? "pdf"
+      : attachment.mimeType === "text/plain"
+        ? "txt"
+        : attachment.mimeType === "image/jpeg"
+          ? "jpg"
+          : "png";
+  const stem =
+    attachment.name
+      .replace(/\.[^.]*$/, "")
+      .replace(/[\\/\u0000-\u001f]/g, "-")
+      .slice(0, 100) || "Nylo file";
+  const directory = new Directory(Paths.cache, `nylo-share-${uid()}`);
   try {
-    await file.write(attachment.data, { encoding: "base64" });
+    await directory.create();
+    const file = new File(directory, `${stem}.${extension}`);
+    await file.write(
+      attachment.data,
+      attachment.mimeType === "text/plain" ? undefined : { encoding: "base64" },
+    );
     await Sharing.shareAsync(file.uri, {
       mimeType: attachment.mimeType,
-      dialogTitle: "Save or share your image",
+      dialogTitle: "Save or share your file",
     });
   } finally {
-    if (file.exists) file.delete();
+    if (directory.exists) directory.delete();
   }
 }
 async function prepareResponseFile(text: string, format: "txt" | "pdf") {
   let file: File;
   if (format === "pdf") {
-    const escaped = text
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
     const result = await Print.printToFileAsync({
-      html: `<!doctype html><html><head><meta charset="utf-8"><style>body{font-family:system-ui,sans-serif;padding:28px;color:#182033}pre{font-family:inherit;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.55}</style></head><body><pre>${escaped}</pre></body></html>`,
+      html: documentHtml("Nylo response", text),
+      width: 595,
+      height: 842,
     });
     file = new File(result.uri);
   } else {

@@ -2,9 +2,10 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { File, Paths } from "expo-file-system";
 import { Connection } from "./types";
 import { uid } from "./domain";
+import { imageEditBody } from "./image-edit-body";
 
 // RN Blob cannot construct from typed arrays. Keep the SDK image interface and
-// use Expo's supported local-file multipart representation for edits only.
+// give Expo fetch actual File objects whose bytes its multipart encoder supports.
 export function sdkImageModel(
   model: ReturnType<ReturnType<typeof createOpenAI>["image"]>,
   connection: Connection,
@@ -23,13 +24,6 @@ export function sdkImageModel(
         throw new Error("Masked edits are not supported in Nylo.");
       const files: File[] = [];
       try {
-        const body = new FormData();
-        body.append("model", model.modelId);
-        body.append("prompt", options.prompt || "");
-        body.append("n", "1");
-        body.append("size", options.size || "1024x1024");
-        body.append("quality", "low");
-        body.append("output_format", "png");
         for (const input of options.files) {
           if (input.type !== "file")
             throw new Error("Only approved local image data can be edited.");
@@ -41,12 +35,13 @@ export function sdkImageModel(
           if (typeof input.data === "string")
             await file.write(input.data, { encoding: "base64" });
           else await file.write(input.data);
-          body.append("image", {
-            uri: file.uri,
-            name: file.name,
-            type: input.mediaType,
-          } as unknown as Blob);
         }
+        const body = imageEditBody({
+          model: model.modelId,
+          prompt: options.prompt || "",
+          size: options.size || "1024x1024",
+          files,
+        });
         const response = await fetcher(
           connection.baseUrl.replace(/\/+$/, "") + "/images/edits",
           {

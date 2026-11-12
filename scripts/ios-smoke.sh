@@ -232,6 +232,12 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
 mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = sdk ]; then
+  mark_phase sdk-document-verification
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo || true
+  python3 scripts/export-sdk-documents.py "$app_container/Documents/SQLite/nylo.db" artifacts/e2e
+fi
 if [ "$scenario" = background ]; then
   mark_phase background-storage-verification
   python3 - "$app_container/Documents/SQLite/nylo.db" <<'BGVERIFY'

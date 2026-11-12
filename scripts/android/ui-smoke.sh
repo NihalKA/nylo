@@ -75,3 +75,18 @@ adb pull /sdcard/nylo-navigation.xml artifacts/android-ui/navigation-hierarchy.x
 # SystemUI navigation is a separate window. Retain the real InsetsState too.
 adb shell dumpsys window displays > artifacts/android-ui/navigation-window-insets.txt
 python3 scripts/android/check-navigation-insets.py artifacts/android-ui/navigation-hierarchy.xml "$mode"
+
+if [ "$scenario" = sdk ]; then
+  # Disposable google_apis CI emulator only. Keep raw SQLite/WAL in RUNNER_TEMP.
+  adb root
+  adb wait-for-device
+  adb shell am force-stop com.nylohq.nylo
+  mkdir -p "$RUNNER_TEMP/nylo-sdk-db"
+  for suffix in '' '-wal' '-shm'; do
+    remote="/data/user/0/com.nylohq.nylo/files/SQLite/nylo.db$suffix"
+    if adb shell test -f "$remote"; then
+      adb pull "$remote" "$RUNNER_TEMP/nylo-sdk-db/nylo.db$suffix"
+    fi
+  done
+  python3 scripts/export-sdk-documents.py "$RUNNER_TEMP/nylo-sdk-db/nylo.db" artifacts/android-ui
+fi

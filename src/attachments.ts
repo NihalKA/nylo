@@ -105,7 +105,5 @@ export function attachmentUri(attachment: Attachment) {
 
 export const validateGeneratedFiles = (value: unknown) => {
   const files = validateAttachments(value, true);
-  if (files.some((f) => !f.mimeType.startsWith("image/")))
-    throw new Error("Invalid generated image.");
   return files;
 };

@@ -38,6 +38,7 @@ export default function DeviceCheck() {
   const [events, setEvents] = useState(0);
   const [sdkResult, setSDKResult] = useState("");
   const [sdkFile, setSDKFile] = useState<Attachment>();
+  const [sdkDocuments, setSDKDocuments] = useState<Attachment[]>([]);
   const [restartResult, setRestartResult] = useState("");
   const check = data.deviceCheck;
   const connection = data.connections.find(
@@ -162,9 +163,9 @@ export default function DeviceCheck() {
         <View style={s.card}>
           <Text style={s.h2}>Offline AI engine check</Text>
           <Text style={s.sub}>
-            Checks streaming, image tools and local text/PDF exports on this
-            device using synthetic data. No provider, credentials or
-            conversations are contacted.
+            Checks streaming, real image upload encoding, PDF/text document
+            tools and local exports on this device using synthetic data. No
+            provider, credentials or conversations are contacted.
           </Text>
           <Button
             title="Check AI engine offline"
@@ -173,7 +174,8 @@ export default function DeviceCheck() {
             onPress={() =>
               void action(async () => {
                 setSDKResult("");
-                setSDKFile(await checkSDKOnDevice());
+                setSDKDocuments([]);
+                setSDKFile(await checkSDKOnDevice(setSDKDocuments));
                 await checkLocalExports();
                 setSDKResult(
                   "Passed: SDK tools, images and local file exports.",
@@ -225,7 +227,7 @@ export default function DeviceCheck() {
                             text: "Synthetic offline SDK example. The green tile is test data, not a live generated picture.",
                             status: "complete",
                             createdAt: Date.now(),
-                            generatedFiles: [sdkFile],
+                            generatedFiles: [sdkFile, ...sdkDocuments],
                           },
                         ],
                       },

@@ -1,21 +1,28 @@
 import { syntheticJSONResponse, syntheticStreamResponse } from "./sdk-response";
 import { runSDKAgent } from "./sdk-engine";
 import { Attachment } from "./types";
+import { checkSDKMultipartUpload } from "./sdk-upload-check";
+import { supportedDocumentFormats } from "./document-files";
 
 // An explicit, synthetic, offline diagnostic. This fetch never contacts a server.
-export async function checkSDKOnDevice(): Promise<Attachment> {
+export async function checkSDKOnDevice(
+  onDocuments?: (files: Attachment[]) => void,
+): Promise<Attachment> {
   const png =
     "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAKklEQVR4nGNQyY6gKWIYtWDUglELRi0YtWDUglELRi0YtWDUglELhooFAERenC4hY24CAAAAAElFTkSuQmCC";
   let chats = 0,
     images = 0;
   let file: Attachment | undefined;
   let text = "";
+  const documents: Attachment[] = [];
   const failures: string[] = [];
   const fetcher: typeof fetch = async (url, init) => {
     if (
       String(url) === "https://sdk-check.invalid/v1/images/generations" ||
       String(url) === "https://sdk-check.invalid/v1/images/edits"
     ) {
+      if (String(url).endsWith("/images/edits"))
+        await checkSDKMultipartUpload(init?.body, png);
       images++;
       return syntheticJSONResponse({ created: 1, data: [{ b64_json: png }] });
     }
@@ -23,17 +30,33 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
       throw new Error("Unexpected diagnostic destination.");
     chats++;
     const item =
-      chats <= 2
+      chats <= 4
         ? {
             type: "function_call",
             status: "completed",
             id: `fc_check_${chats}`,
             call_id: `call_check_${chats}`,
-            name: "generate_image",
-            arguments: JSON.stringify({
-              prompt: "synthetic offline image",
-              ...(chats === 2 ? { imageId: file?.id } : {}),
-            }),
+            name: chats <= 2 ? "generate_image" : "create_document",
+            arguments: JSON.stringify(
+              chats <= 2
+                ? {
+                    prompt: "synthetic offline image",
+                    ...(chats === 2 ? { imageId: file?.id } : {}),
+                  }
+                : {
+                    title:
+                      chats === 3 ? "Offline SDK report" : "Offline SDK text",
+                    format:
+                      chats === 3 &&
+                      (supportedDocumentFormats as readonly string[]).includes(
+                        "pdf",
+                      )
+                        ? "pdf"
+                        : "txt",
+                    content:
+                      "Synthetic offline sample. Not a live weather forecast.\n\n## Weather overview\n\nA clear morning is used here only as sample content.\n\n| Day | Conditions | High |\n| --- | --- | --- |\n| Sample day | Clear | 25 C |\n\n- Local document creation\n- No provider request\n\nCalculation: 7 x 12 = 84.",
+                  },
+            ),
           }
         : {
             type: "message",
@@ -49,7 +72,7 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
       },
       { type: "response.output_item.added", output_index: 0, item },
     ];
-    if (chats > 2) {
+    if (chats > 4) {
       if (String(init?.body).includes(png))
         throw new Error("Diagnostic pixels were resent.");
       events.push({
@@ -119,11 +142,15 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
     },
     approveImageEdit: async () => true,
     onFiles: async (files) => {
-      file = files[0];
+      for (const output of files) {
+        if (output.mimeType.startsWith("image/")) file = output;
+        else documents.push(output);
+      }
     },
   });
   if (
-    chats !== 3 ||
+    chats !== 5 ||
+    documents.length !== 2 ||
     images !== 2 ||
     text !== "SDK_CHECK_OK" ||
     !file ||
@@ -132,5 +159,6 @@ export async function checkSDKOnDevice(): Promise<Attachment> {
     throw new Error(
       `Offline SDK check: ${chats} chat steps, ${images} image calls, ${file ? "file received" : "no file"}, ${text === "SDK_CHECK_OK" ? "text passed" : "text mismatch"}. ${failures.join("; ")}`,
     );
+  onDocuments?.(documents);
   return file;
 }

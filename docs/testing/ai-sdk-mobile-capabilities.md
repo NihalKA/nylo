@@ -83,3 +83,25 @@ npm audit retains three moderate Expo transitive findings, with no high/critical
 findings. Historical development receipts are retained in
 [the development record](ai-sdk-mobile-capabilities-development.md); private Apple
 receipts, logs and credentials are excluded from source/public releases.
+
+## Follow-up: image edits and document creation (not released yet)
+
+The reported live edit failure exposed an upload boundary missed by the original
+synthetic fetch: Expo fetch rejects RN URI-only multipart parts. Native edits now
+append the actual Expo File. A regression executes the installed Expo encoder,
+reproduces the old rejection, and sends the corrected bytes to a temporary local
+HTTP server for multipart parsing. The native offline diagnostic now runs that
+encoder too, checking the image bytes, filename and MIME header without a
+provider request. The generic error no longer assumes access or quota failure.
+
+The owner also requested a model-callable PDF/text creation tool. create_document
+creates a real local file, persists it in existing blob storage, displays a file
+card and supports save/share. PDF formatting supports headings, lists and simple
+tables, with escaped HTML and no external assets. Generation is bounded to two
+documents per turn with validated content/filename limits. Other document formats
+are not enabled by this change. Manual answer exports remain available.
+
+The expanded SDK scenario creates image/PDF/TXT results, cold-reopens them, and
+exports only its known synthetic sample PDF/text from the disposable CI database
+for rendering/content inspection. No raw database is published. These follow-up
+changes are pending native verification and a new beta; build 27 is unchanged.

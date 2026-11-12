@@ -8,7 +8,10 @@ function download(name: string, blob: Blob) {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 export async function shareGeneratedFile(file: Attachment) {
-  const bytes = Uint8Array.from(atob(file.data), (c) => c.charCodeAt(0));
+  const bytes =
+    file.mimeType === "text/plain"
+      ? new TextEncoder().encode(file.data)
+      : Uint8Array.from(atob(file.data), (c) => c.charCodeAt(0));
   download(file.name, new Blob([bytes], { type: file.mimeType }));
 }
 export async function exportResponse(text: string, format: "txt" | "pdf") {

@@ -279,7 +279,7 @@ Heavy native compilation runs in CI rather than on the development machine. Rele
 - **iOS** can finish a reply in the background during the limited time the system grants. Long replies, force-quitting or pending memory approvals can still interrupt it. **Android** stops replies in the background.
 - The full conversation is sent on each turn. There is no automatic summarisation yet.
 - No voice, interactive browsing, code execution or scheduled tasks. Image generation/editing and web search require a supporting connection and enabled capability settings; listing a model does not establish account access.
-- The feature candidate uses AI SDK Core on the device, with the saved provider URL/key. Generated images are kept locally and can be shared. They are not automatically sent back as model input; edits require explicit image-send approval. Response text can be exported locally as text or PDF.
+- The feature candidate uses AI SDK Core on the device, with the saved provider URL/key. Generated images and PDF/TXT documents are kept locally and can be saved/shared. Ask for a PDF or text file to create an attachment directly in chat. Generated file bytes are not automatically sent back as model input; edits require explicit image-send approval. Per-response text/PDF export remains available.
 - Whether a provider and model support PDFs, images or tools depends on that provider and model. Nylo doesn't infer it from model names.
 
 ## Documentation index

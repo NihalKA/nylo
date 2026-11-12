@@ -22,8 +22,27 @@ appId: com.nylohq.nylo
 - tapOn: "Open offline sample"
 - assertVisible: "Save or share image"
 - takeScreenshot: sdk-image-result
+- scrollUntilVisible:
+    element: "Save or share PDF"
+    direction: DOWN
+- assertVisible: "Offline SDK report.pdf"
+- scrollUntilVisible:
+    element: "Save or share text file"
+    direction: DOWN
+- assertVisible: "Offline SDK text.txt"
+- takeScreenshot: sdk-document-results
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Example: SDK image.*"
 - assertVisible: "Save or share image"
 - takeScreenshot: sdk-image-restored
+
+- scrollUntilVisible:
+    element: "Save or share PDF"
+    direction: DOWN
+- assertVisible: "Offline SDK report.pdf"
+- scrollUntilVisible:
+    element: "Save or share text file"
+    direction: DOWN
+- assertVisible: "Offline SDK text.txt"
+- takeScreenshot: sdk-documents-restored

@@ -722,19 +722,40 @@ function Chat() {
                         ))}
                         {message.generatedFiles?.map((file) => (
                           <View key={file.id} style={{ gap: 8 }}>
-                            <Image
-                              source={{ uri: attachmentUri(file) }}
-                              accessibilityLabel={`Generated image: ${file.name}`}
-                              style={{
-                                width: "100%",
-                                height: 280,
-                                borderRadius: 16,
-                                backgroundColor: theme.card,
-                              }}
-                              resizeMode="contain"
-                            />
+                            {file.mimeType.startsWith("image/") ? (
+                              <Image
+                                source={{ uri: attachmentUri(file) }}
+                                accessibilityLabel={`Generated image: ${file.name}`}
+                                style={{
+                                  width: "100%",
+                                  height: 280,
+                                  borderRadius: 16,
+                                  backgroundColor: theme.card,
+                                }}
+                                resizeMode="contain"
+                              />
+                            ) : (
+                              <View style={[s.card, { gap: 6 }]}>
+                                <Text style={[s.text, { fontWeight: "600" }]}>
+                                  {file.name}
+                                </Text>
+                                <Text style={s.sub}>
+                                  {file.mimeType === "application/pdf"
+                                    ? "PDF document"
+                                    : "Text document"}{" "}
+                                  · {Math.max(1, Math.ceil(file.size / 1024))}{" "}
+                                  KB
+                                </Text>
+                              </View>
+                            )}
                             <Button
-                              title="Save or share image"
+                              title={
+                                file.mimeType.startsWith("image/")
+                                  ? "Save or share image"
+                                  : file.mimeType === "application/pdf"
+                                    ? "Save or share PDF"
+                                    : "Save or share text file"
+                              }
                               secondary
                               icon="share-outline"
                               onPress={() =>

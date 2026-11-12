@@ -454,3 +454,62 @@ test("malformed image arguments never reach the image endpoint", async () => {
     assert.equal(chats, 2);
   }
 });
+
+test("a document request calls the real local text writer and returns a file reference", async () => {
+  let chats = 0;
+  let saved: import("../src/types").Attachment | undefined;
+  const o = options(async (url, init) => {
+    assert.ok(
+      String(url).endsWith("/responses"),
+      "Document creation makes no extra provider/file request",
+    );
+    if (++chats === 1) {
+      const request = JSON.parse(String(init?.body));
+      assert.ok(
+        request.tools.some(
+          (t: { name: string }) => t.name === "create_document",
+        ),
+      );
+      return stream(undefined, "create_document", {
+        title: "Weather sample",
+        format: "txt",
+        content: "Synthetic sample: 25 C.",
+      });
+    }
+    const request = JSON.parse(String(init?.body));
+    const result = request.input.find(
+      (x: { type: string }) => x.type === "function_call_output",
+    );
+    const output = JSON.parse(result.output);
+    assert.equal(output.success, true);
+    assert.equal(output.name, "Weather sample.txt");
+    assert.ok(!result.output.includes("Synthetic sample"));
+    return stream("Your file is ready.");
+  });
+  o.onFiles = async (files) => {
+    saved = files[0];
+  };
+  await runSDKAgent(o);
+  assert.equal(chats, 2);
+  assert.equal(saved?.mimeType, "text/plain");
+  assert.equal(saved?.data, "Synthetic sample: 25 C.");
+});
+
+test("invalid document arguments create no file and no additional API request", async () => {
+  let chats = 0;
+  const o = options(async (url) => {
+    assert.ok(String(url).endsWith("/responses"));
+    return ++chats === 1
+      ? stream(undefined, "create_document", {
+          title: "Report",
+          format: "txt",
+          content: "x".repeat(50001),
+        })
+      : stream("The document is too long.");
+  });
+  o.onFiles = async () => {
+    assert.fail("Invalid document must not be saved");
+  };
+  await runSDKAgent(o);
+  assert.equal(chats, 2);
+});
