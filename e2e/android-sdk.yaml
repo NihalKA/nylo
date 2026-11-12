@@ -2,6 +2,20 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
+# Match the existing smoke/gallery handling of the captured API35 launcher ANR.
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: "android:id/alertTitle"
+        text: "Pixel Launcher isn't responding"
+    commands:
+      - takeScreenshot: sdk-pixel-launcher-anr
+      - tapOn:
+          id: "android:id/aerr_close"
+          text: "Close app"
+          retryTapIfNoChange: false
+      - assertNotVisible: "Pixel Launcher isn't responding"
 - tapOn:
     text: "Settings"
     retryTapIfNoChange: true
