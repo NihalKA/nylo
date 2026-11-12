@@ -103,7 +103,14 @@ function Chat() {
     id: string;
     prompt?: string;
   }>();
-  const { data, update, send, runningId, responseProgress, stop } = useStore();
+  const {
+    data,
+    update,
+    send,
+    runningIds,
+    responseProgress: progressByChat,
+    stop,
+  } = useStore();
   const conversation = data.conversations.find((c) => c.id === id);
   const agent = data.agents.find((a) => a.id === conversation?.agentId);
   const savedConnection = data.connections.find(
@@ -140,7 +147,9 @@ function Chat() {
   const scroll = useRef<React.ComponentRef<typeof ScrollView>>(null);
   const composer = useRef<React.ComponentRef<typeof TextInput>>(null);
   const nearBottom = useRef(true);
-  const isRunning = runningId === id;
+  const runningId = runningIds.includes(id) ? id : null;
+  const isRunning = !!runningId;
+  const responseProgress = progressByChat[id];
   const [progressNow, setProgressNow] = useState(Date.now());
   useEffect(() => {
     if (!isRunning) return;
@@ -1228,7 +1237,7 @@ function Chat() {
                       accessibilityLabel="Stop response"
                       onPress={() => {
                         haptic.stop();
-                        stop();
+                        stop(id);
                       }}
                       scaleTo={0.86}
                       style={{
@@ -1298,11 +1307,7 @@ function Chat() {
               <Text
                 style={{ textAlign: "center", fontSize: 12, color: theme.sub }}
               >
-                {runningId && !isRunning
-                  ? "Another conversation is responding."
-                  : isRunning
-                    ? `${progressLabel}. ${responseProgress?.backgroundAllowed ? "Can continue briefly in background; iOS may pause it." : "Keep Nylo open for this request."}`
-                    : "Saved on this device. AI can make mistakes."}
+                {`${progressLabel}. ${responseProgress?.backgroundAllowed ? "Can continue briefly in background; iOS may pause it." : "Keep Nylo open for this request."}`}
               </Text>
             ) : null}
           </View>

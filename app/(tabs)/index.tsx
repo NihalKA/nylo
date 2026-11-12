@@ -27,7 +27,7 @@ export default function Chats() {
   // Cards cascade in only on first arrival, not while scrolling or filtering.
   const mountedAt = useRef(Date.now()).current;
   const [searchFocused, setSearchFocused] = useState(false);
-  const { data, newChat, runningId } = useStore();
+  const { data, newChat, runningIds } = useStore();
   const scrollY = useRef(new Animated.Value(0)).current;
   const tick = useRef(scrollTicker()).current;
   const onScrollTick = (e: { nativeEvent: { contentOffset: { y: number } } }) =>
@@ -207,7 +207,7 @@ export default function Chats() {
             enabled={index < 8 && Date.now() - mountedAt < 800}
           >
             <ConversationRow
-              live={runningId === item.id}
+              live={runningIds.includes(item.id)}
               conversation={item}
               agent={data.agents.find((a) => a.id === item.agentId)}
               onPress={() =>

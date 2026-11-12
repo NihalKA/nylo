@@ -1,5 +1,18 @@
-import { Alert, Platform } from "react-native";
-export async function askPermission(
+import { Alert, AppState, Platform } from "react-native";
+import { createApprovalQueue } from "./approval-queue";
+const approve = createApprovalQueue(
+  () => !AppState.currentState || AppState.currentState === "active",
+);
+
+export function askPermission(
+  title: string,
+  message: string,
+  action = "Allow",
+  signal?: AbortSignal,
+): Promise<boolean> {
+  return approve(() => showPermission(title, message, action), false, signal);
+}
+async function showPermission(
   title: string,
   message: string,
   action = "Allow",
@@ -19,12 +32,23 @@ export async function askPermission(
 }
 
 export type ImageEditPermission = "once" | "chat" | "cancel";
-export async function askImageEditPermission(
+export function askImageEditPermission(
+  message: string,
+  generated: boolean,
+  signal?: AbortSignal,
+): Promise<ImageEditPermission> {
+  return approve(
+    () => showImageEditPermission(message, generated),
+    "cancel",
+    signal,
+  );
+}
+async function showImageEditPermission(
   message: string,
   generated: boolean,
 ): Promise<ImageEditPermission> {
   if (!generated)
-    return (await askPermission(
+    return (await showPermission(
       "Send this image for editing?",
       message,
       "Edit image",

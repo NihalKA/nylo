@@ -477,7 +477,13 @@ export default function DeviceCheck() {
           </>
         )}
         {testRunning ? (
-          <Button title="Stop live test" secondary onPress={stop} />
+          <Button
+            title="Stop live test"
+            secondary
+            onPress={() => {
+              if (runningId) stop(runningId);
+            }}
+          />
         ) : null}
         {error ? (
           <Text accessibilityRole="alert" style={s.error}>
