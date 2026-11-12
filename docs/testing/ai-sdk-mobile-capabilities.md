@@ -1,4 +1,27 @@
-# AI SDK mobile capabilities: delivered beta 33
+# AI SDK mobile capabilities: photo viewer delivered
+
+The latest owner-approved photo viewer is delivered from app source
+`fc10ebd208e4d561e46e76826021c46955fcec97`:
+
+- iOS **1.0.0 (35)** is VALID and **IN_BETA_TESTING** in the existing internal
+  Nylo Device QA group. Independent group, build-beta-detail and exact notes
+  readbacks preserve all older selected builds and all-build access false.
+  [Build details](https://appstoreconnect.apple.com/apps/6832224555/testflight/ios/2a460ef3-0624-4825-8e30-f09e2cebb82b).
+  Physical installation is unverified. Public TestFlight still offers the
+  separately approved build33; this pass did not change its external group.
+- Android **1.0.0 / versionCode36** is a separate public feature prerelease:
+  [APK](https://github.com/NihalKA/nylo/releases/download/android-image-viewer-beta-1.0.0-36/Nylo-test.apk)
+  and [checksum](https://github.com/NihalKA/nylo/releases/download/android-image-viewer-beta-1.0.0-36/SHA256SUMS.txt).
+  Unauthenticated downloads match the audited exact-source APK, 67,762,318 bytes.
+  Older releases remain available; no Play upload.
+
+PR7 was independently merged at app source `fc10ebd` on2026-11-12. Later fixture
+changes and this release record remain on the feature branch, with app inputs
+unchanged. No additional merge or PR was made by the delivery continuation.
+The following beta33 record retains the prior capability and release evidence;
+the full-screen viewer verification below supersedes its fit-only image behavior.
+
+## Prior beta33 release record
 
 Delivered beta33 app source: `1565c0cb20021e6473b9fe5edc8b637e88ee5e9e` on
 `feat/ai-sdk-mobile-capabilities`. Test-only changes through
@@ -154,7 +177,7 @@ Production npm audit retains three moderate Expo transitive findings and no
 high/critical findings. Private handoff, Apple receipts, credentials, SQL/databases
 and logs remain excluded from source and public releases.
 
-## Owner-approved follow-up: full-screen image gestures (pending new beta)
+## Delivered full-screen image gestures
 
 The owner reported that the fit-only image sheet did not zoom, and explicitly
 approved a full-screen photo viewer with pinch zoom, bounded panning, double-tap
@@ -168,13 +191,13 @@ bounds prevent blank edges. Touch-count changes rebase at the current pose to
 avoid a jump when one finger lifts. Viewport changes and reopening reset the view.
 The implementation adds no dependency or native module. Six gesture/geometry cases
 bring the source suite to134 passing tests; typecheck, formatting, security and
-both Hermes exports pass. Native SDK flows now capture real double-tap zoom, pan
-and reset on an owned patterned image; actual native results are pending. Native
+both Hermes exports pass. Native SDK flows capture real double-tap zoom, pan
+and reset on an owned patterned image; all42 final captures are reviewed. Native
 pinch gesture observation must be reported separately from math/unit coverage.
 
 Public build33 remains available at https://testflight.apple.com/join/u7zsCTuR
-with external APPROVED/IN_BETA_TESTING independently verified. This pending viewer
-upgrade has not yet replaced that released binary.
+with external APPROVED/IN_BETA_TESTING independently verified. The new viewer is available internally as35 and as Android36; public external
+TestFlight33 remains unchanged.
 
 The first reused-runtime iOS diagnostic43255235425 stopped at the250-percent
 assertion. Its native trace showed two taps about360ms apart. A timing-edge
@@ -192,7 +215,7 @@ and full capture verification are still pending.
 Fresh candidate builds are now compiled from `fc10ebd`: iOS native run
 `43274267681`, signed iOS35 run `43274280162`, and Android36 run `43274273631`.
 Packaged source/assets, signatures, permissions/privacy and hashes pass. Apple
-processed35 as VALID; it remains unassigned pending final native verification.
+processed35 as VALID; it is now assigned only to the existing internal QA group.
 The first exact-binary iOS SDK run stopped before Settings navigation after a
 slow cold launch; its screenshot and accessibility tree show the original tab.
 The fixture now explicitly waits for that tab, retaining its original selector.
@@ -204,5 +227,46 @@ sequence, with recorded timing and bounded tap duration/gap, instead of two
 separate driver requests. A disposable shell-UID Java input helper and localhost
 test bridge run only in the CI emulator, with no change to Nylo's APK, keys,
 dependencies or gesture recognition. All250/100-percent, pan, preview, source and
-cold-reopen assertions remain. New results and visual review are pending; no
-native Android pinch result or new delivery is claimed.
+cold-reopen assertions remain. Both Android navigation modes and iOS now pass
+with all42 final captures reviewed. Android native pinch and physical-device
+installation remain unobserved.
+
+## Final photo viewer verification
+
+- iOS SDK `43283513329`: pass, exact native `43274267681`, refresh false, large
+  profile. All14 captures and actual synthetic PDF/TXT exports reviewed.
+- Android SDK `43283519365`: both navigation modes pass on native
+  `43274273631`. All28 captures and both PDF/TXT samples reviewed. The gestural
+  first attempt was blocked by a Pixel Launcher ANR dialog, confirmed by its
+  screenshot, accessibility tree and launcher log. One bounded failed-job retry
+  passed; the completed three-button evidence was retained.
+- All42 captures show actual patterned image enlargement, panning, exact fitted
+  image-region restoration at100 percent, Close/Share, retained files after cold
+  reopen, readable PDF/TXT previews, Android PDF zoom geometry, Markdown emphasis
+  and Sources. Android native input records80–81ms inter-tap gaps.
+- Actual PDFs were rendered with Poppler and text/visually checked, readable and
+  unclipped. TXT bytes match the retained synthetic baseline. Only the guarded
+  synthetic fixture is exported; no raw database is published.
+- Manual pinch199 percent was observed in an isolated iOS simulator diagnostic
+  using the compatible main runtime plus corrected JS. This is distinct from
+  exact candidate binary tests and is not physical hardware or Android pinch
+  evidence. Native OS Save/Share interaction and personal-photo cases remain
+  separately unverified.
+- Original candidate source CI `43261543475` passed134 tests and normal checks.
+  Later test-only CI `43283729679` passes tests/typecheck/format/security/assets,
+  but Expo Doctor now recommends newly released Expo58.0.25/SQLite58.0.17 patches
+  against the locked58.0.24/58.0.16 candidate. This live-metadata failure is
+  retained honestly; dependencies and the check were not changed to hide it.
+  Installed SDK metadata expects SQLite58.0.16; offline validation carries its
+  reliability warning and does not override the latest-metadata result.
+
+APK SHA-256: `16c88aed620e153ec7fdf01307a3a801e41876bdb20023881ea0020fd2fec3c8`.
+IPA SHA-256: `a1bbf116f51e098e0a4ab62e277395cb27bc502d9a22ff5942350aaa17520a82`.
+
+Only this delivery's temporary feature signing exception was removed; independent
+readback preserves every other policy object, including unrelated work. The
+owning delivery continuation is disabled with no next run. The separate
+four-hour monitor, other worktrees, owner package/dashboard/output, prior public
+TestFlight and Android releases, roles/testers and signing are preserved.
+No paid/live provider probe, automatic retry feature, backend/model/privacy/
+consent/memory/report/background change was made.
