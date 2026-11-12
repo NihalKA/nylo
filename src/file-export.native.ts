@@ -41,6 +41,8 @@ async function prepareResponseFile(text: string, format: "txt" | "pdf") {
       html: documentHtml("Nylo response", text),
       width: 595,
       height: 842,
+      // iOS ignores CSS @page margins; Android uses the HTML @page rule.
+      margins: { top: 36, bottom: 36, left: 36, right: 36 },
     });
     file = new File(result.uri);
   } else {

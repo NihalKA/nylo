@@ -105,3 +105,34 @@ The expanded SDK scenario creates image/PDF/TXT results, cold-reopens them, and
 exports only its known synthetic sample PDF/text from the disposable CI database
 for rendering/content inspection. No raw database is published. These follow-up
 changes are pending native verification and a new beta; build 27 is unchanged.
+
+Follow-up candidate `476286c`: source CI `43157348781` passes all 114 tests,
+typecheck, formatting, security, fonts/assets and Expo Doctor; both Hermes exports
+pass. Native iOS `43157368418`, signed iOS `43157378858` (28), and signed Android
+`43157372254` (versionCode 28) succeed. Actual signing/profile/privacy/source
+receipts were inspected; the downloaded APK matches its audited SHA-256.
+
+Android SDK `43159374329` passes in both navigation modes. All ten SDK
+captures and all 30 normal-smoke captures from `43159430534` were inspected.
+One additional Pixel Launcher ANR diagnostic was retained. The first gestural
+SDK attempt lost its emulator transport at initial launch, before the SDK check;
+one failed-job retry passed. The actual Android one-page A4 PDF was rendered and
+inspected for readable, unclipped heading/table/list content; extracted PDF text
+and TXT content match the sample. Native and tested source are exactly 476286c.
+
+Android **1.0.0 / versionCode 28** is now published at
+[the new feature APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-28/Nylo-test.apk).
+The unauthenticated public APK download and published checksum match the audited
+SHA-256 `5d1bbb1daa77cc361edf18db46d7deda52174cd8fda5a78bab29b848147e0a78`.
+Build 27's release is unchanged.
+
+iOS SDK `43159849456` passes on the unchanged native/JS source. All five scenario
+captures and the native launch capture were inspected, including image/PDF/TXT
+cards and cold reopen. Its actual PDF is one-page A4 and contains the expected
+text. Visual review found that iOS ignored CSS page margins, leaving content too
+close to the page edges. Expo's native print options are now given explicit
+36-point margins for generated PDFs and manual PDF exports. This focused fix
+requires a new candidate and actual PDF rendering verification. iOS large smoke
+`43159852937` is still pending. iOS 28 is VALID and uploaded but remains
+unassigned; iOS 27 stays available to QA. No live mobile provider or physical
+installation claim is made from these synthetic native tests.

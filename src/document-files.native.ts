@@ -19,6 +19,8 @@ export async function createDocumentFile(
     html: documentHtml(input.title, input.content),
     width: 595,
     height: 842,
+    // iOS ignores CSS @page margins; Android uses the HTML @page rule.
+    margins: { top: 36, bottom: 36, left: 36, right: 36 },
   });
   const file = new File(output.uri);
   try {
