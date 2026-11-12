@@ -44,6 +44,8 @@ appId: com.nylohq.nylo
 - tapOn: "Send message"
 - tapOn: "Allow & send"
 - assertVisible: "Phase one.*"
+- assertVisible: "(?s)Receiving reply.*"
+- takeScreenshot: background-00-active-reply
 - pressKey: Home
 - takeScreenshot: background-01-home
 - runScript:
