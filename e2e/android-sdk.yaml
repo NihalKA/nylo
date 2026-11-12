@@ -22,6 +22,12 @@ appId: com.nylohq.nylo
 - tapOn: "Open offline sample"
 - assertVisible: "Save or share image"
 - takeScreenshot: sdk-image-result
+- tapOn: "Open image: .*"
+- assertVisible: "Image preview: .*"
+- assertVisible: "Save or share"
+- takeScreenshot: sdk-image-preview
+- tapOn: "Close image preview"
+- assertVisible: "Save or share image"
 - scrollUntilVisible:
     element: "Save or share PDF"
     direction: DOWN

@@ -144,3 +144,16 @@ installation/expiry, live provider use, VoiceOver and OS Save/Share are unverifi
 Production npm audit retains three moderate Expo transitive findings and no
 high/critical findings. Private handoff, Apple receipts, credentials, SQL/databases
 and logs remain excluded from source and public releases.
+
+## Approved follow-up: image tap previews (pending new beta)
+
+The owner reported that tapping images did not open them and approved the same
+local preview pattern as PDF/TXT. Sent photos, generated images and selected
+photos before sending now open the existing preview modal, with a contained image,
+Close and the existing Save/Share action. Keyboard dismissal makes the viewer
+usable from the composer. Viewing uses the stored attachment URI without a provider
+request, new permission grant or storage change. No zoom behavior is added in this
+pass. Build32 remains the delivered beta until new native checks and delivery.
+SDK flows now assert image open/content/Close and retained chat controls, with an
+actual preview capture on both platforms. Local128 tests/typecheck and both
+Hermes exports pass; native visual verification is pending.

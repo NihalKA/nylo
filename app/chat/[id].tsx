@@ -587,17 +587,27 @@ function Chat() {
                             style={{ gap: 6, marginBottom: 8 }}
                           >
                             {file.mimeType.startsWith("image/") ? (
-                              <Image
-                                source={{ uri: attachmentUri(file) }}
-                                accessibilityLabel={`Attached photo: ${file.name}`}
-                                style={{
-                                  width: 180,
-                                  height: 140,
-                                  borderRadius: 12,
-                                  maxWidth: "100%",
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open image: ${file.name}`}
+                                accessibilityHint="Opens a local image preview"
+                                onPress={() => {
+                                  Keyboard.dismiss();
+                                  setPreviewFile(file);
                                 }}
-                                resizeMode="contain"
-                              />
+                              >
+                                <Image
+                                  source={{ uri: attachmentUri(file) }}
+                                  accessibilityLabel={`Attached photo: ${file.name}`}
+                                  style={{
+                                    width: 180,
+                                    height: 140,
+                                    borderRadius: 12,
+                                    maxWidth: "100%",
+                                  }}
+                                  resizeMode="contain"
+                                />
+                              </Press>
                             ) : null}
                             <Text style={s.sub}>
                               {file.name} · {Math.ceil(file.size / 1024)} KB
@@ -659,17 +669,27 @@ function Chat() {
                         {message.generatedFiles?.map((file) => (
                           <View key={file.id} style={{ gap: 8 }}>
                             {file.mimeType.startsWith("image/") ? (
-                              <Image
-                                source={{ uri: attachmentUri(file) }}
-                                accessibilityLabel={`Generated image: ${file.name}`}
-                                style={{
-                                  width: "100%",
-                                  height: 280,
-                                  borderRadius: 16,
-                                  backgroundColor: theme.card,
+                              <Press
+                                accessibilityRole="button"
+                                accessibilityLabel={`Open image: ${file.name}`}
+                                accessibilityHint="Opens a local image preview"
+                                onPress={() => {
+                                  Keyboard.dismiss();
+                                  setPreviewFile(file);
                                 }}
-                                resizeMode="contain"
-                              />
+                              >
+                                <Image
+                                  source={{ uri: attachmentUri(file) }}
+                                  accessibilityLabel={`Generated image: ${file.name}`}
+                                  style={{
+                                    width: "100%",
+                                    height: 280,
+                                    borderRadius: 16,
+                                    backgroundColor: theme.card,
+                                  }}
+                                  resizeMode="contain"
+                                />
+                              </Press>
                             ) : (
                               <Press
                                 accessibilityRole="button"
@@ -935,7 +955,15 @@ function Chat() {
                       }}
                     >
                       {image ? (
-                        <View>
+                        <Press
+                          accessibilityRole="button"
+                          accessibilityLabel={`Preview ${file.name}`}
+                          accessibilityHint="Opens a local image preview"
+                          onPress={() => {
+                            Keyboard.dismiss();
+                            setPreviewFile(file);
+                          }}
+                        >
                           <Image
                             source={{ uri: attachmentUri(file) }}
                             accessibilityLabel={`Preview ${file.name}`}
@@ -957,7 +985,7 @@ function Chat() {
                           >
                             {file.mimeType.split("/")[1]?.toUpperCase()}
                           </Text>
-                        </View>
+                        </Press>
                       ) : (
                         <View
                           style={{
