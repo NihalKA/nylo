@@ -1,10 +1,10 @@
 # AI SDK mobile capabilities: delivered beta 33
 
-App source: `1565c0cb20021e6473b9fe5edc8b637e88ee5e9e` on
+Delivered beta33 app source: `1565c0cb20021e6473b9fe5edc8b637e88ee5e9e` on
 `feat/ai-sdk-mobile-capabilities`. Test-only changes through
 `4c58fb2f052f88c8482e562e2a232664b4d4fb45` and later documentation leave app
-inputs unchanged. [PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and
-unmerged. The branch includes main `19c3c44`.
+inputs unchanged. The original feature was merged in [PR 6](https://github.com/NihalKA/nylo/pull/6)
+as main `2706b72`. This follow-up starts from that latest main.
 
 ## Delivery
 
@@ -153,3 +153,38 @@ installation/expiry, live provider use, VoiceOver and OS Save/Share are unverifi
 Production npm audit retains three moderate Expo transitive findings and no
 high/critical findings. Private handoff, Apple receipts, credentials, SQL/databases
 and logs remain excluded from source and public releases.
+
+## Owner-approved follow-up: full-screen image gestures (pending new beta)
+
+The owner reported that the fit-only image sheet did not zoom, and explicitly
+approved a full-screen photo viewer with pinch zoom, bounded panning, double-tap
+zoom/reset, Close and Save/Share. The new image-only modal uses a dark photo canvas,
+safe-area controls, accessible zoom/reset actions, and local attachment data.
+PDF/TXT previews and app-wide theme/provider/consent/background behavior stay as
+before. The earlier proposed image-tool failure recovery change is not included.
+
+Zoom is limited to1–5 times, anchored to the moving two-finger midpoint, and pan
+bounds prevent blank edges. Touch-count changes rebase at the current pose to
+avoid a jump when one finger lifts. Viewport changes and reopening reset the view.
+The implementation adds no dependency or native module. Six gesture/geometry cases
+bring the source suite to134 passing tests; typecheck, formatting, security and
+both Hermes exports pass. Native SDK flows now capture real double-tap zoom, pan
+and reset on an owned patterned image; actual native results are pending. Native
+pinch gesture observation must be reported separately from math/unit coverage.
+
+Public build33 remains available at https://testflight.apple.com/join/u7zsCTuR
+with external APPROVED/IN_BETA_TESTING independently verified. This pending viewer
+upgrade has not yet replaced that released binary.
+
+The first reused-runtime iOS diagnostic43255235425 stopped at the250-percent
+assertion. Its native trace showed two taps about360ms apart. A timing-edge
+correction measures the second touch-down after the first release, rather than
+counting the second tap's duration against the350ms gap; long presses remain
+rejected. CI requests zero additional inter-tap delay so automation overhead does
+not turn a double-tap into two slow single taps. Existing250/100 assertions stay.
+An isolated simulator QA app, using the CI main runtime plus the corrected JS,
+then verified actual pinch (199%), double-tap250%, pan and double-tap reset100%.
+Pixel comparisons confirm zoom/pan changes and exact fit/reset image-region match.
+This is diagnostic evidence, not an exact new distribution binary. Temporary
+numeric event traces were removed from the production source. Final native builds
+and full capture verification are still pending.

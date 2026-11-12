@@ -224,7 +224,7 @@ export default function DeviceCheck() {
                           {
                             id: uid(),
                             role: "assistant",
-                            text: "Synthetic offline SDK example.\n\n## Offline sample overview\n\n- **Local files:** the green tile and documents are synthetic test data.\n- **References:** [Synthetic reference](https://sdk-check.invalid/reference?utm_source=offline).\n\nNo live provider request was made.",
+                            text: "Synthetic offline SDK example.\n\n## Offline sample overview\n\n- **Local files:** the patterned image and documents are synthetic test data.\n- **References:** [Synthetic reference](https://sdk-check.invalid/reference?utm_source=offline).\n\nNo live provider request was made.",
                             sources: [
                               {
                                 title: "Synthetic reference",

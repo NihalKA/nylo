@@ -8,8 +8,9 @@ import { supportedDocumentFormats } from "./document-files";
 export async function checkSDKOnDevice(
   onDocuments?: (files: Attachment[]) => void,
 ): Promise<Attachment> {
+  // Owned colored quadrants/grid make actual zoom and pan visible in captures.
   const png =
-    "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAKklEQVR4nGNQyY6gKWIYtWDUglELRi0YtWDUglELRi0YtWDUglELhooFAERenC4hY24CAAAAAElFTkSuQmCC";
+    "iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAoElEQVR4nO3XsQ2DMBAFUNZIlQFghkiZgJJ1IibKEJknJS0cRVwfhWU5eqfv7uTT08mFh9t9rJf9V/VGDHG+y5zPpf4CeKxbMnF/vjkCAAAAAAAAAAAA0BbgP9B6AwAAAAAAAAAAAL0C9s4LoHWdb2D7PPO51F/GTO9XMnF/vjkCAAAAAAAAAADQOaBeCqDeiL/YAAAAAAAAAAAAAEAbwAGBM7MaqRPCNwAAAABJRU5ErkJggg==";
   let chats = 0,
     images = 0;
   let file: Attachment | undefined;
