@@ -80,34 +80,52 @@ appId: com.nylohq.nylo
 - assertVisible:
     id: "chat-message"
 - tapOn: "Go back"
-# Maximum-text AX reports the row visible even at y895–1181 below tabs at877.
-# Move it into the actual viewport before tapping; preserve exact draft checks.
+# AX can expose the restored row at y895–1181 below the tabs at y877.
+# Wait for the loaded list and require the full row above navigation before tap.
 - runFlow:
     when:
       true: ${MAESTRO_UI_PROFILE == 'large-text'}
     commands:
-      - swipe:
-          start: "50%, 75%"
-          end: "50%, 35%"
-          duration: 500
-- tapOn: "(?s)Open New conversation.*"
+      - extendedWaitUntil:
+          visible: "Search chats"
+          timeout: 60000
+      - scrollUntilVisible:
+          element:
+            text: "(?s)Open New conversation.*"
+            above: "Chats, tab, 1 of 3"
+          direction: DOWN
+          visibilityPercentage: 100
+          centerElement: true
+          timeout: 60000
+- tapOn:
+    text: "(?s)Open New conversation.*"
+    above: "Chats, tab, 1 of 3"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-# Maximum-text AX reports the row visible even at y895–1181 below tabs at877.
-# Move it into the actual viewport before tapping; preserve exact draft checks.
+# AX can expose the restored row at y895–1181 below the tabs at y877.
+# Wait for the loaded list and require the full row above navigation before tap.
 - runFlow:
     when:
       true: ${MAESTRO_UI_PROFILE == 'large-text'}
     commands:
-      - swipe:
-          start: "50%, 75%"
-          end: "50%, 35%"
-          duration: 500
-- tapOn: "(?s)Open New conversation.*"
+      - extendedWaitUntil:
+          visible: "Search chats"
+          timeout: 60000
+      - scrollUntilVisible:
+          element:
+            text: "(?s)Open New conversation.*"
+            above: "Chats, tab, 1 of 3"
+          direction: DOWN
+          visibilityPercentage: 100
+          centerElement: true
+          timeout: 60000
+- tapOn:
+    text: "(?s)Open New conversation.*"
+    above: "Chats, tab, 1 of 3"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
