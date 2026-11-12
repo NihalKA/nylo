@@ -268,3 +268,198 @@ with source-ca48da2 JavaScript to verify the PDF correction early. Its provenanc
 must remain separate; final candidate-29 SDK verification will use its unchanged
 built bundle. The old iOS PDF's measured minimum text Y was 0.22 points, supporting
 the visual finding that native page margins were missing.
+
+## Delivered build 29 and reliability-30 development record
+
+The following snapshot preserves earlier delivery and intermediate failures.
+The current delivery receipt is in `ai-sdk-mobile-capabilities.md`.
+
+# AI SDK mobile capabilities: delivered beta 29
+
+App source: `ca48da21ec171b8001576f7489c7faed25d9f057` on
+`feat/ai-sdk-mobile-capabilities`.
+[PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and unmerged.
+Build 29 corresponds to the app source above. Later branch changes recorded below
+are not included in those delivered binaries.
+
+## Delivery
+
+- iOS **1.0.0 (29)** built and uploaded successfully. Apple processed it **VALID**.
+  Assigned only this new build to the existing internal **Nylo Device QA** group.
+  Independent group/build reads confirm the exact build and **IN_BETA_TESTING**;
+  English test notes were independently read back. Prior group builds, including
+  27, remain available; all-build access remains false. Installation is unverified.
+- Android **1.0.0 / versionCode 29** is published:
+  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-29/Nylo-test.apk).
+  The unauthenticated public APK and published checksum were downloaded and match
+  the audited binary. Existing releases 27/28 were not overwritten. No Play upload.
+
+## Capabilities and repair
+
+Pinned AI SDK Core/provider packages execute on the device using the saved
+connection, key, protocol and model. There is no additional backend or implicit
+Vercel gateway. Existing attachment consent, memory approval, report opt-in,
+storage and background-response policies are preserved.
+
+- Ordinary chats and agents can generate images and edit approved images.
+  Results persist in blob storage, survive restart and have save/share controls.
+- The model-callable `create_document` tool creates real local **PDF** and **TXT**
+  attachments on mobile. File cards show filename/type/size and save/share controls.
+  PDFs support headings, lists and simple tables; content is escaped and uses no
+  external assets/scripts. Manual response exports remain available.
+- Web search produces source links when supported by the selected API and enabled
+  capability. No account capability is inferred from a model name.
+- The existing five-step loop is bounded to two images and two documents per user
+  message. Document title/content limits are validated. Generated pixels are not
+  resent in ordinary follow-up messages. Automatic retries remain disabled.
+
+The reported edit failure exposed an upload boundary missed by the original
+synthetic fetch: Expo rejects React Native URI-only multipart records. Native
+edits now append actual Expo Files. A regression reproduces the original
+rejection using the installed Expo encoder, then sends corrected bytes to a
+local HTTP server for multipart parsing. The native SDK diagnostic checks the
+real encoder too. Unknown failures no longer guess that quota or access caused
+them; actual HTTP failures retain their status-specific messages.
+
+Visual PDF review also caught iOS ignoring CSS page margins. Generated PDFs and
+manual exports now supply native 36-point margins. The final iOS PDF was rendered
+and inspected: one-page A4, readable and unclipped, minimum text Y **36.22 pt**
+(previous candidate: 0.22 pt). Android's actual A4 output was also rendered and
+inspected. PDF/TXT samples are extracted only from the known synthetic CI chat;
+no raw database, credentials or user conversation is published.
+
+Other document/archive/audio/video creation formats are not enabled by this
+change. Feature access still depends on the configured API/model/account.
+
+## Verification
+
+| Check                                 | Actual result                                                                                             |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Source CI `43161649821`               | 114 tests, typecheck, formatting, security, fonts/assets and Expo Doctor pass                             |
+| Both-platform Hermes exports          | Pass                                                                                                      |
+| iOS simulator `43161673458`           | Pass, exact source ca48da2                                                                                |
+| Signed iOS build/upload `43161680755` | Pass, 1.0.0 (29); actual identity/signature/certificate/profile audits pass                               |
+| iOS privacy                           | 12 manifests, required SDK declarations, no microphone/tracking, exempt encryption                        |
+| iOS SDK `43163614819`                 | Pass, unchanged built native/JS bundle; all 5 scenario captures plus launch inspected                     |
+| Android signed build `43161676923`    | Pass, versionCode 29; actual source/ZIP/bundle/assets/signature/permission/hash checks pass               |
+| Android SDK `43163084265`             | Both modes pass first attempt; all 10 captures inspected                                                  |
+| Actual native PDF/TXT                 | Both platforms: created, persisted, cold-reopened and safely extracted; PDF text/render and TXT inspected |
+| iOS normal smoke `43159852937`        | Source 476286c UI baseline: pass, all 15 scenario captures plus launch inspected                          |
+| Android normal smoke `43159430534`    | Source 476286c UI baseline: both modes pass, all 30 functional captures inspected                         |
+
+Candidate 29 changes only native PDF margin options from the fully tested UI
+baseline. Its final SDK runs use exact candidate-29 binaries and exercise the
+changed output. No full native rebuild was used for test-only changes.
+
+The offline SDK scenario exercises actual Hermes streaming/tool execution,
+image generation/edit code with synthetic fetch and real multipart encoding,
+local document/export writers, file cards, persisted blobs and cold reopen.
+It makes no provider request. Earlier computer SDK integration generated a
+visually inspected image through the selected connection and returned web-search
+sources; this is distinct from live mobile provider execution.
+
+The earlier build-28 gestural SDK lost emulator transport before app launch; its
+single failed-job retry passed. A Pixel Launcher ANR diagnostic was retained with
+the passed Android smoke evidence. Candidate-29 SDK runs passed without retry.
+An intermediate iOS margin diagnostic was cancelled by the shared workflow
+concurrency group when the exact-build run was dispatched; no pass/fail claim is
+made from it. Final iOS evidence comes from `43163614819` with JS refresh disabled.
+iOS 28 remains unassigned because its actual PDF review found missing margins.
+
+## Binary hashes and boundaries
+
+- APK SHA-256: `6b9c2b9b1402e8a9c6fa6c3988a396a06d4c96cf144d511bf5c413aaa440f55f`.
+- IPA SHA-256: `74b96bdae47dfb93d8680902025dd90d35aa2c8c4213d690a9e7bbf114a5e18e`.
+
+Only temporary feature signing policy 66408002 was removed after delivery;
+independent readback confirmed the other policies unchanged. Store 15, external
+17, unrelated roles/testers/signing and the separate four-hour App Review monitor
+were not changed. This delivery continuation is disabled with no next run.
+
+Live mobile provider use, physical installation, VoiceOver and OS save/share
+interaction are unverified. Production npm audit retains three moderate Expo
+transitive findings, with no high/critical findings. Earlier receipts are kept in
+[the development record](ai-sdk-mobile-capabilities-development.md). Private Apple
+receipts, logs, databases and credentials are excluded from source/public releases.
+
+## Theme follow-up on current main
+
+The feature branch already includes freshly fetched `origin/main` at
+`19c3c440acf4cf7f8089929ae5f4048f5aec4198`. Its theme tokens, shared UI styles,
+typography, main screens and brand assets match main. No rebase was needed.
+The SDK feature did change completed action-label text from main's green to gray;
+this follow-up restores green for completed labels and matches error/pending text
+to the existing icon colors. Formatting and typecheck pass. This small UI change
+has not yet been verified in a new native build or distributed.
+
+## Approved reliability follow-up (not released yet)
+
+Retry preparation now preserves interrupted files and partial text. When files
+already exist, the retry requests only the unfinished text reply, disables file
+creation/edit/search tools for that retry, and retains the original file messages
+in storage. Generated pixels are not resent. A new explicit user request can
+still create or edit a file with normal consent.
+
+The former three-minute whole-turn cutoff is replaced by idle limits: model/reply
+120 seconds, image 300 seconds, document/saving 60 seconds, approval 180 seconds,
+with an absolute ten-minute cap. Network activity renews idle waits, never the
+total cap. Stop, background denial/expiry, idle/total timeout and storage failure
+have distinct messages. Current-stage/elapsed UI and removal of stale pending
+actions clarify progress. Native background permission remains finite; no new
+backend, provider storage, model/default reasoning change or automatic retry.
+
+File tools support ending a file-only turn immediately after a successful save
+when the model explicitly identifies that no further work is needed. Other
+requests retain the existing bounded multi-step loop. SDK and provider failures
+show only static diagnostic labels, numeric HTTP status and allowlisted codes;
+arbitrary messages/bodies/headers/URLs/credentials are not copied to chat.
+Known error codes in noncanonical LB error frames are retained safely without
+loosening successful-response validation. The exact reported live edit failure
+has not been reproduced with a paid provider request.
+
+124 tests/typecheck/format/security/fonts/assets and both Hermes exports pass.
+Regressions cover repeated/cold-restart file retries, interruption budgets,
+redacted real-SDK stream errors, one-call file completion, and approved editing
+of an image saved by an interrupted turn. The local background fixture now emits
+current SDK-compatible Responses frames; its Home/Stop assertions expect the
+specific new interruption messages. Native verification and a new beta remain
+pending. Delivered build 29 is unchanged.
+
+Candidate-30 native builds and signing audits pass on app source `5b955b4`.
+iOS SDK `43176651978` and Android SDK `43175407929` pass; all 6 iOS and 10 Android
+captures and actual native PDF/TXT outputs were inspected. iOS retains its native
+36-point PDF margins. Android smoke `43175473451` passes both navigation modes;
+all 30 captures were inspected. One failed-job retry followed a confirmed initial
+ADB disconnect before the three-button app launch.
+
+The first iOS background test `43176656145` stopped before response testing because
+the provider sheet remained open after dismissing the system password prompt.
+Retained captures/accessibility state identify the visible Done control. The
+correction is test-only: close that observed sheet semantically and retain the
+strict Home/Stop/file-retry assertions. Corrected run `43178705293` reuses the same
+native binary with JS refresh disabled. It must verify finite background
+completion, foreground-only memory approval, user Stop, and a deliberately failed
+post-image reply followed by text retry without image regeneration. Distribution
+of candidate 30 remains on hold pending that result and capture review. No new
+app behavior or native build was introduced by the test correction.
+
+The corrected navigation run `43178705293` reached response send but failed its
+first-byte assertion before any Home/background case. Its actual screenshot shows
+Waiting for the model with elapsed progress; native network diagnostics show TLS
+trust evaluation pending and no HTTP request reached the owned fixture. Test-only
+`a68f072` adds host TLS readiness/certificate preflight and simulator trust
+diagnostics, retaining the exact response assertion with a bounded readiness wait.
+Diagnostic `43180823900` reuses native 30 with refresh disabled. This is not proof
+of an app background failure or a provider fault; distribution remains held.
+
+TLS diagnostic `43180823900` passed its host certificate/health preflight but
+stopped at an earlier system Save Password prompt, confirmed by the retained
+screenshot. It sent no model request. Test-only `be4cdd6` dismisses that observed
+prompt before the exact Done assertion, while retaining the late-prompt guard
+and all response assertions. Run `43182570399` uses the unchanged native 30.
+
+Run `43182570399` stopped before UI testing because the owned TLS fixture did
+not report ready within its 10-second startup deadline. The server process was
+still alive; no functional app/background result is claimed. Test-only `6b78b46`
+adds a bounded 60-second startup/liveness check and explicit startup diagnostics;
+run `43183719350` reuses native 30 with all response assertions unchanged.
