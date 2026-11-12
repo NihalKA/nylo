@@ -1,5 +1,32 @@
 # iOS release
 
+## AI SDK mobile beta delivered — 1.0.0 (27), 12 November 2026
+
+Build **1.0.0 (27)** is available to the existing internal **Nylo Device QA**
+group. Apple processing is VALID; exact group membership, IN_BETA_TESTING and
+English beta notes were independently read back. Actual installation is unverified.
+
+Both iOS and Android binaries use source `199e62fa7670706ebedcf5ca8dbbc9439aae80a4`.
+The feature stays on `feat/ai-sdk-mobile-capabilities` in
+[unmerged PR #6](https://github.com/NihalKA/nylo/pull/6). Signed iOS workflow
+`43114738391` and Android `43114732905` pass actual source/signing/privacy/package
+audits. iOS SDK and all three smoke profiles pass with 48 captures inspected;
+Android SDK/smoke pass both navigation modes with 36 captures inspected. The
+source suite has 105 passing tests; both-platform Hermes exports pass.
+
+[Download Android APK 27](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-27/Nylo-test.apk).
+Its public download and published checksum match the audited binary. No Play
+release occurred. TestFlight build/upload/processing/group availability are
+verified separately; physical installation and live mobile provider use remain
+unverified. Native SDK checks use synthetic data; a computer SDK integration
+verified the selected connection's image generation and web source output.
+
+The temporary feature signing-environment exception was removed, preserving both
+existing policies. Store15/external17, unrelated testers/roles/signing and the
+separate App Review monitor were not changed. The owning delivery continuation
+is disabled after confirmed delivery. Full receipts and limitations:
+[AI SDK mobile verification](testing/ai-sdk-mobile-capabilities.md).
+
 ## Internal background-response beta delivered — 1.0.0 (17)
 
 Build **1.0.0 (17)** is delivered to the existing internal Nylo Device QA group. Signed workflow 42612628652, source e452a2d produced the actually audited IPA; Apple build `4e6626be-2598-4c2e-a7ae-72e9b628ff51` is VALID. Assignment returned 204 and independent group/buildBetaDetail reads verify exact17 and IN_BETA_TESTING; notes were saved/read back and owner access preserved. Actual audit verifies version, build, bundle, iPhone family 1, eleven manifests, required SDK declaration, camera purpose, no microphone or tracking, and exempt encryption. Proof: `artifacts/signed-17-audit/qa-assignment-verification.json`.
