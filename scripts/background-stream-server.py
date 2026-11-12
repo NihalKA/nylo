@@ -1,4 +1,5 @@
 """Local synthetic SSE, never a provider proxy. No request content/key logging."""
+print('Owned fixture process started', flush=True)
 import http.server
 import json
 from pathlib import Path
@@ -104,6 +105,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             except (sqlite3.Error,StopIteration): pass
             time.sleep(.5)
         payload=json.dumps(dict(ready=ready)).encode();self.send_response(200);self.send_header('Content-Type','application/json');self.end_headers();self.wfile.write(payload)
+print('Owned fixture imports complete; binding TLS and control', flush=True)
 server=http.server.ThreadingHTTPServer(('127.0.0.1',8765),Handler)
 context=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);context.load_cert_chain(cert,key);server.socket=context.wrap_socket(server.socket,server_side=True)
 control=http.server.ThreadingHTTPServer(('127.0.0.1',8766),Handler)

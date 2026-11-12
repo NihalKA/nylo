@@ -220,14 +220,18 @@ extendedKeyUsage = serverAuth
 CERT
   openssl req -x509 -newkey rsa:2048 -nodes -days 1 -config "$RUNNER_TEMP/background-tls.cnf" -keyout "$RUNNER_TEMP/background-tls.key" -out "$RUNNER_TEMP/background-tls.crt" > /dev/null 2>&1
   xcrun simctl keychain "$simulator_id" add-root-cert "$RUNNER_TEMP/background-tls.crt"
+  mark_phase background-fixture-startup
   python3 scripts/background-stream-server.py "$RUNNER_TEMP/background-tls.crt" "$RUNNER_TEMP/background-tls.key" "$app_container/Documents/SQLite/nylo.db" artifacts/e2e/background-server.jsonl > artifacts/e2e/background-server.log 2>&1 &
   background_server_pid=$!
   # Fail before UI navigation if our owned TLS fixture is not actually ready.
   # This checks host TLS only; simulator trust is verified by the real app flow.
-  python3 - "$RUNNER_TEMP/background-tls.crt" <<'PREFLIGHT'
-import json, pathlib, ssl, sys, time, urllib.request
+  python3 - "$RUNNER_TEMP/background-tls.crt" "$background_server_pid" <<'PREFLIGHT'
+import json, os, pathlib, ssl, sys, time, urllib.request
 p = pathlib.Path('artifacts/e2e/background-server.jsonl')
-for _ in range(100):
+deadline = time.monotonic()+60
+while time.monotonic() < deadline:
+    try: os.kill(int(sys.argv[2]), 0)
+    except ProcessLookupError: raise SystemExit('Owned fixture exited before readiness; inspect startup log')
     if p.exists() and any(json.loads(x)['event']=='server_ready' for x in p.read_text().splitlines()): break
     time.sleep(.1)
 else: raise SystemExit('Owned fixture did not become ready')
