@@ -463,3 +463,64 @@ not report ready within its 10-second startup deadline. The server process was
 still alive; no functional app/background result is claimed. Test-only `6b78b46`
 adds a bounded 60-second startup/liveness check and explicit startup diagnostics;
 run `43183719350` reuses native 30 with all response assertions unchanged.
+
+## Chat refinements: candidate 31 held, corrected candidate 32
+
+Owner-approved scope adds remembered generated-image edit permission within one
+chat/provider, proper Markdown/citations with compact activity and a Sources
+sheet, and local PDF/TXT previews retaining Save/Share. Personal uploads still
+prompt; provider identity changes/reset revoke the grant and imports strip it.
+No theme, model/reasoning, provider storage, memory or background architecture
+change was authorized or made.
+
+Candidate 31 passed compilation and functional Android gestural checks, but
+actual captures showed its PDF zoom changed only the button, with identical
+paper pixels. Nested plain text also overrode inherited bold/heading fonts.
+After explanation, candidate 32 fixes intrinsic native PDF measurement and
+inline font inheritance. Android checks require measured 200/100-percent zoom
+and actual captures are reviewed for page enlargement. Candidate 31 remains
+unassigned/unpublished; build 30 stays available.
+
+Test-only corrections retain strict assertions: exact Open-filename card labels,
+scrolling to the retained image before its cold-reopen assertion, and waiting
+for actual iOS PDF contents plus its native close identifier. The failed iOS
+preview diagnostic had Quick Look and document text in the accessibility tree;
+its early screenshot showed the transition and is not visual-pass evidence.
+No native rebuild was used for selector corrections.
+
+Prior candidate 31 serves only as an identified unchanged-main-UI baseline:
+iOS large smoke 43206932619 (16 captures), Android smoke 43206939702 (both modes,
+30 captures), and background 43206304103 (14 captures) passed with all captures
+inspected. The background case also verified first Allow edits in this chat and
+a second edit after restart without another prompt, with exact owned-server
+request and storage assertions. Final candidate 32 repeats the SDK and background
+checks for its actual bundled binary; those results must be reviewed before
+release. No paid/live provider request was used.
+
+## Candidate32 final delivery
+
+Exact source cd9bd299de696b0a808f147c92158e6bcfff4770: native simulator43209826681,
+Android43209832262 and signed iOS43209837140 pass actual source/binary/signing/
+privacy audits. Source CI43209621982 and test-only CI43212349779 pass128 checks.
+Final SDK iOS43213191199 and Android43212391282 both navigation modes pass, with
+all30 SDK captures and actual exported synthetic PDF/TXT reviewed. Pixel review
+confirms real Android page zoom and preserved inline emphasis. iOS PDF minimum
+text X48.64pt/Y36.22pt is readable and unclipped.
+
+Final background43213196823 passes with all14 captures reviewed, exact original
+bundle/refreshfalse. Static storage and owned server assert durable output on
+Home, foreground-only memory approval, Stop, cold restoration and file-retaining
+text-only retry without image regeneration/private error-detail persistence.
+First edit grants Allow edits in this chat; second edit after restart has no
+popup. Exactly two model edit calls and two actual multipart edit uploads occur;
+local chat grant persists. No live provider call or unlimited background claim.
+
+TestFlight32 is VALID/IN_BETA_TESTING in existing Nylo Device QA, independently
+read back with exact notes and all-build access false. Only32 was added; prior
+selected builds remain,28/31 stay unassigned. Installation unobserved. Android32
+is a new public prerelease targeting exactcd9 source; unauthenticated APK and
+checksum download match SHA1d775d9ce61571c127123f4f098b8b592a90a4fd8be068f6f50539460b370201.
+Prior releases unchanged,31 never published. Only temporary policy66438039
+removed; original two policy objects unchanged. Existing delivery task disabled
+with no next run; separate four-hour monitor untouched. Final delivery details
+are in the main testing document; private receipts/logs/databases remain ignored.

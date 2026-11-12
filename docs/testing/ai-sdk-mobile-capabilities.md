@@ -1,163 +1,146 @@
-# AI SDK mobile capabilities: delivered beta 30
+# AI SDK mobile capabilities: delivered beta 32
 
-App source: `5b955b457918fb34e1c5137fb23a5fdcd9f76fa2` on
-`feat/ai-sdk-mobile-capabilities`.
-[PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and unmerged.
-Later test-only changes through `6b78b461e875a4e0470140f82812d3de5db46fec`
-leave app inputs unchanged. The branch includes main `19c3c44`.
+App source: `cd9bd299de696b0a808f147c92158e6bcfff4770` on
+`feat/ai-sdk-mobile-capabilities`. Test-only changes through
+`2b486de550f979c1d7e7e672a2030c4fd07748c4` and later documentation leave app
+inputs unchanged. [PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and
+unmerged. The branch includes main `19c3c44`.
 
 ## Delivery
 
-- iOS **1.0.0 (30)** built and uploaded successfully; Apple processing is **VALID**.
-  Only this new build was added to the existing internal **Nylo Device QA** group.
-  Independent group, build-beta-detail and notes reads confirm **IN_BETA_TESTING**,
-  exact English notes and all-build access false. Prior selected builds, including
-  29 and 27, remain available. Build 28 remains unassigned. Installation unverified.
-- Android **1.0.0 / versionCode 30** is published as a new feature prerelease:
-  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-30/Nylo-test.apk)
-  · [checksum](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-30/SHA256SUMS.txt).
-  The public APK and checksum were downloaded without authentication and match
-  the audited binary. The release tag targets the exact app source. Older releases
-  27/28/29 remain untouched. No Play upload.
+- iOS **1.0.0 (32)** built and uploaded successfully. Apple processing is **VALID**.
+  Only this new build was added to existing internal **Nylo Device QA**. Independent
+  group, build-beta-detail and notes reads confirm **IN_BETA_TESTING**, exact
+  English notes and all-build access false. Prior selected builds, including
+  30/29/27, remain available. Builds 28 and 31 remain unassigned. Installation is
+  unverified.
+- Android **1.0.0 / versionCode 32** is a new public feature prerelease:
+  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-32/Nylo-test.apk)
+  · [checksum](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-32/SHA256SUMS.txt).
+  Unauthenticated public APK and checksum downloads match the audited binary.
+  The release tag targets the exact app source. Earlier releases remain intact;
+  candidate 31 was never published. No Play upload.
 
-## Approved reliability changes
+## Approved chat and file improvements
 
-Previously, retry could discard completed files or partial text, and a whole-turn
-cutoff obscured whether work was still active. Retry now preserves those messages,
-including repeated failure and cold restart. When generated files already exist,
-**Retry text reply (keep files)** requests only the unfinished reply, disables
-file/image/search tools for that retry and does not resend generated pixels.
-A new explicit request can still create or edit files with ordinary consent.
+**Generated-image editing:** choose **Allow edits in this chat** once to remember
+permission for assistant-generated images in that chat and provider. **Edit once**
+and **Not now** remain available. Personal uploads still require approval. The
+local grant is scoped to chat, credential, destination and consent revision;
+provider identity changes and Reset sharing approval revoke it. Imports strip
+remembered permission. Foreground and abort guards still apply.
 
-Progress displays the current stage and elapsed time. Idle limits are model/reply
-120 seconds, image 300 seconds, document/saving 60 seconds and approval 180 seconds,
-with a finite 600-second total cap. Stream activity renews idle time only. User
-Stop, background denial/expiry, idle/total timeout and storage failure have distinct
-messages; stale pending action labels are removed. The native iOS background lease
-is unchanged and finite. This does not provide unlimited background execution or
-a durable server job.
+**Answers and sources:** native Markdown rendering supports headings, emphasis,
+lists, tables, code, safe links and clickable citations. Activity collapses into
+compact rows, and a Sources button opens a sheet with titles and domains. The
+renderer does not execute source HTML or fetch remote images. Existing typography
+and theme tokens are retained.
 
-A single-file-only request can finish after successful save when the model marks
-that file tool as its final action, avoiding an extra reply-generation call.
-Other requests retain the bounded multi-step loop. Error diagnostics retain only
-static SDK labels, numeric HTTP status and allowlisted provider codes, including
-noncanonical SSE error frames. Error bodies are capped at 8 KiB, parsed and
-discarded; arbitrary provider messages, URLs, headers and credentials are not
-copied into chat/storage. Automatic retries remain disabled.
+**Document previews:** tap generated PDF/TXT cards to open them locally inside
+Nylo. Save/Share remains available. iOS PDFs use Quick Look; Android uses an
+embedded native PdfRenderer view with scrolling and 100/200-percent zoom. It
+stays in the existing React activity. Only app-owned temporary cache copies are
+accepted, with cleanup after dismissal/view destruction and viewport-limited
+bitmap caching. TXT uses a local text reader. No external document host is added.
 
-These changes were owner-approved after a what/why/how explanation. Model and
-reasoning defaults, provider storage (`store:false`), protocol, keys, consent,
-foreground memory approval and backend/background architecture were not changed.
-The exact reported live LB edit failure remains **unreproduced**; safe diagnostics
-and upload-boundary regressions do not prove that its server-side cause is fixed.
-No paid/live provider probe was made in this reliability pass.
+These changes were owner-approved after a what/why/how explanation. Actual visual
+review held candidate 31: its zoom label changed while page pixels did not, and
+nested plain text reset heading/bold font inheritance. Candidate 32 corrects
+intrinsic PDF paper measurement and inline inheritance. Final native captures
+show actual page enlargement and proper emphasis. Intermediate evidence remains
+in [the development record](ai-sdk-mobile-capabilities-development.md).
 
-## File capabilities retained
+## Retained AI SDK and reliability behavior
 
-Pinned AI SDK Core/provider packages run on-device using the saved connection.
-There is no additional backend or implicit Vercel gateway.
+Pinned AI SDK Core/provider packages run on-device using the saved connection;
+there is no extra backend or implicit gateway. Ordinary chats and agents support
+image generation and approved edits, real model-callable PDF/TXT creation, and
+web search with sources when enabled and supported by the selected API. Image
+edits append actual Expo Files to multipart forms; the real encoder and an owned
+HTTP regression cover fixed-length and chunked upload boundaries.
 
-- Ordinary chats and agents can generate images and edit approved images. Edits
-  append actual Expo Files to multipart forms rather than rejected URI-only
-  records. The installed encoder and a local HTTP multipart regression verify
-  that boundary. Generated files persist and have save/share controls.
-- Model-callable `create_document` creates real local **PDF** and **TXT** chat
-  attachments. Cards show filename/type/size. PDFs support headings, lists and
-  simple tables, escape content and use no external scripts/assets. Generated
-  PDFs and manual exports use native 36-point iOS margins; Android keeps its CSS
-  margins. Manual response exports remain available.
-- Web search provides source links when the selected API supports it and the
-  capability is enabled. Access is not inferred from a model name.
+`create_document` creates real persistent PDF/TXT attachments. PDFs support
+headings, lists and simple tables, escape content and use no external scripts or
+assets. Generated PDFs and manual exports use native 36-point iOS margins;
+Android retains its CSS margins. Manual response exports remain available. The
+five-step loop stays bounded to two images and two documents per message. Other
+document/archive/audio/video creation formats are not enabled.
 
-The five-step loop remains bounded to two images and two documents per message.
-Other document/archive/audio/video creation formats are not enabled. Existing
-report opt-in, memory, consent, theme and storage behavior are preserved. Owner
-root package/dashboard/output files were not changed by this pass.
+Retry preserves completed files and partial text across repeated failures and
+cold restart. **Retry text reply (keep files)** disables file/image/search tools
+for that retry and does not resend generated pixels. New explicit requests retain
+ordinary capabilities and consent. A successfully saved single-file-only result
+can finish without another model call when the model marks it final.
+
+Visible progress shows stage and elapsed time. Idle limits remain model/reply
+120 seconds, image 300 seconds, document/save 60 seconds and approval 180 seconds,
+with a finite 600-second total cap. Stream activity renews idle only. Stop,
+background denial/expiry, idle/total timeout and storage failure have distinct
+messages. The native iOS lease remains finite; this is not unlimited background
+execution or a durable server job. Automatic retries remain disabled.
+
+Diagnostics retain only static labels, numeric HTTP status and allowlisted codes.
+Error bodies are capped at 8 KiB, parsed and discarded; arbitrary provider
+messages, URLs, headers and credentials are not stored in chat. The exact reported
+live LB edit failure remains **unreproduced**. Synthetic native checks do not prove
+live endpoint behavior. No paid/live provider probe was made.
 
 ## Verification
 
-| Check                               | Actual result                                                                                |
-| ----------------------------------- | -------------------------------------------------------------------------------------------- |
-| App source CI `43173080185`         | 124 tests, typecheck, formatting, security, fonts/assets and Expo Doctor pass                |
-| Final test-fixture CI `43183712582` | Pass; app inputs unchanged from 5b955b4                                                      |
-| Both-platform Hermes exports        | Pass                                                                                         |
-| iOS simulator `43173183196`         | Pass; source 5b955b4, stamp 2026-11-12T07:09:25Z                                             |
-| Signed iOS/upload `43173192601`     | Pass, build 30; actual source/signature/certificate/profile audits pass                      |
-| iOS privacy                         | 12 manifests; required SDK declarations; no microphone/tracking; exempt encryption           |
-| iOS SDK `43176651978`               | Pass, original native/JS bundle; all 5 scenario captures plus launch inspected               |
-| iOS background/retry `43183719350`  | Pass, original native/JS bundle; all 10 scenario/setup captures plus launch inspected        |
-| Android signed `43173188315`        | Pass, versionCode 30; actual source/ZIP/bundle/assets/signature/permissions/hash audits pass |
-| Android SDK `43175407929`           | Both navigation modes pass first attempt; all 10 captures inspected                          |
-| Android smoke `43175473451`         | Both modes pass; all 30 passed captures inspected                                            |
-| Actual native PDF/TXT               | Both platforms: created, persisted, cold-reopened, safely extracted and inspected            |
+| Check                                        | Actual result                                                                                 |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Source CI `43209621982`                      | Pass: 128 tests, typecheck, format, security, fonts/assets and Expo Doctor                    |
+| Test-only CI `43212349779`                   | Pass; app inputs unchanged                                                                    |
+| Both-platform Hermes exports                 | Pass                                                                                          |
+| iOS simulator `43209826681`                  | Pass; exact source and 2026-11-12T11:31:04Z marker, bundle/executable/assets/privacy verified |
+| Signed iOS/upload `43209837140`              | Pass, build 32; actual signature, exact certificate/team/profile/source/hash verified         |
+| iOS privacy                                  | 12 manifests; required declarations present, no microphone/tracking, exempt encryption        |
+| iOS SDK `43213191199`                        | Pass, original bundle/refresh false; all 9 scenario captures plus launch reviewed             |
+| iOS background/edit permission `43213196823` | Pass, original bundle/refresh false; all 13 scenario/setup captures plus launch reviewed      |
+| Android signed `43209832262`                 | Pass, code 32; actual source/bundle/assets/ZIP/signature/permissions/native PDF/hash verified |
+| Android SDK `43212391282`                    | Both modes pass; all 20 captures reviewed, actual zoom and restored files verified            |
+| Unchanged main UI baseline                   | iOS31 smoke `43206932619` and Android31 smoke `43206939702` pass; all 46 captures reviewed    |
+| Actual native PDF/TXT                        | All three final platform/navigation samples rendered, text-checked and visually inspected     |
 
-All **57 final native captures** were inspected. The actual iOS PDF is readable
-and unclipped, one-page A4, minimum text X 48.64 pt and Y 36.22 pt. Android PDFs
-were rendered and inspected in both navigation modes, with matching TXT content.
-Only known synthetic documents are exported; no raw database is published.
+All **44 final candidate32 captures** were inspected, separately from the 46
+unchanged-main-UI baseline captures. Actual PDFs are readable and unclipped, one
+page A4; iOS minimum text X is 48.64 pt and Y is 36.22 pt. Android page pixels and
+measured accessibility zoom both change at 200 percent and restore to 100 percent.
+TXT contents match across platforms. Export is restricted to known synthetic
+samples; no raw database is published.
 
-The SDK scenarios exercise actual Hermes execution, streaming/tools, Expo
-multipart encoding, local document writers and persisted files with synthetic
-fetch. The iOS background scenario uses an owned localhost TLS server and real
-native requests. It verifies output produced and durably saved while on Home,
-no background memory approval, explicit Stop and cold restoration. Its image
-regression creates exactly one synthetic image, deliberately fails the following
-reply with a safe `server_error`, then retries only text. The fixture requires
-three model calls and one image call, no file/search tools on retry, the same
-stored image after restart and no private error-detail tag in persisted messages.
-Actual captures show the stage/elapsed footer and file before/after retry.
+SDK scenarios exercise actual Hermes, Expo multipart encoding, local writers,
+preview modules and persisted files with synthetic fetch. The owned localhost
+TLS background scenario uses real native requests. It verifies durable completion
+while on Home, no background memory approval, explicit Stop, file-preserving
+text retry, redacted error detail and cold restoration. Exactly one synthetic
+image is generated for the retry case, with three model calls and no regeneration.
+The separate edit-permission case grants once, cold-restarts, then edits again
+without another popup. Exact request counts include two edit-model calls and two
+real multipart edit uploads; the stored chat grant is independently asserted.
 
-Android smoke needed one bounded failed-job retry after a confirmed initial ADB
-disconnect before app launch; the retry passed. Intermediate iOS background runs
-stopped at observed system password/provider-sheet navigation, pending TLS trust
-or owned-fixture startup. Retained screenshots/diagnostics led to test-only
-corrections: semantic prompt handling, TLS preflight/trust logs and bounded
-startup/liveness checks. Exact functional assertions were retained. Their results
-are not counted as app background failures or passes. The final passed run uses
-JS refresh **false** and independently verified app identity. No native rebuild
-was used for these test-only corrections.
+Android gestural needed one bounded failed-job retry after initial-launch ADB
+transport failure at 4.364 seconds, before SDK checks or app captures. The retry
+passed. An intermediate iOS Quick Look test expected Done although its actual AX
+record exposed the native close identifier and full document text. The corrected
+test waits for actual PDF contents and targets that identifier; its original early
+transition screenshot is not counted as successful visual evidence. Strict
+functional assertions were retained, and test-only changes reused native builds.
 
-## Hashes and release boundaries
+## Hashes and boundaries
 
-- APK SHA-256: `1d74d6c8873ba242bdb4f7475da920b43930c1361b8e16cc622bd88e9b123bdd`.
-- IPA SHA-256: `a9ef1b9e0293498753237c3353d330b0ab88bf56ee6b8a5f6190b0d30f4b4f92`.
+- APK SHA-256: `1d775d9ce61571c127123f4f098b8b592a90a4fd8be068f6f50539460b370201`.
+- IPA SHA-256: `747553f786087e5777ddc01443449613e40b8a4add8dd83874f64ccfc28a0d54`.
 
-Only this pass's temporary feature signing policy 66418697 was removed;
-independent readback confirms all other policies unchanged. The delivery
-continuation is disabled with no next run. The separate four-hour App Review
-monitor, Store 15, external 17, unrelated roles/testers and signing are untouched.
+Only this pass's temporary signing policy 66438039 was removed; independent
+readback preserves the original two policy objects. The delivery continuation is
+disabled with no next run. The separate four-hour App Review monitor, Store15,
+external17, unrelated roles/testers and signing are untouched.
 
-Physical installation, live mobile provider use, VoiceOver, OS save/share and
-physical-device background expiry are unverified. The finite iOS lease remains
-subject to OS limits. Production npm audit retains three moderate Expo transitive
-findings with no high/critical findings. Earlier receipts and intermediate
-failures are preserved in [the development record](ai-sdk-mobile-capabilities-development.md).
-Private Apple receipts, handoff, logs, databases and credentials are excluded from
-source/public releases.
-
-## Approved follow-up: chat activity and document previews (not released yet)
-
-The owner approved remembered permission for generated-image edits in the same
-chat/provider, compact activity and source presentation with proper Markdown and
-citations, and local PDF/TXT previews. Personal uploads still require approval;
-provider/credential/destination changes and Reset sharing approval revoke the
-remembered scope. Imports do not restore it.
-
-The implementation uses local native PDF preview and a TXT reader while retaining
-Save/Share. Android preview stays in the existing React activity so opening a file
-does not itself background the chat. Source HTML and remote images are not
-executed/loaded by the text renderer. No model, provider storage, theme, memory,
-report or background architecture change. Build 30 remains the delivered release;
-new native verification and delivery are pending. Source checks now cover 128 tests.
-
-Candidate 31 passed native compilation/signing and source audits, but is held and
-will not be distributed. Actual Android preview review found its Zoom control
-changed label without changing page geometry; plain nested text spans also reset
-heading/bold font weights. The correction gives the native paper an intrinsic
-width during unbounded scroll measurement and preserves inherited inline styles.
-Native checks now require measured 100/200-percent zoom as well as visual review.
-A cold-reopen test scrolls to the retained image before its original assertion.
-iOS accessibility exposes document cards as Open plus filename, so test selectors
-now target that exact button label. No successful UI assertion substitutes for
-visual review. A new candidate is required for these production corrections;
-build 30 remains available and build 31 stays unassigned/unpublished.
+Theme, model/reasoning defaults, provider protocol/keys/`store:false`, foreground
+memory approval, report opt-in and background architecture are preserved. Owner
+root package scripts, dashboard and output were not changed. Physical-device
+installation/expiry, live provider use, VoiceOver and OS Save/Share are unverified.
+Production npm audit retains three moderate Expo transitive findings and no
+high/critical findings. Private handoff, Apple receipts, credentials, SQL/databases
+and logs remain excluded from source and public releases.
