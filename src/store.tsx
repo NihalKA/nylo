@@ -57,16 +57,27 @@ type SendOptions = {
   tools: false;
   onText?: () => void;
 };
+type ResponseProgress = {
+  stage: ResponseStage;
+  startedAt: number;
+  backgroundAllowed: boolean;
+};
+type ActiveResponse = {
+  controller: AbortController;
+  exclusive: boolean;
+  canBackground: () => boolean;
+  clock: ReturnType<typeof createResponseClock>;
+  interrupt: (reason: InterruptionReason) => void;
+  awaitingApproval: boolean;
+};
 type Store = {
   data: AppData;
   ready: boolean;
   storageError: string;
+  // Any active chat, for app-wide busy guards on shared/destructive operations.
   runningId: string | null;
-  responseProgress: {
-    stage: ResponseStage;
-    startedAt: number;
-    backgroundAllowed: boolean;
-  } | null;
+  runningIds: string[];
+  responseProgress: Record<string, ResponseProgress>;
   update: (change: (d: AppData) => AppData) => Promise<void>;
   newChat: (agentId?: string) => Promise<string>;
   saveAgent: (
@@ -84,7 +95,7 @@ type Store = {
     onAccepted?: () => void,
     options?: SendOptions,
   ) => Promise<void>;
-  stop: () => void;
+  stop: (conversationId: string) => void;
   importBackup: (value: unknown) => Promise<void>;
 };
 const StoreContext = createContext<Store | null>(null);
@@ -99,19 +110,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const current = useRef(data);
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState("");
-  const [runningId, setRunningId] = useState<string | null>(null);
-  const [responseProgress, setResponseProgress] =
-    useState<Store["responseProgress"]>(null);
+  const [runningIds, setRunningIds] = useState<string[]>([]);
+  const runningId = runningIds[0] || null;
+  const [responseProgress, setResponseProgress] = useState<
+    Store["responseProgress"]
+  >({});
   const stagingCredentials = useRef(new Set<string>());
   const credentialOperations = useRef(createSerialExecutor());
-  const active = useRef<{
-    controller: AbortController;
-    id: string;
-    canBackground: () => boolean;
-    clock: ReturnType<typeof createResponseClock>;
-    interrupt: (reason: InterruptionReason) => void;
-    reviewingMemory: boolean;
-  } | null>(null);
+  const active = useRef(new Map<string, ActiveResponse>());
   const durableUpdate = useRef<ReturnType<
     typeof createDurableUpdater<AppData>
   > | null>(null);
@@ -195,20 +201,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           );
       });
     const subscription = AppState.addEventListener("change", (state) => {
-      const response = active.current;
-      if (!response) return;
-      if (
-        state === "background" &&
-        (response.reviewingMemory || !response.canBackground())
-      )
-        response.interrupt("background-unavailable");
-      const expired = response.clock.expired();
-      if (expired) response.interrupt(expired);
+      for (const response of active.current.values()) {
+        if (
+          state === "background" &&
+          (response.awaitingApproval || !response.canBackground())
+        )
+          response.interrupt("background-unavailable");
+        const expired = response.clock.expired();
+        if (expired) response.interrupt(expired);
+      }
     });
     return () => {
       mounted = false;
       subscription.remove();
-      active.current?.controller.abort();
+      for (const response of active.current.values())
+        response.controller.abort();
     };
   }, []);
 
@@ -218,7 +225,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const agent = current.current.agents.find((a) => a.id === agentId);
     const connectionId =
       agent?.connectionId || current.current.defaultConnectionId;
-    const blank = reusableConversation(current.current, connectionId, agentId);
+    const blank = reusableConversation(
+      {
+        ...current.current,
+        conversations: current.current.conversations.filter(
+          (c) => !active.current.has(c.id),
+        ),
+      },
+      connectionId,
+      agentId,
+    );
     if (blank) return blank.id;
     const conversation = createConversation(connectionId, agentId);
     await update((d) => ({
@@ -263,6 +279,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   };
   const saveConnection = (input: Connection, key: string) =>
     credentialOperations.current(async () => {
+      if (active.current.size)
+        throw new Error("Stop running responses before changing a connection.");
       const connection = validateConnection(input);
       const previous = current.current.connections.find(
         (c) => c.id === connection.id,
@@ -333,7 +351,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     });
   const deleteConnection = (id: string) =>
     credentialOperations.current(async () => {
-      if (active.current)
+      if (active.current.size)
         throw new Error(
           "Stop the current response before removing a connection.",
         );
@@ -365,427 +383,483 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const reserved = isDeviceCheckConversation(current.current, conversationId);
     if (reserved !== !!options?.deviceCheck)
       throw new Error("Run test conversations only from Live device check.");
-    if (active.current)
-      throw new Error(
-        "Another response is running. Stop it before sending a new message.",
-      );
-    const {
-      conversation,
-      connection,
-      attachments,
-      messages,
-      agent,
-      instructions,
-      preservedReplies,
-      retryFiles,
-    } = prepareSend(
-      current.current,
-      conversationId,
-      input,
-      retry,
-      !!options?.deviceCheck,
-    );
-    const destination = credentialDestination(connection);
-    const credentialId = connection.credentialId || connection.id;
-    const requestAttachments = messages.flatMap((m) => m.attachments || []);
-    const pendingAttachments = pendingAttachmentApproval(
-      current.current,
-      conversationId,
-      connection,
-      requestAttachments,
-    );
-    if (pendingAttachments.length) {
-      if (
-        !(await askPermission(
-          "Send attached content?",
-          `Attached content (${pendingAttachments
-            .map((a) => a.name)
-            .join(", ")
-            .slice(
-              0,
-              600,
-            )}) will be sent with this conversation to ${connection.name} at ${new URL(connection.baseUrl).host}, using ${connection.model}. Attachments may include private information and are included in future messages in this chat. Provider charges and data policies apply.`,
-          "Send attachments",
-        ))
-      )
-        throw new Error(
-          "Nothing was sent. Your draft and attachments are kept.",
-        );
-    }
+    if (active.current.has(conversationId))
+      throw new Error("This conversation is already responding.");
     if (
-      !(current.current.providerConsents || []).some(
-        (c) =>
-          c.credentialId === credentialId &&
-          c.destination === destination &&
-          c.revision === 3,
-      )
-    ) {
-      const allowed = await askPermission(
-        "Share with your AI provider?",
-        `Allow Nylo to send conversations to ${connection.name} at ${new URL(connection.baseUrl).host}? This approval is remembered for all chats using this connection. Agent chats also send that agent’s instructions, saved memories and, if enabled, recent chats from that same agent. The provider’s data policies and API charges apply. Reset sharing approval in AI providers at any time.`,
-        "Allow & send",
-      );
-      if (!allowed)
-        throw new Error("Nothing was sent. Your message is ready to edit.");
-      await update((d) => ({
-        ...d,
-        providerConsents: [
-          ...(d.providerConsents || []).filter(
-            (c) => c.credentialId !== credentialId,
-          ),
-          { credentialId, destination, revision: 3, grantedAt: Date.now() },
-        ],
-      }));
-    }
-    const key = await readKey(
-      connection.credentialId || connection.id,
-      credentialDestination(connection),
-    );
-    if (!key)
+      (options?.deviceCheck && active.current.size) ||
+      [...active.current.values()].some((run) => run.exclusive)
+    )
       throw new Error(
-        "Add your API key in Settings. Browser preview keys must be re-entered after a reload.",
+        "Finish the live device check before starting another response.",
       );
-    if (active.current)
-      throw new Error(
-        "Another response is running. Stop it before sending a new message.",
-      );
-    if (AppState.currentState && AppState.currentState !== "active")
-      throw new Error("Return to Nylo to send. Your draft is kept.");
-    const assistantId = uid();
     const controller = new AbortController();
+    const clock = createResponseClock();
     let backgroundLease: Awaited<
       ReturnType<typeof beginBackgroundResponse>
     > | null = null;
-    const clock = createResponseClock();
     let interruption: InterruptionReason | undefined;
     const interrupt = (reason: InterruptionReason) => {
       interruption ??= reason;
       controller.abort();
     };
-    active.current = {
+    const response: ActiveResponse = {
       controller,
-      id: conversationId,
+      exclusive: !!options?.deviceCheck,
       canBackground: () => backgroundLease?.held === true,
       clock,
       interrupt,
-      reviewingMemory: false,
+      awaitingApproval: true,
     };
-    setRunningId(conversationId);
-    setResponseProgress({
+    active.current.set(conversationId, response);
+    setRunningIds([...active.current.keys()]);
+    const progress = (change: Partial<ResponseProgress>) => {
+      if (active.current.get(conversationId) !== response) return;
+      setResponseProgress((all) => ({
+        ...all,
+        [conversationId]: { ...all[conversationId], ...change },
+      }));
+    };
+    progress({
       stage: "model",
       startedAt: clock.startedAt,
       backgroundAllowed: false,
     });
-    let pending = "";
-    let lastFlush = Date.now();
-    const checkpoints = createCheckpointBarrier(() => interrupt("storage"));
-    let accepted = false;
-    const patch = async (
-      delta:
-        Record<string, unknown> | ((m: Message) => Record<string, unknown>),
-    ) =>
-      update((d) => ({
-        ...d,
-        conversations: d.conversations.map((c) =>
-          c.id === conversationId
-            ? {
-                ...c,
-                updatedAt: Date.now(),
-                messages: c.messages.map((m) =>
-                  m.id === assistantId
-                    ? {
-                        ...m,
-                        ...(typeof delta === "function" ? delta(m) : delta),
-                      }
-                    : m,
-                ),
-              }
-            : c,
-        ),
-      }));
-    const flush = () => {
-      if (!pending) return Promise.resolve();
-      const part = pending;
-      pending = "";
-      lastFlush = Date.now();
-      return checkpoints.track(patch((m) => ({ text: m.text + part })));
-    };
-    const timeout = setInterval(() => {
-      const reason = clock.expired();
-      if (reason) interrupt(reason);
-    }, 1000);
-    const flushTimer = setInterval(flush, 200);
     try {
-      backgroundLease = await beginBackgroundResponse(
-        assistantId,
-        () => {
-          interrupt("background-expired");
-        },
-        controller.signal,
-      );
-      setResponseProgress((p) =>
-        p ? { ...p, backgroundAllowed: backgroundLease?.held === true } : p,
-      );
+      // Finish any credential/restore transaction that started before reservation.
+      await credentialOperations.current(async () => {});
       if (controller.signal.aborted)
-        throw new Error("Return to Nylo to send. Your draft is kept.");
-      await update((d) => ({
-        ...d,
-        providerConsents: rememberAttachmentApproval(
-          d,
-          conversationId,
-          connection,
-          requestAttachments,
-        ),
-        deviceCheck:
-          options?.deviceCheck && d.deviceCheck?.streamChatId === conversationId
-            ? { ...d.deviceCheck, streamEvents: undefined }
-            : d.deviceCheck,
-        conversations: d.conversations.map((c) =>
-          c.id === conversationId
-            ? {
-                ...c,
-                connectionId: connection.id,
-                draft: !retry && c.draft === input ? "" : c.draft,
-                draftAttachments: !retry ? [] : c.draftAttachments,
-                title: c.messages.length
-                  ? c.title
-                  : conversationTitle(
-                      input || attachments[0]?.name || "Attachment",
-                    ),
-                updatedAt: Date.now(),
-                messages: [
-                  ...messages,
-                  ...preservedReplies,
-                  {
-                    id: assistantId,
-                    role: "assistant",
-                    text: "",
-                    createdAt: Date.now(),
-                    status: "streaming",
-                    model: connection.model,
-                  },
-                ],
-              }
-            : c,
-        ),
-      }));
-      accepted = true;
-      onAccepted?.();
-      await runSDKAgent({
+        throw new Error("Nothing was sent. Your draft is kept.");
+      const {
+        conversation,
         connection,
-        key,
+        attachments,
         messages,
+        agent,
         instructions,
-        useTools: !!agent && options?.tools !== false,
-        allowCapabilities: options?.tools !== false && !retryFiles.length,
-        onStage: (stage) => {
-          clock.enter(stage);
-          setResponseProgress((p) =>
-            p && p.stage !== stage ? { ...p, stage } : p,
+        preservedReplies,
+        retryFiles,
+      } = prepareSend(
+        current.current,
+        conversationId,
+        input,
+        retry,
+        !!options?.deviceCheck,
+      );
+      const destination = credentialDestination(connection);
+      const credentialId = connection.credentialId || connection.id;
+      const requestAttachments = messages.flatMap((m) => m.attachments || []);
+      const pendingAttachments = pendingAttachmentApproval(
+        current.current,
+        conversationId,
+        connection,
+        requestAttachments,
+      );
+      if (pendingAttachments.length) {
+        clock.enter("approval");
+        progress({ stage: "approval" });
+        if (
+          !(await askPermission(
+            "Send attached content?",
+            `Chat "${conversation.title}": Attached content (${pendingAttachments
+              .map((a) => a.name)
+              .join(", ")
+              .slice(
+                0,
+                600,
+              )}) will be sent with this conversation to ${connection.name} at ${new URL(connection.baseUrl).host}, using ${connection.model}. Attachments may include private information and are included in future messages in this chat. Provider charges and data policies apply.`,
+            "Send attachments",
+            controller.signal,
+          ))
+        )
+          throw new Error(
+            "Nothing was sent. Your draft and attachments are kept.",
           );
-        },
-        onActivity: () => clock.activity(),
-        onFiles: async (files) => {
-          if (controller.signal.aborted) throw new Error("Response stopped.");
-          await patch((m) => ({
-            generatedFiles: [...(m.generatedFiles || []), ...files],
-          }));
-        },
-        onSource: (source) => {
-          checkpoints.track(
-            patch((m) => ({
-              sources: [
-                ...(m.sources || []).filter((s) => s.url !== source.url),
-                source,
-              ].slice(0, 30),
-            })),
-          );
-        },
-        onVerified: (capability) => {
-          checkpoints.track(
-            update((d) => ({
-              ...d,
-              connections: d.connections.map((c) =>
-                c.id === connection.id
-                  ? {
-                      ...c,
-                      ...(capability === "images"
-                        ? { imagesVerifiedAt: Date.now() }
-                        : { searchVerifiedAt: Date.now() }),
-                    }
-                  : c,
-              ),
-            })),
-          );
-        },
-        approveImageEdit: async (image) => {
-          if (AppState.currentState !== "active" || controller.signal.aborted)
-            return false;
-          if (
-            generatedEditApproved(
-              current.current,
-              conversationId,
-              connection,
-              image,
-            )
+      }
+      if (
+        !(current.current.providerConsents || []).some(
+          (c) =>
+            c.credentialId === credentialId &&
+            c.destination === destination &&
+            c.revision === 3,
+        )
+      ) {
+        clock.enter("approval");
+        progress({ stage: "approval" });
+        const allowed = await askPermission(
+          "Share with your AI provider?",
+          `From chat "${conversation.title}": Allow Nylo to send conversations to ${connection.name} at ${new URL(connection.baseUrl).host}? This approval is remembered for all chats using this connection. Agent chats also send that agent’s instructions, saved memories and, if enabled, recent chats from that same agent. The provider’s data policies and API charges apply. Reset sharing approval in AI providers at any time.`,
+          "Allow & send",
+          controller.signal,
+        );
+        if (!allowed)
+          throw new Error("Nothing was sent. Your message is ready to edit.");
+        await update((d) => ({
+          ...d,
+          // A different chat may have approved this provider while we waited.
+          // Keep its attachment/image approvals rather than replacing the entry.
+          providerConsents: (d.providerConsents || []).some(
+            (c) =>
+              c.credentialId === credentialId &&
+              c.destination === destination &&
+              c.revision === 3,
           )
-            return true;
-          if (active.current) active.current.reviewingMemory = true;
-          try {
-            const choice = await askImageEditPermission(
-              `${image.name} will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Image generation charges may apply.`,
-              isGeneratedImage(current.current, conversationId, image),
-            );
-            if (
-              choice === "cancel" ||
-              controller.signal.aborted ||
-              AppState.currentState !== "active"
-            )
-              return false;
-            if (choice === "chat")
-              await update((d) => ({
-                ...d,
-                providerConsents: rememberGeneratedEdits(
-                  d,
-                  conversationId,
-                  connection,
+            ? d.providerConsents
+            : [
+                ...(d.providerConsents || []).filter(
+                  (c) => c.credentialId !== credentialId,
                 ),
-              }));
-            return (
-              !controller.signal.aborted && AppState.currentState === "active"
-            );
-          } finally {
-            if (active.current?.controller === controller)
-              active.current.reviewingMemory = false;
-          }
-        },
-        maxOutputTokens: options?.maxOutputTokens,
-        signal: controller.signal,
-        fetcher: streamingFetch,
-        onText: (text) => {
-          options?.onText?.();
-          pending += text;
-          if (Date.now() - lastFlush > 100) flush();
-        },
-        onAction: (label) => {
-          checkpoints.track(
-            patch((m) => ({ actions: nextActionLabels(m.actions, label) })),
-          );
-        },
-        executeTool: async (call) => {
-          if (!agent) throw new Error("No agent selected.");
-          const args = JSON.parse(call.arguments);
-          if (call.name !== "remember_fact" && call.name !== "forget_fact")
-            throw new Error("Unsupported memory action.");
-          const currentAgent = current.current.agents.find(
-            (a) => a.id === agent.id,
-          );
-          const change =
-            call.name === "remember_fact"
-              ? args.text
-              : currentAgent?.memories.find((m) => m.id === args.id)?.text;
-          if (
-            typeof change !== "string" ||
-            !change.trim() ||
-            change.length > 1000
-          )
-            throw new Error("Invalid memory change.");
-          // A memory decision must be reviewed in the foreground, never via a
-          // hidden alert while another app is open.
-          if (AppState.currentState !== "active") {
-            interrupt("background-unavailable");
-            throw new Error("Return to Nylo to review the memory change.");
-          }
-          if (active.current) active.current.reviewingMemory = true;
-          let allowed = false;
-          try {
-            allowed = await askPermission(
-              call.name === "remember_fact"
-                ? "Save this memory?"
-                : "Forget this memory?",
-              `${agent.name}: ${change}`,
-              call.name === "remember_fact" ? "Save memory" : "Forget",
-            );
-          } finally {
-            if (active.current?.controller === controller)
-              active.current.reviewingMemory = false;
-          }
-          if (controller.signal.aborted || AppState.currentState !== "active")
-            throw new Error(
-              "Response stopped. Return to Nylo to review memory changes.",
-            );
-          if (!allowed)
-            return JSON.stringify({ approved: false, changed: false });
-          let output = "";
-          await update((d) => ({
-            ...d,
-            agents: d.agents.map((a) => {
-              if (a.id !== agent.id) return a;
-              if (call.name === "remember_fact") {
-                if (
-                  typeof args.text !== "string" ||
-                  !args.text.trim() ||
-                  args.text.length > 1000
-                )
-                  throw new Error("Invalid memory.");
-                const existing = a.memories.find(
-                  (m) =>
-                    m.text.toLowerCase() === args.text.trim().toLowerCase(),
-                );
-                if (existing) {
-                  output = JSON.stringify({ saved: true, id: existing.id });
-                  return a;
+                {
+                  credentialId,
+                  destination,
+                  revision: 3,
+                  grantedAt: Date.now(),
+                },
+              ],
+        }));
+      }
+      const key = await readKey(
+        connection.credentialId || connection.id,
+        credentialDestination(connection),
+      );
+      if (!key)
+        throw new Error(
+          "Add your API key in Settings. Browser preview keys must be re-entered after a reload.",
+        );
+      if (
+        controller.signal.aborted ||
+        (AppState.currentState && AppState.currentState !== "active")
+      )
+        throw new Error("Return to Nylo to send. Your draft is kept.");
+      response.awaitingApproval = false;
+      clock.enter("model");
+      clock.activity();
+      progress({ stage: "model" });
+      const assistantId = uid();
+      let pending = "";
+      let lastFlush = Date.now();
+      const checkpoints = createCheckpointBarrier(() => interrupt("storage"));
+      let accepted = false;
+      const patch = async (
+        delta:
+          Record<string, unknown> | ((m: Message) => Record<string, unknown>),
+      ) =>
+        update((d) => ({
+          ...d,
+          conversations: d.conversations.map((c) =>
+            c.id === conversationId
+              ? {
+                  ...c,
+                  updatedAt: Date.now(),
+                  messages: c.messages.map((m) =>
+                    m.id === assistantId
+                      ? {
+                          ...m,
+                          ...(typeof delta === "function" ? delta(m) : delta),
+                        }
+                      : m,
+                  ),
                 }
-                if (a.memories.length >= 50) throw new Error("Memory is full.");
-                const memory = {
-                  id: uid(),
-                  text: args.text.trim(),
-                  createdAt: Date.now(),
-                };
-                output = JSON.stringify({ saved: true, id: memory.id });
-                return { ...a, memories: [...a.memories, memory] };
-              }
-              if (call.name === "forget_fact" && typeof args.id === "string") {
-                if (a.memories.find((m) => m.id === args.id)?.text !== change)
-                  throw new Error(
-                    "This memory changed. Review it before trying again.",
+              : c,
+          ),
+        }));
+      const flush = () => {
+        if (!pending) return Promise.resolve();
+        const part = pending;
+        pending = "";
+        lastFlush = Date.now();
+        return checkpoints.track(patch((m) => ({ text: m.text + part })));
+      };
+      const timeout = setInterval(() => {
+        const reason = clock.expired();
+        if (reason) interrupt(reason);
+      }, 1000);
+      const flushTimer = setInterval(flush, 200);
+      try {
+        backgroundLease = await beginBackgroundResponse(
+          assistantId,
+          () => {
+            interrupt("background-expired");
+          },
+          controller.signal,
+        );
+        progress({ backgroundAllowed: backgroundLease?.held === true });
+        if (controller.signal.aborted)
+          throw new Error("Return to Nylo to send. Your draft is kept.");
+        await update((d) => ({
+          ...d,
+          providerConsents: rememberAttachmentApproval(
+            d,
+            conversationId,
+            connection,
+            requestAttachments,
+          ),
+          deviceCheck:
+            options?.deviceCheck &&
+            d.deviceCheck?.streamChatId === conversationId
+              ? { ...d.deviceCheck, streamEvents: undefined }
+              : d.deviceCheck,
+          conversations: d.conversations.map((c) =>
+            c.id === conversationId
+              ? {
+                  ...c,
+                  connectionId: connection.id,
+                  draft: !retry && c.draft === input ? "" : c.draft,
+                  draftAttachments: !retry ? [] : c.draftAttachments,
+                  title: c.messages.length
+                    ? c.title
+                    : conversationTitle(
+                        input || attachments[0]?.name || "Attachment",
+                      ),
+                  updatedAt: Date.now(),
+                  messages: [
+                    ...messages,
+                    ...preservedReplies,
+                    {
+                      id: assistantId,
+                      role: "assistant",
+                      text: "",
+                      createdAt: Date.now(),
+                      status: "streaming",
+                      model: connection.model,
+                    },
+                  ],
+                }
+              : c,
+          ),
+        }));
+        accepted = true;
+        onAccepted?.();
+        if (controller.signal.aborted) throw new Error("Response stopped.");
+        await runSDKAgent({
+          connection,
+          key,
+          messages,
+          instructions,
+          useTools: !!agent && options?.tools !== false,
+          allowCapabilities: options?.tools !== false && !retryFiles.length,
+          onStage: (stage) => {
+            clock.enter(stage);
+            progress({ stage });
+          },
+          onActivity: () => clock.activity(),
+          onFiles: async (files) => {
+            if (controller.signal.aborted) throw new Error("Response stopped.");
+            await patch((m) => ({
+              generatedFiles: [...(m.generatedFiles || []), ...files],
+            }));
+          },
+          onSource: (source) => {
+            if (controller.signal.aborted) return;
+            checkpoints.track(
+              patch((m) => ({
+                sources: [
+                  ...(m.sources || []).filter((s) => s.url !== source.url),
+                  source,
+                ].slice(0, 30),
+              })),
+            );
+          },
+          onVerified: (capability) => {
+            checkpoints.track(
+              update((d) => ({
+                ...d,
+                connections: d.connections.map((c) =>
+                  c.id === connection.id
+                    ? {
+                        ...c,
+                        ...(capability === "images"
+                          ? { imagesVerifiedAt: Date.now() }
+                          : { searchVerifiedAt: Date.now() }),
+                      }
+                    : c,
+                ),
+              })),
+            );
+          },
+          approveImageEdit: async (image) => {
+            if (AppState.currentState !== "active" || controller.signal.aborted)
+              return false;
+            if (
+              generatedEditApproved(
+                current.current,
+                conversationId,
+                connection,
+                image,
+              )
+            )
+              return true;
+            response.awaitingApproval = true;
+            try {
+              const choice = await askImageEditPermission(
+                `Chat "${conversation.title}": ${image.name} will be sent to ${connection.name} at ${new URL(connection.baseUrl).host}. Image generation charges may apply.`,
+                isGeneratedImage(current.current, conversationId, image),
+                controller.signal,
+              );
+              if (
+                choice === "cancel" ||
+                controller.signal.aborted ||
+                AppState.currentState !== "active"
+              )
+                return false;
+              if (choice === "chat")
+                await update((d) => ({
+                  ...d,
+                  providerConsents: rememberGeneratedEdits(
+                    d,
+                    conversationId,
+                    connection,
+                  ),
+                }));
+              return (
+                !controller.signal.aborted && AppState.currentState === "active"
+              );
+            } finally {
+              response.awaitingApproval = false;
+            }
+          },
+          maxOutputTokens: options?.maxOutputTokens,
+          signal: controller.signal,
+          fetcher: streamingFetch,
+          onText: (text) => {
+            if (controller.signal.aborted) return;
+            options?.onText?.();
+            pending += text;
+            if (Date.now() - lastFlush > 100) flush();
+          },
+          onAction: (label) => {
+            if (controller.signal.aborted) return;
+            checkpoints.track(
+              patch((m) => ({ actions: nextActionLabels(m.actions, label) })),
+            );
+          },
+          executeTool: async (call) => {
+            if (!agent) throw new Error("No agent selected.");
+            const args = JSON.parse(call.arguments);
+            if (call.name !== "remember_fact" && call.name !== "forget_fact")
+              throw new Error("Unsupported memory action.");
+            const currentAgent = current.current.agents.find(
+              (a) => a.id === agent.id,
+            );
+            const change =
+              call.name === "remember_fact"
+                ? args.text
+                : currentAgent?.memories.find((m) => m.id === args.id)?.text;
+            if (
+              typeof change !== "string" ||
+              !change.trim() ||
+              change.length > 1000
+            )
+              throw new Error("Invalid memory change.");
+            // A memory decision must be reviewed in the foreground, never via a
+            // hidden alert while another app is open.
+            if (AppState.currentState !== "active") {
+              interrupt("background-unavailable");
+              throw new Error("Return to Nylo to review the memory change.");
+            }
+            response.awaitingApproval = true;
+            let allowed = false;
+            try {
+              allowed = await askPermission(
+                call.name === "remember_fact"
+                  ? "Save this memory?"
+                  : "Forget this memory?",
+                `Chat "${conversation.title}" · ${agent.name}: ${change}`,
+                call.name === "remember_fact" ? "Save memory" : "Forget",
+                controller.signal,
+              );
+            } finally {
+              response.awaitingApproval = false;
+            }
+            if (controller.signal.aborted || AppState.currentState !== "active")
+              throw new Error(
+                "Response stopped. Return to Nylo to review memory changes.",
+              );
+            if (!allowed)
+              return JSON.stringify({ approved: false, changed: false });
+            let output = "";
+            await update((d) => ({
+              ...d,
+              agents: d.agents.map((a) => {
+                if (a.id !== agent.id) return a;
+                if (call.name === "remember_fact") {
+                  if (
+                    typeof args.text !== "string" ||
+                    !args.text.trim() ||
+                    args.text.length > 1000
+                  )
+                    throw new Error("Invalid memory.");
+                  const existing = a.memories.find(
+                    (m) =>
+                      m.text.toLowerCase() === args.text.trim().toLowerCase(),
                   );
-                output = JSON.stringify({ forgotten: true });
-                return {
-                  ...a,
-                  memories: a.memories.filter((m) => m.id !== args.id),
-                };
-              }
-              throw new Error("Unsupported local tool.");
-            }),
-          }));
-          return output;
-        },
-      });
-      await flush();
-      await checkpoints.finish();
-      await patch({ status: "complete" });
-    } catch (error) {
-      if (!accepted) throw error;
-      flush();
-      await patch({
-        status: controller.signal.aborted ? "interrupted" : "error",
-        error: controller.signal.aborted
-          ? interruptionMessage(interruption || "stopped", clock.stage)
-          : safeError(error, key),
-      }).catch(() => {});
+                  if (existing) {
+                    output = JSON.stringify({ saved: true, id: existing.id });
+                    return a;
+                  }
+                  if (a.memories.length >= 50)
+                    throw new Error("Memory is full.");
+                  const memory = {
+                    id: uid(),
+                    text: args.text.trim(),
+                    createdAt: Date.now(),
+                  };
+                  output = JSON.stringify({ saved: true, id: memory.id });
+                  return { ...a, memories: [...a.memories, memory] };
+                }
+                if (
+                  call.name === "forget_fact" &&
+                  typeof args.id === "string"
+                ) {
+                  if (a.memories.find((m) => m.id === args.id)?.text !== change)
+                    throw new Error(
+                      "This memory changed. Review it before trying again.",
+                    );
+                  output = JSON.stringify({ forgotten: true });
+                  return {
+                    ...a,
+                    memories: a.memories.filter((m) => m.id !== args.id),
+                  };
+                }
+                throw new Error("Unsupported local tool.");
+              }),
+            }));
+            return output;
+          },
+        });
+        await flush();
+        await checkpoints.finish();
+        if (controller.signal.aborted) throw new Error("Response stopped.");
+        await patch({ status: "complete" });
+      } catch (error) {
+        if (!accepted) throw error;
+        await flush();
+        await checkpoints.finish().catch(() => {});
+        await patch({
+          status: controller.signal.aborted ? "interrupted" : "error",
+          error: controller.signal.aborted
+            ? interruptionMessage(interruption || "stopped", clock.stage)
+            : safeError(error, key),
+        }).catch(() => {});
+      } finally {
+        clearInterval(timeout);
+        clearInterval(flushTimer);
+        backgroundLease?.release();
+      }
     } finally {
-      clearInterval(timeout);
-      clearInterval(flushTimer);
-      backgroundLease?.release();
-      active.current = null;
-      setRunningId(null);
-      setResponseProgress(null);
+      if (active.current.get(conversationId) === response) {
+        active.current.delete(conversationId);
+        setRunningIds([...active.current.keys()]);
+        setResponseProgress((all) => {
+          const next = { ...all };
+          delete next[conversationId];
+          return next;
+        });
+      }
     }
   };
   const importBackup = (value: unknown) =>
     credentialOperations.current(async () => {
-      if (active.current)
+      if (active.current.size)
         throw new Error("Stop the current response before restoring a backup.");
       const imported = parseData(value);
       const retired = [
@@ -805,6 +879,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ready,
         storageError,
         runningId,
+        runningIds,
         responseProgress,
         update,
         newChat,
@@ -812,7 +887,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         saveConnection,
         deleteConnection,
         send,
-        stop: () => active.current?.interrupt("stopped"),
+        stop: (id) => active.current.get(id)?.interrupt("stopped"),
         importBackup,
       }}
     >
