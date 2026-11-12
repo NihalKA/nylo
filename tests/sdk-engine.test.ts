@@ -513,3 +513,140 @@ test("invalid document arguments create no file and no additional API request", 
   await runSDKAgent(o);
   assert.equal(chats, 2);
 });
+
+test("file-only completion saves output and avoids the extra model roundtrip", async () => {
+  let chats = 0,
+    images = 0,
+    text = "";
+  const stages: string[] = [];
+  const o = options(async (url) => {
+    if (String(url).endsWith("/images/generations")) {
+      images++;
+      return Response.json({ created: 1, data: [{ b64_json: png }] });
+    }
+    chats++;
+    assert.equal(chats, 1);
+    return stream(undefined, "generate_image", {
+      prompt: "a tile",
+      finishAfter: true,
+    });
+  });
+  o.onFiles = async () => {};
+  o.onText = (delta) => {
+    text += delta;
+  };
+  o.onStage = (stage) => stages.push(stage);
+  await runSDKAgent(o);
+  assert.equal(chats, 1);
+  assert.equal(images, 1);
+  assert.match(text, /file is saved/);
+  assert.ok(stages.includes("image") && stages.includes("saving"));
+});
+test("editing an interrupted saved image retains its reference and requests edit approval", async () => {
+  let chats = 0,
+    edits = 0,
+    approvals = 0;
+  const o = options(async (url, init) => {
+    if (String(url).endsWith("/images/edits")) {
+      edits++;
+      assert.ok(init?.body instanceof FormData);
+      return Response.json({ created: 1, data: [{ b64_json: png }] });
+    }
+    chats++;
+    assert.ok(!String(init?.body).includes(png));
+    return stream(undefined, "generate_image", {
+      prompt: "make it green",
+      imageId: "saved",
+      finishAfter: true,
+    });
+  });
+  o.messages.push({
+    id: "interrupted",
+    role: "assistant",
+    text: "",
+    status: "interrupted",
+    createdAt: 2,
+    generatedFiles: [
+      {
+        id: "saved",
+        name: "Saved.png",
+        mimeType: "image/png",
+        data: png,
+        size: Buffer.from(png, "base64").length,
+      },
+    ],
+  });
+  o.messages.push({
+    id: "edit-user",
+    role: "user",
+    text: "Make it green",
+    status: "complete",
+    createdAt: 3,
+  });
+  o.approveImageEdit = async (file) => {
+    approvals++;
+    assert.equal(file.id, "saved");
+    return true;
+  };
+  o.onFiles = async () => {};
+  await runSDKAgent(o);
+  assert.equal(chats, 1);
+  assert.equal(edits, 1);
+  assert.equal(approvals, 1);
+});
+test("text-only file retry cannot invoke image or document tools", async () => {
+  const o = options(async (_url, init) => {
+    const body = JSON.parse(String(init?.body));
+    assert.ok(
+      !(body.tools || []).some((t: any) =>
+        ["generate_image", "create_document", "web_search"].includes(
+          t.name || t.type,
+        ),
+      ),
+    );
+    return stream("Your saved file is still available.");
+  });
+  o.allowCapabilities = false;
+  o.onFiles = async () => {
+    assert.fail("must not create another file");
+  };
+  await runSDKAgent(o);
+});
+
+test("actual SDK stream errors retain safe provider codes without exposing the server message", async () => {
+  let calls = 0;
+  const o = options(async () => {
+    calls++;
+    return new Response(
+      'data: {"type":"error","sequence_number":1,"code":"unsupported_parameter","message":"private prompt and synthetic-key"}\n\n',
+      { headers: { "content-type": "text/event-stream" } },
+    );
+  });
+  await assert.rejects(runSDKAgent(o), (e) => {
+    assert.match(String(e), /unsupported_parameter/);
+    assert.ok(
+      !String(e).includes("synthetic-key") &&
+        !String(e).includes("private prompt"),
+    );
+    return true;
+  });
+  assert.equal(calls, 1);
+});
+
+test("a noncanonical LB error frame still exposes only its allowlisted code", async () => {
+  const o = options(
+    async () =>
+      new Response(
+        'data: {"type":"error","code":"invalid_request_error","message":"synthetic-key private content"}\n\n',
+        { headers: { "content-type": "text/event-stream" } },
+      ),
+  );
+  await assert.rejects(runSDKAgent(o), (e) => {
+    assert.match(String(e), /invalid_request_error/);
+    assert.ok(
+      !String(e).includes("synthetic-key") &&
+        !String(e).includes("private content"),
+    );
+    return true;
+  });
+});

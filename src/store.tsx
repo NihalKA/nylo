@@ -1,4 +1,11 @@
 import {
+  createResponseClock,
+  interruptionMessage,
+  nextActionLabels,
+  ResponseStage,
+  InterruptionReason,
+} from "./response-progress";
+import {
   pendingAttachmentApproval,
   rememberAttachmentApproval,
 } from "./attachment-consent";
@@ -50,6 +57,11 @@ type Store = {
   ready: boolean;
   storageError: string;
   runningId: string | null;
+  responseProgress: {
+    stage: ResponseStage;
+    startedAt: number;
+    backgroundAllowed: boolean;
+  } | null;
   update: (change: (d: AppData) => AppData) => Promise<void>;
   newChat: (agentId?: string) => Promise<string>;
   saveAgent: (
@@ -83,13 +95,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState("");
   const [runningId, setRunningId] = useState<string | null>(null);
+  const [responseProgress, setResponseProgress] =
+    useState<Store["responseProgress"]>(null);
   const stagingCredentials = useRef(new Set<string>());
   const credentialOperations = useRef(createSerialExecutor());
   const active = useRef<{
     controller: AbortController;
     id: string;
     canBackground: () => boolean;
-    deadline: number;
+    clock: ReturnType<typeof createResponseClock>;
+    interrupt: (reason: InterruptionReason) => void;
     reviewingMemory: boolean;
   } | null>(null);
   const durableUpdate = useRef<ReturnType<
@@ -176,13 +191,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       });
     const subscription = AppState.addEventListener("change", (state) => {
       const response = active.current;
+      if (!response) return;
       if (
-        response &&
-        ((state === "background" &&
-          (response.reviewingMemory || !response.canBackground())) ||
-          Date.now() >= response.deadline)
+        state === "background" &&
+        (response.reviewingMemory || !response.canBackground())
       )
-        response.controller.abort();
+        response.interrupt("background-unavailable");
+      const expired = response.clock.expired();
+      if (expired) response.interrupt(expired);
     });
     return () => {
       mounted = false;
@@ -355,6 +371,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       messages,
       agent,
       instructions,
+      preservedReplies,
+      retryFiles,
     } = prepareSend(
       current.current,
       conversationId,
@@ -433,18 +451,29 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     let backgroundLease: Awaited<
       ReturnType<typeof beginBackgroundResponse>
     > | null = null;
-    let backgroundExpired = false;
+    const clock = createResponseClock();
+    let interruption: InterruptionReason | undefined;
+    const interrupt = (reason: InterruptionReason) => {
+      interruption ??= reason;
+      controller.abort();
+    };
     active.current = {
       controller,
       id: conversationId,
       canBackground: () => backgroundLease?.held === true,
-      deadline: Date.now() + 180000,
+      clock,
+      interrupt,
       reviewingMemory: false,
     };
     setRunningId(conversationId);
+    setResponseProgress({
+      stage: "model",
+      startedAt: clock.startedAt,
+      backgroundAllowed: false,
+    });
     let pending = "";
     let lastFlush = Date.now();
-    const checkpoints = createCheckpointBarrier(() => controller.abort());
+    const checkpoints = createCheckpointBarrier(() => interrupt("storage"));
     let accepted = false;
     const patch = async (
       delta:
@@ -476,16 +505,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       lastFlush = Date.now();
       return checkpoints.track(patch((m) => ({ text: m.text + part })));
     };
-    const timeout = setTimeout(() => controller.abort(), 180000);
+    const timeout = setInterval(() => {
+      const reason = clock.expired();
+      if (reason) interrupt(reason);
+    }, 1000);
     const flushTimer = setInterval(flush, 200);
     try {
       backgroundLease = await beginBackgroundResponse(
         assistantId,
         () => {
-          backgroundExpired = true;
-          controller.abort();
+          interrupt("background-expired");
         },
         controller.signal,
+      );
+      setResponseProgress((p) =>
+        p ? { ...p, backgroundAllowed: backgroundLease?.held === true } : p,
       );
       if (controller.signal.aborted)
         throw new Error("Return to Nylo to send. Your draft is kept.");
@@ -516,6 +550,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
                 updatedAt: Date.now(),
                 messages: [
                   ...messages,
+                  ...preservedReplies,
                   {
                     id: assistantId,
                     role: "assistant",
@@ -537,7 +572,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         messages,
         instructions,
         useTools: !!agent && options?.tools !== false,
-        allowCapabilities: options?.tools !== false,
+        allowCapabilities: options?.tools !== false && !retryFiles.length,
+        onStage: (stage) => {
+          clock.enter(stage);
+          setResponseProgress((p) =>
+            p && p.stage !== stage ? { ...p, stage } : p,
+          );
+        },
+        onActivity: () => clock.activity(),
         onFiles: async (files) => {
           if (controller.signal.aborted) throw new Error("Response stopped.");
           await patch((m) => ({
@@ -600,7 +642,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         },
         onAction: (label) => {
           checkpoints.track(
-            patch((m) => ({ actions: [...(m.actions || []), label] })),
+            patch((m) => ({ actions: nextActionLabels(m.actions, label) })),
           );
         },
         executeTool: async (call) => {
@@ -624,7 +666,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           // A memory decision must be reviewed in the foreground, never via a
           // hidden alert while another app is open.
           if (AppState.currentState !== "active") {
-            controller.abort();
+            interrupt("background-unavailable");
             throw new Error("Return to Nylo to review the memory change.");
           }
           if (active.current) active.current.reviewingMemory = true;
@@ -702,17 +744,16 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       await patch({
         status: controller.signal.aborted ? "interrupted" : "error",
         error: controller.signal.aborted
-          ? backgroundExpired
-            ? "iOS ended background time. Your partial answer is saved. Retry in Nylo to make a new request."
-            : "Response paused. Retry to make a new request; the partial answer is kept until then."
+          ? interruptionMessage(interruption || "stopped", clock.stage)
           : safeError(error, key),
       }).catch(() => {});
     } finally {
-      clearTimeout(timeout);
+      clearInterval(timeout);
       clearInterval(flushTimer);
       backgroundLease?.release();
       active.current = null;
       setRunningId(null);
+      setResponseProgress(null);
     }
   };
   const importBackup = (value: unknown) =>
@@ -737,13 +778,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ready,
         storageError,
         runningId,
+        responseProgress,
         update,
         newChat,
         saveAgent,
         saveConnection,
         deleteConnection,
         send,
-        stop: () => active.current?.controller.abort(),
+        stop: () => active.current?.interrupt("stopped"),
         importBackup,
       }}
     >

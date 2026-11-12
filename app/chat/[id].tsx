@@ -1,3 +1,4 @@
+import { stageLabels } from "../../src/response-progress";
 import { shareGeneratedFile, exportResponse } from "../../src/file-export";
 import { BlurTargetView, BlurView } from "expo-blur";
 import { Text, TextInput, fonts } from "../../src/typography";
@@ -162,7 +163,7 @@ function Chat() {
     id: string;
     prompt?: string;
   }>();
-  const { data, update, send, runningId, stop } = useStore();
+  const { data, update, send, runningId, responseProgress, stop } = useStore();
   const conversation = data.conversations.find((c) => c.id === id);
   const agent = data.agents.find((a) => a.id === conversation?.agentId);
   const savedConnection = data.connections.find(
@@ -199,6 +200,19 @@ function Chat() {
   const composer = useRef<React.ComponentRef<typeof TextInput>>(null);
   const nearBottom = useRef(true);
   const isRunning = runningId === id;
+  const [progressNow, setProgressNow] = useState(Date.now());
+  useEffect(() => {
+    if (!isRunning) return;
+    const timer = setInterval(() => setProgressNow(Date.now()), 1000);
+    return () => clearInterval(timer);
+  }, [isRunning]);
+  const progressLabel = responseProgress
+    ? `${stageLabels[responseProgress.stage]} · ${Math.max(0, Math.floor((progressNow - responseProgress.startedAt) / 1000))}s`
+    : "Waiting for the model";
+  const hasSavedFilesInTurn = conversation?.messages
+    .slice(conversation.messages.findLastIndex((m) => m.role === "user") + 1)
+    .some((m) => m.generatedFiles?.length);
+
   // Feel the reply arrive: a settled double pulse, or an error feel.
   const wasRunning = useRef(false);
   useEffect(() => {
@@ -812,7 +826,7 @@ function Chat() {
                           <FadeIn distance={6} duration={200}>
                             <View
                               accessible
-                              accessibilityLabel="Thinking"
+                              accessibilityLabel={progressLabel}
                               accessibilityLiveRegion="polite"
                               style={[
                                 s.row,
@@ -833,7 +847,7 @@ function Chat() {
                               <ThinkingOrb size={20} />
                               <Breathe>
                                 <Text style={[s.sub, { fontSize: 13 }]}>
-                                  Thinking…
+                                  {progressLabel}
                                 </Text>
                               </Breathe>
                             </View>
@@ -851,7 +865,11 @@ function Chat() {
                             <Text style={s.error}>{message.error}</Text>
                             {index === conversation.messages.length - 1 ? (
                               <Button
-                                title="Retry response"
+                                title={
+                                  hasSavedFilesInTurn
+                                    ? "Retry text reply (keep files)"
+                                    : "Retry response"
+                                }
                                 secondary
                                 disabled={!!runningId}
                                 icon="refresh-outline"
@@ -1351,7 +1369,7 @@ function Chat() {
                 {runningId && !isRunning
                   ? "Another conversation is responding."
                   : isRunning
-                    ? "Working on this device. Keep the app open."
+                    ? `${progressLabel}. ${responseProgress?.backgroundAllowed ? "Can continue briefly in background; iOS may pause it." : "Keep Nylo open for this request."}`
                     : "Saved on this device. AI can make mistakes."}
               </Text>
             ) : null}

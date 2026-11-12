@@ -72,7 +72,7 @@ appId: com.nylohq.nylo
 # the separate explicit stopApp/cold launch at the end still tests restart.
 - launchApp:
     stopApp: false
-- assertVisible: "(?s)Response paused.*"
+- assertVisible: "(?s)Nylo could not continue after the app moved to the background[.].*"
 - assertNotVisible: "Save memory"
 - takeScreenshot: background-03-memory-interrupted
 - tapOn: "Go back"
@@ -80,7 +80,7 @@ appId: com.nylohq.nylo
 - tapOn: "Send message"
 - assertVisible: "Phase one.*"
 - tapOn: "Stop response"
-- assertVisible: "(?s)Response paused.*"
+- assertVisible: "(?s)You stopped this response[.].*"
 - assertNotVisible: "Stop response"
 - takeScreenshot: background-04-stop
 - stopApp

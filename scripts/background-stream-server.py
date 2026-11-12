@@ -31,7 +31,10 @@ class Handler(http.server.BaseHTTPRequestHandler):
         def event(value):
             self.wfile.write(('data: '+json.dumps(value)+'\n\n').encode());self.wfile.flush()
         try:
-            event(dict(type='response.output_text.delta', delta='Phase one. '))
+            event(dict(type='response.created', response=dict(id='resp_owned', created_at=1, model=model)))
+            message = dict(type='message', id='msg_owned', role='assistant', status='completed', content=[])
+            event(dict(type='response.output_item.added', output_index=0, item=message))
+            event(dict(type='response.output_text.delta', item_id='msg_owned', delta='Phase one. '))
             if model == 'qa-stop':
                 time.sleep(30)
             else:
@@ -42,11 +45,15 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     return
                 time.sleep(.5)
             if model == 'qa-memory':
-                event(dict(type='response.output_item.done',output_index=0,item=dict(type='function_call',call_id='owned-call',name='remember_fact',arguments=json.dumps(dict(text='Owned QA memory must not save in background')))))
+                event(dict(type='response.output_item.done', output_index=0, item=message))
+                call = dict(type='function_call', id='fc_owned', status='completed', call_id='owned-call', name='remember_fact', arguments=json.dumps(dict(text='Owned QA memory must not save in background')))
+                event(dict(type='response.output_item.added', output_index=1, item=call))
+                event(dict(type='response.output_item.done', output_index=1, item=call))
             else:
-                event(dict(type='response.output_text.delta',delta='Completed in background.'))
+                event(dict(type='response.output_text.delta',item_id='msg_owned',delta='Completed in background.'))
+                event(dict(type='response.output_item.done', output_index=0, item=message))
             record('final_output_sent', model=model)
-            event(dict(type='response.completed'));record('stream_finished', model=model)
+            event(dict(type='response.completed', response=dict(usage=dict(input_tokens=1, output_tokens=1, total_tokens=2))));record('stream_finished', model=model)
         except (BrokenPipeError,ConnectionResetError,ssl.SSLError): record('client_stopped',model=model)
     def do_GET(self):
         if self.server.server_port != 8766 or self.path not in ['/complete','/memory']:

@@ -115,3 +115,36 @@ The SDK feature did change completed action-label text from main's green to gray
 this follow-up restores green for completed labels and matches error/pending text
 to the existing icon colors. Formatting and typecheck pass. This small UI change
 has not yet been verified in a new native build or distributed.
+
+## Approved reliability follow-up (not released yet)
+
+Retry preparation now preserves interrupted files and partial text. When files
+already exist, the retry requests only the unfinished text reply, disables file
+creation/edit/search tools for that retry, and retains the original file messages
+in storage. Generated pixels are not resent. A new explicit user request can
+still create or edit a file with normal consent.
+
+The former three-minute whole-turn cutoff is replaced by idle limits: model/reply
+120 seconds, image 300 seconds, document/saving 60 seconds, approval 180 seconds,
+with an absolute ten-minute cap. Network activity renews idle waits, never the
+total cap. Stop, background denial/expiry, idle/total timeout and storage failure
+have distinct messages. Current-stage/elapsed UI and removal of stale pending
+actions clarify progress. Native background permission remains finite; no new
+backend, provider storage, model/default reasoning change or automatic retry.
+
+File tools support ending a file-only turn immediately after a successful save
+when the model explicitly identifies that no further work is needed. Other
+requests retain the existing bounded multi-step loop. SDK and provider failures
+show only static diagnostic labels, numeric HTTP status and allowlisted codes;
+arbitrary messages/bodies/headers/URLs/credentials are not copied to chat.
+Known error codes in noncanonical LB error frames are retained safely without
+loosening successful-response validation. The exact reported live edit failure
+has not been reproduced with a paid provider request.
+
+124 tests/typecheck/format/security/fonts/assets and both Hermes exports pass.
+Regressions cover repeated/cold-restart file retries, interruption budgets,
+redacted real-SDK stream errors, one-call file completion, and approved editing
+of an image saved by an interrupted turn. The local background fixture now emits
+current SDK-compatible Responses frames; its Home/Stop assertions expect the
+specific new interruption messages. Native verification and a new beta remain
+pending. Delivered build 29 is unchanged.
