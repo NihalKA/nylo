@@ -3,7 +3,8 @@
 App source: `ca48da21ec171b8001576f7489c7faed25d9f057` on
 `feat/ai-sdk-mobile-capabilities`.
 [PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and unmerged.
-Documentation-only follow-up commits do not change the delivered app inputs.
+Build 29 corresponds to the app source above. Later branch changes recorded below
+are not included in those delivered binaries.
 
 ## Delivery
 
@@ -104,3 +105,13 @@ interaction are unverified. Production npm audit retains three moderate Expo
 transitive findings, with no high/critical findings. Earlier receipts are kept in
 [the development record](ai-sdk-mobile-capabilities-development.md). Private Apple
 receipts, logs, databases and credentials are excluded from source/public releases.
+
+## Theme follow-up on current main
+
+The feature branch already includes freshly fetched `origin/main` at
+`19c3c440acf4cf7f8089929ae5f4048f5aec4198`. Its theme tokens, shared UI styles,
+typography, main screens and brand assets match main. No rebase was needed.
+The SDK feature did change completed action-label text from main's green to gray;
+this follow-up restores green for completed labels and matches error/pending text
+to the existing icon colors. Formatting and typecheck pass. This small UI change
+has not yet been verified in a new native build or distributed.

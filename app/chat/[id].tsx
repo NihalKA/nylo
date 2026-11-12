@@ -715,7 +715,16 @@ function Chat() {
                                     : theme.green
                               }
                             />
-                            <Text style={{ fontSize: 11, color: theme.sub }}>
+                            <Text
+                              style={{
+                                fontSize: 11,
+                                color: label.includes("failed")
+                                  ? theme.error
+                                  : label.endsWith("…")
+                                    ? theme.sub
+                                    : theme.green,
+                              }}
+                            >
                               {label}
                             </Text>
                           </View>
