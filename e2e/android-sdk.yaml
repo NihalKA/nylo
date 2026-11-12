@@ -2,6 +2,20 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
+# Match the existing smoke/gallery handling of the captured API35 launcher ANR.
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: "android:id/alertTitle"
+        text: "Pixel Launcher isn't responding"
+    commands:
+      - takeScreenshot: sdk-pixel-launcher-anr
+      - tapOn:
+          id: "android:id/aerr_close"
+          text: "Close app"
+          retryTapIfNoChange: false
+      - assertNotVisible: "Pixel Launcher isn't responding"
 - tapOn:
     text: "Settings"
     retryTapIfNoChange: true
@@ -29,9 +43,11 @@ appId: com.nylohq.nylo
 - assertVisible: "Image preview: .*"
 - assertVisible: "Save or share"
 - takeScreenshot: sdk-image-preview
+# Inject real touch events inside the captured image bounds. A zero-delay
+# selector double tap left the Android canvas at 100% in run 43280319138.
 - doubleTapOn:
-    text: "Image preview: .*"
-    delay: 0
+    point: "50%, 50%"
+    delay: 100
 - assertVisible: "Image zoom 250 percent"
 - takeScreenshot: sdk-image-zoomed
 - swipe:
@@ -40,9 +56,11 @@ appId: com.nylohq.nylo
     duration: 500
 - assertVisible: "Image zoom 250 percent"
 - takeScreenshot: sdk-image-panned
+# Inject real touch events inside the captured image bounds. A zero-delay
+# selector double tap left the Android canvas at 100% in run 43280319138.
 - doubleTapOn:
-    text: "Image preview: .*"
-    delay: 0
+    point: "50%, 50%"
+    delay: 100
 - assertVisible: "Image zoom 100 percent"
 - takeScreenshot: sdk-image-reset
 - tapOn: "Close image preview"
