@@ -24,7 +24,20 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.send_error(404); return
         n = int(self.headers.get('Content-Length', '0'))
         if n > 100000: self.send_error(413); return
-        raw = self.rfile.read(n)
+        if self.headers.get('Transfer-Encoding', '').lower() == 'chunked':
+            chunks = []
+            total = 0
+            while True:
+                size = int(self.rfile.readline(1024).strip().split(b';')[0], 16)
+                assert 0 <= size <= 100000 and total + size <= 100000
+                if size == 0:
+                    for _ in range(16):
+                        if self.rfile.readline(1024) in [b'\r\n', b'\n']: break
+                    break
+                chunks.append(self.rfile.read(size));total += size
+                assert self.rfile.read(2) == b'\r\n'
+            raw = b''.join(chunks)
+        else: raw = self.rfile.read(n)
         if self.path == '/v1/images/edits':
             from email.parser import BytesParser
             from email.policy import default
