@@ -37,11 +37,13 @@ appId: com.nylohq.nylo
     direction: UP
 - tapOn: "Open Offline SDK report.pdf"
 - extendedWaitUntil:
-    visible: "(?s).*Offline SDK report.*"
+    visible: "Calculation: 7 x 12 = 84."
     timeout: 30000
+- assertVisible:
+    id: "QLOverlayDoneButtonAccessibilityIdentifier"
 - takeScreenshot: sdk-pdf-preview
-- assertVisible: "Done"
-- tapOn: "Done"
+- tapOn:
+    id: "QLOverlayDoneButtonAccessibilityIdentifier"
 - scrollUntilVisible:
     element: "Open Offline SDK text.txt"
     direction: DOWN
