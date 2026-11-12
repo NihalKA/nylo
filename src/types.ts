@@ -49,6 +49,7 @@ export type Message = {
   model?: string;
 };
 export type Conversation = {
+  archived?: boolean;
   id: string;
   title: string;
   draft?: string;

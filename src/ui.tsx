@@ -1220,12 +1220,24 @@ export function relativeDay(timestamp: number) {
 export function ConversationRow({
   conversation,
   onPress,
+  onLongPress,
+  accessibilityActions,
+  onAccessibilityAction,
+  accessibilityHint,
   agent,
   live,
 }: {
   agent?: Agent;
   conversation: Conversation;
   onPress: () => void;
+  onLongPress?: () => void;
+  accessibilityActions?: React.ComponentProps<
+    typeof Tappable
+  >["accessibilityActions"];
+  onAccessibilityAction?: React.ComponentProps<
+    typeof Tappable
+  >["onAccessibilityAction"];
+  accessibilityHint?: string;
   /** This chat is replying right now. */
   live?: boolean;
 }) {
@@ -1252,6 +1264,10 @@ export function ConversationRow({
         .filter(Boolean)
         .join(". ")}
       onPress={onPress}
+      onLongPress={onLongPress}
+      accessibilityHint={accessibilityHint}
+      accessibilityActions={accessibilityActions}
+      onAccessibilityAction={onAccessibilityAction}
       feel="card"
       scaleTo={0.98}
       ripple={rgba(tone, 0.5)}

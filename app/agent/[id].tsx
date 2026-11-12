@@ -4,6 +4,7 @@ import { recentAgentContext } from "../../src/agent-context";
 import React, { useRef, useState } from "react";
 import { Pressable, ScrollView, View, useWindowDimensions } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
+import { ChatRow } from "../../src/chat-row";
 import { useStore } from "../../src/store";
 import { uid } from "../../src/domain";
 import {
@@ -11,7 +12,6 @@ import {
   Badge,
   Button,
   Switch,
-  ConversationRow,
   Empty,
   Field,
   Header,
@@ -206,6 +206,7 @@ function AgentDetail() {
     .filter(
       (c) =>
         c.agentId === id &&
+        !c.archived &&
         (c.messages.length > 0 ||
           c.draft?.trim() ||
           !!c.draftAttachments?.length),
@@ -353,7 +354,7 @@ function AgentDetail() {
         {tab === "conversations" ? (
           chats.length ? (
             chats.map((c) => (
-              <ConversationRow
+              <ChatRow
                 key={c.id}
                 conversation={c}
                 onPress={() =>

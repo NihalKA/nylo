@@ -137,6 +137,7 @@ export function reusableConversation(
   return data.conversations.find(
     (c) =>
       !isDeviceCheckConversation(data, c.id) &&
+      !c.archived &&
       c.agentId === agentId &&
       c.connectionId === connectionId &&
       !c.messages.length &&
@@ -286,6 +287,7 @@ export function parseData(value: unknown, local = false): AppData {
         !string(c.id) ||
         !string(c.title) ||
         !string(c.connectionId) ||
+        (c.archived !== undefined && typeof c.archived !== "boolean") ||
         (c.agentId !== undefined && !string(c.agentId)) ||
         !Number.isFinite(c.createdAt) ||
         !Number.isFinite(c.updatedAt) ||
@@ -462,6 +464,7 @@ export function parseData(value: unknown, local = false): AppData {
       })),
     })),
     conversations: d.conversations.map((c) => ({
+      archived: c.archived,
       id: c.id,
       title: c.title,
       agentId: c.agentId,

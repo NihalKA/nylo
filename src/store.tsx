@@ -88,6 +88,8 @@ type Store = {
   ) => Promise<string>;
   saveConnection: (connection: Connection, key: string) => Promise<void>;
   deleteConnection: (id: string) => Promise<void>;
+  archiveChat: (id: string, archived: boolean) => Promise<void>;
+  deleteChat: (id: string) => Promise<void>;
   send: (
     conversationId: string,
     text: string,
@@ -118,6 +120,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const stagingCredentials = useRef(new Set<string>());
   const credentialOperations = useRef(createSerialExecutor());
   const active = useRef(new Map<string, ActiveResponse>());
+  const deletingChats = useRef(new Set<string>());
   const durableUpdate = useRef<ReturnType<
     typeof createDurableUpdater<AppData>
   > | null>(null);
@@ -229,7 +232,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       {
         ...current.current,
         conversations: current.current.conversations.filter(
-          (c) => !active.current.has(c.id),
+          (c) => !active.current.has(c.id) && !deletingChats.current.has(c.id),
         ),
       },
       connectionId,
@@ -242,6 +245,41 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       conversations: [conversation, ...d.conversations],
     }));
     return conversation.id;
+  };
+  const archiveChat = async (id: string, archived: boolean) => {
+    if (isDeviceCheckConversation(current.current, id))
+      throw new Error("This conversation belongs to Live device check.");
+    await update((d) => ({
+      ...d,
+      conversations: d.conversations.map((c) =>
+        c.id === id ? { ...c, archived } : c,
+      ),
+    }));
+  };
+  const deleteChat = async (id: string) => {
+    if (isDeviceCheckConversation(current.current, id))
+      throw new Error("This conversation belongs to Live device check.");
+    if (active.current.has(id))
+      throw new Error("Stop this chat’s reply before deleting it.");
+    if (deletingChats.current.has(id)) return;
+    deletingChats.current.add(id);
+    try {
+      await update((d) => ({
+        ...d,
+        conversations: d.conversations.filter((c) => c.id !== id),
+        providerConsents: d.providerConsents?.map((consent) => ({
+          ...consent,
+          generatedImageEditChats: consent.generatedImageEditChats?.filter(
+            (chatId) => chatId !== id,
+          ),
+          attachmentApprovals: consent.attachmentApprovals?.filter(
+            (approval) => approval.conversationId !== id,
+          ),
+        })),
+      }));
+    } finally {
+      deletingChats.current.delete(id);
+    }
   };
   const saveAgent = async (
     draft: AgentDraft,
@@ -380,6 +418,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     onAccepted?: () => void,
     options?: SendOptions,
   ) => {
+    if (deletingChats.current.has(conversationId))
+      throw new Error("This chat is being deleted.");
     const reserved = isDeviceCheckConversation(current.current, conversationId);
     if (reserved !== !!options?.deviceCheck)
       throw new Error("Run test conversations only from Live device check.");
@@ -886,6 +926,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         saveAgent,
         saveConnection,
         deleteConnection,
+        archiveChat,
+        deleteChat,
         send,
         stop: (id) => active.current.get(id)?.interrupt("stopped"),
         importBackup,

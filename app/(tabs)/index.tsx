@@ -2,12 +2,12 @@ import { Text, TextInput } from "../../src/typography";
 import React, { useMemo, useRef, useState } from "react";
 import { Animated, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
+import { ChatRow } from "../../src/chat-row";
 import { useStore } from "../../src/store";
 import { scrollTicker } from "../../src/haptics";
 import { isDeviceCheckConversation } from "../../src/domain";
 import {
   Button,
-  ConversationRow,
   FabButton,
   FadeIn,
   Icon,
@@ -33,13 +33,19 @@ export default function Chats() {
   const onScrollTick = (e: { nativeEvent: { contentOffset: { y: number } } }) =>
     tick(e.nativeEvent.contentOffset.y);
   const [query, setQuery] = useState("");
+  const [archived, setArchived] = useState(false);
+  const archivedCount = data.conversations.filter(
+    (c) => c.archived && !isDeviceCheckConversation(data, c.id),
+  ).length;
   const [error, setError] = useState("");
   const chats = useMemo(
     () =>
       data.conversations
         .filter((c) => !isDeviceCheckConversation(data, c.id))
+        .filter((c) => !!c.archived === archived)
         .filter(
           (c) =>
+            c.archived ||
             c.messages.length > 0 ||
             c.draft?.trim() ||
             !!c.draftAttachments?.length,
@@ -56,7 +62,7 @@ export default function Chats() {
           );
         })
         .sort((a, b) => b.updatedAt - a.updatedAt),
-    [data.conversations, data.agents, data.deviceCheck, query],
+    [data.conversations, data.agents, data.deviceCheck, query, archived],
   );
   const start = async () => {
     try {
@@ -84,7 +90,7 @@ export default function Chats() {
             maxFontSizeMultiplier={1.6}
             style={s.title}
           >
-            Chats
+            {archived ? "Archived chats" : "Chats"}
           </Text>
         </View>
         <FabButton
@@ -131,6 +137,31 @@ export default function Chats() {
           }}
         />
       </View>
+      {archived || archivedCount > 0 ? (
+        <Tappable
+          accessibilityRole="button"
+          accessibilityLabel={
+            archived ? "Back to chats" : `Archived chats, ${archivedCount}`
+          }
+          onPress={() => {
+            setArchived(!archived);
+            setQuery("");
+          }}
+          style={[
+            s.row,
+            { gap: 8, minHeight: 44, alignSelf: "flex-start", marginBottom: 4 },
+          ]}
+        >
+          <Icon
+            name={archived ? "arrow-back" : "archive-outline"}
+            size={18}
+            color={theme.accentText}
+          />
+          <Text style={[s.sub, { color: theme.accentText }]}>
+            {archived ? "Back to chats" : `Archived (${archivedCount})`}
+          </Text>
+        </Tappable>
+      ) : null}
       {error ? (
         <Text accessibilityRole="alert" style={s.error}>
           {error}
@@ -206,7 +237,7 @@ export default function Chats() {
             delay={Math.min(index, 6) * 45}
             enabled={index < 8 && Date.now() - mountedAt < 800}
           >
-            <ConversationRow
+            <ChatRow
               live={runningIds.includes(item.id)}
               conversation={item}
               agent={data.agents.find((a) => a.id === item.agentId)}
@@ -247,7 +278,11 @@ export default function Chats() {
                 },
               ]}
             >
-              {query ? "No chats found" : "No chats yet"}
+              {query
+                ? "No chats found"
+                : archived
+                  ? "No archived chats"
+                  : "No chats yet"}
             </Text>
             {fontScale <= 1.6 ? (
               <Text
@@ -263,23 +298,25 @@ export default function Chats() {
               >
                 {query
                   ? "Try a different word or search an agent’s name."
-                  : "Your questions, drafts and ideas.\nSaved here as you go."}
+                  : archived
+                    ? "Archived chats stay here until you restore or delete them."
+                    : "Your questions, drafts and ideas.\nSaved here as you go."}
               </Text>
             ) : null}
-            {!query ? (
+            {!query && !archived ? (
               <Button
                 title="New chat"
                 icon="create-outline"
                 onPress={() => void start()}
               />
-            ) : (
+            ) : query ? (
               <Button
                 title="Clear search"
                 secondary
                 onPress={() => setQuery("")}
               />
-            )}
-            {!query && !data.connections.length ? (
+            ) : null}
+            {!query && !archived && !data.connections.length ? (
               <Text
                 style={[
                   s.sub,
