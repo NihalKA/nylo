@@ -149,3 +149,15 @@ does not itself background the chat. Source HTML and remote images are not
 executed/loaded by the text renderer. No model, provider storage, theme, memory,
 report or background architecture change. Build 30 remains the delivered release;
 new native verification and delivery are pending. Source checks now cover 128 tests.
+
+Candidate 31 passed native compilation/signing and source audits, but is held and
+will not be distributed. Actual Android preview review found its Zoom control
+changed label without changing page geometry; plain nested text spans also reset
+heading/bold font weights. The correction gives the native paper an intrinsic
+width during unbounded scroll measurement and preserves inherited inline styles.
+Native checks now require measured 100/200-percent zoom as well as visual review.
+A cold-reopen test scrolls to the retained image before its original assertion.
+iOS accessibility exposes document cards as Open plus filename, so test selectors
+now target that exact button label. No successful UI assertion substitutes for
+visual review. A new candidate is required for these production corrections;
+build 30 remains available and build 31 stays unassigned/unpublished.

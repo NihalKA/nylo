@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Alert, Linking, ScrollView, View } from "react-native";
 import { Token, Tokens } from "marked";
 import { Text, fonts } from "./typography";
@@ -17,6 +17,7 @@ export function MessageContent({
   text: string;
   sources?: Source[];
 }) {
+  const tokens = useMemo(() => messageTokens(text), [text]);
   const inline = (tokens: Token[] | undefined): React.ReactNode =>
     tokens?.map((t, i) => {
       if (t.type === "br") return "\n";
@@ -76,15 +77,11 @@ export function MessageContent({
       if (t.type === "image")
         return <Text key={i}>{(t as Tokens.Image).text}</Text>;
       // HTML remains literal text; never execute model markup or remote images.
-      return (
-        <Text key={i}>
-          {"tokens" in t && t.tokens
-            ? inline(t.tokens as Token[])
-            : "text" in t
-              ? String(t.text)
-              : t.raw}
-        </Text>
-      );
+      return "tokens" in t && t.tokens
+        ? inline(t.tokens as Token[])
+        : "text" in t
+          ? String(t.text)
+          : t.raw;
     });
   const blocks = (tokens: Token[]): React.ReactNode =>
     tokens.map((t, i) => {
@@ -201,5 +198,5 @@ export function MessageContent({
         </Text>
       );
     });
-  return <View style={{ gap: 14 }}>{blocks(messageTokens(text))}</View>;
+  return <View style={{ gap: 14 }}>{blocks(tokens)}</View>;
 }

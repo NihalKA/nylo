@@ -41,8 +41,12 @@ appId: com.nylohq.nylo
 - takeScreenshot: sdk-pdf-preview
 - assertVisible: "Zoom in"
 - tapOn: "Zoom in"
+- extendedWaitUntil:
+    visible: "PDF document, 1 page, zoom 200 percent"
+    timeout: 10000
 - takeScreenshot: sdk-pdf-zoomed
 - tapOn: "Zoom out"
+- assertVisible: "PDF document, 1 page, zoom 100 percent"
 - tapOn: "Close document preview"
 - scrollUntilVisible:
     element: "Open Offline SDK text.txt"
@@ -65,6 +69,9 @@ appId: com.nylohq.nylo
 - stopApp
 - launchApp
 - tapOn: "(?s)Open Example: SDK image.*"
+- scrollUntilVisible:
+    element: "Save or share image"
+    direction: UP
 - assertVisible: "Save or share image"
 - takeScreenshot: sdk-image-restored
 

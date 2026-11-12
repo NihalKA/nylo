@@ -11,6 +11,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.pdf.PdfRenderer
 import android.view.View
+import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.HorizontalScrollView
@@ -38,10 +39,10 @@ class NyloPdfView(context: Context, appContext: AppContext) : ExpoView(context, 
       document = renderer
       require(renderer.pageCount in 1..500)
       val root = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; setBackgroundColor(Color.WHITE); fitsSystemWindows = true }
-      val header = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; setPadding(12, 8, 12, 8) }
+      val header = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL; setPadding(12, 8, 12, 8) }
       header.addView(TextView(context).apply { text = "${renderer.pageCount} ${if (renderer.pageCount == 1) "page" else "pages"}"; setTextColor(Color.BLACK); textSize = 16f }, LinearLayout.LayoutParams(0, -2, 1f))
-      pages = PDFPages(renderer)
       var baseWidth = width.takeIf { it > 0 } ?: resources.displayMetrics.widthPixels
+      pages = PDFPages(renderer, baseWidth)
       val vertical = ScrollView(context).apply { addView(pages); setOnScrollChangeListener { _, _, _, _, _ -> pages?.invalidate() } }
       var zoomed = false
       header.addView(Button(context).apply {
@@ -49,25 +50,19 @@ class NyloPdfView(context: Context, appContext: AppContext) : ExpoView(context, 
         setOnClickListener {
           zoomed = !zoomed
           text = if (zoomed) "Zoom out" else "Zoom in"
-          pages?.clear()
-          vertical.layoutParams.width = baseWidth * if (zoomed) 2 else 1
-          vertical.requestLayout()
-          pages?.invalidate()
+          pages?.setPaperWidth(baseWidth * if (zoomed) 2 else 1, baseWidth)
         }
       })
       resizePaper = { available ->
         if (available > 0) {
           baseWidth = available
           val paperWidth = baseWidth * if (zoomed) 2 else 1
-          if (vertical.layoutParams != null && vertical.layoutParams.width != paperWidth) {
-            vertical.layoutParams.width = paperWidth
-            vertical.requestLayout()
-          }
+          pages?.setPaperWidth(paperWidth, baseWidth)
         }
       }
       root.addView(header)
       root.addView(HorizontalScrollView(context).apply {
-        addView(vertical, LinearLayout.LayoutParams(baseWidth, -1))
+        addView(vertical, android.widget.FrameLayout.LayoutParams(-2, -1))
         setOnScrollChangeListener { _, _, _, _, _ -> pages?.invalidate() }
       }, LinearLayout.LayoutParams(-1, 0, 1f))
       addView(root, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
@@ -86,17 +81,30 @@ class NyloPdfView(context: Context, appContext: AppContext) : ExpoView(context, 
     descriptor?.close(); descriptor = null
     file?.parentFile?.deleteRecursively(); file = null
   }
-  private inner class PDFPages(private val renderer: PdfRenderer) : View(context) {
+  private inner class PDFPages(private val renderer: PdfRenderer, initialWidth: Int) : View(context) {
+    private var paperWidth = initialWidth
+    private var viewportWidth = initialWidth
+    fun setPaperWidth(value: Int, viewport: Int) {
+      viewportWidth = viewport
+      if (paperWidth == value) return
+      paperWidth = value.coerceAtLeast(1)
+      clear()
+      requestLayout()
+      invalidate()
+    }
     private val ratios = (0 until renderer.pageCount).map { index -> renderer.openPage(index).use { it.height.toFloat() / it.width } }
     private var offsets = FloatArray(renderer.pageCount + 1)
     private val cache = linkedMapOf<Int, Bitmap>()
     private val paint = Paint(Paint.FILTER_BITMAP_FLAG)
     init { contentDescription = "PDF document, ${renderer.pageCount} ${if (renderer.pageCount == 1) "page" else "pages"}. Scroll to read." }
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-      val w = MeasureSpec.getSize(widthSpec).coerceAtLeast(1)
+      // HorizontalScrollView measures content with UNSPECIFIED width. Use
+      // the requested paper width, rather than that parent's width hint.
+      val w = paperWidth.coerceAtLeast(1)
       offsets = FloatArray(renderer.pageCount + 1)
       for (i in ratios.indices) offsets[i+1] = offsets[i] + w * ratios[i] + 12
       setMeasuredDimension(w, offsets.last().toInt())
+      contentDescription = "PDF document, ${renderer.pageCount} ${if (renderer.pageCount == 1) "page" else "pages"}, zoom ${w * 100 / viewportWidth.coerceAtLeast(1)} percent"
     }
     override fun onDraw(canvas: Canvas) {
       super.onDraw(canvas)
