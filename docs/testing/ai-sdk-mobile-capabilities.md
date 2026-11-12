@@ -1,138 +1,106 @@
-# AI SDK mobile beta delivery
+# AI SDK mobile capabilities: delivered beta 29
 
-The feature remains on `feat/ai-sdk-mobile-capabilities`, unmerged in
-[PR #6](https://github.com/NihalKA/nylo/pull/6), from main
-`19c3c440acf4cf7f8089929ae5f4048f5aec4198`.
-Both distributed binaries use app source
-`199e62fa7670706ebedcf5ca8dbbc9439aae80a4`; later commits change tests/docs only.
+App source: `ca48da21ec171b8001576f7489c7faed25d9f057` on
+`feat/ai-sdk-mobile-capabilities`.
+[PR 6](https://github.com/NihalKA/nylo/pull/6) remains open and unmerged.
+Documentation-only follow-up commits do not change the delivered app inputs.
 
 ## Delivery
 
-- Android **1.0.0 / versionCode 27** is published:
-  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-27/Nylo-test.apk).
-  The public APK and published checksum were downloaded and match the audited binary.
-- iOS **1.0.0 (27)** was built, uploaded and processed **VALID**.
-  Assigned to the existing internal **Nylo Device QA** group. Fresh group/build
-  reads confirm the exact build and **IN_BETA_TESTING**; English test notes
-  were saved and independently read back.
-  Actual TestFlight installation is unverified.
+- iOS **1.0.0 (29)** built and uploaded successfully. Apple processed it **VALID**.
+  Assigned only this new build to the existing internal **Nylo Device QA** group.
+  Independent group/build reads confirm the exact build and **IN_BETA_TESTING**;
+  English test notes were independently read back. Prior group builds, including
+  27, remain available; all-build access remains false. Installation is unverified.
+- Android **1.0.0 / versionCode 29** is published:
+  [download APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-29/Nylo-test.apk).
+  The unauthenticated public APK and published checksum were downloaded and match
+  the audited binary. Existing releases 27/28 were not overwritten. No Play upload.
 
-## What changed
+## Capabilities and repair
 
-Pinned AI SDK Core/provider packages run directly on the device using explicit
-provider objects, the saved connection/key and Expo fetch. There is no additional
-backend or implicit Vercel gateway. Nylo retains protocol/model choice, attachment
-consent, memory approval and background-response policy.
+Pinned AI SDK Core/provider packages execute on the device using the saved
+connection, key, protocol and model. There is no additional backend or implicit
+Vercel gateway. Existing attachment consent, memory approval, report opt-in,
+storage and background-response policies are preserved.
 
-- Configurable image generation and approved edits, persisted images, save/share.
-- Web-search source links when the selected API supports the configured tool.
-- Local response text/PDF exports.
-- Explicit capability settings and verification after successful use; account
-  access is not inferred from a model name. Generated pixels are not resent in
-  ordinary follow-up messages.
+- Ordinary chats and agents can generate images and edit approved images.
+  Results persist in blob storage, survive restart and have save/share controls.
+- The model-callable `create_document` tool creates real local **PDF** and **TXT**
+  attachments on mobile. File cards show filename/type/size and save/share controls.
+  PDFs support headings, lists and simple tables; content is escaped and uses no
+  external assets/scripts. Manual response exports remain available.
+- Web search produces source links when supported by the selected API and enabled
+  capability. No account capability is inferred from a model name.
+- The existing five-step loop is bounded to two images and two documents per user
+  message. Document title/content limits are validated. Generated pixels are not
+  resent in ordinary follow-up messages. Automatic retries remain disabled.
 
-The tool loop is bounded, automatic retries are disabled, malformed image
-arguments are rejected before the image API, and requests stay on the selected
-connection. Native edits use Expo files for multipart data. Native writes are
-awaited before uploading, reading or sharing; temporary output is cleaned up.
+The reported edit failure exposed an upload boundary missed by the original
+synthetic fetch: Expo rejects React Native URI-only multipart records. Native
+edits now append actual Expo Files. A regression reproduces the original
+rejection using the installed Expo encoder, then sends corrected bytes to a
+local HTTP server for multipart parsing. The native SDK diagnostic checks the
+real encoder too. Unknown failures no longer guess that quota or access caused
+them; actual HTTP failures retain their status-specific messages.
+
+Visual PDF review also caught iOS ignoring CSS page margins. Generated PDFs and
+manual exports now supply native 36-point margins. The final iOS PDF was rendered
+and inspected: one-page A4, readable and unclipped, minimum text Y **36.22 pt**
+(previous candidate: 0.22 pt). Android's actual A4 output was also rendered and
+inspected. PDF/TXT samples are extracted only from the known synthetic CI chat;
+no raw database, credentials or user conversation is published.
+
+Other document/archive/audio/video creation formats are not enabled by this
+change. Feature access still depends on the configured API/model/account.
 
 ## Verification
 
-| Check                                      | Actual result                                                                              |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| Source CI `43114718126`                    | 105 tests, typecheck, formatting, security, fonts/assets and Expo Doctor pass              |
-| Both-platform Hermes exports               | Pass                                                                                       |
-| iOS simulator build `43114728155`          | Pass, source 199e62f                                                                       |
-| Signed iOS build/upload `43114738391`      | Pass, 1.0.0 (27); actual signature/certificate/profile/source audits pass                  |
-| iOS privacy                                | 12 manifests, required SDK declarations present, no microphone/tracking, exempt encryption |
-| iOS SDK `43118369361`                      | Pass on unchanged native/JS source; all 3 captures inspected                               |
-| iOS large/maximum-text smoke `43118374422` | Both pass; all 30 captures inspected                                                       |
-| iOS compact smoke `43120342832`            | Pass; all 15 captures inspected                                                            |
-| Android signed build `43114732905`         | Pass, versionCode 27; APK/AAB signatures, source, permissions and downloaded hash verified |
-| Android SDK `43117443285`                  | Both navigation modes pass; all 6 captures inspected                                       |
-| Android smoke `43117447966`                | Both modes pass; all 30 captures inspected                                                 |
-| Android gallery `43113384909`              | Earlier build 26 UI baseline: both modes pass; all 28 captures inspected                   |
+| Check                                 | Actual result                                                                                             |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Source CI `43161649821`               | 114 tests, typecheck, formatting, security, fonts/assets and Expo Doctor pass                             |
+| Both-platform Hermes exports          | Pass                                                                                                      |
+| iOS simulator `43161673458`           | Pass, exact source ca48da2                                                                                |
+| Signed iOS build/upload `43161680755` | Pass, 1.0.0 (29); actual identity/signature/certificate/profile audits pass                               |
+| iOS privacy                           | 12 manifests, required SDK declarations, no microphone/tracking, exempt encryption                        |
+| iOS SDK `43163614819`                 | Pass, unchanged built native/JS bundle; all 5 scenario captures plus launch inspected                     |
+| Android signed build `43161676923`    | Pass, versionCode 29; actual source/ZIP/bundle/assets/signature/permission/hash checks pass               |
+| Android SDK `43163084265`             | Both modes pass first attempt; all 10 captures inspected                                                  |
+| Actual native PDF/TXT                 | Both platforms: created, persisted, cold-reopened and safely extracted; PDF text/render and TXT inspected |
+| iOS normal smoke `43159852937`        | Source 476286c UI baseline: pass, all 15 scenario captures plus launch inspected                          |
+| Android normal smoke `43159430534`    | Source 476286c UI baseline: both modes pass, all 30 functional captures inspected                         |
 
-The offline native SDK scenario exercises actual Hermes streaming and tool
-execution, generation/edit code with synthetic fetch, local text/PDF files,
-rendered image persistence and cold reopen. It sends no provider request. One
-computer integration case also generated a visually inspected image through the
-actual SDK and selected NyloHQ connection; SDK web search returned source links.
-These are distinct from a live mobile provider or physical-device test.
+Candidate 29 changes only native PDF margin options from the fully tested UI
+baseline. Its final SDK runs use exact candidate-29 binaries and exercise the
+changed output. No full native rebuild was used for test-only changes.
 
-The Android gestural SDK job passed its single retry after the first screenshot
-showed a Pixel Launcher ANR. The first compact iOS attempt missed its initial
-accessibility state; the targeted test adds a bounded wait for the same state.
-Maximum-text navigation scrolls an offscreen row into the tappable viewport;
-exact draft/memory restoration assertions remain. No native rebuild was used for
-test-only corrections. Builds 25/26 were superseded and not assigned to QA.
+The offline SDK scenario exercises actual Hermes streaming/tool execution,
+image generation/edit code with synthetic fetch and real multipart encoding,
+local document/export writers, file cards, persisted blobs and cold reopen.
+It makes no provider request. Earlier computer SDK integration generated a
+visually inspected image through the selected connection and returned web-search
+sources; this is distinct from live mobile provider execution.
 
-The temporary feature-branch signing-environment policy was removed after delivery;
-both pre-existing policies were independently verified unchanged. Store build 15,
-external build 17, unrelated testers/roles/signing, and the separate App Review
-monitor were not changed by this task. The delivery continuation is disabled.
+The earlier build-28 gestural SDK lost emulator transport before app launch; its
+single failed-job retry passed. A Pixel Launcher ANR diagnostic was retained with
+the passed Android smoke evidence. Candidate-29 SDK runs passed without retry.
+An intermediate iOS margin diagnostic was cancelled by the shared workflow
+concurrency group when the exact-build run was dispatched; no pass/fail claim is
+made from it. Final iOS evidence comes from `43163614819` with JS refresh disabled.
+iOS 28 remains unassigned because its actual PDF review found missing margins.
 
-## Binary hashes
+## Binary hashes and boundaries
 
-- APK SHA-256: `078f0ee0851366fe8e012ac42c6cdcb812264f4408f4e924e8acc43ea1cd730e`.
-- IPA SHA-256: `11267ea94df7deb0e37b7f14331662875de2b41d186b3f168539d3a087068d67`.
+- APK SHA-256: `6b9c2b9b1402e8a9c6fa6c3988a396a06d4c96cf144d511bf5c413aaa440f55f`.
+- IPA SHA-256: `74b96bdae47dfb93d8680902025dd90d35aa2c8c4213d690a9e7bbf114a5e18e`.
 
-Provider feature access depends on the configured API/model/account. Physical
-installation, VoiceOver and live mobile provider use are unverified. Production
-npm audit retains three moderate Expo transitive findings, with no high/critical
-findings. Historical development receipts are retained in
-[the development record](ai-sdk-mobile-capabilities-development.md); private Apple
-receipts, logs and credentials are excluded from source/public releases.
+Only temporary feature signing policy 66408002 was removed after delivery;
+independent readback confirmed the other policies unchanged. Store 15, external
+17, unrelated roles/testers/signing and the separate four-hour App Review monitor
+were not changed. This delivery continuation is disabled with no next run.
 
-## Follow-up: image edits and document creation (not released yet)
-
-The reported live edit failure exposed an upload boundary missed by the original
-synthetic fetch: Expo fetch rejects RN URI-only multipart parts. Native edits now
-append the actual Expo File. A regression executes the installed Expo encoder,
-reproduces the old rejection, and sends the corrected bytes to a temporary local
-HTTP server for multipart parsing. The native offline diagnostic now runs that
-encoder too, checking the image bytes, filename and MIME header without a
-provider request. The generic error no longer assumes access or quota failure.
-
-The owner also requested a model-callable PDF/text creation tool. create_document
-creates a real local file, persists it in existing blob storage, displays a file
-card and supports save/share. PDF formatting supports headings, lists and simple
-tables, with escaped HTML and no external assets. Generation is bounded to two
-documents per turn with validated content/filename limits. Other document formats
-are not enabled by this change. Manual answer exports remain available.
-
-The expanded SDK scenario creates image/PDF/TXT results, cold-reopens them, and
-exports only its known synthetic sample PDF/text from the disposable CI database
-for rendering/content inspection. No raw database is published. These follow-up
-changes are pending native verification and a new beta; build 27 is unchanged.
-
-Follow-up candidate `476286c`: source CI `43157348781` passes all 114 tests,
-typecheck, formatting, security, fonts/assets and Expo Doctor; both Hermes exports
-pass. Native iOS `43157368418`, signed iOS `43157378858` (28), and signed Android
-`43157372254` (versionCode 28) succeed. Actual signing/profile/privacy/source
-receipts were inspected; the downloaded APK matches its audited SHA-256.
-
-Android SDK `43159374329` passes in both navigation modes. All ten SDK
-captures and all 30 normal-smoke captures from `43159430534` were inspected.
-One additional Pixel Launcher ANR diagnostic was retained. The first gestural
-SDK attempt lost its emulator transport at initial launch, before the SDK check;
-one failed-job retry passed. The actual Android one-page A4 PDF was rendered and
-inspected for readable, unclipped heading/table/list content; extracted PDF text
-and TXT content match the sample. Native and tested source are exactly 476286c.
-
-Android **1.0.0 / versionCode 28** is now published at
-[the new feature APK](https://github.com/NihalKA/nylo/releases/download/android-ai-sdk-beta-1.0.0-28/Nylo-test.apk).
-The unauthenticated public APK download and published checksum match the audited
-SHA-256 `5d1bbb1daa77cc361edf18db46d7deda52174cd8fda5a78bab29b848147e0a78`.
-Build 27's release is unchanged.
-
-iOS SDK `43159849456` passes on the unchanged native/JS source. All five scenario
-captures and the native launch capture were inspected, including image/PDF/TXT
-cards and cold reopen. Its actual PDF is one-page A4 and contains the expected
-text. Visual review found that iOS ignored CSS page margins, leaving content too
-close to the page edges. Expo's native print options are now given explicit
-36-point margins for generated PDFs and manual PDF exports. This focused fix
-requires a new candidate and actual PDF rendering verification. iOS large smoke
-`43159852937` is still pending. iOS 28 is VALID and uploaded but remains
-unassigned; iOS 27 stays available to QA. No live mobile provider or physical
-installation claim is made from these synthetic native tests.
+Live mobile provider use, physical installation, VoiceOver and OS save/share
+interaction are unverified. Production npm audit retains three moderate Expo
+transitive findings, with no high/critical findings. Earlier receipts are kept in
+[the development record](ai-sdk-mobile-capabilities-development.md). Private Apple
+receipts, logs, databases and credentials are excluded from source/public releases.
