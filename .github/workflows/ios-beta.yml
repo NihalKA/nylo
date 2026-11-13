@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   beta:
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/release/vivek-ui-2-1-testflight' || github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
     # Standard Intel runner avoids the macOS arm64 capacity shortage.
     runs-on: macos-26-intel
     environment: apple-release
