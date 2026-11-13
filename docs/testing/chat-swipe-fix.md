@@ -49,3 +49,30 @@ regression tests cover the specific lifecycle and recoil faults directly.
 Physical-device gesture testing and Android runtime UI remain unverified.
 Replacement distributable builds must include this fix before claiming it is
 available in TestFlight or the Android APK; prior iOS 39 / Android 38 do not.
+
+## Patched native builds — 13 November 2026
+
+[Signed iOS build 40](https://github.com/NihalKA/nylo/actions/runs/43366858912)
+succeeded on source `9a670b272123fe8753b115ad055a53c223ed7504`. The downloaded
+original diagnostics archive digest and ZIP CRC match GitHub metadata. Actual
+exported-IPA receipts verify the strict signature, original certificate/team/App
+Store profile, source marker, nondebug configuration, privacy declarations and
+12 original fonts. IPA SHA256:
+`9f6b97e2b9878f1f293b5dee1d46580ff1eae4b0abe5c91a709cc279f4ba4cd2`.
+
+Apple independently reports 1.0.0 (40) VALID and IN_BETA_TESTING in the existing
+internal Nylo Device QA group. English swipe-fix notes were saved and read back;
+all previous selected builds and existing group attributes remain. Installation
+on the owner's phone remains unobserved. External groups were not changed.
+
+[Android signed build 40](https://github.com/NihalKA/nylo/actions/runs/43366855414)
+also succeeded on the same source. The original archive digest and ZIP CRC,
+actual APK source marker and bundle hash, all 57 original assets/fonts,
+APK/AAB hashes, and compiled original-certificate/signature/permission receipts
+were independently checked. The verified APK is 67,776,670 bytes,
+SHA256 `763a6b579aabb524cf37c756207e885c97c1efa47773810a48c9b71bbc81ed1b`; it was copied to a local download outside
+the task checkout. No Play upload or public APK release was created.
+
+The task's temporary exact-branch Apple policy and both workflow allowances were
+removed after CI completion. Later documentation/CI cleanup commits retain the
+same application/native inputs as the distributed candidates.
