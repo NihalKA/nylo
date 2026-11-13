@@ -13,17 +13,17 @@ concurrency:
   cancel-in-progress: false
 jobs:
   beta:
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/release/vivek-ui-2-1-testflight' || github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
     # Standard Intel runner avoids the macOS arm64 capacity shortage.
     runs-on: macos-26-intel
     environment: apple-release
     timeout-minutes: 60
     env:
-      CI: "1"
+      CI: '1'
       NYLO_BUILD_STAMP: ${{ inputs.build_stamp }}
-      EXPO_NO_TELEMETRY: "1"
-      FASTLANE_SKIP_UPDATE_CHECK: "1"
-      FASTLANE_HIDE_CHANGELOG: "1"
+      EXPO_NO_TELEMETRY: '1'
+      FASTLANE_SKIP_UPDATE_CHECK: '1'
+      FASTLANE_HIDE_CHANGELOG: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -39,7 +39,7 @@ jobs:
           node-version-file: .nvmrc
       - uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199
         with:
-          ruby-version: "3.3.13"
+          ruby-version: '3.3.13'
       - run: npm ci --no-audit --no-fund
       - run: npm run check
       - run: python3 scripts/check-design-fonts.py
