@@ -2,7 +2,10 @@ import React, { useMemo } from "react";
 import { Alert, Linking, ScrollView, View } from "react-native";
 import { Token, Tokens } from "marked";
 import { Text, fonts } from "./typography";
-import { theme } from "./ui";
+import { Icon, theme } from "./ui";
+import { FadeIn } from "./motion";
+import { rgba } from "./organic";
+import { Callout, CodeBlock, DataTable } from "./rich-blocks";
 import {
   citationLabel,
   messageTokens,
@@ -13,9 +16,12 @@ import {
 export function MessageContent({
   text,
   sources = [],
+  animate,
 }: {
   text: string;
   sources?: Source[];
+  /** The reply is arriving now: new blocks glide in as they appear. */
+  animate?: boolean;
 }) {
   const tokens = useMemo(() => messageTokens(text), [text]);
   const inline = (tokens: Token[] | undefined): React.ReactNode =>
@@ -88,33 +94,46 @@ export function MessageContent({
       if (t.type === "space") return null;
       if (t.type === "code")
         return (
-          <ScrollView
-            key={i}
-            horizontal
-            style={{ backgroundColor: theme.surface, borderRadius: 12 }}
-          >
-            <Text
-              selectable
-              style={{
-                fontFamily: fonts.mono,
-                fontSize: 12,
-                lineHeight: 20,
-                padding: 14,
-                color: theme.ink,
-              }}
-            >
-              {t.text}
-            </Text>
-          </ScrollView>
+          <CodeBlock key={i} code={t.text} lang={(t as Tokens.Code).lang} />
         );
       if (t.type === "list")
         return (
           <View key={i} style={{ gap: 8 }}>
             {(t as Tokens.List).items.map((item, j) => (
-              <View key={j} style={{ flexDirection: "row", gap: 8 }}>
-                <Text style={{ color: theme.sub, lineHeight: 22 }}>
-                  {t.ordered ? `${Number(t.start || 1) + j}.` : "•"}
-                </Text>
+              <View key={j} style={{ flexDirection: "row", gap: 10 }}>
+                {item.task ? (
+                  <View style={{ paddingTop: 3 }}>
+                    <Icon
+                      name={
+                        item.checked ? "checkmark-circle" : "ellipse-outline"
+                      }
+                      size={16}
+                      color={item.checked ? theme.accentText : theme.quiet}
+                    />
+                  </View>
+                ) : t.ordered ? (
+                  <Text
+                    style={{
+                      minWidth: 18,
+                      color: theme.accentText,
+                      fontWeight: "600",
+                      lineHeight: 22,
+                      fontVariant: ["tabular-nums"],
+                    }}
+                  >
+                    {`${Number(t.start || 1) + j}.`}
+                  </Text>
+                ) : (
+                  <View
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: 3,
+                      marginTop: 8,
+                      backgroundColor: rgba(theme.primary, 0.7),
+                    }}
+                  />
+                )}
                 <View style={{ flex: 1, gap: 8 }}>
                   {blocks(item.tokens || [])}
                 </View>
@@ -124,56 +143,30 @@ export function MessageContent({
         );
       if (t.type === "blockquote")
         return (
-          <View
-            key={i}
-            style={{
-              borderLeftWidth: 3,
-              borderLeftColor: theme.lineStrong,
-              paddingLeft: 12,
-              gap: 8,
-            }}
-          >
+          <Callout key={i} text={(t as Tokens.Blockquote).text}>
             {blocks(t.tokens || [])}
-          </View>
+          </Callout>
         );
       if (t.type === "hr")
         return (
-          <View key={i} style={{ height: 1, backgroundColor: theme.line }} />
+          <View
+            key={i}
+            style={{
+              height: 1,
+              marginVertical: 4,
+              backgroundImage: `linear-gradient(90deg, ${rgba(theme.primary, 0)} 0%, ${rgba(theme.primary, 0.35)} 50%, ${rgba(theme.primary, 0)} 100%)`,
+            }}
+          />
         );
-      if (t.type === "table") {
-        const table = t as Tokens.Table;
+      if (t.type === "table")
         return (
-          <ScrollView horizontal key={i}>
-            <View>
-              {[table.header, ...table.rows].map((row, r) => (
-                <View key={r} style={{ flexDirection: "row" }}>
-                  {row.map((cell, c) => (
-                    <View
-                      key={c}
-                      style={{
-                        width: 180,
-                        padding: 10,
-                        borderWidth: 0.5,
-                        borderColor: theme.line,
-                      }}
-                    >
-                      <Text
-                        selectable
-                        style={{
-                          color: theme.ink,
-                          fontWeight: r === 0 ? "600" : "400",
-                        }}
-                      >
-                        {inline(cell.tokens)}
-                      </Text>
-                    </View>
-                  ))}
-                </View>
-              ))}
-            </View>
-          </ScrollView>
+          <DataTable
+            key={i}
+            table={t as Tokens.Table}
+            inline={inline}
+            animate={animate}
+          />
         );
-      }
       const heading = t.type === "heading";
       return (
         <Text
@@ -182,12 +175,18 @@ export function MessageContent({
           style={{
             fontSize: heading
               ? (t as Tokens.Heading).depth <= 2
-                ? 20
-                : 17
+                ? 19
+                : 16
               : 14,
-            lineHeight: heading ? 27 : 22,
+            lineHeight: heading ? 26 : 22,
             color: heading ? theme.ink : theme.sub,
-            fontWeight: heading ? "600" : "400",
+            fontWeight: heading
+              ? (t as Tokens.Heading).depth <= 2
+                ? "700"
+                : "600"
+              : "400",
+            letterSpacing: heading ? -0.3 : 0,
+            marginTop: heading ? 4 : 0,
           }}
         >
           {"tokens" in t
@@ -198,5 +197,16 @@ export function MessageContent({
         </Text>
       );
     });
-  return <View style={{ gap: 14 }}>{blocks(tokens)}</View>;
+  const top = blocks(tokens) as React.ReactNode[];
+  return (
+    <View style={{ gap: 14 }}>
+      {top.map((node, i) =>
+        node ? (
+          <FadeIn key={i} enabled={!!animate} distance={6} duration={300}>
+            {node}
+          </FadeIn>
+        ) : null,
+      )}
+    </View>
+  );
 }
