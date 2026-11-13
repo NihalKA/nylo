@@ -39,6 +39,10 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+# Gradle output from local Expo modules (paths exceed Windows' limit)
+modules/*/android/build/
+modules/*/android/.gradle/
+modules/*/android/.cxx/
 
 # Credentials, device data, generated evidence
 .env

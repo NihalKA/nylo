@@ -1,18 +1,19 @@
-import { Text } from "../../src/typography";
-import { fonts } from "../../src/typography";
+import { Text } from "../src/typography";
+import { fonts } from "../src/typography";
 import Constants from "expo-constants";
 import React, { useEffect, useRef, useState } from "react";
 import { Linking, Pressable, View } from "react-native";
-import { AppearancePreference } from "../../src/theme";
-import { hapticsEnabled, setHapticsEnabled } from "../../src/haptics";
-import { setSoundsEnabled, soundsEnabled } from "../../src/sounds";
+import { AppearancePreference } from "../src/theme";
+import { hapticsEnabled, setHapticsEnabled } from "../src/haptics";
+import { setSoundsEnabled, soundsEnabled } from "../src/sounds";
 import { router } from "expo-router";
-import { emptyData } from "../../src/types";
-import { useStore } from "../../src/store";
-import { exportBackup, pickBackup } from "../../src/backup";
+import { emptyData } from "../src/types";
+import { useStore } from "../src/store";
+import { exportBackup, pickBackup } from "../src/backup";
 import {
   FormScroll,
   Icon,
+  Header,
   Page,
   Segmented,
   Switch,
@@ -26,8 +27,8 @@ import {
   BrandMark,
   BrandWordmark,
   BrandLine,
-} from "../../src/ui";
-import { DesignIconName } from "../../src/design-icons";
+} from "../src/ui";
+import { DesignIconName } from "../src/design-icons";
 
 function SettingsRow({
   title,
@@ -236,24 +237,8 @@ export default function Settings() {
   };
   return (
     <Page aura>
+      <Header title="Settings" titleStyle={{ fontSize: 20 }} />
       <FormScroll contentStyle={{ gap: 24, paddingTop: 8 }}>
-        <Text
-          accessibilityRole="header"
-          maxFontSizeMultiplier={1.6}
-          style={[
-            s.title,
-            {
-              fontFamily: fonts.nimbus,
-              fontSize: 16,
-              lineHeight: 24,
-              letterSpacing: -0.4,
-              paddingTop: 0,
-              paddingBottom: 0,
-            },
-          ]}
-        >
-          Settings
-        </Text>
         <View style={{ gap: 8 }}>
           <Text
             style={[
