@@ -13,6 +13,7 @@ import { exportBackup, pickBackup } from "../src/backup";
 import {
   FormScroll,
   Icon,
+  Header,
   Page,
   Segmented,
   Switch,
@@ -236,24 +237,8 @@ export default function Settings() {
   };
   return (
     <Page aura>
+      <Header title="Settings" titleStyle={{ fontSize: 20 }} />
       <FormScroll contentStyle={{ gap: 24, paddingTop: 8 }}>
-        <Text
-          accessibilityRole="header"
-          maxFontSizeMultiplier={1.6}
-          style={[
-            s.title,
-            {
-              fontFamily: fonts.nimbus,
-              fontSize: 16,
-              lineHeight: 24,
-              letterSpacing: -0.4,
-              paddingTop: 0,
-              paddingBottom: 0,
-            },
-          ]}
-        >
-          Settings
-        </Text>
         <View style={{ gap: 8 }}>
           <Text
             style={[

@@ -10,6 +10,7 @@ import {
   Chip,
   FabButton,
   FadeIn,
+  Header,
   Icon,
   IconBubble,
   Page,
@@ -39,16 +40,11 @@ export default function Agents() {
   const create = () => router.push("/agent/edit");
   return (
     <Page aura>
-      <View style={[s.between, { paddingTop: 12, paddingBottom: 18 }]}>
-        <Text
-          accessibilityRole="header"
-          maxFontSizeMultiplier={1.6}
-          style={s.title}
-        >
-          Agents
-        </Text>
-        <FabButton name="add" label="Create agent" onPress={create} />
-      </View>
+      <Header
+        title="Your agents"
+        titleStyle={{ fontSize: 20 }}
+        right={<FabButton name="add" label="Create agent" onPress={create} />}
+      />
       <FlatList
         data={agents}
         keyExtractor={(a) => a.id}

@@ -19,14 +19,13 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { DesignIcon, DesignIconName } from "./design-icons";
-import { router, useSegments } from "expo-router";
+import { router } from "expo-router";
 import { Agent, Conversation } from "./types";
 import { plainTextPreview } from "./domain";
 import { Palette, onSchemeApplied, theme, useTheme } from "./theme";
-import { Burst, Tappable, useReducedMotion } from "./motion";
+import { Burst, Tappable, glide, smooth, useReducedMotion } from "./motion";
 import { Aura, ThinkingOrb, accentGradient, meshAvatar, rgba } from "./organic";
 import { HapticFeel, haptic, play } from "./haptics";
-import { BrandLine } from "./brand";
 
 export { haptic } from "./haptics";
 
@@ -50,6 +49,8 @@ export {
   PulseRing,
   Breathe,
   Burst,
+  smooth,
+  glide,
 } from "./motion";
 export {
   BrandMark,
@@ -189,16 +190,8 @@ export function Page({
   scrollY?: Animated.Value;
 }) {
   useTheme();
-  const segments = useSegments();
   return (
-    <SafeAreaView
-      edges={
-        segments[0] === "(tabs)"
-          ? ["top", "left", "right"]
-          : ["top", "left", "right", "bottom"]
-      }
-      style={s.page}
-    >
+    <SafeAreaView edges={["top", "left", "right", "bottom"]} style={s.page}>
       {aura ? <Aura scrollY={scrollY} /> : null}
       <View style={s.shell}>{children}</View>
     </SafeAreaView>
@@ -301,11 +294,11 @@ export function Switch({
   useEffect(() => {
     if (reduced) position.setValue(value ? 1 : 0);
     else
-      Animated.spring(position, {
+      Animated.timing(position, {
         toValue: value ? 1 : 0,
+        duration: glide.base,
+        easing: smooth,
         useNativeDriver: true,
-        speed: 24,
-        bounciness: 6,
       }).start();
   }, [value, reduced]);
   return (
@@ -492,94 +485,6 @@ export function Press({
   );
 }
 
-export function MainNavigation({
-  active,
-}: {
-  active: "chats" | "agents" | "settings";
-}) {
-  const destinations = [
-    {
-      key: "chats",
-      label: "Chats",
-      icon: "chatbox-outline",
-      selectedIcon: "chatbox",
-      path: "/",
-    },
-    {
-      key: "agents",
-      label: "Agents",
-      icon: "people-outline",
-      selectedIcon: "people",
-      path: "/agents",
-    },
-    {
-      key: "settings",
-      label: "Settings",
-      icon: "settings-outline",
-      selectedIcon: "settings",
-      path: "/settings",
-    },
-  ] as const;
-  return (
-    <View
-      style={{
-        flexDirection: "row",
-        marginHorizontal: -20,
-        backgroundColor: theme.bg,
-        paddingHorizontal: 24,
-      }}
-    >
-      <BrandLine
-        fade
-        height={1}
-        style={{ position: "absolute", top: 0, left: "4%", right: "4%" }}
-      />
-      {destinations.map((item) => {
-        const selected = active === item.key;
-        const color = selected ? theme.accentText : theme.quiet;
-        return (
-          <Pressable
-            key={item.key}
-            testID={`detail-tab-${item.key}`}
-            accessibilityRole="tab"
-            accessibilityLabel={item.label}
-            accessibilityState={{ selected }}
-            onPress={() => {
-              if (!selected) haptic.select();
-              router.navigate(item.path);
-            }}
-            style={{
-              flex: 1,
-              minHeight: 49,
-              paddingVertical: 4,
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 2,
-            }}
-          >
-            <TabPill
-              focused={selected}
-              name={selected ? item.selectedIcon : item.icon}
-              color={color}
-            />
-            <Text
-              maxFontSizeMultiplier={1.6}
-              style={{
-                fontSize: 11,
-                fontWeight: "600",
-                letterSpacing: 0.33,
-                color,
-              }}
-            >
-              {item.label}
-            </Text>
-          </Pressable>
-        );
-      })}
-    </View>
-  );
-}
-
 /** Tab icon with a soft accent pill that springs in when selected. */
 export function TabPill({
   name,
@@ -596,11 +501,11 @@ export function TabPill({
   useEffect(() => {
     if (reduced) on.setValue(focused ? 1 : 0);
     else
-      Animated.spring(on, {
+      Animated.timing(on, {
         toValue: focused ? 1 : 0,
+        duration: glide.base,
+        easing: smooth,
         useNativeDriver: true,
-        speed: 20,
-        bounciness: 8,
       }).start();
   }, [focused, reduced]);
   const design: DesignIconName | undefined = name.startsWith("chatbox")
@@ -760,6 +665,7 @@ export function Field({
   labelStyle,
   inputHint,
   gap = 7,
+  tint,
   ...props
 }: TextInputProps & {
   label: string;
@@ -767,6 +673,8 @@ export function Field({
   labelStyle?: TextStyle;
   inputHint?: string;
   gap?: number;
+  /** Glow in this colour while typing (e.g. an agent's own colour). */
+  tint?: string;
 }) {
   const [focused, setFocused] = useState(false);
   return (
@@ -798,7 +706,12 @@ export function Field({
               ? { minHeight: 100, textAlignVertical: "top" }
               : null,
             props.style,
-            focused ? { borderColor: theme.primary } : null,
+            focused ? { borderColor: tint || theme.primary } : null,
+            focused && tint
+              ? {
+                  boxShadow: `0px 0px 0px 4px ${rgba(tint, 0.16)}, 0px 8px 22px -8px ${rgba(tint, 0.45)}`,
+                }
+              : null,
           ]}
         />
         {inputHint ? (
@@ -1135,11 +1048,11 @@ function AuraSwatch({
   useEffect(() => {
     if (reduced) on.setValue(selected ? 1 : 0);
     else
-      Animated.spring(on, {
+      Animated.timing(on, {
         toValue: selected ? 1 : 0,
+        duration: glide.base,
+        easing: smooth,
         useNativeDriver: true,
-        speed: 18,
-        bounciness: 10,
       }).start();
   }, [selected, reduced]);
   return (
@@ -1380,11 +1293,11 @@ export function Segmented<T extends string>({
   useEffect(() => {
     if (reduced) position.setValue(index);
     else
-      Animated.spring(position, {
+      Animated.timing(position, {
         toValue: index,
+        duration: glide.base,
+        easing: smooth,
         useNativeDriver: true,
-        speed: 18,
-        bounciness: 6,
       }).start();
   }, [index, reduced]);
   const segment = width ? (width - 8) / options.length : 0;

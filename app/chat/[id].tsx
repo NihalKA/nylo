@@ -28,7 +28,7 @@ import {
   Keyboard,
   Image,
   useWindowDimensions,
-  KeyboardAvoidingView,
+  Animated,
   Modal,
   Platform,
   Pressable,
@@ -40,6 +40,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Clipboard from "expo-clipboard";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useStore } from "../../src/store";
+import { useKeyboardLift } from "../../src/keyboard-lift";
 import {
   contextMessages,
   isDeviceCheckConversation,
@@ -82,10 +83,47 @@ export default function ChatRoute() {
   return <Chat key={params.id} />;
 }
 
-function Chat() {
+/** What the agent is doing, for the home screen's living avatar. */
+export type ChatActivity = "idle" | "listening" | "thinking" | "speaking";
+
+/** What the home screen supplies when it hosts a chat inline. */
+export type ChatHomeSlots = {
+  /** Replaces the back-button header; the home screen owns its own top bar. */
+  header?: React.ReactNode;
+  /** Replaces the empty-conversation introduction. */
+  renderIntro: (api: {
+    /** Seed an empty composer with a starter and focus it. */
+    startDraft: (prefix: string) => void;
+    connected: boolean;
+  }) => React.ReactNode;
+  /** The first message was accepted. */
+  onAccepted?: () => void;
+  /** Typing, waiting for or receiving a reply. */
+  onActivity?: (activity: ChatActivity) => void;
+};
+
+/** Embedded chats render inside the host's page instead of their own. */
+function EmbeddedShell({
+  children,
+}: {
+  children: React.ReactNode;
+  aura?: boolean;
+}) {
+  return <View style={{ flex: 1 }}>{children}</View>;
+}
+
+export function Chat({
+  chatId,
+  home,
+}: {
+  chatId?: string;
+  home?: ChatHomeSlots;
+} = {}) {
   const { scheme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { fontScale } = useWindowDimensions();
+  const liftArea = useRef<React.ComponentRef<typeof View>>(null);
+  const keyboardLift = useKeyboardLift(liftArea);
+  const { fontScale, height: windowHeight } = useWindowDimensions();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   useEffect(() => {
     const show = Keyboard.addListener("keyboardDidShow", () =>
@@ -99,10 +137,12 @@ function Chat() {
       hide.remove();
     };
   }, []);
-  const { id, prompt } = useLocalSearchParams<{
+  const params = useLocalSearchParams<{
     id: string;
     prompt?: string;
   }>();
+  const id = chatId ?? params.id;
+  const prompt = home ? undefined : params.prompt;
   const {
     data,
     update,
@@ -182,6 +222,23 @@ function Chat() {
   const [composerFocused, setComposerFocused] = useState(false);
   const [sentCount, setSentCount] = useState(0);
   const canSend = !!(text.trim() || attachments.length) && !runningId;
+  const streamingText = !!(
+    last?.role === "assistant" &&
+    last.status === "streaming" &&
+    last.text
+  );
+  const activity: ChatActivity = isRunning
+    ? streamingText
+      ? "speaking"
+      : "thinking"
+    : composerFocused && text.trim()
+      ? "listening"
+      : "idle";
+  const reportActivity = home?.onActivity;
+  useEffect(() => {
+    reportActivity?.(activity);
+  }, [activity]);
+  useEffect(() => () => reportActivity?.("idle"), []);
   useEffect(() => {
     setText(prompt || conversation?.draft || "");
     setAttachments(conversation?.draftAttachments || []);
@@ -314,6 +371,7 @@ function Chat() {
       await send(id, value, false, () => {
         setText((current) => (current === value ? "" : current));
         setAttachments((current) => (current === files ? [] : current));
+        home?.onAccepted?.();
       });
     } catch (e) {
       setError((e as Error).message);
@@ -329,6 +387,7 @@ function Chat() {
       setError((e as Error).message);
     }
   };
+  const Shell = home ? EmbeddedShell : Page;
   const queueAttachment = (source: AttachmentSource) => {
     dispatchAttachment({
       type: "choose",
@@ -338,40 +397,45 @@ function Chat() {
     });
   };
   return (
-    <Page aura={!conversation.messages.length}>
+    <Shell aura={!conversation.messages.length}>
       <BlurTargetView ref={blurTarget} style={{ flex: 1 }}>
-        <Header
-          centerTitle={!agent && !conversation.messages.length}
-          dismissKeyboard={keyboardVisible}
-          onDismissKeyboard={() => {
-            composer.current?.blur();
-            Keyboard.dismiss();
-          }}
-          titleStyle={{
-            fontSize: !conversation.messages.length ? 22 : 18,
-            fontWeight: conversation.messages.length || hasPdf ? "700" : "600",
-            letterSpacing:
-              !conversation.messages.length && hasPdf ? -0.33 : -0.45,
-            color:
-              conversation.messages.length || hasPdf ? theme.text : theme.ink,
-          }}
-          title={
-            agent?.name ||
-            (conversation.messages.length ? conversation.title : "New chat")
-          }
-          right={
-            <IconButton
-              name="ellipsis-horizontal"
-              design="chatMore"
-              label="Conversation options"
-              onPress={() => {
-                setTitle(conversation.title);
-                setMenu(true);
-              }}
-            />
-          }
-        />
-        {agent && !keyboardVisible ? (
+        {home ? (
+          home.header
+        ) : (
+          <Header
+            centerTitle={!agent && !conversation.messages.length}
+            dismissKeyboard={keyboardVisible}
+            onDismissKeyboard={() => {
+              composer.current?.blur();
+              Keyboard.dismiss();
+            }}
+            titleStyle={{
+              fontSize: !conversation.messages.length ? 22 : 18,
+              fontWeight:
+                conversation.messages.length || hasPdf ? "700" : "600",
+              letterSpacing:
+                !conversation.messages.length && hasPdf ? -0.33 : -0.45,
+              color:
+                conversation.messages.length || hasPdf ? theme.text : theme.ink,
+            }}
+            title={
+              agent?.name ||
+              (conversation.messages.length ? conversation.title : "New chat")
+            }
+            right={
+              <IconButton
+                name="ellipsis-horizontal"
+                design="chatMore"
+                label="Conversation options"
+                onPress={() => {
+                  setTitle(conversation.title);
+                  setMenu(true);
+                }}
+              />
+            }
+          />
+        )}
+        {agent && !home && !keyboardVisible ? (
           <Press
             feel="tick"
             accessibilityRole="button"
@@ -402,16 +466,12 @@ function Chat() {
             <Icon name="chevron-forward" color={theme.sub} size={12} />
           </Press>
         ) : null}
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          keyboardVerticalOffset={insets.top}
-          behavior={
-            Platform.OS === "ios"
-              ? "padding"
-              : Platform.OS === "android"
-                ? "height"
-                : undefined
-          }
+        {/* Messages and composer rise with the keyboard, so what you type
+            always sits just above it (iOS and edge-to-edge Android). */}
+        <Animated.View
+          ref={liftArea}
+          collapsable={false}
+          style={{ flex: 1, paddingBottom: keyboardLift }}
         >
           <ScrollView
             ref={scroll}
@@ -451,7 +511,23 @@ function Chat() {
                 scroll.current?.scrollToEnd({ animated: false });
             }}
           >
-            {!conversation.messages.length ? (
+            {!conversation.messages.length && home ? (
+              <View
+                style={{
+                  display: keyboardVisible ? "none" : "flex",
+                  flexGrow: 1,
+                }}
+              >
+                {home.renderIntro({
+                  connected: !!connection,
+                  startDraft: (prefix) => {
+                    setText((current) => starterDraft(current, prefix));
+                    haptic.select();
+                    composer.current?.focus();
+                  },
+                })}
+              </View>
+            ) : !conversation.messages.length ? (
               <View
                 style={{
                   display: keyboardVisible ? "none" : "flex",
@@ -747,6 +823,7 @@ function Chat() {
                             <MessageContent
                               text={message.text}
                               sources={message.sources}
+                              animate={message.status === "streaming"}
                             />
                             {message.status === "streaming" ? (
                               <StreamCaret />
@@ -1158,13 +1235,25 @@ function Chat() {
                   alignItems: "flex-end",
                   gap: 10,
                   padding: 4,
+                  // While typing, the composer glows: the brand gradient for a
+                  // chat, the agent's own colour for an agent session.
                   boxShadow: composerFocused
-                    ? `0px 0px 0px 4px ${rgba(theme.primary, 0.14)}, 0px 8px 24px -8px ${rgba(theme.accent2, 0.35)}`
+                    ? agent
+                      ? `0px 0px 0px 4px ${rgba(agent.color, 0.18)}, 0px 8px 26px -6px ${rgba(agent.color, 0.5)}`
+                      : `0px 0px 0px 4px ${rgba(theme.primary, 0.14)}, 0px 8px 24px -8px ${rgba(theme.accent2, 0.35)}`
                     : theme.cardShadow,
                   borderRadius: 27,
                   borderWidth: 1,
-                  borderColor: composerFocused ? theme.primary : theme.fileLine,
+                  borderColor: composerFocused
+                    ? agent?.color || theme.primary
+                    : agent
+                      ? rgba(agent.color, 0.35)
+                      : theme.fileLine,
                   backgroundColor: theme.file,
+                  backgroundImage:
+                    agent && composerFocused
+                      ? `linear-gradient(120deg, ${rgba(agent.color, 0.1)} 0%, ${rgba(agent.color, 0)} 70%)`
+                      : undefined,
                 },
               ]}
             >
@@ -1191,16 +1280,22 @@ function Chat() {
                 placeholderTextColor={theme.quiet}
                 onFocus={() => setComposerFocused(true)}
                 onBlur={() => setComposerFocused(false)}
+                // Same height as the buttons beside it, with equal space above
+                // and below the line, so text and placeholder sit centred.
+                textAlignVertical="center"
                 style={{
                   flex: 1,
                   fontSize: 14,
                   lineHeight: 20,
                   color: theme.ink,
-                  minHeight: 36,
-                  maxHeight: 150,
+                  minHeight: 44,
+                  // Grows with what you write (font size never changes); past
+                  // ~40% of the screen it scrolls inside, still above the keys.
+                  maxHeight: Math.max(160, Math.round(windowHeight * 0.4)),
                   paddingHorizontal: 5,
-                  paddingTop: 6,
-                  paddingBottom: 6,
+                  paddingTop: 12,
+                  paddingBottom: 12,
+                  includeFontPadding: false,
                 }}
                 onKeyPress={(event) => {
                   if (
@@ -1311,7 +1406,7 @@ function Chat() {
               </Text>
             ) : null}
           </View>
-        </KeyboardAvoidingView>
+        </Animated.View>
       </BlurTargetView>
       <DocumentPreviewModal
         file={previewFile}
@@ -2005,6 +2100,6 @@ function Chat() {
           </View>
         </View>
       </Modal>
-    </Page>
+    </Shell>
   );
 }

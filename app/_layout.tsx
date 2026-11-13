@@ -2,6 +2,7 @@ import { Text } from "../src/typography";
 import React from "react";
 import { useFonts } from "expo-font";
 import { fontAssets } from "../src/typography";
+import { Ionicons } from "@expo/vector-icons";
 import { Platform, View } from "react-native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -18,7 +19,12 @@ function Root() {
   React.useEffect(() => {
     if (ready) warmUpSounds();
   }, [ready]);
-  const [fontsLoaded, fontError] = useFonts(fontAssets);
+  // The Ionicons glyph font loads with the app fonts, so icons are ready on
+  // the first screen instead of appearing (or not) after a lazy load.
+  const [fontsLoaded, fontError] = useFonts({
+    ...fontAssets,
+    ...Ionicons.font,
+  });
   const loadingFont = fontsLoaded
     ? undefined
     : { fontFamily: Platform.OS === "ios" ? "System" : "sans-serif" };
