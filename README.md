@@ -305,3 +305,5 @@ Heavy native compilation runs in CI rather than on the development machine. Rele
 Support: **admin@colorforfun.app** · Privacy policy: https://nihalka.github.io/nylo/privacy.html
 
 Released under the MIT License. See [`LICENSE`](LICENSE). Bundled fonts carry their own open licenses in `assets/fonts/`, and they are also listed in the app under Settings → Font licenses.
+
+Testing updates
