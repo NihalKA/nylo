@@ -1,11 +1,11 @@
-import { Text, TextInput } from "../../src/typography";
+import { Text, TextInput } from "../src/typography";
 import React, { useMemo, useRef, useState } from "react";
 import { Animated, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
-import { ChatRow } from "../../src/chat-row";
-import { useStore } from "../../src/store";
-import { scrollTicker } from "../../src/haptics";
-import { isDeviceCheckConversation } from "../../src/domain";
+import { ChatRow } from "../src/chat-row";
+import { useStore } from "../src/store";
+import { scrollTicker } from "../src/haptics";
+import { isDeviceCheckConversation } from "../src/domain";
 import {
   Button,
   FabButton,
@@ -20,7 +20,7 @@ import {
   s,
   theme,
   useTheme,
-} from "../../src/ui";
+} from "../src/ui";
 export default function Chats() {
   useTheme();
   const { fontScale } = useWindowDimensions();

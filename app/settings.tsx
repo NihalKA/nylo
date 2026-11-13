@@ -1,15 +1,15 @@
-import { Text } from "../../src/typography";
-import { fonts } from "../../src/typography";
+import { Text } from "../src/typography";
+import { fonts } from "../src/typography";
 import Constants from "expo-constants";
 import React, { useEffect, useRef, useState } from "react";
 import { Linking, Pressable, View } from "react-native";
-import { AppearancePreference } from "../../src/theme";
-import { hapticsEnabled, setHapticsEnabled } from "../../src/haptics";
-import { setSoundsEnabled, soundsEnabled } from "../../src/sounds";
+import { AppearancePreference } from "../src/theme";
+import { hapticsEnabled, setHapticsEnabled } from "../src/haptics";
+import { setSoundsEnabled, soundsEnabled } from "../src/sounds";
 import { router } from "expo-router";
-import { emptyData } from "../../src/types";
-import { useStore } from "../../src/store";
-import { exportBackup, pickBackup } from "../../src/backup";
+import { emptyData } from "../src/types";
+import { useStore } from "../src/store";
+import { exportBackup, pickBackup } from "../src/backup";
 import {
   FormScroll,
   Icon,
@@ -26,8 +26,8 @@ import {
   BrandMark,
   BrandWordmark,
   BrandLine,
-} from "../../src/ui";
-import { DesignIconName } from "../../src/design-icons";
+} from "../src/ui";
+import { DesignIconName } from "../src/design-icons";
 
 function SettingsRow({
   title,

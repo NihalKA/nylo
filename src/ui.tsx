@@ -510,14 +510,14 @@ export function MainNavigation({
       label: "Agents",
       icon: "people-outline",
       selectedIcon: "people",
-      path: "/(tabs)/agents",
+      path: "/agents",
     },
     {
       key: "settings",
       label: "Settings",
       icon: "settings-outline",
       selectedIcon: "settings",
-      path: "/(tabs)/settings",
+      path: "/settings",
     },
   ] as const;
   return (

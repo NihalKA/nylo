@@ -1,9 +1,9 @@
-import { Text } from "../../src/typography";
+import { Text } from "../src/typography";
 import React, { useRef } from "react";
 import { FlatList, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
-import { useStore } from "../../src/store";
-import { scrollTicker } from "../../src/haptics";
+import { useStore } from "../src/store";
+import { scrollTicker } from "../src/haptics";
 import {
   AgentAvatar,
   Button,
@@ -18,7 +18,7 @@ import {
   s,
   theme,
   useTheme,
-} from "../../src/ui";
+} from "../src/ui";
 
 // Soft, distinct tones for the three starter templates (light / dark).
 const templateTones = [
