@@ -1220,6 +1220,7 @@ export function relativeDay(timestamp: number) {
 export function ConversationRow({
   conversation,
   onPress,
+  onPressIn,
   onLongPress,
   accessibilityActions,
   onAccessibilityAction,
@@ -1230,6 +1231,7 @@ export function ConversationRow({
   agent?: Agent;
   conversation: Conversation;
   onPress: () => void;
+  onPressIn?: () => void;
   onLongPress?: () => void;
   accessibilityActions?: React.ComponentProps<
     typeof Tappable
@@ -1264,6 +1266,7 @@ export function ConversationRow({
         .filter(Boolean)
         .join(". ")}
       onPress={onPress}
+      onPressIn={onPressIn}
       onLongPress={onLongPress}
       accessibilityHint={accessibilityHint}
       accessibilityActions={accessibilityActions}

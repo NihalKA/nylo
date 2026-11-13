@@ -19,6 +19,8 @@ export function ChatRow(props: React.ComponentProps<typeof ConversationRow>) {
   const translateX = useRef(new Animated.Value(0)).current;
   const opened = useRef(false);
   const origin = useRef(0);
+  const position = useRef(0);
+  const gestureClaimed = useRef(false);
   const locked = useRef(false);
   const [visible, setVisible] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -26,38 +28,60 @@ export function ChatRow(props: React.ComponentProps<typeof ConversationRow>) {
   const settle = (open: boolean) => {
     opened.current = open;
     setVisible(open);
+    position.current = open ? -revealWidth : 0;
     Animated.timing(translateX, {
       toValue: open ? -revealWidth : 0,
       duration: reduced ? 0 : 180,
       useNativeDriver: true,
     }).start();
   };
-  // Keep revealed controls aligned after rotation or a Dynamic Type change.
+  // PanResponder owns touch history. Replacing it when grant reveals the buttons
+  // discards that history in the middle of the gesture. Keep one instance and
+  // read the latest layout/animation settings through a ref instead.
+  const interaction = useRef({ revealWidth, settle });
+  interaction.current = { revealWidth, settle };
   useEffect(() => {
     translateX.stopAnimation();
-    translateX.setValue(opened.current ? -revealWidth : 0);
+    position.current = opened.current ? -revealWidth : 0;
+    translateX.setValue(position.current);
   }, [revealWidth, translateX]);
-  const gesture = PanResponder.create({
-    onMoveShouldSetPanResponder: (_, { dx, dy }) =>
+  const gesture = useRef<ReturnType<typeof PanResponder.create> | null>(null);
+  if (!gesture.current) {
+    const shouldClaim = (_: unknown, { dx, dy }: { dx: number; dy: number }) =>
       !locked.current &&
       Math.abs(dx) > 12 &&
       Math.abs(dx) > Math.abs(dy) * 1.5 &&
-      (dx < 0 || opened.current),
-    onPanResponderGrant: () => {
-      translateX.stopAnimation();
-      origin.current = opened.current ? -revealWidth : 0;
-      setVisible(true);
-    },
-    onPanResponderMove: (_, { dx }) =>
-      translateX.setValue(
-        Math.max(-revealWidth, Math.min(0, origin.current + dx)),
-      ),
-    onPanResponderRelease: (_, { dx, vx }) =>
-      settle(
-        vx < -0.4 || (vx <= 0.4 && origin.current + dx < -revealWidth / 2),
-      ),
-    onPanResponderTerminate: () => settle(false),
-  });
+      (dx < 0 || opened.current);
+    gesture.current = PanResponder.create({
+      onMoveShouldSetPanResponder: shouldClaim,
+      onMoveShouldSetPanResponderCapture: shouldClaim,
+      onPanResponderGrant: () => {
+        gestureClaimed.current = true;
+        translateX.stopAnimation();
+        origin.current = opened.current ? -interaction.current.revealWidth : 0;
+        position.current = origin.current;
+        setVisible(true);
+      },
+      onPanResponderMove: (_, { dx }) => {
+        position.current = Math.max(
+          -interaction.current.revealWidth,
+          Math.min(0, origin.current + dx),
+        );
+        translateX.setValue(position.current);
+      },
+      onPanResponderRelease: (_, { dx, vx }) => {
+        const { revealWidth: width, settle: finish } = interaction.current;
+        // Distance wins over a small rightward recoil at the end of a left swipe.
+        // A short deliberate left fling can also reveal the buttons.
+        finish(origin.current + dx <= -width / 2 || (dx < -12 && vx < -0.4));
+      },
+      onPanResponderTerminationRequest: () => false,
+      onPanResponderTerminate: () => {
+        const { revealWidth: width, settle: finish } = interaction.current;
+        finish(position.current <= -width / 2);
+      },
+    });
+  }
   const action = async (remove: boolean) => {
     if (locked.current) return;
     locked.current = true;
@@ -144,13 +168,23 @@ export function ChatRow(props: React.ComponentProps<typeof ConversationRow>) {
         </View>
       ) : null}
       <Animated.View
-        {...gesture.panHandlers}
+        {...gesture.current.panHandlers}
         style={{ transform: [{ translateX }] }}
       >
         <ConversationRow
           {...props}
-          onPress={() => (opened.current ? settle(false) : props.onPress())}
-          onLongPress={() => settle(!opened.current)}
+          onPressIn={() => {
+            // A fresh touch may close/open the row; the release of the swipe may not.
+            gestureClaimed.current = false;
+          }}
+          onPress={() => {
+            if (gestureClaimed.current) return;
+            if (opened.current) settle(false);
+            else props.onPress();
+          }}
+          onLongPress={() => {
+            if (!gestureClaimed.current) settle(!opened.current);
+          }}
           accessibilityHint="Swipe left or long press for chat actions."
           accessibilityActions={[
             { name: "archive", label: archiveLabel },
