@@ -102,14 +102,14 @@ appId: com.nylohq.nylo
 # Center the complete role target before applying it, then verify its result.
 - scrollUntilVisible:
     element:
-      text: "Writing partner"
+      text: "Writing partner[.].*"
       below: "Create an agent"
       above: "Create agent"
     direction: DOWN
     visibilityPercentage: 100
     centerElement: true
 - tapOn:
-    text: "Writing partner"
+    text: "Writing partner[.].*"
     below: "Create an agent"
     above: "Create agent"
 - scrollUntilVisible:
