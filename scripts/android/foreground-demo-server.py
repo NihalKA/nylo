@@ -100,8 +100,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif self.server.server_port == 8766 and self.path == '/home':
             services = adb('shell', 'dumpsys', 'activity', 'services', 'com.nylohq.nylo').decode()
             (root / 'foreground-service-while-home.txt').write_text(services)
-            activities = adb('shell', 'dumpsys', 'activity', 'activities').decode()
-            resumed = '\n'.join(line for line in activities.splitlines() if 'mResumedActivity' in line)
+            for _ in range(10):
+                activities = adb('shell', 'dumpsys', 'activity', 'activities').decode()
+                # Android versions report either mResumedActivity or
+                # topResumedActivity. Retain the actual dump, not just a guess
+                # at one platform version's field name.
+                resumed = '\n'.join(line for line in activities.splitlines() if 'ResumedActivity' in line)
+                if 'launcher' in resumed.lower():
+                    break
+                time.sleep(.5)
+            (root / 'foreground-activities-while-home.txt').write_text(activities)
             (root / 'foreground-resumed-while-home.txt').write_text(resumed)
             assert 'launcher' in resumed.lower(), 'Nylo must be on Home'
             assert 'NyloResponseService' in services and 'isForeground=true' in services
