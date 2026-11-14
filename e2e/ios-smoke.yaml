@@ -76,16 +76,16 @@ appId: com.nylohq.nylo
 - tapOn: "Cancel attachments"
 - assertVisible:
     id: "chat-message"
-- tapOn: "History: search, archive and delete chats"
-- tapOn: "(?s)Open New conversation.*"
+# The active unsent draft lives on Home and is excluded from history.
+- tapOn: "Agent"
+- tapOn: "Chat"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-- tapOn: "History: search, archive and delete chats"
-- tapOn: "(?s)Open New conversation.*"
+# Cold launch resumes the unsent draft directly on Home.
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
