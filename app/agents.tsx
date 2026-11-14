@@ -1,15 +1,16 @@
-import { Text } from "../../src/typography";
+import { Text } from "../src/typography";
 import React, { useRef } from "react";
 import { FlatList, View, useWindowDimensions } from "react-native";
 import { router } from "expo-router";
-import { useStore } from "../../src/store";
-import { scrollTicker } from "../../src/haptics";
+import { useStore } from "../src/store";
+import { scrollTicker } from "../src/haptics";
 import {
   AgentAvatar,
   Button,
   Chip,
   FabButton,
   FadeIn,
+  Header,
   Icon,
   IconBubble,
   Page,
@@ -18,7 +19,7 @@ import {
   s,
   theme,
   useTheme,
-} from "../../src/ui";
+} from "../src/ui";
 
 // Soft, distinct tones for the three starter templates (light / dark).
 const templateTones = [
@@ -39,16 +40,11 @@ export default function Agents() {
   const create = () => router.push("/agent/edit");
   return (
     <Page aura>
-      <View style={[s.between, { paddingTop: 12, paddingBottom: 18 }]}>
-        <Text
-          accessibilityRole="header"
-          maxFontSizeMultiplier={1.6}
-          style={s.title}
-        >
-          Agents
-        </Text>
-        <FabButton name="add" label="Create agent" onPress={create} />
-      </View>
+      <Header
+        title="Your agents"
+        titleStyle={{ fontSize: 20 }}
+        right={<FabButton name="add" label="Create agent" onPress={create} />}
+      />
       <FlatList
         data={agents}
         keyExtractor={(a) => a.id}

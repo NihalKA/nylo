@@ -16,7 +16,6 @@ import {
   Field,
   Header,
   IconButton,
-  MainNavigation,
   Page,
   confirm,
   s,
@@ -708,7 +707,6 @@ function AgentDetail() {
           />
         </View>
       </ScrollView>
-      {!showContext ? <MainNavigation active="agents" /> : null}
     </Page>
   );
 }

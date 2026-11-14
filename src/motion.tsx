@@ -17,6 +17,16 @@ import { HapticFeel, play } from "./haptics";
 // the native driver (transform/opacity only) and collapses to a static state
 // when the OS "Reduce Motion" setting is on.
 
+/**
+ * Nylo's one motion curve: a soft ease-in, ease-out that settles gently.
+ * Use it (with `glide`) for every transition so the whole app moves alike.
+ */
+export const smooth = Easing.bezier(0.45, 0, 0.15, 1);
+/** Durations that pair with `smooth`. */
+export const glide = { quick: 180, base: 280, slow: 420 } as const;
+/** Spring settings without overshoot, for drag-like follow-through. */
+export const butter = { speed: 14, bounciness: 0 } as const;
+
 export function useReducedMotion() {
   const [reduced, setReduced] = useState(false);
   useEffect(() => {
@@ -70,8 +80,8 @@ export function Tappable({
     Animated.spring(press, {
       toValue: value,
       useNativeDriver: true,
-      speed: value ? 50 : 22,
-      bounciness: value ? 0 : 7,
+      speed: value ? 50 : 18,
+      bounciness: 0,
     }).start();
   const flat = StyleSheet.flatten(style);
   const baseOpacity = flat?.opacity ?? 1;
@@ -267,7 +277,7 @@ export function FadeIn({
       toValue: 1,
       duration,
       delay,
-      easing: Easing.out(Easing.cubic),
+      easing: smooth,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -312,12 +322,12 @@ export function PopIn({
       return;
     }
     if (!trigger || reduced) return;
-    scale.setValue(0.72);
-    Animated.spring(scale, {
+    scale.setValue(0.82);
+    Animated.timing(scale, {
       toValue: 1,
+      duration: glide.base,
+      easing: smooth,
       useNativeDriver: true,
-      speed: 18,
-      bounciness: 12,
     }).start();
   }, [trigger]);
   return (

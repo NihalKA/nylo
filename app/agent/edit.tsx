@@ -8,9 +8,11 @@ import {
   colors,
   isDeviceCheckConversation,
 } from "../../src/domain";
+import { AgentCharacter, agentPersona } from "../../src/agent-character";
 import {
-  AgentAvatar,
   Badge,
+  Icon,
+  PulseRing,
   Button,
   Switch,
   Field,
@@ -22,7 +24,6 @@ import {
   theme,
   confirm,
   useTheme,
-  LivingAvatar,
   AuraPicker,
   rgba,
   Press,
@@ -31,21 +32,47 @@ import {
 const templates = [
   {
     name: "Thinking partner",
+    color: "#C2650F",
+    workflow: "coach" as const,
     description: "A clear head for ideas and decisions.",
     instructions:
       "Help me think clearly. Ask one useful question at a time. Explore alternatives, point out weak assumptions respectfully, and turn our discussion into practical next steps.",
   },
   {
     name: "Writing partner",
+    color: "#2F5BEA",
+    workflow: "direct" as const,
     description: "Find the words that sound like you.",
     instructions:
       "Help me write with clarity and personality. Ask about the audience and goal when needed. Give concrete drafts and useful edits. Learn my style from the preferences I explicitly ask you to remember.",
   },
   {
     name: "Project guide",
+    color: "#1F8A4C",
+    workflow: "plan" as const,
     description: "Keep the context. Find the next step.",
     instructions:
       "Help me move my project forward. Keep decisions clear, identify open questions, and suggest manageable next steps. Be honest about what you know and what still needs to be checked.",
+  },
+];
+const personalities = [
+  {
+    value: "direct" as const,
+    title: "Doer",
+    body: "Gets straight to the work and hands you results",
+    icon: "flash-outline" as const,
+  },
+  {
+    value: "plan" as const,
+    title: "Planner",
+    body: "Lays out the steps, then delivers each one",
+    icon: "list-outline" as const,
+  },
+  {
+    value: "coach" as const,
+    title: "Coach",
+    body: "Asks good questions and guides you through",
+    icon: "school-outline" as const,
   },
 ];
 export default function AgentEditRoute() {
@@ -79,7 +106,7 @@ function AgentEdit() {
   const [instructions, setInstructions] = useState(initial?.instructions || "");
   const [goal, setGoal] = useState(original?.goal || "");
   const [workflow, setWorkflow] = useState<"direct" | "plan" | "coach">(
-    original?.workflow || "direct",
+    original?.workflow || chosenTemplate?.workflow || "direct",
   );
   const [shareRecentChats, setShareRecentChats] = useState(
     original?.shareRecentChats || false,
@@ -97,7 +124,9 @@ function AgentEdit() {
   const [connectionId, setConnectionId] = useState(
     original?.connectionId || source?.connectionId || data.defaultConnectionId,
   );
-  const [color, setColor] = useState(original?.color || colors[0]);
+  const [color, setColor] = useState(
+    original?.color || chosenTemplate?.color || colors[0],
+  );
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const saveLocked = useRef(false);
@@ -184,127 +213,175 @@ function AgentEdit() {
         }
       />
       <FormScroll contentStyle={{ paddingTop: 4, paddingBottom: 24 }}>
+        {/* Live preview: the character you are creating, in its own light. */}
         <View
-          style={[
-            s.card,
-            s.row,
-            {
-              gap: 18,
-              padding: 20,
-              minHeight: 96,
-              boxShadow: theme.cardShadow,
-              backgroundColor: theme.card,
-              // the card picks up a whisper of the chosen aura
-              backgroundImage: `radial-gradient(circle at 0% 50%, ${rgba(color, 0.16)} 0%, ${rgba(color, 0)} 60%)`,
-              overflow: "visible",
-            },
-          ]}
+          style={{
+            alignItems: "center",
+            gap: 8,
+            paddingTop: 22,
+            paddingBottom: 18,
+            paddingHorizontal: 18,
+            borderRadius: 28,
+            borderWidth: 1,
+            borderColor: rgba(color, 0.28),
+            backgroundColor: theme.card,
+            backgroundImage: `radial-gradient(circle at 50% 0%, ${rgba(color, 0.32)} 0%, ${rgba(color, 0)} 68%), linear-gradient(160deg, ${rgba(color, 0.1)} 0%, ${rgba(color, 0)} 60%)`,
+            boxShadow: `0px 12px 32px -14px ${rgba(color, 0.45)}`,
+          }}
         >
-          <LivingAvatar agent={{ name, color }} size={56} />
-          <View style={{ flex: 1 }}>
-            <Text style={[s.h2, { letterSpacing: -0.18, lineHeight: 22.5 }]}>
-              {name || "Your agent"}
-            </Text>
-            <Text style={[s.sub, { fontSize: 12, lineHeight: 16 }]}>
-              Instructions and memory for the work you return to.
-            </Text>
+          <View
+            style={{
+              width: 112,
+              height: 112,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <PulseRing color={color} size={88} />
+            <AgentCharacter
+              agent={{ name: name || "Agent", color }}
+              size={86}
+            />
           </View>
+          <Text
+            numberOfLines={1}
+            style={[s.h2, { fontSize: 22, letterSpacing: -0.5 }]}
+          >
+            {name.trim() || "Your new agent"}
+          </Text>
+          <Text
+            numberOfLines={2}
+            style={[s.sub, { textAlign: "center", maxWidth: 300 }]}
+          >
+            {description.trim() || agentPersona({ workflow })}
+          </Text>
         </View>
-        {/* Role chips only on a blank "Create agent": opening from a template
-            (Writing partner, Thinking partner, Project guide) has already
-            chosen the role. */}
+        {/* Role cards only on a blank "Create agent": opening from a template
+            has already chosen the role. */}
         {!original && !source && !chosenTemplate ? (
-          <View style={{ gap: 8 }}>
-            <Text style={s.eyebrow}>Start with a role</Text>
-            <View
-              style={[s.row, { columnGap: 8, rowGap: 0, flexWrap: "wrap" }]}
-            >
-              {templates.map((t) => (
-                <Press
-                  feel="select"
-                  accessibilityRole="button"
-                  key={t.name}
-                  accessibilityState={{
-                    selected:
-                      name === t.name && instructions === t.instructions,
-                  }}
-                  disabled={busy}
-                  onPress={() =>
-                    void (async () => {
-                      if (
-                        roleEdited &&
-                        !(await confirm(
-                          "Replace this setup?",
-                          "This replaces the name, purpose and instructions you edited. Your current text is kept if you cancel.",
-                          "Use role",
-                          false,
-                        ))
-                      )
-                        return;
-                      setName(t.name);
-                      setDescription(t.description);
-                      setInstructions(t.instructions);
-                      setRoleEdited(false);
-                    })()
-                  }
-                  style={{
-                    minWidth:
-                      t.name === "Thinking partner"
-                        ? 134.36
-                        : t.name === "Writing partner"
-                          ? 125.58
-                          : 113.73,
-                    maxWidth: "100%",
-                    backgroundColor: "transparent",
-                    minHeight: 44,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    paddingVertical: 5,
-                    paddingHorizontal: 12,
-                  }}
-                >
-                  <View
-                    accessible={false}
+          <View style={{ gap: 10 }}>
+            <Text style={s.eyebrow}>Start from a character</Text>
+            <View style={[s.row, { gap: 10 }]}>
+              {templates.map((t) => {
+                const selected =
+                  name === t.name && instructions === t.instructions;
+                return (
+                  <Press
+                    feel="select"
+                    accessibilityRole="button"
+                    key={t.name}
+                    accessibilityLabel={`${t.name}. ${t.description}`}
+                    accessibilityState={{ selected }}
+                    disabled={busy}
+                    onPress={() =>
+                      void (async () => {
+                        if (
+                          roleEdited &&
+                          !(await confirm(
+                            "Replace this setup?",
+                            "This replaces the name, purpose and instructions you edited. Your current text is kept if you cancel.",
+                            "Use role",
+                            false,
+                          ))
+                        )
+                          return;
+                        setName(t.name);
+                        setDescription(t.description);
+                        setInstructions(t.instructions);
+                        setColor(t.color);
+                        setWorkflow(t.workflow);
+                        setRoleEdited(false);
+                      })()
+                    }
                     style={{
-                      position: "absolute",
-                      top: 5,
-                      bottom: 5,
-                      left: 0,
-                      right: 0,
-                      borderRadius: 17,
-                      borderWidth: 1,
-                      borderColor:
-                        name === t.name && instructions === t.instructions
-                          ? theme.primary
-                          : theme.line,
-                      backgroundColor:
-                        name === t.name && instructions === t.instructions
-                          ? theme.primary
-                          : theme.surface,
-                    }}
-                  />
-                  <Text
-                    style={{
-                      color:
-                        name === t.name && instructions === t.instructions
-                          ? theme.onPrimary
-                          : theme.ink,
-                      fontSize: 12,
-                      lineHeight: 16,
-                      fontWeight: "500",
-                      letterSpacing: 0.24,
+                      flex: 1,
+                      alignItems: "center",
+                      gap: 8,
+                      paddingVertical: 14,
+                      paddingHorizontal: 6,
+                      borderRadius: 20,
+                      borderWidth: selected ? 2 : 1,
+                      borderColor: selected ? t.color : theme.hairline,
+                      backgroundColor: theme.card,
+                      backgroundImage: `radial-gradient(circle at 50% 0%, ${rgba(t.color, selected ? 0.22 : 0.1)} 0%, ${rgba(t.color, 0)} 70%)`,
                     }}
                   >
-                    {t.name}
-                  </Text>
-                </Press>
-              ))}
+                    <AgentCharacter
+                      agent={{ name: t.name, color: t.color }}
+                      size={44}
+                    />
+                    <Text
+                      numberOfLines={2}
+                      maxFontSizeMultiplier={1.4}
+                      style={{
+                        fontSize: 12,
+                        fontWeight: "600",
+                        color: theme.ink,
+                        textAlign: "center",
+                      }}
+                    >
+                      {t.name}
+                    </Text>
+                  </Press>
+                );
+              })}
             </View>
           </View>
         ) : null}
+        {/* Personality: how the agent approaches the work. */}
+        <View style={{ gap: 10 }}>
+          <Text style={s.eyebrow}>Personality</Text>
+          {personalities.map((p) => {
+            const selected = workflow === p.value;
+            return (
+              <Press
+                key={p.value}
+                feel="select"
+                accessibilityRole="radio"
+                accessibilityLabel={`${p.title}. ${p.body}`}
+                accessibilityState={{ selected, checked: selected }}
+                onPress={() => setWorkflow(p.value)}
+                style={[
+                  s.row,
+                  {
+                    gap: 12,
+                    minHeight: 60,
+                    paddingHorizontal: 14,
+                    paddingVertical: 10,
+                    borderRadius: 18,
+                    borderWidth: selected ? 2 : 1,
+                    borderColor: selected ? color : theme.hairline,
+                    backgroundColor: selected ? rgba(color, 0.08) : theme.card,
+                  },
+                ]}
+              >
+                <View
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 12,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: rgba(color, selected ? 0.18 : 0.08),
+                  }}
+                >
+                  <Icon name={p.icon} size={18} color={color} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={[s.text, { fontWeight: "600" }]}>{p.title}</Text>
+                  <Text style={[s.sub, { fontSize: 12 }]}>{p.body}</Text>
+                </View>
+                {selected ? (
+                  <Icon name="checkmark-circle" size={20} color={color} />
+                ) : null}
+              </Press>
+            );
+          })}
+        </View>
         <Field
           testID="agent-name"
           label="Name"
+          tint={color}
           labelStyle={s.eyebrow}
           value={name}
           onChangeText={(value) => {
@@ -325,6 +402,7 @@ function AgentEdit() {
         </View>
         <Field
           label="Its purpose"
+          tint={color}
           labelStyle={s.eyebrow}
           value={description}
           onChangeText={(value) => {
@@ -337,6 +415,7 @@ function AgentEdit() {
         />
         <Field
           label="How it should work"
+          tint={color}
           labelStyle={s.eyebrow}
           value={instructions}
           onChangeText={(value) => {
@@ -358,6 +437,7 @@ function AgentEdit() {
         />
         <Field
           label="Current goal"
+          tint={color}
           labelStyle={s.eyebrow}
           style={{
             minHeight: 108,
@@ -376,23 +456,6 @@ function AgentEdit() {
         />
         {showOptions ? (
           <View style={{ gap: 20 }}>
-            <Text style={s.text}>Working approach</Text>
-            <View style={[s.row, { gap: 8, flexWrap: "wrap" }]}>
-              {(["direct", "plan", "coach"] as const).map((value) => (
-                <Button
-                  key={value}
-                  title={
-                    value === "direct"
-                      ? "Work directly"
-                      : value === "plan"
-                        ? "Plan & deliver"
-                        : "Coach me"
-                  }
-                  secondary={workflow !== value}
-                  onPress={() => setWorkflow(value)}
-                />
-              ))}
-            </View>
             <View style={{ gap: 8 }}>
               <Text style={s.text}>Use recent chats</Text>
               <Switch
