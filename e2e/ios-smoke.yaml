@@ -57,12 +57,8 @@ appId: com.nylohq.nylo
     text: "(?s).*A second line.*"
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
-# Inline Chat has no header dismissal control; use the OS keyboard action.
-- hideKeyboard
-- assertVisible:
-    id: "chat-message"
-    text: '(?s)A draft that should survive reopening\nA second line[.]'
-- takeScreenshot: 05-chat-draft
+# Add attachment explicitly blurs the composer and dismisses the keyboard.
+# Avoid Maestro hideKeyboard heuristics: the retained capture opens AI providers.
 - tapOn: "Add attachment"
 - waitForAnimationToEnd
 - scrollUntilVisible:
@@ -76,6 +72,10 @@ appId: com.nylohq.nylo
 - tapOn: "Cancel attachments"
 - assertVisible:
     id: "chat-message"
+    text: '(?s)A draft that should survive reopening\\nA second line[.]'
+# Home intro is hidden while the OS keyboard is visible.
+- assertVisible: "How can I help[?]"
+- takeScreenshot: 05-chat-draft
 # The active unsent draft lives on Home and is excluded from history.
 - tapOn: "Agent"
 - tapOn: "Chat"
