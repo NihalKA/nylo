@@ -197,3 +197,42 @@ The owner subsequently authorized completing this follow-up on the same branch,
 merging to main and publishing both corrected candidates to the existing
 TestFlight and closed Alpha destinations. That instruction supersedes the
 earlier hold on merging pending owner acceptance.
+
+## Corrected footer candidates verified — 14 November 2026
+
+[Android 1.0.0 (46)](https://github.com/NihalKA/nylo/actions/runs/43576437302)
+completed successfully at source `d16af5da1313d03d36b2a1e22e5dddcee6b2caea`.
+Exact artifact digest/CRC, actual APK/AAB hashes, compiled source and all 57
+assets, original signing certificate, manifest/permissions and four native lease
+tests passed. Local AAB cryptographic verification and certificate comparison
+also passed. The compiled DEX includes the native application version/build
+module. The AAB SHA256 is
+`75d4f9aedd264f2eed2e76cb99a9d034e876a6e8ba4110f191e1edbe49a12445`.
+The requested runtime Settings check could not install: the emulator rejected
+the command because another task owns its session. No app was installed or
+launched, and that session was left untouched.
+
+[Signed iOS 1.0.0 (45)](https://github.com/NihalKA/nylo/actions/runs/43577317792)
+completed successfully at source `45c19c8b83349734943f125ffbcd64b124bd0d17`.
+Its exact diagnostics digest/CRC and original exported IPA receipts verify
+source/build, strict signature, original distribution signer/profile, privacy
+declarations, all 12 fonts and 57 assets. The IPA SHA256 is
+`5f13450539be70b3a683d0b0c79dac22fe422d8dfb7e5bbc29cad4f67dd36103`.
+The first footer candidate, iOS 44, failed before compilation/upload when
+Fastlane's Xcode build-settings query exhausted its 3/6/12/24-second timeouts.
+The replacement increases the base query timeout to 120 seconds with three
+retries. This CI-only change leaves app/native inputs identical to Android 46.
+
+These are candidate-verification facts. Apple processing/group availability,
+Play upload/review/tester availability and installation remain separate delivery
+steps at this checkpoint. Source verification passes 177 tests and type
+checking. Physical background duration and lock-screen behavior remain
+unverified. No real provider request was made.
+
+The temporary workflow branch gates and only this task's temporary Apple branch
+policy have been removed again after successful native CI; all other policies
+were preserved. Native candidates are retained without rebuilding unchanged
+inputs. The owner has explicitly authorized merge and distribution to the
+existing TestFlight groups and closed Alpha track. Fresh Play readback shows the
+existing selected closed-test list now has 15 testers and the track covers 178
+countries/regions; these owner-managed current settings will be preserved.
