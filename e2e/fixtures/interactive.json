@@ -107,6 +107,64 @@
           }
         }
       ]
+    },
+    {
+      "id": "interactive-loan",
+      "title": "Example: Loan calculator",
+      "connectionId": "interactive-qa",
+      "createdAt": 1794614400000,
+      "updatedAt": 1794614400000,
+      "messages": [
+        {
+          "id": "question-loan",
+          "role": "user",
+          "text": "Test Loan calculator",
+          "status": "complete",
+          "createdAt": 1794614400000
+        },
+        {
+          "id": "answer-loan",
+          "role": "assistant",
+          "text": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+          "status": "complete",
+          "createdAt": 1794614400000,
+          "interactive": {
+            "version": 2,
+            "source": "root = Root([Text(\"Illustrative loan assumptions: INR, fixed annual rate, monthly payments, no fees.\"), Number(\"amount\",\"Loan amount\",0,1000000,1000,240000,\"INR\"), Number(\"rate\",\"Annual interest\",0,30,0.1,5,\"%\"), Number(\"years\",\"Term\",1,40,1,30,\"years\"), Metric(\"Monthly payment\",\"@Payment($amount,$rate,$years)\",\"INR\"), Metric(\"Total interest\",\"@Payment($amount,$rate,$years)*$years*12-$amount\",\"INR\")])",
+            "fallback": "Illustrative native verification with no network requests.",
+            "values": {}
+          }
+        }
+      ]
+    },
+    {
+      "id": "interactive-dates",
+      "title": "Example: Travel dates",
+      "connectionId": "interactive-qa",
+      "createdAt": 1794614400000,
+      "updatedAt": 1794614400000,
+      "messages": [
+        {
+          "id": "question-dates",
+          "role": "user",
+          "text": "Test Travel dates",
+          "status": "complete",
+          "createdAt": 1794614400000
+        },
+        {
+          "id": "answer-dates",
+          "role": "assistant",
+          "text": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+          "status": "complete",
+          "createdAt": 1794614400000,
+          "interactive": {
+            "version": 2,
+            "source": "root = Root([DateInput(\"start\",\"Departure date\",\"2026-12-20\",true), DateInput(\"end\",\"Return date\",\"2026-12-20\",true,\"start\"), Submit(\"Plan trip\",\"Plan a trip with these dates\")])",
+            "fallback": "Illustrative native verification with no network requests.",
+            "values": {}
+          }
+        }
+      ]
     }
   ]
 }

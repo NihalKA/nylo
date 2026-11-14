@@ -1,6 +1,6 @@
 import { MessageContent } from "../../src/message-content";
 import { InteractiveContent } from "../../src/interactive-content";
-import { replyValues } from "../../src/interactive-reply";
+import { replyValues, visibleReplyText } from "../../src/interactive-reply";
 import { MessageActivity, MessageSources } from "../../src/message-activity";
 import { DocumentPreviewModal } from "../../src/document-preview-modal";
 import { openPdfPreview } from "../../src/document-preview";
@@ -825,6 +825,13 @@ export function Chat({
                             key={`${message.id}:interactive`}
                             reply={message.interactive}
                             disabled={
+                              (message.interactive.version === 1
+                                ? message.status !== "complete"
+                                : message.status === "streaming") ||
+                              !!conversation.archived ||
+                              !!runningId
+                            }
+                            submitDisabled={
                               message.status !== "complete" ||
                               !!conversation.archived ||
                               !!runningId
@@ -865,7 +872,11 @@ export function Chat({
                         {message.text ? (
                           <>
                             <MessageContent
-                              text={message.text}
+                              text={visibleReplyText(
+                                message.text,
+                                message.interactive,
+                              )}
+                              partial={message.status !== "complete"}
                               sources={message.sources}
                               animate={message.status === "streaming"}
                             />

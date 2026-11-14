@@ -111,3 +111,42 @@ Sources:
 - https://www.openui.com/integrations/react-native
 - https://www.openui.com/docs/openui-lang
 - https://github.com/thesysdev/openui/blob/main/LICENSE
+
+## Version 2: useful local interactions
+
+Version 2 adds Number (slider and exact numeric entry with units), Metric, native
+DateInput calendars/ranges, Section and optional collapsed Details. Existing
+version-1 replies still restore. The calendar dependency is Expo's supported MIT
+`@react-native-community/datetimepicker` 9.2.1; this requires new native binaries.
+
+Numeric formulas are quoted OpenUI expressions, restricted to finite numbers,
+declared numeric controls, arithmetic and five registered functions: Payment,
+Power, Min, Max and Round. Payment represents fixed-rate monthly amortization,
+with annual percentage and term in years. There is no program execution, property
+access, generated JavaScript, networking, iteration or computed-reference graph.
+Bounds apply before parsing and at every intermediate numeric result. Division by
+zero is rejected rather than accepting the upstream engine's zero fallback.
+Allowlisted calls are mapped to private registered names to avoid built-in name
+collisions. Charts and table cells may derive values locally. Tables can also
+filter numeric budgets and rank supplied numeric columns.
+
+Local changes recalculate immediately. Persistence holds at most one active and
+one replaceable pending snapshot, flushes on explicit commit/background/unmount,
+and must succeed before Submit. Invalid numeric drafts block submission. Dates
+are stored as date-only ISO strings and converted at local noon to avoid timezone
+shifts. The outer error boundary contains initial parsing as well as rendering;
+event, calculation and storage failures have independent readable fallbacks.
+
+A complete saved version-2 local interface remains usable after subsequent prose
+is interrupted, while submitting stays disabled until the normal send rules allow
+it. The readable fallback remains in message history; a validated offset hides
+only its exact duplicate from the visible successful reply. Unknown payload
+versions and malformed sources fall back to readable message text.
+
+System guidance selects controls according to the task. The tool allows one
+correction of rejected source within the existing five-step limit and timeout,
+then text fallback; at most one section is saved. `finishAfter` avoids an extra
+continuation for a complete self-contained section. Citation control tokens are
+normalized across stream boundaries without inventing source mappings. Mistaken
+plain-text UI programs are withheld; validated Text-only output is recovered as
+Markdown, and invalid/control programs show a readable retry message.

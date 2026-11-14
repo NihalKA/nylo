@@ -20,6 +20,17 @@ function loadContent() {
     Pressable: "Pressable",
     ScrollView: "ScrollView",
     ActivityIndicator: "ActivityIndicator",
+    Modal: ({
+      visible,
+      children,
+    }: {
+      visible: boolean;
+      children: React.ReactNode;
+    }) =>
+      visible ? React.createElement(React.Fragment, null, children) : null,
+    Platform: { OS: "ios" },
+    Keyboard: { dismiss() {} },
+    AppState: { addEventListener: () => ({ remove() {} }) },
   };
   const nativePath = path.join(
     path.dirname(require.resolve("@openuidev/react-lang")),
@@ -44,6 +55,8 @@ function loadContent() {
     "./ui": { Button: "Button" },
     "./theme": { theme: { ink: "black", primary: "blue" } },
     "./rich-blocks": { DataTable: "DataTable" },
+    "./reply-date-picker": { __esModule: true, default: "DatePicker" },
+    "./message-content": { MessageContent: "MessageContent" },
   };
   const filename = path.resolve("src/interactive-content.tsx");
   const localRequire = createRequire(filename);
@@ -155,6 +168,241 @@ test("native OpenUI controls filter existing table/chart locally, persist and ex
     assert.equal(
       tree.root.findByProps({ title: "Continue" }).props.disabled,
       true,
+    );
+  } finally {
+    await act(async () => tree.unmount());
+  }
+});
+
+test("calculator updates locally with exact edits, rejects ambiguous input and restores persisted values", async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const Content = loadContent();
+  const source =
+    'root = Root([Number("p","Amount",0,10000,100,1000,"INR"),Metric("Double","$p*2"),Submit("Send","Use amount")])';
+  const reply = readInteractiveReply({
+    version: 2,
+    source,
+    fallback: "Adjust amount",
+    values: {},
+  })!;
+  const saved: ReplyValues[] = [];
+  let requests = 0;
+  let tree!: ReactTestRenderer;
+  await act(async () => {
+    tree = create(
+      React.createElement(Content, {
+        reply,
+        disabled: false,
+        onSave: async (v) => {
+          saved.push(v);
+        },
+        onSubmit: async () => {
+          requests++;
+        },
+      }),
+    );
+  });
+  const json = () => JSON.stringify(tree.toJSON());
+  try {
+    assert.match(json(), /2,000/);
+    await act(async () => {
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onFocus();
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onChangeText("1234.5");
+    });
+    assert.match(json(), /2,469/);
+    assert.equal(requests, 0);
+    await act(async () => {
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onChangeText("1,000");
+    });
+    assert.equal(tree.root.findByProps({ title: "Send" }).props.disabled, true);
+    await act(async () => {
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onBlur();
+    });
+    assert.equal(tree.root.findByProps({ title: "Send" }).props.disabled, true);
+    await act(async () => {
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onChangeText("2500");
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Amount" })
+        .props.onBlur();
+    });
+    assert.match(json(), /5,000/);
+    assert.equal(saved.at(-1)?.p, 2500);
+    assert.equal(requests, 0);
+  } finally {
+    await act(async () => tree.unmount());
+  }
+});
+test("calendar selection cancels safely, commits only on Use date, and enforces date order", async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const Content = loadContent();
+  const reply = readInteractiveReply({
+    version: 2,
+    source:
+      'root = Root([DateInput("start","Start","",true),DateInput("end","End","",true,"start"),Submit("Plan","Plan a trip")])',
+    fallback: "Pick dates",
+    values: {},
+  })!;
+  const saved: ReplyValues[] = [];
+  let tree!: ReactTestRenderer;
+  await act(async () => {
+    tree = create(
+      React.createElement(Content, {
+        reply,
+        disabled: false,
+        onSave: async (v) => {
+          saved.push(v);
+        },
+        onSubmit: async () => {},
+      }),
+    );
+  });
+  try {
+    const press = async (label: string) => {
+      await act(async () =>
+        tree.root.findByProps({ accessibilityLabel: label }).props.onPress(),
+      );
+    };
+    await press("Choose Start");
+    await act(async () =>
+      tree.root
+        .findByType("DatePicker" as React.ElementType)
+        .props.onChange({ type: "set" }, new Date(2026, 11, 20, 12)),
+    );
+    assert.equal(saved.length, 0);
+    await act(async () =>
+      tree.root.findByProps({ title: "Cancel date selection" }).props.onPress(),
+    );
+    assert.equal(saved.length, 0);
+    await press("Choose Start");
+    await act(async () =>
+      tree.root
+        .findByType("DatePicker" as React.ElementType)
+        .props.onChange({ type: "set" }, new Date(2026, 11, 20, 12)),
+    );
+    await act(async () =>
+      tree.root.findAllByProps({ title: "Use date" })[0].props.onPress(),
+    );
+    assert.equal(saved.at(-1)?.start, "2026-12-20");
+    assert.equal(tree.root.findByProps({ title: "Plan" }).props.disabled, true);
+    await press("Choose End");
+    assert.equal(
+      tree.root
+        .findByType("DatePicker" as React.ElementType)
+        .props.minimumDate.getDate(),
+      20,
+    );
+  } finally {
+    await act(async () => tree.unmount());
+  }
+});
+
+test("captured LB calculator and planner render with real OpenUI native composition", async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const Content = loadContent();
+  const fixture = JSON.parse(
+    readFileSync("e2e/fixtures/interactive-model-output.json", "utf8"),
+  );
+  for (const id of ["loan", "travel-v2"]) {
+    const reply = readInteractiveReply(
+      fixture.cases.find((c: { id: string }) => c.id === id).reply,
+    )!;
+    let tree!: ReactTestRenderer;
+    await act(async () => {
+      tree = create(
+        React.createElement(Content, {
+          reply,
+          disabled: false,
+          onSave: async () => {},
+          onSubmit: async () => assert.fail("unexpected request"),
+        }),
+      );
+    });
+    try {
+      if (id === "loan") {
+        assert.equal(
+          tree.root.findAllByType("TextInput" as React.ElementType).length,
+          3,
+        );
+        assert.match(JSON.stringify(tree.toJSON()), /1,288[.]37/);
+      } else {
+        assert.equal(
+          tree.root.findAllByProps({
+            accessibilityLabel: "Choose Departure date (optional)",
+          }).length,
+          1,
+        );
+        assert.equal(
+          tree.root.findAllByProps({
+            accessibilityLabel: "Choose Return date (optional)",
+          }).length,
+          1,
+        );
+      }
+    } finally {
+      await act(async () => tree.unmount());
+    }
+  }
+});
+
+test("collapsing optional numeric edits discards draft and clears its host validation together", async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const Content = loadContent();
+  const reply = readInteractiveReply({
+    version: 2,
+    source:
+      'root = Root([Details("Options",[Number("optional","Optional",0,100,1,10)]),Submit("Send","Use choices")])',
+    fallback: "Options",
+    values: {},
+  })!;
+  let tree!: ReactTestRenderer;
+  await act(async () => {
+    tree = create(
+      React.createElement(Content, {
+        reply,
+        disabled: false,
+        onSave: async () => {},
+        onSubmit: async () => {},
+      }),
+    );
+  });
+  try {
+    await act(async () =>
+      tree.root.findByProps({ title: "Show Options" }).props.onPress(),
+    );
+    await act(async () =>
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Optional" })
+        .props.onChangeText("bad"),
+    );
+    assert.equal(tree.root.findByProps({ title: "Send" }).props.disabled, true);
+    await act(async () =>
+      tree.root.findByProps({ title: "Hide Options" }).props.onPress(),
+    );
+    assert.equal(
+      tree.root.findByProps({ title: "Send" }).props.disabled,
+      false,
+    );
+    await act(async () =>
+      tree.root.findByProps({ title: "Show Options" }).props.onPress(),
+    );
+    assert.equal(
+      tree.root.findByProps({ accessibilityLabel: "Exact Optional" }).props
+        .value,
+      "10",
+    );
+    assert.equal(
+      tree.root.findByProps({ title: "Send" }).props.disabled,
+      false,
     );
   } finally {
     await act(async () => tree.unmount());

@@ -17,13 +17,15 @@ export function MessageContent({
   text,
   sources = [],
   animate,
+  partial = animate,
 }: {
   text: string;
   sources?: Source[];
   /** The reply is arriving now: new blocks glide in as they appear. */
   animate?: boolean;
+  partial?: boolean;
 }) {
-  const tokens = useMemo(() => messageTokens(text), [text]);
+  const tokens = useMemo(() => messageTokens(text, partial), [text, partial]);
   const inline = (tokens: Token[] | undefined): React.ReactNode =>
     tokens?.map((t, i) => {
       if (t.type === "br") return "\n";

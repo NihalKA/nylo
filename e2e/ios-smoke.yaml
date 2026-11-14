@@ -100,14 +100,19 @@ appId: com.nylohq.nylo
 - waitForAnimationToEnd
 # The fixed Save bar covers the lowest part of the scrolling viewport.
 # Center the complete role target before applying it, then verify its result.
+# Find and centre the complete card before applying header/footer bounds. At
+# maximum text, a 6pt header overlap excluded it from discovery in run43634280127.
+# The tap below still requires the full target between the fixed controls.
 - scrollUntilVisible:
-    element:
-      text: "Writing partner[.].*"
-      below: "Create an agent"
-      above: "Create agent"
+    element: "Writing partner[.].*"
     direction: DOWN
+    timeout: 60000
     visibilityPercentage: 100
     centerElement: true
+- assertVisible:
+    text: "Writing partner[.].*"
+    below: "Create an agent"
+    above: "Create agent"
 - tapOn:
     text: "Writing partner[.].*"
     below: "Create an agent"

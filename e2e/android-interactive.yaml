@@ -1,0 +1,191 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    clearState: true
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      visible:
+        id: "android:id/alertTitle"
+        text: "Pixel Launcher isn't responding"
+    commands:
+      - takeScreenshot: 00-pixel-launcher-anr
+      - tapOn:
+          id: "android:id/aerr_close"
+          text: "Close app"
+          retryTapIfNoChange: false
+      - assertNotVisible: "Pixel Launcher isn't responding"
+- extendedWaitUntil:
+    visible: "How can I help[?]"
+    timeout: 120000
+- assertVisible: "How can I help[?]"
+- tapOn: "Settings"
+- waitForAnimationToEnd
+- takeScreenshot: gallery-01-settings
+- scrollUntilVisible:
+    element:
+      id: "app-version"
+    direction: DOWN
+- assertVisible:
+    id: "app-version"
+    text: "Version .*"
+- assertNotVisible: "UI: figma-parity.*"
+- takeScreenshot: gallery-01b-app-version
+- scrollUntilVisible:
+    element: ".*Restore backup.*"
+    direction: UP
+- scrollUntilVisible:
+    element: ".*Restore backup.*"
+    direction: DOWN
+- tapOn: ".*Restore backup.*"
+- waitForAnimationToEnd
+- runFlow:
+    when:
+      notVisible: "Nylo-QA-interactive.json"
+    commands:
+      - tapOn: "Show roots"
+      - tapOn: "Downloads"
+- assertVisible: "Nylo-QA-interactive.json"
+- takeScreenshot: gallery-02-owned-backup-picker
+- tapOn: "Nylo-QA-interactive.json"
+- assertVisible: "Replace local data?"
+- tapOn: "Restore"
+- scrollUntilVisible:
+    element: "Backup restored. Add your API keys to continue."
+    direction: DOWN
+- assertVisible: "Backup restored. Add your API keys to continue."
+- tapOn: "Go back"
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive expenses.*"
+- scrollUntilVisible:
+    element: "Sample expenses"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Sample expenses"
+- takeScreenshot: interactive-01-expenses-all
+- tapOn: "Food"
+- scrollUntilVisible:
+    element: "1 row"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: "1 row"
+- assertNotVisible: "Bus: 30"
+- takeScreenshot: interactive-02-expenses-filtered
+- scrollUntilVisible:
+    element: "All"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "All"
+- scrollUntilVisible:
+    element: "2 rows"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: "2 rows"
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive planning.*"
+- scrollUntilVisible:
+    element: "Trip goal"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Trip goal"
+- inputText: "A quiet weekend"
+- hideKeyboard
+- takeScreenshot: interactive-03-planning-entered
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive planning.*"
+- scrollUntilVisible:
+    element: "A quiet weekend"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "A quiet weekend"
+- takeScreenshot: interactive-04-planning-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive phones.*"
+- scrollUntilVisible:
+    element: "Increase Budget"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Increase Budget"
+- assertVisible: "Budget: 41000"
+- tapOn: "Camera"
+- takeScreenshot: interactive-05-phone-choices
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive phones.*"
+- scrollUntilVisible:
+    element: "Budget: 41000"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Budget: 41000"
+- takeScreenshot: interactive-06-phone-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Loan calculator.*"
+- scrollUntilVisible:
+    element: "Exact Loan amount"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Exact Loan amount"
+- eraseText: 12
+- inputText: "120000"
+- tapOn: "Finish editing Loan amount"
+- scrollUntilVisible:
+    element: "Monthly payment"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: ".*644[.]19.*"
+- takeScreenshot: interactive-07-loan-live-result
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Loan calculator.*"
+- scrollUntilVisible:
+    element: "Exact Loan amount"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Loan amount: 120000 INR"
+- takeScreenshot: interactive-08-loan-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Travel dates.*"
+- scrollUntilVisible:
+    element: "Choose Return date"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Choose Return date"
+- assertVisible: "OK"
+- takeScreenshot: interactive-09-native-calendar
+- tapOn: "OK"
+- assertVisible: "Clear Return date"
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Travel dates.*"
+- scrollUntilVisible:
+    element: "Clear Return date"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Clear Return date"
+- takeScreenshot: interactive-10-dates-restored

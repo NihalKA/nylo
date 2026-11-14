@@ -719,7 +719,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             if (controller.signal.aborted) throw new Error("Response stopped.");
             try {
               await patch((m) => ({
-                interactive: reply,
+                interactive: {
+                  ...reply,
+                  fallbackOffset: m.text.length + (m.text ? 2 : 0),
+                },
                 text: m.text + (m.text ? "\n\n" : "") + reply.fallback + "\n\n",
               }));
             } catch (error) {

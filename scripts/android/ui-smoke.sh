@@ -48,6 +48,11 @@ scenario="${ANDROID_UI_SCENARIO:-smoke}"
 case "$scenario" in
   smoke) flow=e2e/android-smoke.yaml ;;
   sdk) flow=e2e/android-sdk.yaml ;;
+  interactive)
+    flow=e2e/android-interactive.yaml
+    cp e2e/fixtures/interactive.json artifacts/android-ui/Nylo-QA-interactive.json
+    adb push artifacts/android-ui/Nylo-QA-interactive.json /sdcard/Download/Nylo-QA-interactive.json
+    ;;
   gallery)
     flow=e2e/android-gallery.yaml
     adb shell wm size 1170x2532

@@ -10,6 +10,7 @@
     "@expo/vector-icons": "^15.0.2",
     "@openuidev/lang-core": "1.1.1",
     "@openuidev/react-lang": "1.1.1",
+    "@react-native-community/datetimepicker": "9.2.1",
     "ai": "7.0.170",
     "expo": "~58.0.25",
     "expo-application": "~58.1.2",
