@@ -1,4 +1,6 @@
 import { MessageContent } from "../../src/message-content";
+import { InteractiveContent } from "../../src/interactive-content";
+import { replyValues } from "../../src/interactive-reply";
 import { MessageActivity, MessageSources } from "../../src/message-activity";
 import { DocumentPreviewModal } from "../../src/document-preview-modal";
 import { openPdfPreview } from "../../src/document-preview";
@@ -818,6 +820,48 @@ export function Chat({
                             />
                           </View>
                         ))}
+                        {message.interactive ? (
+                          <InteractiveContent
+                            key={`${message.id}:interactive`}
+                            reply={message.interactive}
+                            disabled={
+                              message.status !== "complete" ||
+                              !!conversation.archived ||
+                              !!runningId
+                            }
+                            onSave={(values) =>
+                              update((d) => ({
+                                ...d,
+                                conversations: d.conversations.map((c) =>
+                                  c.id === id && !c.archived
+                                    ? {
+                                        ...c,
+                                        messages: c.messages.map((m) =>
+                                          m.id === message.id && m.interactive
+                                            ? {
+                                                ...m,
+                                                interactive: {
+                                                  ...m.interactive,
+                                                  values: replyValues(
+                                                    m.interactive.source,
+                                                    values,
+                                                  ),
+                                                },
+                                              }
+                                            : m,
+                                        ),
+                                      }
+                                    : c,
+                                ),
+                              }))
+                            }
+                            onSubmit={(values) =>
+                              send(id, "", false, undefined, {
+                                interactive: { messageId: message.id, values },
+                              })
+                            }
+                          />
+                        ) : null}
                         {message.text ? (
                           <>
                             <MessageContent

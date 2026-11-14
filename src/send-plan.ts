@@ -4,6 +4,11 @@ import { validateAttachments } from "./attachments";
 import { contextMessages, systemPrompt, uid } from "./domain";
 import { recentAgentContext, sharedContextPrompt } from "./agent-context";
 import { preflightRequest } from "./providers";
+import {
+  replySubmission,
+  replyValues,
+  type ReplyValues,
+} from "./interactive-reply";
 // Pure prepare phase: validation must finish before permission, persistence or network effects.
 export function prepareSend(
   data: AppData,
@@ -11,16 +16,37 @@ export function prepareSend(
   input: string,
   retry = false,
   diagnostic = false,
+  interactive?: { messageId: string; values: ReplyValues },
 ) {
   const conversation = data.conversations.find((c) => c.id === id);
   if (!conversation) throw new Error("Conversation not found.");
+  let submitted: string | undefined;
+  if (interactive) {
+    if (retry || diagnostic || conversation.archived)
+      throw new Error("This form cannot be submitted here.");
+    const message = conversation.messages.find(
+      (m) => m.id === interactive.messageId,
+    );
+    if (
+      message?.role !== "assistant" ||
+      message.status !== "complete" ||
+      !message.interactive
+    )
+      throw new Error("Wait for this reply to finish before submitting.");
+    submitted = replySubmission(message.interactive, interactive.values);
+    if (message.interactive.submitted === submitted)
+      throw new Error(
+        "These choices have already been sent. Change a value to send again.",
+      );
+    input = submitted;
+  }
   const saved = data.connections.find(
     (c) => c.id === (conversation.connectionId || data.defaultConnectionId),
   );
   if (!saved) throw new Error("Add or choose a connection in Settings first.");
   const connection = selectedConnection(saved, conversation.model);
   const attachments = validateAttachments(
-    retry ? undefined : conversation.draftAttachments,
+    retry || interactive ? undefined : conversation.draftAttachments,
   );
   const last = conversation.messages.at(-1);
   const userIndex = conversation.messages.findLastIndex(
@@ -42,7 +68,18 @@ export function prepareSend(
     ? []
     : retry && last?.role === "assistant"
       ? conversation.messages.slice(0, userIndex + 1)
-      : [...conversation.messages];
+      : conversation.messages.map((m) =>
+          interactive && m.id === interactive.messageId && m.interactive
+            ? {
+                ...m,
+                interactive: {
+                  ...m.interactive,
+                  values: replyValues(m.interactive.source, interactive.values),
+                  submitted,
+                },
+              }
+            : m,
+        );
   if (!retry) {
     if (!input.trim() && !attachments.length)
       throw new Error("Write a message or choose an attachment.");
@@ -78,5 +115,6 @@ export function prepareSend(
     instructions,
     preservedReplies,
     retryFiles,
+    input,
   };
 }

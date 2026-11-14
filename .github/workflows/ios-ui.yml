@@ -30,6 +30,8 @@ permissions:
 concurrency:
   group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}-${{ inputs.profile || 'all' }}
   cancel-in-progress: true
+env:
+  OPENUI_TELEMETRY_DISABLED: "1"
 jobs:
   eligibility:
     name: Check source relevance (no UI tests)

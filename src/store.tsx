@@ -10,6 +10,7 @@ import {
   rememberAttachmentApproval,
 } from "./attachment-consent";
 import { prepareSend } from "./send-plan";
+import { type ReplyValues } from "./interactive-reply";
 import { credentialDestination, stageCredential } from "./credentials";
 import {
   createCheckpointBarrier,
@@ -52,9 +53,10 @@ import { beginBackgroundResponse } from "./background-response";
 
 type AgentDraft = Omit<Agent, "id" | "createdAt" | "memories">;
 type SendOptions = {
-  deviceCheck: true;
-  maxOutputTokens: number;
-  tools: false;
+  deviceCheck?: true;
+  maxOutputTokens?: number;
+  tools?: false;
+  interactive?: { messageId: string; values: ReplyValues };
   onText?: () => void;
 };
 type ResponseProgress = {
@@ -472,6 +474,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       await credentialOperations.current(async () => {});
       if (controller.signal.aborted)
         throw new Error("Nothing was sent. Your draft is kept.");
+      const prepared = prepareSend(
+        current.current,
+        conversationId,
+        input,
+        retry,
+        !!options?.deviceCheck,
+        options?.interactive,
+      );
+      input = prepared.input;
       const {
         conversation,
         connection,
@@ -481,13 +492,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         instructions,
         preservedReplies,
         retryFiles,
-      } = prepareSend(
-        current.current,
-        conversationId,
-        input,
-        retry,
-        !!options?.deviceCheck,
-      );
+      } = prepared;
       const destination = credentialDestination(connection);
       const credentialId = connection.credentialId || connection.id;
       const requestAttachments = messages.flatMap((m) => m.attachments || []);
@@ -659,8 +664,12 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
               ? {
                   ...c,
                   connectionId: connection.id,
-                  draft: !retry && c.draft === input ? "" : c.draft,
-                  draftAttachments: !retry ? [] : c.draftAttachments,
+                  draft:
+                    !retry && !options?.interactive && c.draft === input
+                      ? ""
+                      : c.draft,
+                  draftAttachments:
+                    !retry && !options?.interactive ? [] : c.draftAttachments,
                   title: c.messages.length
                     ? c.title
                     : conversationTitle(
@@ -703,6 +712,20 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
             await patch((m) => ({
               generatedFiles: [...(m.generatedFiles || []), ...files],
             }));
+          },
+          onInteractive: async (reply) => {
+            if (controller.signal.aborted) throw new Error("Response stopped.");
+            await flush();
+            if (controller.signal.aborted) throw new Error("Response stopped.");
+            try {
+              await patch((m) => ({
+                interactive: reply,
+                text: m.text + (m.text ? "\n\n" : "") + reply.fallback + "\n\n",
+              }));
+            } catch (error) {
+              interrupt("storage");
+              throw error;
+            }
           },
           onSource: (source) => {
             if (controller.signal.aborted) return;

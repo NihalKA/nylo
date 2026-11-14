@@ -8,6 +8,7 @@ import {
 import { connectionCapabilities } from "../src/capabilities";
 import { emptyData, type Connection } from "../src/types";
 import { parseData } from "../src/domain";
+import type { InteractiveReply } from "../src/interactive-reply";
 import {
   splitAttachmentStorage,
   hydrateAttachmentStorage,
@@ -23,6 +24,59 @@ const connection: Connection = {
 };
 const png =
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=";
+
+test("interactive tool uses the selected endpoint and saves a validated section before continuing", async () => {
+  let calls = 0;
+  let saved: InteractiveReply | undefined;
+  const source =
+    'root = Root([Input("goal", "Goal", "", true), Submit("Continue", "Help with my goal")])';
+  const o = options(async (url, init) => {
+    assert.equal(String(url), connection.baseUrl + "/responses");
+    assert.ok(String(init?.body).includes("show_interactive"));
+    if (++calls === 1)
+      return stream(undefined, "show_interactive", {
+        source,
+        fallback: "Tell me your goal and press Continue.",
+      });
+    assert.equal(saved?.source, source);
+    return stream("Choose your goal above.");
+  });
+  o.onInteractive = async (reply) => {
+    saved = reply;
+  };
+  await runSDKAgent(o);
+  assert.equal(calls, 2);
+  assert.deepEqual(saved?.values, { goal: "" });
+});
+test("invalid interactive output is not saved and the model receives a text-fallback instruction", async () => {
+  let calls = 0;
+  const o = options(async (_url, init) => {
+    if (++calls === 1)
+      return stream(undefined, "show_interactive", {
+        source: 'root = Root([Unknown("bad")])',
+        fallback: "Readable answer",
+      });
+    assert.ok(String(init?.body).includes("no interface was saved"));
+    return stream("Here is a readable answer.");
+  });
+  o.onInteractive = async () =>
+    assert.fail("invalid output must never be saved");
+  await runSDKAgent(o);
+  assert.equal(calls, 2);
+});
+test("cancelled interactive tool cannot publish a late interface", async () => {
+  const controller = new AbortController();
+  const o = options(async () => {
+    controller.abort();
+    return stream(undefined, "show_interactive", {
+      source: 'root = Root([Text("late")])',
+      fallback: "Late",
+    });
+  });
+  o.signal = controller.signal;
+  o.onInteractive = async () => assert.fail("stopped interface must not save");
+  await assert.rejects(runSDKAgent(o));
+});
 function stream(text?: string, name?: string, args: unknown = {}) {
   const item = name
     ? {

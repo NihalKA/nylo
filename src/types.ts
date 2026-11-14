@@ -36,6 +36,7 @@ export type Agent = {
   createdAt: number;
 };
 export type Message = {
+  interactive?: import("./interactive-reply").InteractiveReply;
   id: string;
   role: "user" | "assistant";
   text: string;
