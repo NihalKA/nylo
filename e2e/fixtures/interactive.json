@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "connections": [
+    {
+      "id": "interactive-qa",
+      "name": "Offline sample",
+      "provider": "custom",
+      "protocol": "openai",
+      "baseUrl": "https://example.invalid/v1",
+      "model": "synthetic-model"
+    }
+  ],
+  "defaultConnectionId": "interactive-qa",
+  "agents": [],
+  "conversations": [
+    {
+      "id": "interactive-expenses",
+      "title": "Example: Interactive expenses",
+      "connectionId": "interactive-qa",
+      "createdAt": 1794614400000,
+      "updatedAt": 1794614400000,
+      "messages": [
+        {
+          "id": "question-expenses",
+          "role": "user",
+          "text": "Show the sample expenses as an interactive reply.",
+          "status": "complete",
+          "createdAt": 1794614400000
+        },
+        {
+          "id": "answer-expenses",
+          "role": "assistant",
+          "text": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+          "status": "complete",
+          "createdAt": 1794614400000,
+          "interactive": {
+            "version": 1,
+            "source": "root = Root([Select(\"category\", \"Category\", [\"All\", \"Food\", \"Travel\"], \"All\"), Chart(\"Sample expenses\", \"bar\", [{label:\"Lunch\",value:100,category:\"Food\"},{label:\"Bus\",value:30,category:\"Travel\"}], \"category\"), Table([\"Item\", \"Amount\", \"Category\"], [[\"Lunch\", \"100\", \"Food\"], [\"Bus\", \"30\", \"Travel\"]], \"category\", 2)])",
+            "fallback": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+            "values": {
+              "category": "All"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "interactive-phones",
+      "title": "Example: Interactive phones",
+      "connectionId": "interactive-qa",
+      "createdAt": 1794614399999,
+      "updatedAt": 1794614399999,
+      "messages": [
+        {
+          "id": "question-phones",
+          "role": "user",
+          "text": "Show the sample phones as an interactive reply.",
+          "status": "complete",
+          "createdAt": 1794614399999
+        },
+        {
+          "id": "answer-phones",
+          "role": "assistant",
+          "text": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+          "status": "complete",
+          "createdAt": 1794614399999,
+          "interactive": {
+            "version": 1,
+            "source": "root = Root([Text(\"Sample phone comparison\"), Slider(\"budget\", \"Budget\", 10000, 50000, 1000, 40000), Select(\"priority\", \"Priority\", [\"Battery\", \"Camera\"], \"Battery\"), Table([\"Phone\", \"Price\"], [[\"Sample A\", \"30000\"], [\"Sample B\", \"35000\"]]), Submit(\"Update recommendations\", \"Recommend a phone using my choices\")])",
+            "fallback": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+            "values": {
+              "budget": 40000,
+              "priority": "Battery"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "interactive-planning",
+      "title": "Example: Interactive planning",
+      "connectionId": "interactive-qa",
+      "createdAt": 1794614399998,
+      "updatedAt": 1794614399998,
+      "messages": [
+        {
+          "id": "question-planning",
+          "role": "user",
+          "text": "Show the sample planning as an interactive reply.",
+          "status": "complete",
+          "createdAt": 1794614399998
+        },
+        {
+          "id": "answer-planning",
+          "role": "assistant",
+          "text": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+          "status": "complete",
+          "createdAt": 1794614399998,
+          "interactive": {
+            "version": 1,
+            "source": "root = Root([Input(\"goal\", \"Trip goal\", \"\", true), Input(\"notes\", \"Notes\", \"\", false), Submit(\"Plan\", \"Plan my trip\")])",
+            "fallback": "Illustrative sample data for native UI verification. No provider request or account key is used.",
+            "values": {
+              "goal": "",
+              "notes": ""
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

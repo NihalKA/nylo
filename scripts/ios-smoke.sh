@@ -6,7 +6,7 @@ mkdir -p artifacts/e2e
 profile="${UI_PROFILE:-large}"
 scenario="${UI_SCENARIO:-smoke}"
 case "$profile" in compact|large|large-text) ;; *) echo 'Unknown UI profile'; exit 1 ;; esac
-case "$scenario" in smoke|gallery|attachments|store|pdf|background|sdk) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
+case "$scenario" in smoke|gallery|attachments|store|pdf|background|sdk|interactive) ;; *) echo 'Unknown UI scenario'; exit 1 ;; esac
 if [ "$scenario" = store ] && { [ "$profile" != large ] || [ "${REFRESH_JS_BUNDLE:-false}" != false ]; }; then
   echo 'Store captures require the large profile and the original native JS bundle.'
   exit 1
@@ -55,7 +55,7 @@ source_sha="$(python3 - artifacts/e2e/native-source-run.json "$GITHUB_REPOSITORY
 import json, re, sys
 run=json.load(open(sys.argv[1]))
 if (run.get("name") != "iOS native validation" or run.get("conclusion") != "success" or
-    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context", "feat/ai-sdk-mobile-capabilities") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
+    run.get("head_branch") not in ("main", "feat/figma-ui-parity", "feat/preserve-followup-file-context", "feat/ai-sdk-mobile-capabilities", "feat/openui-interactive-replies") or run.get("head_repository", {}).get("full_name") != sys.argv[2] or
     not re.fullmatch(r"[0-9a-f]{40}", run.get("head_sha", ""))):
     raise SystemExit("Use a successful native validation run from this repository's approved main or feature candidate branch.")
 print(run["head_sha"])
@@ -79,6 +79,9 @@ if [ "$scenario" = attachments ]; then
 fi
 if [ "$scenario" = store ]; then
   shasum -a 256 scripts/seed-ios-store.py >> artifacts/e2e/fixture-sha256.txt
+fi
+if [ "$scenario" = interactive ]; then
+  shasum -a 256 scripts/seed-ios-interactive.py e2e/fixtures/interactive.json >> artifacts/e2e/fixture-sha256.txt
 fi
 mark_phase download-native-artifact
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
@@ -163,6 +166,12 @@ xcrun simctl install "$simulator_id" "$RUNNER_TEMP/nylo-app/Nylo.app"
 xcrun simctl launch "$simulator_id" com.nylohq.nylo
 sleep 8
 xcrun simctl io "$simulator_id" screenshot artifacts/e2e/00-native-launch.png
+if [ "$scenario" = interactive ]; then
+  xcrun simctl terminate "$simulator_id" com.nylohq.nylo
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  mark_phase seed-interactive-examples
+  python3 scripts/seed-ios-interactive.py --container "$app_container"
+fi
 if [ "$scenario" = store ]; then
   xcrun simctl terminate "$simulator_id" com.nylohq.nylo
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"

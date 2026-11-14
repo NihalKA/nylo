@@ -17,7 +17,7 @@ on:
       scenario:
         description: Smoke, QA gallery/attachments, or illustrative store asset capture
         type: choice
-        options: [smoke, gallery, attachments, store, pdf, background, sdk]
+        options: [smoke, gallery, attachments, store, pdf, background, sdk, interactive]
         default: smoke
       profile:
         description: Smoke profile to validate (other scenarios use large)
