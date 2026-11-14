@@ -143,3 +143,38 @@ Settings now shows only version and native build number. CI's source marker
 remains in a private build-info property inside both production Hermes bundles;
 it is not rendered by the product UI. Gallery checks now inspect the version
 footer and absence of the old marker rather than requiring diagnostic text.
+
+## Background repair candidate delivery — 14 November 2026
+
+[Android 1.0.0 (45) CI](https://github.com/NihalKA/nylo/actions/runs/43564085672)
+passed at source `c1d1cf1ff5110b0cdd23176db15e2a9a0a3c68a3`. The original
+APK/AAB archive digest and CRC, compiled source marker and 57 assets, original
+signer, foreground-service manifest and four native lease tests were verified.
+The AAB SHA256 is `dbd5fe586205bdfbf425e30c6dfc63e3d95dff563a2e5d2623199d42e309f09d`.
+This exact bundle remains ready for the existing Play closed Alpha track; it has
+not been uploaded or submitted for review because the signed-in Chrome
+Computer Use bridge reports an unavailable browser host. Existing build 42
+remains the available Play release. No replacement build is needed.
+
+[Signed iOS 1.0.0 (43) CI](https://github.com/NihalKA/nylo/actions/runs/43572299470)
+passed at source `9a5587b8f8b777b41e679dda3479e475e1b30fff`. The exact diagnostics
+archive digest/CRC and original exported IPA audit receipts verified the source,
+build, original distribution signer, strict signature, embedded App Store
+profile, privacy declarations, 12 fonts and 57 assets. The IPA SHA256 is
+`7cb417b2e3b516ec4425102dbe4a04fe0ad26a85676c38872be3b076aed57415`.
+Apple reports build 43 `VALID`; independent readbacks confirm its selection in
+the existing internal QA and public TestFlight groups and both states
+`IN_BETA_TESTING`. Release notes were saved and read back; prior build selections,
+group attributes and internal tester membership were preserved. The existing
+public TestFlight link is https://testflight.apple.com/join/u7zsCTuR. Installation
+and physical background/lock-screen behavior have not been observed.
+
+The iOS simulator workflow numbered 81 contains app version 1.0.0 (1), not build 81. Its source/package/assets were verified, but no new runtime acceptance pass
+is claimed. Source tests and signing receipts do not establish physical-device
+background duration. No real provider request was made for this delivery.
+
+Both original candidate binaries are retained. Temporary feature-branch CI
+workflow gates and only this task's Apple environment branch policy were removed
+after CI completed; other policies remain intact. These cleanup/documentation
+changes do not alter the app inputs and require no native rebuild. Merge remains
+blocked until the owner explicitly confirms the delivered builds are good.
