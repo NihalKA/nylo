@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/preserve-followup-file-context' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities'))
+    if: github.ref == 'refs/heads/main' || (github.event_name == 'workflow_dispatch' && (github.ref == 'refs/heads/feat/figma-ui-parity' || github.ref == 'refs/heads/feat/preserve-followup-file-context' || github.ref == 'refs/heads/feat/ai-sdk-mobile-capabilities' || github.ref == 'refs/heads/fix/background-response-lifecycle'))
     runs-on: ubuntu-24.04
     environment: android-release
     timeout-minutes: 60
@@ -65,7 +65,7 @@ jobs:
           chmod 600 "$ANDROID_KEYSTORE_PATH"
           mkdir -p artifacts/android
           cd android
-          ./gradlew --no-daemon --no-build-cache --rerun-tasks --max-workers=2 --init-script ../scripts/android/release.init.gradle clean :app:assembleRelease :app:bundleRelease -PreactNativeArchitectures=arm64-v8a,x86_64 > ../artifacts/android/build.log 2>&1 || { tail -100 ../artifacts/android/build.log; exit 1; }
+          ./gradlew --no-daemon --no-build-cache --rerun-tasks --max-workers=2 --init-script ../scripts/android/release.init.gradle clean :nylo-background-response:testReleaseUnitTest :app:assembleRelease :app:bundleRelease -PreactNativeArchitectures=arm64-v8a,x86_64 > ../artifacts/android/build.log 2>&1 || { tail -100 ../artifacts/android/build.log; exit 1; }
           cd ..
           cp android/app/build/outputs/apk/release/app-release.apk artifacts/android/Nylo-test.apk
           cp android/app/build/outputs/bundle/release/app-release.aab artifacts/android/Nylo-release.aab

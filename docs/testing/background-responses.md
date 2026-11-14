@@ -107,3 +107,39 @@ Together with the fully inspected fresh three-profile smoke evidence, this clear
 Signed workflow42612628652/sourcee452a2d exported and uploaded1.0.0 (17). The retained actual IPA audit confirms the bundle/version/build/family1, eleven privacy manifests, required image SDK, camera purpose, no microphone/tracking and exempt encryption. Apple reports build `4e6626be-2598-4c2e-a7ae-72e9b628ff51` VALID. English notes were saved/read back, internal Nylo Device QA assignment returned204, and independent group/build-state reads confirm exact17 and IN_BETA_TESTING. Evidence: `artifacts/signed-17-audit/qa-assignment-verification.json`.
 
 This clears internal delivery, not physical-device or production acceptance. Original storebuild15 remains selected and WAITING_FOR_REVIEW, independently read after assignment at12:17UTC. The30-minute delivery task is disabled; the separate App Review/external-invitation monitor remains enabled.
+
+## Android protection and lifecycle repair (November 2026)
+
+Android previously never loaded a native response lease: its platform selector
+returned `null`, and the local module registered only for Apple. Going Home
+therefore deterministically interrupted an otherwise healthy Android response.
+Standalone Android builds now register `NyloBackgroundResponse` and protect
+already initiated requests with a non-exported `dataSync` foreground service.
+The service posts an in-progress notification (Android notification visibility
+still follows the user's system settings) and holds a bounded partial wake lock.
+It stops after the last response completes/cancels, never restarts a killed
+request, and has a ten-minute native per-response deadline as well as Android's
+OS timeout handling. Concurrent responses own separate tokens; stopping one
+cannot release another's protection. No boot receiver, background scheduling,
+provider migration, additional generation request, or automatic retry is added.
+
+Native startup can overlap a Home gesture. The store now waits for the actual
+lease result before cancelling; a denied grant in the background preserves the
+unsent draft. A late iOS expiration after returning to the foreground revokes
+background eligibility without cancelling the foreground reply. Actual OS
+expiration while backgrounded still interrupts and keeps checkpointed files and
+text. iOS retains its finite UIKit budget; force quit, resource pressure, battery
+restrictions and OS suspension can still interrupt work.
+
+Source regressions reproduce three failures on the original implementation:
+Android native selection, Home during acquisition, and late foreground expiry.
+They pass with this change, along with background completion, no-replay,
+checkpoint preservation and denied-startup coverage. Native Android lease tests
+cover cancellation before service startup, independent concurrent ownership,
+stale/duplicate events and expiry before a grant. Native compilation and actual
+runtime acceptance must be recorded separately from these source checks.
+
+Settings now shows only version and native build number. CI's source marker
+remains in a private build-info property inside both production Hermes bundles;
+it is not rendered by the product UI. Gallery checks now inspect the version
+footer and absence of the old marker rather than requiring diagnostic text.

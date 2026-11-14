@@ -56,7 +56,8 @@ export function interruptionMessage(
     stopped: "You stopped this response.",
     "background-unavailable":
       "Nylo could not continue after the app moved to the background.",
-    "background-expired": "iOS ended the available background time.",
+    "background-expired":
+      "The operating system ended the available background time.",
     "stage-timeout": `${stageLabels[stage]} timed out after ${stageLimits[stage] / 1000} seconds without progress.`,
     "total-timeout": "This response reached its ten-minute total limit.",
     storage:

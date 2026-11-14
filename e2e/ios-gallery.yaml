@@ -83,21 +83,18 @@ appId: com.nylohq.nylo
 - tapOn: "Go back"
 - tapOn: "Settings, tab, 3 of 3"
 - takeScreenshot: gallery-settings-current
-- runFlow:
-    when:
-      true: ${MAESTRO_UI_BUILD_MARKER != ""}
-    commands:
-      - scrollUntilVisible:
-          element:
-            id: "ui-build-marker"
-          direction: DOWN
-      - assertVisible:
-          id: "ui-build-marker"
-          text: ${MAESTRO_UI_BUILD_MARKER}
-      - takeScreenshot: gallery-settings-build-marker
-      - scrollUntilVisible:
-          element: "Live device check.*"
-          direction: UP
+- scrollUntilVisible:
+    element:
+      id: "app-version"
+    direction: DOWN
+- assertVisible:
+    id: "app-version"
+    text: "Version .*"
+- assertNotVisible: "UI: figma-parity.*"
+- takeScreenshot: gallery-settings-app-version
+- scrollUntilVisible:
+    element: "Live device check.*"
+    direction: UP
 - scrollUntilVisible:
     element: "Live device check.*"
     direction: DOWN

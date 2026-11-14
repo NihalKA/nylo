@@ -19,21 +19,18 @@ appId: com.nylohq.nylo
 - tapOn: "Settings"
 - waitForAnimationToEnd
 - takeScreenshot: gallery-01-settings
-- runFlow:
-    when:
-      true: ${UI_BUILD_MARKER != ""}
-    commands:
-      - scrollUntilVisible:
-          element:
-            id: "ui-build-marker"
-          direction: DOWN
-      - assertVisible:
-          id: "ui-build-marker"
-          text: ${UI_BUILD_MARKER}
-      - takeScreenshot: gallery-01b-build-marker
-      - scrollUntilVisible:
-          element: ".*Restore backup.*"
-          direction: UP
+- scrollUntilVisible:
+    element:
+      id: "app-version"
+    direction: DOWN
+- assertVisible:
+    id: "app-version"
+    text: "Version .*"
+- assertNotVisible: "UI: figma-parity.*"
+- takeScreenshot: gallery-01b-app-version
+- scrollUntilVisible:
+    element: ".*Restore backup.*"
+    direction: UP
 - scrollUntilVisible:
     element: ".*Restore backup.*"
     direction: DOWN

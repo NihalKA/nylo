@@ -29,7 +29,10 @@ test("slow images have their own idle budget; activity never extends the total d
   assert.equal(clock.expired(), "total-timeout");
 });
 test("background expiry, user stop and idle timeout explain different causes", () => {
-  assert.match(interruptionMessage("background-expired", "image"), /iOS ended/);
+  assert.match(
+    interruptionMessage("background-expired", "image"),
+    /operating system ended/,
+  );
   assert.match(interruptionMessage("stopped", "image"), /You stopped/);
   assert.match(interruptionMessage("stage-timeout", "image"), /300 seconds/);
   assert.match(interruptionMessage("stage-timeout", "model"), /120 seconds/);

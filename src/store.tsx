@@ -69,6 +69,7 @@ type ActiveResponse = {
   clock: ReturnType<typeof createResponseClock>;
   interrupt: (reason: InterruptionReason) => void;
   awaitingApproval: boolean;
+  acquiringBackground: boolean;
 };
 type Store = {
   data: AppData;
@@ -207,7 +208,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       for (const response of active.current.values()) {
         if (
           state === "background" &&
-          (response.awaitingApproval || !response.canBackground())
+          (response.awaitingApproval ||
+            (!response.acquiringBackground && !response.canBackground()))
         )
           response.interrupt("background-unavailable");
         const expired = response.clock.expired();
@@ -449,6 +451,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       clock,
       interrupt,
       awaitingApproval: true,
+      acquiringBackground: false,
     };
     active.current.set(conversationId, response);
     setRunningIds([...active.current.keys()]);
@@ -615,14 +618,27 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       }, 1000);
       const flushTimer = setInterval(flush, 200);
       try {
-        backgroundLease = await beginBackgroundResponse(
-          assistantId,
-          () => {
-            interrupt("background-expired");
-          },
-          controller.signal,
-        );
+        // Native startup may overlap the Home gesture. Wait for its actual grant
+        // before deciding whether this user-initiated request can continue.
+        response.acquiringBackground = true;
+        try {
+          backgroundLease = await beginBackgroundResponse(
+            assistantId,
+            () => {
+              progress({ backgroundAllowed: false });
+              // A delayed OS expiration must not cancel a foreground reply.
+              // The revoked lease still prevents a later unsupported background.
+              if (AppState.currentState === "background")
+                interrupt("background-expired");
+            },
+            controller.signal,
+          );
+        } finally {
+          response.acquiringBackground = false;
+        }
         progress({ backgroundAllowed: backgroundLease?.held === true });
+        if (AppState.currentState === "background" && !backgroundLease?.held)
+          interrupt("background-unavailable");
         if (controller.signal.aborted)
           throw new Error("Return to Nylo to send. Your draft is kept.");
         await update((d) => ({

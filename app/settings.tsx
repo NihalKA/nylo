@@ -1,6 +1,6 @@
 import { Text } from "../src/typography";
 import { fonts } from "../src/typography";
-import Constants from "expo-constants";
+import { buildInfo } from "../src/build-info";
 import React, { useEffect, useRef, useState } from "react";
 import { Linking, Pressable, View } from "react-native";
 import { AppearancePreference } from "../src/theme";
@@ -566,17 +566,13 @@ export default function Settings() {
             <BrandWordmark height={18} />
           </View>
         </View>
-        <Text style={[s.sub, { paddingBottom: 8, textAlign: "center" }]}>
-          Version {Constants.expoConfig?.version || "Development"}
-          {Constants.nativeBuildVersion
-            ? ` (${Constants.nativeBuildVersion})`
-            : ""}
+        <Text
+          testID="app-version"
+          style={[s.sub, { paddingBottom: 8, textAlign: "center" }]}
+        >
+          Version {buildInfo.version}
+          {buildInfo.build ? ` (${buildInfo.build})` : ""}
         </Text>
-        {process.env.EXPO_PUBLIC_UI_BUILD_MARKER ? (
-          <Text testID="ui-build-marker" style={[s.sub, { fontSize: 12 }]}>
-            {process.env.EXPO_PUBLIC_UI_BUILD_MARKER}
-          </Text>
-        ) : null}
         <Press
           feel="tick"
           accessibilityRole="button"
