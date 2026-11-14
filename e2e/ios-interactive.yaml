@@ -79,3 +79,59 @@ appId: com.nylohq.nylo
     centerElement: true
 - assertVisible: "Budget: 41000"
 - takeScreenshot: interactive-06-phone-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Loan calculator.*"
+- scrollUntilVisible:
+    element: "Exact Loan amount"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Exact Loan amount"
+- eraseText: 12
+- inputText: "120000"
+- tapOn: "Finish editing Loan amount"
+- scrollUntilVisible:
+    element: "Monthly payment"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: ".*644[.]19.*"
+- takeScreenshot: interactive-07-loan-live-result
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Loan calculator.*"
+- scrollUntilVisible:
+    element: "Exact Loan amount"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Loan amount: 120000 INR"
+- takeScreenshot: interactive-08-loan-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Travel dates.*"
+- scrollUntilVisible:
+    element: "Choose Return date"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Choose Return date"
+- assertVisible: "Use date"
+- takeScreenshot: interactive-09-native-calendar
+- tapOn: "Use date"
+- assertVisible: "Clear Return date"
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Travel dates.*"
+- scrollUntilVisible:
+    element: "Clear Return date"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Clear Return date"
+- takeScreenshot: interactive-10-dates-restored

@@ -704,3 +704,47 @@ test("a noncanonical LB error frame still exposes only its allowlisted code", as
     return true;
   });
 });
+
+test("one invalid UI can be corrected once, and a complete calculator stops without another request", async () => {
+  let calls = 0;
+  const saved: InteractiveReply[] = [];
+  const o = options(async (_url, init) => {
+    calls++;
+    if (calls === 1)
+      return stream(undefined, "show_interactive", {
+        source: 'root = Root([Unknown("bad")])',
+        fallback: "Calculator",
+      });
+    assert.equal(calls, 2);
+    assert.ok(String(init?.body).includes("retryAllowed"));
+    return stream(undefined, "show_interactive", {
+      source:
+        'root = Root([Number("p","Amount",0,10000,100,1000),Metric("Double","$p*2")])',
+      fallback: "Adjust amount to double it.",
+      finishAfter: true,
+    });
+  });
+  o.onInteractive = async (r) => {
+    saved.push(r);
+  };
+  await runSDKAgent(o);
+  assert.equal(calls, 2);
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].version, 2);
+});
+test("invalid UI correction budget is bounded and exhausted attempts save nothing", async () => {
+  let calls = 0;
+  const o = options(async (_url, init) => {
+    calls++;
+    if (calls <= 3)
+      return stream(undefined, "show_interactive", {
+        source: 'root = Root([Unknown("bad")])',
+        fallback: "No controls",
+      });
+    assert.ok(String(init?.body).includes("Only one successful interactive"));
+    return stream("Please enter the loan amount, annual rate and term.");
+  });
+  o.onInteractive = async () => assert.fail("invalid section saved");
+  await runSDKAgent(o);
+  assert.equal(calls, 4);
+});

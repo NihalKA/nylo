@@ -1,21 +1,35 @@
 import React, {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import {
+  AppState,
+  Keyboard,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  View,
+} from "react-native";
 import {
   createLibrary,
   Renderer,
   type ComponentRenderProps,
 } from "@openuidev/react-lang";
+import DatePicker from "./reply-date-picker";
+import { calculate, formatResult } from "./reply-calculations";
+import { validDate, localDate, dateValue } from "./reply-dates";
+import { CoalescedWriter } from "./coalesced-writer";
 import { marked, type Tokens } from "marked";
 import { Text, TextInput } from "./typography";
 import { Button } from "./ui";
 import { theme } from "./theme";
 import { DataTable } from "./rich-blocks";
+import { MessageContent } from "./message-content";
 import {
   replyLibrary,
   inspectReply,
@@ -32,6 +46,9 @@ type Host = {
   submit: () => void;
   submitted: boolean;
   valid: boolean;
+  submitDisabled: boolean;
+  commit: () => void;
+  inputValidity: (name: string, valid: boolean) => void;
 };
 const HostContext = createContext<Host | null>(null);
 const useHost = () => useContext(HostContext)!;
@@ -47,10 +64,39 @@ const textStyle = () => ({ color: theme.ink, fontSize: 14, lineHeight: 22 });
 
 function Table({ props }: ComponentRenderProps<any>) {
   const { values } = useHost();
-  const filter = props.filterField ? values[props.filterField] : undefined;
-  const rows = (props.rows as string[][]).filter(
-    (r) => !filter || filter === "All" || r[props.filterColumn] === filter,
-  );
+  const config =
+    typeof props.filterField === "object"
+      ? props.filterField
+      : { selectField: props.filterField, selectColumn: props.filterColumn };
+  const filter = config.selectField ? values[config.selectField] : undefined;
+  const maximum = config.maxField ? values[config.maxField] : undefined;
+  let rows = (props.rows as any[][])
+    .map((row) =>
+      row.map((value) => {
+        if (typeof value === "string") return value;
+        try {
+          return formatResult(
+            calculate(value.expression, values),
+            value.format,
+            values,
+          );
+        } catch {
+          return "Calculation unavailable";
+        }
+      }),
+    )
+    .filter(
+      (r) =>
+        (!filter || filter === "All" || r[config.selectColumn] === filter) &&
+        (typeof maximum !== "number" ||
+          (/^-?\d+(\.\d+)?$/.test(r[config.maxColumn]) &&
+            Number(r[config.maxColumn]) <= maximum)),
+    );
+  const column = config.sortField
+    ? props.headers.indexOf(values[config.sortField])
+    : -1;
+  if (column >= 0)
+    rows = [...rows].sort((a, b) => Number(b[column]) - Number(a[column]));
   const cell = (text: string): Tokens.TableCell => ({
     text,
     tokens: marked.Lexer.lexInline(text),
@@ -86,9 +132,30 @@ function Chart({ props }: ComponentRenderProps<any>) {
   const { values } = useHost();
   const [selected, setSelected] = useState<number | null>(null);
   const filter = props.filterField ? values[props.filterField] : undefined;
-  const points = (props.points as Point[]).filter(
+  let calculationFailed = false;
+  const resolved = (props.points as any[]).map((p) => {
+    try {
+      return {
+        ...p,
+        value:
+          typeof p.value === "number"
+            ? p.value
+            : calculate(p.value.expression, values),
+      } as Point;
+    } catch {
+      calculationFailed = true;
+      return { ...p, value: 0 } as Point;
+    }
+  });
+  const points = resolved.filter(
     (p) => !filter || filter === "All" || p.category === filter,
   );
+  if (calculationFailed)
+    return (
+      <Text style={textStyle()}>
+        Calculation unavailable. Check the numeric inputs.
+      </Text>
+    );
   const low = Math.min(0, ...points.map((p) => p.value));
   const high = Math.max(0, ...points.map((p) => p.value));
   const range = high - low || 1;
@@ -254,11 +321,22 @@ function Select({ props }: ComponentRenderProps<any>) {
     </View>
   );
 }
-function Slider({ props }: ComponentRenderProps<any>) {
+function Slider({
+  props,
+  exact = false,
+}: ComponentRenderProps<any> & { exact?: boolean }) {
   const host = useHost();
   const [width, setWidth] = useState(1);
   const value = Number(host.values[props.name]);
-  const set = (v: number) =>
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(String(value));
+  const [invalid, setInvalid] = useState(false);
+  useEffect(() => {
+    if (!editing && !invalid) setDraft(String(value));
+  }, [value, editing, invalid]);
+  const set = (v: number) => {
+    setInvalid(false);
+    host.inputValidity(props.name, true);
     host.change(
       props.name,
       Number(
@@ -271,6 +349,7 @@ function Slider({ props }: ComponentRenderProps<any>) {
         ).toFixed(8),
       ),
     );
+  };
   const touch = (x: number) => {
     if (!host.disabled)
       set(
@@ -282,6 +361,9 @@ function Slider({ props }: ComponentRenderProps<any>) {
     <View style={{ gap: 6 }}>
       <Text style={textStyle()}>
         {props.label}: {value}
+        {props.unit
+          ? ` ${props.unit.startsWith("$") ? host.values[props.unit.slice(1)] : props.unit}`
+          : ""}
       </Text>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
         <Button
@@ -289,7 +371,10 @@ function Slider({ props }: ComponentRenderProps<any>) {
           accessibilityLabel={`Decrease ${props.label}`}
           secondary
           disabled={host.disabled || value <= props.min}
-          onPress={() => set(value - props.step)}
+          onPress={() => {
+            set(value - props.step);
+            host.commit();
+          }}
         />
         <View
           accessible
@@ -312,6 +397,8 @@ function Slider({ props }: ComponentRenderProps<any>) {
           onMoveShouldSetResponder={() => !host.disabled}
           onResponderGrant={(e) => touch(e.nativeEvent.locationX)}
           onResponderMove={(e) => touch(e.nativeEvent.locationX)}
+          onResponderRelease={host.commit}
+          onResponderTerminate={host.commit}
           style={{ flex: 1, minHeight: 44, justifyContent: "center" }}
         >
           <View
@@ -344,9 +431,204 @@ function Slider({ props }: ComponentRenderProps<any>) {
           accessibilityLabel={`Increase ${props.label}`}
           secondary
           disabled={host.disabled || value >= props.max}
-          onPress={() => set(value + props.step)}
+          onPress={() => {
+            set(value + props.step);
+            host.commit();
+          }}
         />
       </View>
+      {exact ? (
+        <>
+          <TextInput
+            accessibilityLabel={`Exact ${props.label}`}
+            keyboardType="decimal-pad"
+            editable={!host.disabled}
+            value={draft}
+            onFocus={() => setEditing(true)}
+            onChangeText={(text) => {
+              setDraft(text);
+              const n = Number(text);
+              const valid =
+                /^[-+]?(?:\d+(?:\.\d*)?|\.\d+)$/.test(text.trim()) &&
+                Number.isFinite(n) &&
+                n >= props.min &&
+                n <= props.max;
+              host.inputValidity(props.name, valid);
+              setInvalid(!valid);
+              if (valid) host.change(props.name, n);
+            }}
+            onBlur={() => {
+              setEditing(false);
+              host.commit();
+            }}
+            style={{
+              minHeight: 44,
+              padding: 12,
+              color: theme.ink,
+              backgroundColor: theme.surface,
+              borderWidth: 1,
+              borderColor: invalid ? theme.error : theme.lineStrong,
+              borderRadius: 12,
+            }}
+          />
+          {editing ? (
+            <Button
+              secondary
+              title="Done editing"
+              accessibilityLabel={`Finish editing ${props.label}`}
+              onPress={() => {
+                Keyboard.dismiss();
+                setEditing(false);
+                host.commit();
+              }}
+            />
+          ) : null}
+          {invalid ? (
+            <Text accessibilityRole="alert" style={{ color: theme.error }}>
+              Enter a number from {props.min} to {props.max}.
+            </Text>
+          ) : null}
+        </>
+      ) : null}
+    </View>
+  );
+}
+function Metric({ props }: ComponentRenderProps<any>) {
+  const { values } = useHost();
+  let result: string;
+  try {
+    result = formatResult(
+      calculate(props.expression, values),
+      props.format,
+      values,
+    );
+  } catch {
+    result = "Calculation unavailable. Check the numeric inputs.";
+  }
+  return (
+    <View style={frame()}>
+      <Text style={textStyle()}>{props.label}</Text>
+      <Text
+        accessibilityLiveRegion="polite"
+        style={[
+          textStyle(),
+          { fontSize: 22, lineHeight: 30, fontWeight: "600" },
+        ]}
+      >
+        {result}
+      </Text>
+    </View>
+  );
+}
+function CalendarInput({ props }: ComponentRenderProps<any>) {
+  const host = useHost();
+  const value = String(host.values[props.name] || "");
+  const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState(new Date());
+  const minimum =
+    props.afterField && validDate(host.values[props.afterField])
+      ? localDate(String(host.values[props.afterField]))
+      : localDate("1900-01-01");
+  const maximum = localDate("2200-12-31");
+  const commit = (date: Date) => {
+    host.change(props.name, dateValue(date));
+    host.commit();
+    setOpen(false);
+  };
+  return (
+    <View style={{ gap: 8 }}>
+      <Text style={textStyle()}>
+        {props.label}
+        {props.required ? " (required)" : ""}
+      </Text>
+      <Button
+        secondary
+        title={value ? localDate(value).toLocaleDateString() : "Choose date"}
+        accessibilityLabel={`Choose ${props.label}`}
+        disabled={host.disabled}
+        onPress={() => {
+          const chosen = value ? localDate(value) : new Date();
+          setPending(
+            chosen < minimum ? minimum : chosen > maximum ? maximum : chosen,
+          );
+          setOpen(true);
+        }}
+      />
+      {value ? (
+        <Button
+          secondary
+          title="Clear date"
+          accessibilityLabel={`Clear ${props.label}`}
+          disabled={host.disabled}
+          onPress={() => {
+            host.change(props.name, "");
+            host.commit();
+          }}
+        />
+      ) : null}
+      {minimum && value && value < dateValue(minimum) ? (
+        <Text accessibilityRole="alert" style={{ color: theme.error }}>
+          End date must not precede start date.
+        </Text>
+      ) : null}
+      {open && Platform.OS === "android" ? (
+        <DatePicker
+          value={pending}
+          mode="date"
+          minimumDate={minimum}
+          maximumDate={maximum}
+          onChange={(event, date) => {
+            if (event.type === "set" && date) commit(date);
+            else setOpen(false);
+          }}
+        />
+      ) : null}
+      <Modal
+        visible={open && Platform.OS !== "android"}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setOpen(false)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            padding: 20,
+            backgroundColor: "rgba(0,0,0,0.35)",
+          }}
+        >
+          <ScrollView
+            contentContainerStyle={frame()}
+            style={{ flexGrow: 0, maxHeight: "85%" }}
+          >
+            <Text style={[textStyle(), { fontWeight: "600" }]}>
+              {props.label}
+            </Text>
+            {open ? (
+              <DatePicker
+                value={pending}
+                mode="date"
+                display="inline"
+                minimumDate={minimum}
+                maximumDate={maximum}
+                onChange={(_, date) => {
+                  if (date) setPending(date);
+                }}
+              />
+            ) : null}
+            <Button
+              title="Use date"
+              disabled={!!minimum && dateValue(pending) < dateValue(minimum)}
+              onPress={() => commit(pending)}
+            />
+            <Button
+              secondary
+              title="Cancel date selection"
+              onPress={() => setOpen(false)}
+            />
+          </ScrollView>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -362,6 +644,7 @@ function Input({ props }: ComponentRenderProps<any>) {
         accessibilityLabel={props.label}
         editable={!host.disabled}
         maxLength={1000}
+        onBlur={host.commit}
         value={String(host.values[props.name] ?? "")}
         onChangeText={(value) => host.change(props.name, value)}
         style={{
@@ -386,7 +669,9 @@ function Submit({ props }: ComponentRenderProps<any>) {
       </Text>
       <Button
         title={host.submitted ? "Choices sent" : props.label}
-        disabled={host.disabled || host.submitted || !host.valid}
+        disabled={
+          host.disabled || host.submitDisabled || host.submitted || !host.valid
+        }
         onPress={host.submit}
       />
     </View>
@@ -400,15 +685,39 @@ const renderers: Record<string, React.FC<ComponentRenderProps<any>>> = {
       ))}
     </View>
   ),
-  Text: ({ props }) => (
-    <Text selectable style={textStyle()}>
-      {props.text}
-    </Text>
+  Text: ({ props }) => <MessageContent text={props.text} />,
+  Section: ({ props, renderNode }) => (
+    <View style={frame()}>
+      <Text style={[textStyle(), { fontWeight: "600" }]}>{props.title}</Text>
+      {props.children.map((node: unknown, i: number) => (
+        <React.Fragment key={i}>{renderNode(node)}</React.Fragment>
+      ))}
+    </View>
   ),
+  Details: function Details({ props, renderNode }) {
+    const [open, setOpen] = useState(false);
+    return (
+      <View style={{ gap: 10 }}>
+        <Button
+          secondary
+          title={`${open ? "Hide" : "Show"} ${props.title}`}
+          onPress={() => setOpen(!open)}
+        />
+        {open
+          ? props.children.map((node: unknown, i: number) => (
+              <React.Fragment key={i}>{renderNode(node)}</React.Fragment>
+            ))
+          : null}
+      </View>
+    );
+  },
   Table,
   Chart,
   Select,
   Slider,
+  Number: (args) => <Slider {...args} exact />,
+  Metric,
+  DateInput: CalendarInput,
   Input,
   Submit,
 };
@@ -437,14 +746,16 @@ class ReplyBoundary extends React.Component<
   }
 }
 
-export function InteractiveContent({
+function InteractiveHost({
   reply,
   disabled,
+  submitDisabled = disabled,
   onSave,
   onSubmit,
 }: {
   reply: InteractiveReply;
   disabled: boolean;
+  submitDisabled?: boolean;
   onSave: (values: ReplyValues) => Promise<void>;
   onSubmit: (values: ReplyValues) => Promise<void>;
 }) {
@@ -455,28 +766,60 @@ export function InteractiveContent({
   const [values, setValues] = useState(initial);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const queue = useRef<Promise<void>>(Promise.resolve());
+  const [invalidInputs, setInvalidInputs] = useState<Set<string>>(new Set());
+  const invalidRef = useRef(new Set<string>());
+  const inputValidity = (name: string, valid: boolean) => {
+    const next = new Set(invalidRef.current);
+    if (valid) next.delete(name);
+    else next.add(name);
+    invalidRef.current = next;
+    setInvalidInputs(next);
+  };
   const lock = useRef(false);
-  const saveFailure = useRef(false);
+  const current = useRef(initial);
+  const mounted = useRef(true);
+  const saver = useRef(onSave);
+  saver.current = onSave;
+  const writer = useRef<CoalescedWriter<ReplyValues> | null>(null);
+  if (!writer.current)
+    writer.current = new CoalescedWriter(
+      (v) => saver.current(v),
+      (failed) => {
+        if (mounted.current)
+          setError(
+            failed
+              ? "Could not save these choices. Change a value to try again."
+              : "",
+          );
+      },
+    );
+  const commit = () => {
+    void writer.current!.flush().catch(() => {});
+  };
+  useEffect(() => {
+    mounted.current = true;
+    const subscription = AppState.addEventListener("change", (state) => {
+      if (state !== "active") commit();
+    });
+    return () => {
+      mounted.current = false;
+      subscription.remove();
+      commit();
+    };
+  }, []);
   const change = (name: string, value: string | number) => {
     if (disabled || lock.current) return;
-    const next = replyValues(reply.source, { ...values, [name]: value });
-    setValues(next);
-    queue.current = queue.current
-      .catch(() => {})
-      .then(() => onSave(next))
-      .then(
-        () => {
-          saveFailure.current = false;
-          setError("");
-        },
-        () => {
-          saveFailure.current = true;
-          setError(
-            "Could not save these choices. Try changing the value again.",
-          );
-        },
-      );
+    try {
+      const next = replyValues(reply.source, {
+        ...current.current,
+        [name]: value,
+      });
+      current.current = next;
+      setValues(next);
+      writer.current!.push(next);
+    } catch {
+      setError("These controls could not update. Your saved choices are kept.");
+    }
   };
   let submitted = false;
   let valid = false;
@@ -487,17 +830,14 @@ export function InteractiveContent({
     /* required field remains empty */
   }
   const submit = async () => {
-    if (disabled || lock.current) return;
+    if (disabled || submitDisabled || lock.current || invalidRef.current.size)
+      return;
     lock.current = true;
     setBusy(true);
     setError("");
     try {
       replySubmission(reply, values);
-      await queue.current;
-      if (saveFailure.current)
-        throw new Error(
-          "Save your choices before sending. Try changing the value again.",
-        );
+      await writer.current!.flush();
       await onSubmit(values);
     } catch (e) {
       setError(
@@ -522,7 +862,10 @@ export function InteractiveContent({
           change,
           submit: () => void submit(),
           submitted,
-          valid,
+          valid: valid && !invalidInputs.size,
+          inputValidity,
+          submitDisabled,
+          commit,
         }}
       >
         <Renderer
@@ -543,6 +886,16 @@ export function InteractiveContent({
           </Text>
         ) : null}
       </HostContext.Provider>
+    </ReplyBoundary>
+  );
+}
+
+export function InteractiveContent(
+  props: React.ComponentProps<typeof InteractiveHost>,
+) {
+  return (
+    <ReplyBoundary key={props.reply.source} fallback={props.reply.fallback}>
+      <InteractiveHost {...props} />
     </ReplyBoundary>
   );
 }

@@ -27,4 +27,4 @@ with sqlite3.connect(database) as db:
     if occupied or db.execute("SELECT count(*) FROM attachment_blobs").fetchone()[0]:
         raise SystemExit("Refusing to replace a nonempty app database.")
     db.execute("INSERT INTO app_state(id,json) VALUES(1,?) ON CONFLICT(id) DO UPDATE SET json=excluded.json", (json.dumps(fixture),))
-print("Seeded 3 synthetic interactive replies; no credentials or provider requests.")
+print("Seeded 5 synthetic interactive replies; no credentials or provider requests.")

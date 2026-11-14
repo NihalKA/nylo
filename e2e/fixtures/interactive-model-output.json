@@ -1,0 +1,81 @@
+{
+  "model": "gpt-6.1-sol",
+  "connection": "Existing NyloHQ LB /responses",
+  "date": "2026-11-15",
+  "syntheticDataOnly": true,
+  "requestsUsed": 9,
+  "requestLimit": 12,
+  "cases": [
+    {
+      "id": "loan",
+      "request": "Help me calculate a loan. Use INR 240000, 5% annual interest, 30 years, monthly payments and no fees. I want to explore different amounts and rates.",
+      "text": "",
+      "reply": {
+        "version": 2,
+        "source": "root = Root([intro, amount, rate, term, monthly, interest, total, note])\nintro = Text(\"Loan calculator · INR · Monthly payments. Adjust the amount, annual rate, or term to recalculate instantly.\")\namount = Number(\"amount\", \"Loan amount\", 0, 10000000, 1000, 240000, \"INR\")\nrate = Number(\"rate\", \"Annual interest rate\", 0, 30, 0.1, 5, \"%\")\nterm = Number(\"years\", \"Loan term\", 1, 50, 1, 30, \"years\")\nmonthly = Metric(\"Monthly payment\", \"@Payment($amount,$rate,$years)\", \"INR\")\ninterest = Metric(\"Total interest\", \"@Payment($amount,$rate,$years)*$years*12-$amount\", \"INR\")\ntotal = Metric(\"Total repaid\", \"@Payment($amount,$rate,$years)*$years*12\", \"INR\")\nnote = Text(\"Assumptions: fixed annual interest rate, interest calculated monthly at the annual rate ÷ 12, equal end-of-month payments, and no fees or extra payments. Totals use unrounded payments; actual lender rounding may differ.\")",
+        "fallback": "For a ₹240,000 loan at 5% annual interest over 30 years (360 monthly payments), assuming a fixed rate, monthly interest at 5% ÷ 12, equal end-of-month payments, and no fees:\n\n• Monthly payment: ₹1,288.37\n• Total interest: ₹223,813.88\n• Total repaid: ₹463,813.88\n\nAdjust the loan amount, annual interest rate, or term in the calculator to explore scenarios. Totals use unrounded payments; actual lender rounding may differ.",
+        "values": {
+          "amount": 240000,
+          "rate": 5,
+          "years": 30
+        }
+      }
+    },
+    {
+      "id": "travel-v2",
+      "request": "Help me plan a weekend trip from Kochi to Munnar. I have not chosen the dates yet. Budget INR 15000 for two adults. Ask me only what you need before making the plan.",
+      "text": "",
+      "reply": {
+        "version": 2,
+        "source": "root = Root([intro, timing, departure, returnDate, nights, transport, submit])\nintro = Text(\"Kochi → Munnar · 2 adults · Total budget ₹15,000. Before I plan, I only need your trip length, transport preference, and any date constraints. Leave the calendars blank if you’re flexible.\")\ntiming = Select(\"date_flexibility\", \"Dates\", [\"Flexible—no dates chosen\", \"I have a preferred weekend\"], \"Flexible—no dates chosen\")\ndeparture = DateInput(\"departure_date\", \"Departure date (optional)\", \"\", false)\nreturnDate = DateInput(\"return_date\", \"Return date (optional)\", \"\", false, \"departure_date\")\nnights = Select(\"trip_length\", \"How long would you like to stay?\", [\"Not sure—suggest what fits the budget\", \"1 night\", \"2 nights\"], \"Not sure—suggest what fits the budget\")\ntransport = Select(\"transport\", \"Transport preference\", [\"Recommend a budget-friendly option\", \"Own car\", \"Hired car with driver\", \"Bus / public transport\"], \"Recommend a budget-friendly option\")\nsubmit = Submit(\"Plan our weekend\", \"Create a Kochi-to-Munnar weekend plan for two adults within a total INR 15000 budget, using my trip length, transport preference and date flexibility. Clearly label any assumptions.\")",
+        "fallback": "For your Kochi–Munnar weekend for two adults within ₹15,000, I only need:\n1. Would you prefer 1 night or 2 nights, or should I suggest what fits the budget?\n2. Will you use your own car, hire a car with a driver, take public transport, or would you like me to recommend an option?\nDates can stay flexible. If you have a preferred weekend, you can optionally choose departure and return dates.",
+        "values": {
+          "date_flexibility": "Flexible—no dates chosen",
+          "departure_date": "",
+          "return_date": "",
+          "trip_length": "Not sure—suggest what fits the budget",
+          "transport": "Recommend a budget-friendly option"
+        }
+      }
+    },
+    {
+      "id": "expense",
+      "request": "These are sample expenses: Lunch 100 Food, Bus 30 Travel, Dinner 200 Food. Help me explore them by category with a table and chart.",
+      "text": "",
+      "reply": {
+        "version": 2,
+        "source": "root = Root([intro, category, expenses, chart, totals])\nintro = Text(\"Sample expenses by category. Choose a category to filter both the table and chart. Amounts are shown without a currency because none was supplied.\")\ncategory = Select(\"category\", \"Category\", [\"All\", \"Food\", \"Travel\"], \"All\")\nexpenses = Table([\"Expense\", \"Category\", \"Amount\"], [[\"Lunch\", \"Food\", \"100\"], [\"Bus\", \"Travel\", \"30\"], [\"Dinner\", \"Food\", \"200\"]], \"category\", 1)\nchart = Chart(\"Sample expense totals by category\", \"bar\", [{label: \"Food\", value: 300, category: \"Food\"}, {label: \"Travel\", value: 30, category: \"Travel\"}], \"category\")\ntotals = Text(\"Category totals: Food 300; Travel 30. Overall total: 330 across 3 sample expenses.\")",
+        "fallback": "## Sample expenses\n\n| Expense | Category | Amount |\n|---|---|---:|\n| Lunch | Food | 100 |\n| Bus | Travel | 30 |\n| Dinner | Food | 200 |\n\nChart totals: Food **300**; Travel **30**.\n\n**Overall total: 330** across 3 sample expenses. No currency was supplied. The interactive category selector filters both the table and bar chart.",
+        "values": {
+          "category": "All"
+        }
+      }
+    },
+    {
+      "id": "phones",
+      "request": "Compare only these SAMPLE phones: A price INR30000 battery score8 camera score6; B price INR40000 battery score6 camera score9; C price INR50000 battery score9 camera score8. Let me adjust budget and rank by battery or camera without another request.",
+      "text": "",
+      "reply": {
+        "version": 2,
+        "source": "root = Root([intro,budget,rank,phones])\nintro = Text(\"SAMPLE phones only. Adjust the budget to show phones at or below it, and choose a score to rank highest first. Changes happen locally without another request.\")\nbudget = Number(\"budget\",\"Maximum budget\",0,60000,1000,50000,\"INR\")\nrank = Select(\"ranking\",\"Rank by\",[\"Battery score\",\"Camera score\"],\"Battery score\")\nphones = Table([\"Phone\",\"Price (INR)\",\"Battery score\",\"Camera score\"],[[\"A\",\"30000\",\"8\",\"6\"],[\"B\",\"40000\",\"6\",\"9\"],[\"C\",\"50000\",\"9\",\"8\"]],{maxField:\"budget\",maxColumn:1,sortField:\"ranking\"})",
+        "fallback": "SAMPLE data only:\n| Phone | Price (INR) | Battery score | Camera score |\n|---|---:|---:|---:|\n| A | 30,000 | 8 | 6 |\n| B | 40,000 | 6 | 9 |\n| C | 50,000 | 9 | 8 |\n\nAt the initial INR 50,000 budget, battery ranking is C, A, B; camera ranking is B, C, A. The interactive controls filter phones at or below your budget and rank by your selected score, highest first, without another request.",
+        "values": {
+          "budget": 50000,
+          "ranking": "Battery score"
+        }
+      }
+    },
+    {
+      "id": "simple-v2",
+      "request": "What is 12 times 8?",
+      "text": "12 × 8 = **96**.",
+      "reply": null
+    },
+    {
+      "id": "ambiguous-v2",
+      "request": "Help me with a calculator.",
+      "text": "What would you like the calculator to calculate?",
+      "reply": null
+    }
+  ]
+}

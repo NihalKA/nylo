@@ -21,6 +21,8 @@ expected = {
     "interactive-expenses": {"category": "All"},
     "interactive-planning": {"goal": "A quiet weekend", "notes": ""},
     "interactive-phones": {"budget": 41000, "priority": "Camera"},
+    "interactive-loan": {"amount": 120000, "rate": 5, "years": 30},
+    "interactive-dates": {"start": "2026-12-20", "end": "2026-12-20"},
 }
 for identifier, values in expected.items():
     chat = next(c for c in data["conversations"] if c["id"] == identifier)
