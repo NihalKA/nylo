@@ -178,3 +178,22 @@ workflow gates and only this task's Apple environment branch policy were removed
 after CI completed; other policies remain intact. These cleanup/documentation
 changes do not alter the app inputs and require no native rebuild. Merge remains
 blocked until the owner explicitly confirms the delivered builds are good.
+
+## Settings build-number follow-up
+
+The owner observed that installed iOS 43 showed only `Version 1.0.0`. The footer
+read `nativeBuildVersion` from `expo-constants`, which does not supply that field
+in SDK 58. It now reads the installed native version and build from the
+SDK-compatible `expo-application` module, so the footer renders
+`Version 1.0.0 (<installed build>)` on both native platforms. No number is
+hardcoded. Web keeps its configured version without inventing a native build.
+Three regression cases cover iOS, Android and web; all 177 tests and type
+checking pass. Existing distributed binaries are unchanged; new CI candidates
+are required for this correction. The exact branch workflow allowances are
+temporarily restored only for those candidate builds and must be removed again
+after CI completes.
+
+The owner subsequently authorized completing this follow-up on the same branch,
+merging to main and publishing both corrected candidates to the existing
+TestFlight and closed Alpha destinations. That instruction supersedes the
+earlier hold on merging pending owner acceptance.
