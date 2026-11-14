@@ -209,7 +209,7 @@ coalesced persistence, outer parsing containment, bounded invalid-UI correction,
 provider citation normalization and raw-UI text-channel protection. Version-1
 replies remain supported. No provider/protocol/key/model/memory/consent switches.
 
-Local verification: 207 tests pass and iOS/Android/web production bundles export.
+Local verification: 209 tests pass and iOS/Android/web production bundles export.
 Independent payment-balance tests cover zero/tiny/ordinary/high rates, and malformed
 expressions, calendar order/cycles, storage failures, stream splits and repeated
 updates are covered. These tests do not establish native-crash resolution.

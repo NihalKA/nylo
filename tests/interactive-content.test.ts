@@ -353,3 +353,58 @@ test("captured LB calculator and planner render with real OpenUI native composit
     }
   }
 });
+
+test("collapsing optional numeric edits discards draft and clears its host validation together", async () => {
+  Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
+  const Content = loadContent();
+  const reply = readInteractiveReply({
+    version: 2,
+    source:
+      'root = Root([Details("Options",[Number("optional","Optional",0,100,1,10)]),Submit("Send","Use choices")])',
+    fallback: "Options",
+    values: {},
+  })!;
+  let tree!: ReactTestRenderer;
+  await act(async () => {
+    tree = create(
+      React.createElement(Content, {
+        reply,
+        disabled: false,
+        onSave: async () => {},
+        onSubmit: async () => {},
+      }),
+    );
+  });
+  try {
+    await act(async () =>
+      tree.root.findByProps({ title: "Show Options" }).props.onPress(),
+    );
+    await act(async () =>
+      tree.root
+        .findByProps({ accessibilityLabel: "Exact Optional" })
+        .props.onChangeText("bad"),
+    );
+    assert.equal(tree.root.findByProps({ title: "Send" }).props.disabled, true);
+    await act(async () =>
+      tree.root.findByProps({ title: "Hide Options" }).props.onPress(),
+    );
+    assert.equal(
+      tree.root.findByProps({ title: "Send" }).props.disabled,
+      false,
+    );
+    await act(async () =>
+      tree.root.findByProps({ title: "Show Options" }).props.onPress(),
+    );
+    assert.equal(
+      tree.root.findByProps({ accessibilityLabel: "Exact Optional" }).props
+        .value,
+      "10",
+    );
+    assert.equal(
+      tree.root.findByProps({ title: "Send" }).props.disabled,
+      false,
+    );
+  } finally {
+    await act(async () => tree.unmount());
+  }
+});

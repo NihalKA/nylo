@@ -1,45 +1,41 @@
 import { inspectReply } from "./interactive-reply";
 import { ProviderTextFilter } from "./provider-text";
 
-// A provider can mistakenly serialize UI into its text channel. Hold a leading
-// assignment until complete, then recover text-only answers without exposing DSL.
+const declaration =
+  /\b[a-zA-Z_]\w*\s*=\s*(?:Root|Text|Table|Chart|Select|Slider|Number|Metric|DateInput|Input|Submit|Section|Details)\s*\(/;
+// Keep a bounded lookbehind so declaration names, fences and preambles are
+// recognized independently of provider chunk boundaries. No source is executed.
 export class ReplyTextFilter {
   private citations = new ProviderTextFilter();
   private pending = "";
-  private mode: "prefix" | "text" | "source" = "prefix";
+  private source = false;
   push(value: string) {
-    const text = this.citations.push(value);
-    if (this.mode === "text") return text;
-    this.pending += text;
-    if (this.mode === "source") {
-      if (this.pending.length > 24000)
-        this.pending = this.pending.slice(0, 24001);
-      return "";
-    }
-    if (
-      /^\s*root\s*=/.test(this.pending) ||
-      /^\s*[a-zA-Z_]\w*\s*=\s*[A-Z]\w*\s*\(/.test(this.pending)
-    ) {
-      this.mode = "source";
-      return "";
-    }
-    if (
-      this.pending.length < 160 &&
-      /^\s*[a-zA-Z_]*\s*(?:=\s*[A-Za-z_]*\s*)?$/.test(this.pending)
-    )
-      return "";
-    this.mode = "text";
-    const result = this.pending;
-    this.pending = "";
-    return result;
+    this.pending += this.citations.push(value);
+    if (!this.source) {
+      const match = declaration.exec(this.pending);
+      if (match) {
+        const prefix = this.pending
+          .slice(0, match.index)
+          .replace(/(^|\n)[ \t]*```[^\n]*\n?[ \t]*$/, "$1");
+        this.pending = this.pending.slice(match.index, match.index + 24001);
+        this.source = true;
+        return prefix;
+      }
+      if (this.pending.length > 160) {
+        const text = this.pending.slice(0, -160);
+        this.pending = this.pending.slice(-160);
+        return text;
+      }
+    } else if (this.pending.length > 24000)
+      this.pending = this.pending.slice(0, 24001);
+    return "";
   }
   finish() {
-    const rest = this.push(this.citations.finish());
-    let result = rest;
-    if (this.mode === "prefix") result += this.pending;
-    if (this.mode === "source") {
+    let result = this.push(this.citations.finish());
+    if (this.source) {
       try {
-        const { nodes } = inspectReply(this.pending);
+        const source = this.pending.replace(/\s*```\s*$/, "").trim();
+        const { nodes } = inspectReply(source);
         if (!nodes.every((n) => n.typeName === "Text"))
           throw Error("Missing tool call");
         result += nodes.map((n) => String(n.props.text)).join("\n\n");
@@ -47,8 +43,8 @@ export class ReplyTextFilter {
         result +=
           "The interactive reply could not be displayed. Please try again.";
       }
-    }
-    this.mode = "prefix";
+    } else result += this.pending;
+    this.source = false;
     this.pending = "";
     return result;
   }

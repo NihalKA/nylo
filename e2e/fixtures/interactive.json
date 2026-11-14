@@ -159,7 +159,7 @@
           "createdAt": 1794614400000,
           "interactive": {
             "version": 2,
-            "source": "root = Root([DateInput(\"start\",\"Departure date\",\"2026-12-20\",true), DateInput(\"end\",\"Return date\",\"\",true,\"start\"), Submit(\"Plan trip\",\"Plan a trip with these dates\")])",
+            "source": "root = Root([DateInput(\"start\",\"Departure date\",\"2026-12-20\",true), DateInput(\"end\",\"Return date\",\"2026-12-20\",true,\"start\"), Submit(\"Plan trip\",\"Plan a trip with these dates\")])",
             "fallback": "Illustrative native verification with no network requests.",
             "values": {}
           }

@@ -1,6 +1,7 @@
 import React, {
   createContext,
   useContext,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -331,6 +332,11 @@ function Slider({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(String(value));
   const [invalid, setInvalid] = useState(false);
+  const inputValidity = host.inputValidity;
+  useEffect(
+    () => () => inputValidity(props.name, true),
+    [inputValidity, props.name],
+  );
   useEffect(() => {
     if (!editing && !invalid) setDraft(String(value));
   }, [value, editing, invalid]);
@@ -768,13 +774,13 @@ function InteractiveHost({
   const [busy, setBusy] = useState(false);
   const [invalidInputs, setInvalidInputs] = useState<Set<string>>(new Set());
   const invalidRef = useRef(new Set<string>());
-  const inputValidity = (name: string, valid: boolean) => {
+  const inputValidity = useCallback((name: string, valid: boolean) => {
     const next = new Set(invalidRef.current);
     if (valid) next.delete(name);
     else next.add(name);
     invalidRef.current = next;
     setInvalidInputs(next);
-  };
+  }, []);
   const lock = useRef(false);
   const current = useRef(initial);
   const mounted = useRef(true);
