@@ -59,6 +59,10 @@ case "$scenario" in
     python3 scripts/seed-android-gallery.py artifacts/android-ui/Nylo-QA-gallery.json
     adb push artifacts/android-ui/Nylo-QA-gallery.json /sdcard/Download/Nylo-QA-gallery.json
     ;;
+  foreground-demo)
+    bash scripts/android/foreground-demo.sh
+    exit 0
+    ;;
   *) echo "Unknown Android UI scenario" >&2; exit 1 ;;
 esac
 printf 'Scenario: %s\n' "$scenario" >> artifacts/android-ui/provenance.txt

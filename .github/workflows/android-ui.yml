@@ -13,7 +13,7 @@ on:
       scenario:
         description: Existing smoke or populated offline design gallery
         type: choice
-        options: [smoke, gallery, sdk]
+        options: [smoke, gallery, sdk, foreground-demo]
         default: smoke
       allow_failed_audit:
         description: Revalidate existing compiled binaries after a test-only audit-parser correction
@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        navigation: [gestural, threebutton]
+        navigation: ${{ fromJSON(inputs.scenario == 'foreground-demo' && '["gestural"]' || '["gestural","threebutton"]') }}
     env:
       # Keep the emulator and Maestro within the hosted runner memory budget.
       JAVA_TOOL_OPTIONS: "-Xmx1024m"
@@ -61,9 +61,9 @@ jobs:
           import json, os, subprocess
           from pathlib import Path
           r=json.loads(Path('artifacts/android-ui/source-run.json').read_text())
-          assert r['name']=='Android signed builds' and r['head_branch'] in ('main', 'feat/figma-ui-parity', 'feat/preserve-followup-file-context', 'feat/ai-sdk-mobile-capabilities')
+          assert r['name']=='Android signed builds' and r['head_branch'] in ('main', 'feat/figma-ui-parity', 'feat/preserve-followup-file-context', 'feat/ai-sdk-mobile-capabilities', 'fix/background-response-lifecycle')
           assert r['conclusion']=='success' or (os.environ['GITHUB_EVENT_NAME']=='workflow_dispatch' and os.environ['ALLOW_FAILED_AUDIT']=='true')
-          if r['head_branch'] in ('feat/figma-ui-parity', 'feat/preserve-followup-file-context', 'feat/ai-sdk-mobile-capabilities'):
+          if r['head_branch'] != 'main':
               subprocess.run(['git','diff','--exit-code',r['head_sha'],'HEAD','--','app','src','assets','modules','plugins','app.json','package.json','package-lock.json','babel.config.js','metro.config.js','scripts/android/configure-build.py','scripts/android/release.init.gradle'],check=True)
           assert r['head_repository']['full_name']==os.environ['GITHUB_REPOSITORY']
           subprocess.run(['gh','run','download',str(r['id']),'--repo',os.environ['GITHUB_REPOSITORY'],'--name',f"android-{r['run_number']}-{r['head_sha']}",'--dir','artifacts/android-build'],check=True)
@@ -109,7 +109,7 @@ jobs:
           grep -qi llvmpipe "$RUNNER_TEMP/nylo-renderer.txt"
       - uses: ReactiveCircus/android-emulator-runner@4c44018e59b437e86cdfc41da381398f93ed8808
         with:
-          api-level: 35
+          api-level: ${{ inputs.scenario == 'foreground-demo' && 32 || 35 }}
           # Emulator 37.2.13 segfaults on this runner; use archived stable 36.6.11.
           emulator-build: 15507667
           target: google_apis

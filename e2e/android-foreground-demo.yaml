@@ -1,0 +1,54 @@
+appId: com.nylohq.nylo
+---
+- launchApp:
+    stopApp: false
+- assertVisible: "Send message"
+- tapOn: "Send message"
+- tapOn: "Allow & send"
+- extendedWaitUntil:
+    visible: "Receiving the synthetic test stream.*"
+    timeout: 60000
+- assertVisible: "Stop response"
+- takeScreenshot: foreground-01-active
+- pressKey: Home
+- takeScreenshot: foreground-02-home
+- runScript:
+    file: ../scripts/background-wait.js
+    env:
+      PHASE: home
+- assertTrue: ${output.backgroundReady}
+- swipe:
+    start: "50%, 0%"
+    end: "50%, 80%"
+    duration: 600
+- extendedWaitUntil:
+    visible: "Nylo is responding"
+    timeout: 10000
+- takeScreenshot: foreground-03-notification
+- runScript:
+    file: ../scripts/background-wait.js
+    env:
+      PHASE: complete
+- assertTrue: ${output.backgroundReady}
+- pressKey: Back
+- launchApp:
+    stopApp: false
+- runFlow:
+    when:
+      visible: "(?s)Open Synthetic background demo.*"
+    commands:
+      - tapOn: "(?s)Open Synthetic background demo.*"
+- assertVisible: "Receiving the synthetic test stream[.] Finished while Nylo was in the background[.]"
+- assertNotVisible: "Stop response"
+- takeScreenshot: foreground-04-complete
+- tapOn: "Go back"
+- tapOn: "Settings"
+- scrollUntilVisible:
+    element:
+      id: "app-version"
+    direction: DOWN
+- assertVisible:
+    id: "app-version"
+    text: "Version 1[.]0[.]0 [(]46[)]"
+- assertNotVisible: "UI: figma-parity.*"
+- takeScreenshot: foreground-05-version
