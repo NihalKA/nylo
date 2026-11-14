@@ -17,13 +17,18 @@ appId: com.nylohq.nylo
           text: "Close app"
           retryTapIfNoChange: false
       - assertNotVisible: "Pixel Launcher isn't responding"
-- assertVisible: "No chats yet"
+- extendedWaitUntil:
+    visible: "How can I help[?]"
+    timeout: 120000
+- assertVisible: "How can I help[?]"
 - takeScreenshot: 01-chats-empty
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
     text: "Agents"
-    retryTapIfNoChange: true
+    index: 1
 - assertVisible: "No agents yet"
 - takeScreenshot: 02-agents-empty
+- tapOn: "Go back"
 - tapOn:
     text: "Settings"
     retryTapIfNoChange: true
@@ -43,10 +48,8 @@ appId: com.nylohq.nylo
 - tapOn: "NyloHQ"
 - takeScreenshot: 04-provider-setup
 - tapOn: "Go back"
-- tapOn:
-    text: "Chats"
-    retryTapIfNoChange: true
-- tapOn: "New chat"
+- tapOn: "Go back"
+- assertVisible: "How can I help[?]"
 - assertVisible:
     id: "chat-message"
 - tapOn:
@@ -61,8 +64,11 @@ appId: com.nylohq.nylo
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
-- tapOn: "Dismiss keyboard"
-- assertNotVisible: "Dismiss keyboard"
+# Inline Chat has no header dismissal control; use the OS keyboard action.
+- hideKeyboard
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - takeScreenshot: 05-chat-draft
 - tapOn: "Add attachment"
 - waitForAnimationToEnd
@@ -77,21 +83,22 @@ appId: com.nylohq.nylo
 - tapOn: "Cancel attachments"
 - assertVisible:
     id: "chat-message"
-- tapOn: "Go back"
-- tapOn: "(?s)Open New conversation.*"
+# The active unsent draft lives on Home and is excluded from history.
+- tapOn: "Agent"
+- tapOn: "Chat"
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-- tapOn: "(?s)Open New conversation.*"
+# Cold launch resumes the unsent draft directly on Home.
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - takeScreenshot: 06-restored-draft
-- tapOn: "Go back"
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
     text: "Agents"
-    retryTapIfNoChange: true
+    index: 1
 - tapOn: "Create agent"
 - assertVisible: "Create an agent"
 - waitForAnimationToEnd
@@ -163,8 +170,7 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 08-agent-memory
-- tapOn:
-    id: "detail-tab-agents"
+- tapOn: "Go back"
 - waitForAnimationToEnd
 - assertVisible: "Create agent"
 - tapOn: "Open Writing partner"
@@ -179,9 +185,10 @@ appId: com.nylohq.nylo
 - takeScreenshot: 08b-memory-navigation-restored
 - stopApp
 - launchApp
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
     text: "Agents"
-    retryTapIfNoChange: true
+    index: 1
 - tapOn: "Open Writing partner"
 - scrollUntilVisible:
     element: "Memory"

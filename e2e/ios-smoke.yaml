@@ -2,23 +2,20 @@ appId: com.nylohq.nylo
 ---
 - launchApp:
     clearState: true
-# A loaded CI runner may expose the first accessibility tree after launch returns.
-# Wait for the exact initial state, then retain the same assertion below.
+# Wait for the current home screen before testing navigation.
 - extendedWaitUntil:
-    visible: "No chats yet"
+    visible: "How can I help[?]"
     timeout: 120000
-- assertVisible: "No chats yet"
+- assertVisible: "How can I help[?]"
 - takeScreenshot: 01-chats-empty
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
-    text: "Agents, tab, 2 of 3"
-    point: "50%, 25%"
-    retryTapIfNoChange: true
+    text: "Agents"
+    index: 1
 - assertVisible: "No agents yet"
 - takeScreenshot: 02-agents-empty
-- tapOn:
-    text: "Settings, tab, 3 of 3"
-    point: "50%, 25%"
-    retryTapIfNoChange: true
+- tapOn: "Go back"
+- tapOn: "Settings"
 - waitForAnimationToEnd
 - scrollUntilVisible:
     element: ".*Connect your AI.*"
@@ -45,11 +42,8 @@ appId: com.nylohq.nylo
     notVisible: "(?s).*Ready for Apple Intelligence.*"
     timeout: 15000
 - tapOn: "Go back"
-- tapOn:
-    text: "Chats, tab, 1 of 3"
-    point: "50%, 25%"
-    retryTapIfNoChange: true
-- tapOn: "New chat"
+- tapOn: "Go back"
+- assertVisible: "How can I help[?]"
 - assertVisible:
     id: "chat-message"
 - tapOn:
@@ -63,8 +57,11 @@ appId: com.nylohq.nylo
     text: "(?s).*A second line.*"
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
-- tapOn: "Dismiss keyboard"
-- assertNotVisible: "Dismiss keyboard"
+# Inline Chat has no header dismissal control; use the OS keyboard action.
+- hideKeyboard
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - takeScreenshot: 05-chat-draft
 - tapOn: "Add attachment"
 - waitForAnimationToEnd
@@ -79,65 +76,25 @@ appId: com.nylohq.nylo
 - tapOn: "Cancel attachments"
 - assertVisible:
     id: "chat-message"
-- tapOn: "Go back"
-# AX can expose the restored row at y895–1181 below the tabs at y877.
-# Require visibility above navigation, without centring the final list row.
-# Maestro finds it 100% visible at y559–845, but cannot centre it at scroll end.
-- runFlow:
-    when:
-      true: ${MAESTRO_UI_PROFILE == 'large-text'}
-    commands:
-      - extendedWaitUntil:
-          visible: "Search chats"
-          timeout: 60000
-      - scrollUntilVisible:
-          element:
-            text: "(?s)Open New conversation.*"
-            above: "Agents, tab, 2 of 3"
-          direction: DOWN
-          visibilityPercentage: 100
-          centerElement: false
-          timeout: 60000
-- tapOn:
-    text: "(?s)Open New conversation.*"
-    above: "Agents, tab, 2 of 3"
+# The active unsent draft lives on Home and is excluded from history.
+- tapOn: "Agent"
+- tapOn: "Chat"
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - stopApp
 - launchApp
-# AX can expose the restored row at y895–1181 below the tabs at y877.
-# Require visibility above navigation, without centring the final list row.
-# Maestro finds it 100% visible at y559–845, but cannot centre it at scroll end.
-- runFlow:
-    when:
-      true: ${MAESTRO_UI_PROFILE == 'large-text'}
-    commands:
-      - extendedWaitUntil:
-          visible: "Search chats"
-          timeout: 60000
-      - scrollUntilVisible:
-          element:
-            text: "(?s)Open New conversation.*"
-            above: "Agents, tab, 2 of 3"
-          direction: DOWN
-          visibilityPercentage: 100
-          centerElement: false
-          timeout: 60000
-- tapOn:
-    text: "(?s)Open New conversation.*"
-    above: "Agents, tab, 2 of 3"
+# Cold launch resumes the unsent draft directly on Home.
 - assertVisible:
     id: "chat-message"
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - assertVisible: "(?s).*A draft that should survive reopening.*"
 - takeScreenshot: 06-restored-draft
-- tapOn: "Go back"
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
-    text: "Agents, tab, 2 of 3"
-    point: "50%, 25%"
-    retryTapIfNoChange: true
+    text: "Agents"
+    index: 1
 - tapOn: "Create agent"
 - assertVisible: "Create an agent"
 - waitForAnimationToEnd
@@ -195,23 +152,17 @@ appId: com.nylohq.nylo
 - assertVisible: "Create agent"
 - tapOn: "Create agent"
 - assertVisible: "Agent"
-# At maximum text, AX can expose Memory behind the fixed bottom navigation
-# (observed y858–939; its centre hit Agents). Require the entire real tab
-# between the header and navigation before selecting it.
+# Centre the Memory tab below the fixed Agent header before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
       below: "Agent"
-      above:
-        id: "detail-tab-agents"
     direction: DOWN
     visibilityPercentage: 100
     centerElement: true
 - tapOn:
     text: "Memory"
     below: "Agent"
-    above:
-      id: "detail-tab-agents"
 - scrollUntilVisible:
     element:
       id: "agent-memory-input"
@@ -247,28 +198,21 @@ appId: com.nylohq.nylo
     element: "QA sample: I prefer concise answers."
     direction: DOWN
 - takeScreenshot: 08-agent-memory
-- tapOn:
-    id: "detail-tab-agents"
+- tapOn: "Go back"
 - waitForAnimationToEnd
 - assertVisible: "Create agent"
 - tapOn: "Open Writing partner"
-# At maximum text, AX can expose Memory behind the fixed bottom navigation
-# (observed y858–939; its centre hit Agents). Require the entire real tab
-# between the header and navigation before selecting it.
+# Centre the Memory tab below the fixed Agent header before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
       below: "Agent"
-      above:
-        id: "detail-tab-agents"
     direction: DOWN
     visibilityPercentage: 100
     centerElement: true
 - tapOn:
     text: "Memory"
     below: "Agent"
-    above:
-      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
@@ -276,28 +220,22 @@ appId: com.nylohq.nylo
 - takeScreenshot: 08b-memory-navigation-restored
 - stopApp
 - launchApp
+- tapOn: "History: search, archive and delete chats"
 - tapOn:
-    text: "Agents, tab, 2 of 3"
-    point: "50%, 25%"
-    retryTapIfNoChange: true
+    text: "Agents"
+    index: 1
 - tapOn: "Open Writing partner"
-# At maximum text, AX can expose Memory behind the fixed bottom navigation
-# (observed y858–939; its centre hit Agents). Require the entire real tab
-# between the header and navigation before selecting it.
+# Centre the Memory tab below the fixed Agent header before selecting it.
 - scrollUntilVisible:
     element:
       text: "Memory"
       below: "Agent"
-      above:
-        id: "detail-tab-agents"
     direction: DOWN
     visibilityPercentage: 100
     centerElement: true
 - tapOn:
     text: "Memory"
     below: "Agent"
-    above:
-      id: "detail-tab-agents"
 - scrollUntilVisible:
     element: "QA sample: I prefer concise answers."
     direction: DOWN
