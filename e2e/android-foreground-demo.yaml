@@ -35,13 +35,13 @@ appId: com.nylohq.nylo
     stopApp: false
 - runFlow:
     when:
-      visible: "(?s)Open Synthetic background demo.*"
+      notVisible: "Receiving the synthetic test stream[.] Finished while Nylo was in the background[.]"
     commands:
+      - tapOn: "History: search, archive and delete chats"
       - tapOn: "(?s)Open Synthetic background demo.*"
 - assertVisible: "Receiving the synthetic test stream[.] Finished while Nylo was in the background[.]"
 - assertNotVisible: "Stop response"
 - takeScreenshot: foreground-04-complete
-- tapOn: "Go back"
 - tapOn: "Settings"
 - scrollUntilVisible:
     element:
