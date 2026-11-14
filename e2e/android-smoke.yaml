@@ -64,8 +64,11 @@ appId: com.nylohq.nylo
     text: '(?s)A draft that should survive reopening\nA second line[.]'
 - waitForAnimationToEnd
 - takeScreenshot: 05-chat-keyboard-multiline
-- tapOn: "Dismiss keyboard"
-- assertNotVisible: "Dismiss keyboard"
+# Inline Chat has no header dismissal control; use the OS keyboard action.
+- hideKeyboard
+- assertVisible:
+    id: "chat-message"
+    text: '(?s)A draft that should survive reopening\nA second line[.]'
 - takeScreenshot: 05-chat-draft
 - tapOn: "Add attachment"
 - waitForAnimationToEnd
