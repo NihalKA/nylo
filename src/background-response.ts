@@ -14,7 +14,7 @@ type BackgroundModule = {
   ) => { remove: () => void };
 };
 const native =
-  Platform.OS === "ios"
+  Platform.OS === "ios" || Platform.OS === "android"
     ? requireOptionalNativeModule<BackgroundModule>("NyloBackgroundResponse")
     : null;
 const adapter: ResponseLeaseAdapter | null = native

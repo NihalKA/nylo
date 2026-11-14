@@ -1,6 +1,11 @@
 {
-  "platforms": ["apple"],
+  "platforms": ["apple", "android"],
   "apple": {
     "modules": ["NyloBackgroundResponseModule"]
+  },
+  "android": {
+    "modules": [
+      "expo.modules.nylobackgroundresponse.NyloBackgroundResponseModule"
+    ]
   }
 }

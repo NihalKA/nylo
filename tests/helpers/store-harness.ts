@@ -21,6 +21,7 @@ export async function mountStore(
     write?: (data: AppData) => Promise<void>;
     permission?: (title: string, message: string) => Promise<boolean>;
     background?: (token: string) => boolean;
+    backgroundBegin?: () => Promise<boolean>;
   } = {},
 ) {
   Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
@@ -32,6 +33,7 @@ export async function mountStore(
     done: ReturnType<typeof deferred<void>>;
   }[] = [];
   const released: string[] = [];
+  const leases = new Map<string, { held: boolean; expire: () => void }>();
   const appState = {
     currentState: "active",
     addEventListener: (_: string, listener: typeof onAppState) => {
@@ -74,10 +76,20 @@ export async function mountStore(
       },
     },
     "./background-response": {
-      beginBackgroundResponse: async (token: string) => ({
-        held: options.background?.(token) ?? true,
-        release: () => released.push(token),
-      }),
+      beginBackgroundResponse: async (token: string, expired: () => void) => {
+        const lease = {
+          held: options.backgroundBegin
+            ? await options.backgroundBegin()
+            : (options.background?.(token) ?? true),
+          expire: () => {
+            lease.held = false;
+            expired();
+          },
+          release: () => released.push(token),
+        };
+        leases.set(token, lease);
+        return lease;
+      },
     },
     "./consent": {
       askPermission: (
@@ -132,6 +144,17 @@ export async function mountStore(
     requests,
     released,
     saved: () => persisted,
+    expireLeases: async () => {
+      await act(async () => {
+        for (const lease of leases.values()) lease.expire();
+      });
+    },
+    appState: async (state: string) => {
+      await act(async () => {
+        appState.currentState = state;
+        onAppState?.(state);
+      });
+    },
     background: async () => {
       await act(async () => {
         appState.currentState = "background";

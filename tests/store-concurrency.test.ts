@@ -497,3 +497,115 @@ test("live device-check sends stay exclusive while ordinary chats allow concurre
     await h.close();
   }
 });
+
+test("Home while native protection starts waits for the grant without cancelling or replaying", async () => {
+  const grant = deferred<boolean>();
+  const h = await mountStore(fixture(), {
+    backgroundBegin: () => grant.promise,
+  });
+  try {
+    let send!: Promise<void>;
+    await act(async () => {
+      send = h.store.send("a", "a");
+    });
+    assert.equal(h.requests.length, 0);
+    await h.background();
+    await act(async () => {
+      grant.resolve(true);
+    });
+    assert.equal(h.requests.length, 1);
+    assert.equal(h.requests[0].request.signal.aborted, false);
+    await act(async () => {
+      await h.requests[0].request.onFiles?.([image]);
+      h.requests[0].request.onText("Finished in background");
+      h.requests[0].done.resolve();
+      await send;
+    });
+    assert.equal(h.requests.length, 1);
+    const reply = h.saved().conversations[0].messages.at(-1)!;
+    assert.equal(reply.text, "Finished in background");
+    assert.equal(reply.status, "complete");
+    assert.deepEqual(reply.generatedFiles, [image]);
+    assert.equal(h.released.length, 1);
+  } finally {
+    await h.close();
+  }
+});
+
+test("denied native startup after Home sends nothing and keeps the draft", async () => {
+  const grant = deferred<boolean>();
+  const h = await mountStore(fixture(), {
+    backgroundBegin: () => grant.promise,
+  });
+  try {
+    let send!: Promise<void>;
+    await act(async () => {
+      send = h.store.send("a", "a");
+    });
+    await h.background();
+    await act(async () => {
+      grant.resolve(false);
+      await assert.rejects(send, /Return to Nylo/);
+    });
+    assert.equal(h.requests.length, 0);
+    assert.equal(h.saved().conversations[0].draft, "a");
+    assert.equal(h.saved().conversations[0].messages.length, 0);
+  } finally {
+    await h.close();
+  }
+});
+
+test("late iOS expiry after returning active does not cancel the foreground response", async () => {
+  const h = await mountStore(fixture());
+  try {
+    let send!: Promise<void>;
+    await act(async () => {
+      send = h.store.send("a", "a");
+    });
+    await h.background();
+    await h.appState("active");
+    await h.expireLeases();
+    assert.equal(h.requests[0].request.signal.aborted, false);
+    assert.equal(h.store.responseProgress.a.backgroundAllowed, false);
+    await act(async () => {
+      h.requests[0].done.resolve();
+      await send;
+    });
+    assert.equal(
+      h.saved().conversations[0].messages.at(-1)?.status,
+      "complete",
+    );
+  } finally {
+    await h.close();
+  }
+});
+
+test("OS expiry in background interrupts once and retains checkpointed output", async () => {
+  const h = await mountStore(fixture());
+  try {
+    let send!: Promise<void>;
+    await act(async () => {
+      send = h.store.send("a", "a");
+    });
+    await act(async () => {
+      await h.requests[0].request.onFiles?.([image]);
+      h.requests[0].request.onText("Partial reply");
+    });
+    await h.appState("inactive");
+    assert.equal(h.requests[0].request.signal.aborted, false);
+    await h.background();
+    await h.expireLeases();
+    await act(async () => {
+      await send;
+    });
+    assert.equal(h.requests.length, 1);
+    assert.equal(h.requests[0].request.signal.aborted, true);
+    const reply = h.saved().conversations[0].messages.at(-1)!;
+    assert.equal(reply.status, "interrupted");
+    assert.equal(reply.text, "Partial reply");
+    assert.deepEqual(reply.generatedFiles, [image]);
+    assert.match(reply.error || "", /operating system ended/);
+  } finally {
+    await h.close();
+  }
+});

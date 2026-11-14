@@ -1,0 +1,18 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+group = 'expo.modules.nylobackgroundresponse'
+version = '1.0.0'
+android {
+  namespace 'expo.modules.nylobackgroundresponse'
+  // AGP 9 creates unit-test tasks only for the selected test build type.
+  testBuildType 'release'
+  defaultConfig {
+    versionCode 1
+    versionName '1.0.0'
+  }
+}
+dependencies {
+  testImplementation 'junit:junit:4.13.2'
+}

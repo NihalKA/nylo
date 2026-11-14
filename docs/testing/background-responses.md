@@ -107,3 +107,132 @@ Together with the fully inspected fresh three-profile smoke evidence, this clear
 Signed workflow42612628652/sourcee452a2d exported and uploaded1.0.0 (17). The retained actual IPA audit confirms the bundle/version/build/family1, eleven privacy manifests, required image SDK, camera purpose, no microphone/tracking and exempt encryption. Apple reports build `4e6626be-2598-4c2e-a7ae-72e9b628ff51` VALID. English notes were saved/read back, internal Nylo Device QA assignment returned204, and independent group/build-state reads confirm exact17 and IN_BETA_TESTING. Evidence: `artifacts/signed-17-audit/qa-assignment-verification.json`.
 
 This clears internal delivery, not physical-device or production acceptance. Original storebuild15 remains selected and WAITING_FOR_REVIEW, independently read after assignment at12:17UTC. The30-minute delivery task is disabled; the separate App Review/external-invitation monitor remains enabled.
+
+## Android protection and lifecycle repair (November 2026)
+
+Android previously never loaded a native response lease: its platform selector
+returned `null`, and the local module registered only for Apple. Going Home
+therefore deterministically interrupted an otherwise healthy Android response.
+Standalone Android builds now register `NyloBackgroundResponse` and protect
+already initiated requests with a non-exported `dataSync` foreground service.
+The service posts an in-progress notification (Android notification visibility
+still follows the user's system settings) and holds a bounded partial wake lock.
+It stops after the last response completes/cancels, never restarts a killed
+request, and has a ten-minute native per-response deadline as well as Android's
+OS timeout handling. Concurrent responses own separate tokens; stopping one
+cannot release another's protection. No boot receiver, background scheduling,
+provider migration, additional generation request, or automatic retry is added.
+
+Native startup can overlap a Home gesture. The store now waits for the actual
+lease result before cancelling; a denied grant in the background preserves the
+unsent draft. A late iOS expiration after returning to the foreground revokes
+background eligibility without cancelling the foreground reply. Actual OS
+expiration while backgrounded still interrupts and keeps checkpointed files and
+text. iOS retains its finite UIKit budget; force quit, resource pressure, battery
+restrictions and OS suspension can still interrupt work.
+
+Source regressions reproduce three failures on the original implementation:
+Android native selection, Home during acquisition, and late foreground expiry.
+They pass with this change, along with background completion, no-replay,
+checkpoint preservation and denied-startup coverage. Native Android lease tests
+cover cancellation before service startup, independent concurrent ownership,
+stale/duplicate events and expiry before a grant. Native compilation and actual
+runtime acceptance must be recorded separately from these source checks.
+
+Settings now shows only version and native build number. CI's source marker
+remains in a private build-info property inside both production Hermes bundles;
+it is not rendered by the product UI. Gallery checks now inspect the version
+footer and absence of the old marker rather than requiring diagnostic text.
+
+## Background repair candidate delivery — 14 November 2026
+
+[Android 1.0.0 (45) CI](https://github.com/NihalKA/nylo/actions/runs/43564085672)
+passed at source `c1d1cf1ff5110b0cdd23176db15e2a9a0a3c68a3`. The original
+APK/AAB archive digest and CRC, compiled source marker and 57 assets, original
+signer, foreground-service manifest and four native lease tests were verified.
+The AAB SHA256 is `dbd5fe586205bdfbf425e30c6dfc63e3d95dff563a2e5d2623199d42e309f09d`.
+This exact bundle remains ready for the existing Play closed Alpha track; it has
+not been uploaded or submitted for review because the signed-in Chrome
+Computer Use bridge reports an unavailable browser host. Existing build 42
+remains the available Play release. No replacement build is needed.
+
+[Signed iOS 1.0.0 (43) CI](https://github.com/NihalKA/nylo/actions/runs/43572299470)
+passed at source `9a5587b8f8b777b41e679dda3479e475e1b30fff`. The exact diagnostics
+archive digest/CRC and original exported IPA audit receipts verified the source,
+build, original distribution signer, strict signature, embedded App Store
+profile, privacy declarations, 12 fonts and 57 assets. The IPA SHA256 is
+`7cb417b2e3b516ec4425102dbe4a04fe0ad26a85676c38872be3b076aed57415`.
+Apple reports build 43 `VALID`; independent readbacks confirm its selection in
+the existing internal QA and public TestFlight groups and both states
+`IN_BETA_TESTING`. Release notes were saved and read back; prior build selections,
+group attributes and internal tester membership were preserved. The existing
+public TestFlight link is https://testflight.apple.com/join/u7zsCTuR. Installation
+and physical background/lock-screen behavior have not been observed.
+
+The iOS simulator workflow numbered 81 contains app version 1.0.0 (1), not build 81. Its source/package/assets were verified, but no new runtime acceptance pass
+is claimed. Source tests and signing receipts do not establish physical-device
+background duration. No real provider request was made for this delivery.
+
+Both original candidate binaries are retained. Temporary feature-branch CI
+workflow gates and only this task's Apple environment branch policy were removed
+after CI completed; other policies remain intact. These cleanup/documentation
+changes do not alter the app inputs and require no native rebuild. Merge remains
+blocked until the owner explicitly confirms the delivered builds are good.
+
+## Settings build-number follow-up
+
+The owner observed that installed iOS 43 showed only `Version 1.0.0`. The footer
+read `nativeBuildVersion` from `expo-constants`, which does not supply that field
+in SDK 58. It now reads the installed native version and build from the
+SDK-compatible `expo-application` module, so the footer renders
+`Version 1.0.0 (<installed build>)` on both native platforms. No number is
+hardcoded. Web keeps its configured version without inventing a native build.
+Three regression cases cover iOS, Android and web; all 177 tests and type
+checking pass. Existing distributed binaries are unchanged; new CI candidates
+are required for this correction. The exact branch workflow allowances are
+temporarily restored only for those candidate builds and must be removed again
+after CI completes.
+
+The owner subsequently authorized completing this follow-up on the same branch,
+merging to main and publishing both corrected candidates to the existing
+TestFlight and closed Alpha destinations. That instruction supersedes the
+earlier hold on merging pending owner acceptance.
+
+## Corrected footer candidates verified — 14 November 2026
+
+[Android 1.0.0 (46)](https://github.com/NihalKA/nylo/actions/runs/43576437302)
+completed successfully at source `d16af5da1313d03d36b2a1e22e5dddcee6b2caea`.
+Exact artifact digest/CRC, actual APK/AAB hashes, compiled source and all 57
+assets, original signing certificate, manifest/permissions and four native lease
+tests passed. Local AAB cryptographic verification and certificate comparison
+also passed. The compiled DEX includes the native application version/build
+module. The AAB SHA256 is
+`75d4f9aedd264f2eed2e76cb99a9d034e876a6e8ba4110f191e1edbe49a12445`.
+The requested runtime Settings check could not install: the emulator rejected
+the command because another task owns its session. No app was installed or
+launched, and that session was left untouched.
+
+[Signed iOS 1.0.0 (45)](https://github.com/NihalKA/nylo/actions/runs/43577317792)
+completed successfully at source `45c19c8b83349734943f125ffbcd64b124bd0d17`.
+Its exact diagnostics digest/CRC and original exported IPA receipts verify
+source/build, strict signature, original distribution signer/profile, privacy
+declarations, all 12 fonts and 57 assets. The IPA SHA256 is
+`5f13450539be70b3a683d0b0c79dac22fe422d8dfb7e5bbc29cad4f67dd36103`.
+The first footer candidate, iOS 44, failed before compilation/upload when
+Fastlane's Xcode build-settings query exhausted its 3/6/12/24-second timeouts.
+The replacement increases the base query timeout to 120 seconds with three
+retries. This CI-only change leaves app/native inputs identical to Android 46.
+
+These are candidate-verification facts. Apple processing/group availability,
+Play upload/review/tester availability and installation remain separate delivery
+steps at this checkpoint. Source verification passes 177 tests and type
+checking. Physical background duration and lock-screen behavior remain
+unverified. No real provider request was made.
+
+The temporary workflow branch gates and only this task's temporary Apple branch
+policy have been removed again after successful native CI; all other policies
+were preserved. Native candidates are retained without rebuilding unchanged
+inputs. The owner has explicitly authorized merge and distribution to the
+existing TestFlight groups and closed Alpha track. Fresh Play readback shows the
+existing selected closed-test list now has 15 testers and the track covers 178
+countries/regions; these owner-managed current settings will be preserved.
