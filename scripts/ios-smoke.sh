@@ -81,7 +81,7 @@ if [ "$scenario" = store ]; then
   shasum -a 256 scripts/seed-ios-store.py >> artifacts/e2e/fixture-sha256.txt
 fi
 if [ "$scenario" = interactive ]; then
-  shasum -a 256 scripts/seed-ios-interactive.py e2e/fixtures/interactive.json >> artifacts/e2e/fixture-sha256.txt
+  shasum -a 256 scripts/seed-ios-interactive.py scripts/check-ios-interactive.py e2e/fixtures/interactive.json >> artifacts/e2e/fixture-sha256.txt
 fi
 mark_phase download-native-artifact
 gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "ios-simulator-$source_sha" -D artifacts/native
@@ -262,6 +262,11 @@ export MAESTRO_DRIVER_STARTUP_TIMEOUT=300000
 shasum -a 256 "$RUNNER_TEMP/nylo-app/Nylo.app/main.jsbundle" > artifacts/e2e/js-bundle-sha256.txt
 mark_phase native-flow
 "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro" --device "$simulator_id" test --test-output-dir "$PWD/artifacts/e2e" --format junit --output artifacts/e2e/results.xml "e2e/ios-$scenario.yaml"
+if [ "$scenario" = interactive ]; then
+  mark_phase verify-interactive-state
+  app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"
+  python3 scripts/check-ios-interactive.py --container "$app_container" --output artifacts/e2e/interactive-state-check.json
+fi
 if [ "$scenario" = sdk ]; then
   mark_phase sdk-document-verification
   app_container="$(xcrun simctl get_app_container "$simulator_id" com.nylohq.nylo data)"

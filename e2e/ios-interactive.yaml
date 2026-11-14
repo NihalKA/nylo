@@ -4,16 +4,32 @@ appId: com.nylohq.nylo
 - tapOn: "History: search, archive and delete chats"
 - tapOn: "(?s)Open Example: Interactive expenses.*"
 - scrollUntilVisible:
-    element: "All"
+    element: "Sample expenses"
     direction: UP
     timeout: 60000
+    centerElement: true
 - assertVisible: "Sample expenses"
 - takeScreenshot: interactive-01-expenses-all
 - tapOn: "Food"
+- scrollUntilVisible:
+    element: "1 row"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
 - assertVisible: "1 row"
 - assertNotVisible: "Bus: 30"
 - takeScreenshot: interactive-02-expenses-filtered
+- scrollUntilVisible:
+    element: "All"
+    direction: UP
+    timeout: 60000
+    centerElement: true
 - tapOn: "All"
+- scrollUntilVisible:
+    element: "2 rows"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
 - assertVisible: "2 rows"
 - stopApp
 - launchApp
@@ -23,6 +39,7 @@ appId: com.nylohq.nylo
     element: "Trip goal"
     direction: UP
     timeout: 60000
+    centerElement: true
 - tapOn: "Trip goal"
 - inputText: "A quiet weekend"
 - hideKeyboard
@@ -35,6 +52,7 @@ appId: com.nylohq.nylo
     element: "A quiet weekend"
     direction: UP
     timeout: 60000
+    centerElement: true
 - assertVisible: "A quiet weekend"
 - takeScreenshot: interactive-04-planning-restored
 - stopApp
@@ -45,6 +63,7 @@ appId: com.nylohq.nylo
     element: "Increase Budget"
     direction: UP
     timeout: 60000
+    centerElement: true
 - tapOn: "Increase Budget"
 - assertVisible: "Budget: 41000"
 - tapOn: "Camera"
@@ -57,5 +76,6 @@ appId: com.nylohq.nylo
     element: "Budget: 41000"
     direction: UP
     timeout: 60000
+    centerElement: true
 - assertVisible: "Budget: 41000"
 - takeScreenshot: interactive-06-phone-restored
