@@ -10,7 +10,7 @@ Signed source `781a6c4b77bcde5fe436b93e3e4fe6ff2c15cdd8` passed type checking, 1
 
 Public install link: https://testflight.apple.com/join/u7zsCTuR
 
-The existing public-group cap remains 5 testers, with 2 members observed before assignment. Physical installation is unobserved.
+At the owner’s request, the existing public-group cap was increased to 50 testers and independently read back; all other group attributes were preserved. Two members were observed before build assignment. Physical installation is unobserved.
 
 ## Android 1.0.0 (42)
 
