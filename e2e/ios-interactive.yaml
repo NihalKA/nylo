@@ -1,0 +1,81 @@
+appId: com.nylohq.nylo
+---
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive expenses.*"
+- scrollUntilVisible:
+    element: "Sample expenses"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Sample expenses"
+- takeScreenshot: interactive-01-expenses-all
+- tapOn: "Food"
+- scrollUntilVisible:
+    element: "1 row"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: "1 row"
+- assertNotVisible: "Bus: 30"
+- takeScreenshot: interactive-02-expenses-filtered
+- scrollUntilVisible:
+    element: "All"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "All"
+- scrollUntilVisible:
+    element: "2 rows"
+    direction: DOWN
+    timeout: 60000
+    centerElement: true
+- assertVisible: "2 rows"
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive planning.*"
+- scrollUntilVisible:
+    element: "Trip goal"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Trip goal"
+- inputText: "A quiet weekend"
+- hideKeyboard
+- takeScreenshot: interactive-03-planning-entered
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive planning.*"
+- scrollUntilVisible:
+    element: "A quiet weekend"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "A quiet weekend"
+- takeScreenshot: interactive-04-planning-restored
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive phones.*"
+- scrollUntilVisible:
+    element: "Increase Budget"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- tapOn: "Increase Budget"
+- assertVisible: "Budget: 41000"
+- tapOn: "Camera"
+- takeScreenshot: interactive-05-phone-choices
+- stopApp
+- launchApp
+- tapOn: "History: search, archive and delete chats"
+- tapOn: "(?s)Open Example: Interactive phones.*"
+- scrollUntilVisible:
+    element: "Budget: 41000"
+    direction: UP
+    timeout: 60000
+    centerElement: true
+- assertVisible: "Budget: 41000"
+- takeScreenshot: interactive-06-phone-restored

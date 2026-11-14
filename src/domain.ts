@@ -1,4 +1,5 @@
 import { connectionModels } from "./model-library";
+import { readInteractiveReply } from "./interactive-reply";
 import { validateAttachments, validateGeneratedFiles } from "./attachments";
 import {
   Agent,
@@ -478,6 +479,10 @@ export function parseData(value: unknown, local = false): AppData {
         id: m.id,
         role: m.role,
         text: m.text,
+        interactive:
+          m.role === "assistant"
+            ? readInteractiveReply(m.interactive)
+            : undefined,
         attachments: validateAttachments(m.attachments),
         generatedFiles: validateGeneratedFiles(m.generatedFiles),
         sources: Array.isArray(m.sources)

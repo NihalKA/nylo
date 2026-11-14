@@ -20,6 +20,11 @@ import { uid } from "./domain";
 import { memoryTools, preflightRequest, type ToolCall } from "./providers";
 import { Attachment, Connection, Message } from "./types";
 import { EventDecoder } from "./sse";
+import {
+  interactiveInstructions,
+  readInteractiveReply,
+  type InteractiveReply,
+} from "./interactive-reply";
 
 import {
   ProviderRequestError,
@@ -45,6 +50,7 @@ export type SDKOptions = {
   onActivity?: () => void;
   executeTool: (call: ToolCall) => Promise<string>;
   onFiles?: (files: Attachment[]) => Promise<void>;
+  onInteractive?: (reply: InteractiveReply) => Promise<void>;
   // Used only by the explicit synthetic offline diagnostic.
   onToolDiagnostic?: (error: unknown) => void;
   onSource?: (source: { title: string; url: string }) => void;
@@ -255,6 +261,50 @@ export async function runSDKAgent(options: SDKOptions) {
           })(connection.model)
         : openai.responses(connection.model);
   const tools: ToolSet = {};
+  let interactiveSaved = false;
+  let interactiveAttempts = 0;
+  if (options.allowCapabilities !== false && options.onInteractive) {
+    tools.show_interactive = tool({
+      description:
+        "Show an interactive section only when useful for the user's request: charts, local filters or a form for choices. Normal text and simple tables can remain Markdown. Supply a complete readable fallback including the displayed facts/data. Do not output OpenUI source in text. At most one section per reply. " +
+        interactiveInstructions,
+      inputSchema: jsonSchema<{ source: string; fallback: string }>({
+        type: "object",
+        properties: {
+          source: { type: "string", maxLength: 24000 },
+          fallback: { type: "string", minLength: 1, maxLength: 4000 },
+        },
+        required: ["source", "fallback"],
+        additionalProperties: false,
+      }),
+      execute: async (input) => {
+        await ensureComplete();
+        if (signal.aborted) throw new Error("Response stopped.");
+        if (++interactiveAttempts > 1)
+          return {
+            error:
+              "Only one interactive section may be requested per reply. Continue in ordinary text.",
+          };
+        const reply = readInteractiveReply({
+          version: 1,
+          ...input,
+          values: {},
+        });
+        if (!reply)
+          return {
+            error:
+              "The interface was invalid or incomplete. Give a readable text answer instead; no interface was saved.",
+          };
+        await options.onInteractive!(reply);
+        interactiveSaved = true;
+        return {
+          success: true,
+          message:
+            "The interactive section and readable summary are saved in this chat. Continue only with useful additional explanation.",
+        };
+      },
+    });
+  }
   if (options.useTools)
     for (const definition of memoryTools) {
       tools[definition.name] = tool({
@@ -564,7 +614,7 @@ export async function runSDKAgent(options: SDKOptions) {
       );
     if (finishAfterFile && !text.trim())
       options.onText("Your file is saved in this chat.");
-    if (!text.trim() && !savedFiles)
+    if (!text.trim() && !savedFiles && !interactiveSaved)
       throw new Error(
         "The provider returned no text. Check its API format and model support.",
       );

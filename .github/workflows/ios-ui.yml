@@ -17,7 +17,7 @@ on:
       scenario:
         description: Smoke, QA gallery/attachments, or illustrative store asset capture
         type: choice
-        options: [smoke, gallery, attachments, store, pdf, background, sdk]
+        options: [smoke, gallery, attachments, store, pdf, background, sdk, interactive]
         default: smoke
       profile:
         description: Smoke profile to validate (other scenarios use large)
@@ -27,9 +27,12 @@ on:
 permissions:
   contents: read
   actions: read
+  statuses: write
 concurrency:
   group: ios-ui-${{ github.event.workflow_run.head_sha || github.ref }}-${{ inputs.scenario || 'smoke' }}-${{ inputs.profile || 'all' }}
   cancel-in-progress: true
+env:
+  OPENUI_TELEMETRY_DISABLED: "1"
 jobs:
   eligibility:
     name: Check source relevance (no UI tests)
@@ -87,6 +90,17 @@ jobs:
           }, indent=2) + '\n')
           PYRESULT
           printf '### UI eligibility: %s\n\n%s\n\nNative source: `%s` · Fixture source: `%s`\n' "$decision" "$reason" "${NATIVE_SOURCE_SHA:-resolved by manual runner}" "$checkout_sha" >> "$GITHUB_STEP_SUMMARY"
+      - name: Mark native UI acceptance pending on the tested commit
+        if: steps.source.outputs.run_ui == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHECK_SHA: ${{ steps.source.outputs.checkout_sha }}
+          CHECK_CONTEXT: iPhone UI (${{ inputs.scenario || 'smoke' }})
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$CHECK_SHA" \
+            -f state=pending -f context="$CHECK_CONTEXT" \
+            -f description='Native UI verification is running.' \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
@@ -129,3 +143,22 @@ jobs:
           name: iphone-ui-${{ github.run_id }}-${{ matrix.profile }}
           path: artifacts/e2e
           retention-days: 7
+  publish-result:
+    needs: [eligibility, smoke]
+    if: ${{ always() && needs.eligibility.outputs.run_ui == 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Publish native UI acceptance on the tested commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CHECK_SHA: ${{ needs.eligibility.outputs.checkout_sha }}
+          CHECK_CONTEXT: iPhone UI (${{ inputs.scenario || 'smoke' }})
+          UI_RESULT: ${{ needs.smoke.result }}
+        run: |
+          state=failure
+          if [ "$UI_RESULT" = success ]; then state=success; fi
+          gh api "repos/$GITHUB_REPOSITORY/statuses/$CHECK_SHA" \
+            -f state="$state" -f context="$CHECK_CONTEXT" \
+            -f description="Native UI verification: $UI_RESULT." \
+            -f target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
